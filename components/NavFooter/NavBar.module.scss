@@ -1,0 +1,448 @@
+$redColor:#CB1E31;
+$orangeColor:#f93c7b;
+$blackish:#292f51;
+.navDiv{
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index:9;
+    background-color: white;
+    margin-top: 30px;
+    margin: 30px 7% 0px 7%;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+}
+#navDiv{
+    z-index: 9;
+}
+.logoP{
+    font-size: 36px;
+    font-weight: 800;
+    color: #000000;
+}
+.logoP span{
+  color: $orangeColor;
+}
+
+.navDiv0{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+#coName{
+  font-size: 25px;
+  font-weight: 800;  
+  color:orange;
+  text-decoration: none;
+  margin-left: 10px;
+}
+.navDiv2{
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    min-width: 66px;
+    height: 80px;
+    padding-left: 0px;
+    padding-right: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 3;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+   
+}
+
+.shopScrolled{
+    position: fixed;
+    z-index: 3;
+    height: 80px;
+    top:0;right:0;left:0;
+    margin: 0px -10px 0px -10px;
+    border-radius: none; 
+    
+    transition: all .3s ease-in-out;
+    transform-origin: left top;
+    transform: scaleY(1);
+   }
+   
+   .expandable:target {
+    transform: scaleY(1);
+  }
+ .navMain{
+     display: flex;
+     justify-content: space-between;
+ }
+ .logDiv{
+     display: flex;
+     align-items: center;
+ }
+ .talkDiv{
+     display: flex;
+     align-items: center;
+     border-radius: 20px;
+     height: 40px;
+     width: 110px;
+     justify-content: center;
+     cursor: pointer;
+     text-decoration:none;
+     border: 1px solid $blackish;
+     color: $blackish;
+     font-weight: 600;
+     margin-right: 20px;
+    
+ }
+ .talkDiv1{
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 41px;
+    width: 111px;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration:none;
+    border: none;
+    color: white;
+    font-weight: 600;
+    background: linear-gradient(to right, #CB1E31 0%, #fa495e 100%);
+}
+.logOutBtn{
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 35px;
+    width: 95px;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration:none;
+    border: none;
+    color: $redColor;
+    font-weight: 700;
+    border: 1px solid $redColor;
+    background-color: transparent;
+    
+}
+ .talkDiv p{
+     margin-right: 10px;
+ }
+ .talkDiv2{
+    display: flex;
+    align-items: center;
+    color: $blackish;
+    border: 1px solid $blackish;
+    height: 40px;
+    width: 130px;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration:none;
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+.talkDiv3{
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #f93c7b 0%, #fd7370 100%);
+    color: white;
+    height: 35px;
+    width: 131px;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration:none;
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+.logOutL{
+    display: flex;
+    align-items: center;
+    color: $redColor;
+    height: 35px;
+    width: 131px;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration:none;
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    border: 1px solid $redColor;
+}
+.navDiv3{
+    margin-left: 50px;
+    display: flex;
+    //margin-right: 10%;
+}
+.optionsIcon{
+ color: $blackish;
+ margin-right: 5%;
+ margin-left: 5px;
+ display:none;
+}
+.optionsIcon:hover{
+    cursor: pointer;
+}
+.navMainLi{
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: $blackish;
+    cursor: pointer;
+    margin-left: 25px;
+    font-weight: 600;
+    font-size: 18px;
+    
+}
+.navMainLi:hover{
+    color:$orangeColor;
+}
+.optionsDivLi{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: $blackish;
+    padding-left: 4%;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+   
+}
+.optionsDiv{
+    width:100%;
+    display:none;
+    flex-direction: column;
+    background-color:white;
+    margin-top: -70px;
+    padding-top: 10px;
+    z-index: 9999;
+   padding-bottom: 20px;
+}
+.logoCont0{
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+.logoCont{
+    width: 280px;
+    display: flex;
+    align-items: center;
+    background-color: $blackish;
+    height: 100%;
+    padding-right: 50px;
+    padding-left: 40px;
+   // background-image: linear-gradient(to bottom right, $blackish, $blackish 50%, #f93c7b 50%, #f93c7b);
+   //-webkit-clip-path: polygon(100% 0, 0 0, 0 100%);
+   //clip-path: polygon(100% 80%, 70% 60%, 0 100%);
+   background: linear-gradient(110deg, $blackish 11ch, white 55ch);
+  
+}
+.logo001{
+height: 80px;
+width: 290px;
+min-width: 290px;
+display: flex;
+align-items: center;
+padding-left: 40px;
+position: relative;
+text-decoration: none;
+}
+#logoImg{
+    height:55px; 
+    z-index: 2;
+}
+#triiMG{
+    height: 100%;
+    width: 100%;
+    min-width: 100%;
+    position: absolute;
+    top:0;left: 0;bottom: 0;
+    z-index: 1;
+  }
+.logoDiv1{
+    border-left: 3px solid white;
+    height: 45px;
+    margin: 0px 3px;
+    margin-right: 8px;
+    z-index: 2;
+    
+}
+.logoDiv2{
+    z-index: 2;  
+}
+.ramP{
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 800;
+    margin-top: -10px;
+    color: white;
+    /*background: linear-gradient(red, #0000ff);
+    background: linear-gradient(to right, $blackish 0%, #fd7370 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;*/
+    color: white;
+}
+.fantP{
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: -10px;
+    color: white;
+}
+.logInModal{
+    position: fixed;
+    top:0;bottom:0;left:0;right:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media all and (max-width: 1300px) {
+    .navMainLi{
+        margin-right: 0px;
+    }
+    .navDiv2{
+        padding-left: 0px;
+        padding-right: 20px;
+    }
+}
+@media all and (max-width: 1200px) {
+    .navMainLi{
+        margin-right: 30px;
+    }
+    .navDiv2{
+        padding-left: 0px;
+        padding-right: 20px;
+    }
+    .navDiv3{
+        margin-left: 20px;
+    }
+    .navMainLi{
+        margin-right: 0px;
+    }
+}
+@media all and (max-width: 1100px) {
+    .navMainLi{
+        margin-left: 0px;
+        font-size: 14px;
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+   
+}
+@media all and (max-width: 950px) {
+    .navDiv{
+        margin: 0px;
+        border-radius: 0px;
+      }
+}
+@media all and (max-width: 850px) {
+    .navMainLi{
+        margin-left: 0px;
+        font-size: 14px;
+        padding-right: 10px;
+        padding-left: 0px;
+    }
+    .talkDiv{
+        display: none;
+    }
+    .logOutBtn{
+        display: none;   
+    }
+    .talkDiv1{
+     display: none;
+ }
+   
+    .navDiv3{
+        display: none;
+    }
+    .optionsDiv{
+        display:flex;
+        position: absolute;
+        margin-top: 5px;
+        box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    }
+    .optionsIcon{
+        display:flex;
+       }
+     
+       
+}
+@media all and (max-width: 600px) {
+    #coName{
+        font-size: 20px;
+        margin-left: 10px;
+      }
+    
+}
+@media all and (max-width: 500px) {
+  .navDiv{
+     border-bottom-width: 0px;
+  }
+  .navDiv2{
+    padding-left: 0px;
+    padding-right: 20px;
+}
+    .navMainLi{
+        font-size: 14px;
+    }
+    .logo001{
+        height: 80px;
+        width: 200px;
+        min-width: 200px;
+        padding-left: 20px;
+        }
+        .ramP{
+            font-size: 32px;
+            margin-top: 0px;
+        }
+        .fantP{
+            font-size: 7px;
+            font-weight: 600;
+            margin-top: -5px;
+            color: white;
+        }
+        #logoImg{
+            height:35px; 
+            z-index: 2;
+        }
+}
+@media all and (max-width: 420px) {
+   
+    .navDiv2{
+        padding-left: 0px;
+        padding-right: 10px;
+    }
+    .navMainLi{
+        font-size: 12px;
+        margin-left: 5px;
+        //padding-bottom: 0px;
+    }
+    .socialCont{
+        display:none;
+    }
+   .optionsIcon:hover{
+       color: $orangeColor;
+   }
+   .optionsDivLi{
+   font-size: 20px;
+   margin-top: 10px;
+}
+}
+@media all and (max-width: 330px) {
+    .navMainLi{
+        font-size: 10px;
+        margin-left: 5px;
+    }
+}
+

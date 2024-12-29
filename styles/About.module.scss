@@ -1,0 +1,151 @@
+  $primaryColor: #ff8801;
+  $secondaryColor: #FED800;
+  $blackish:#292f51;
+  $redColor:#CB1E31;
+  .mainCont{
+    padding-top: 100px;
+    padding: 100px 50px 0px 50px;
+  }
+  .container{
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box; 
+    margin-bottom: 0px;
+    background-color:#ecf0f3;
+    display: flex;
+    padding: 30px 50px;
+   
+}
+.leftDiv{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+    //background-color: red;
+}
+.leftDiv img{
+    height: 85%;
+}
+.rightDiv{
+    width: 50%;
+    padding: 50px 20px;
+    padding-top: 100px;
+}
+.titleP{
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 400;
+    font-family: "Rubik", sans-serif;
+    color: $redColor;
+}
+.subTitleP{
+    margin-bottom: 20px;
+    font-size: 50px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    color: $blackish;
+}
+.descP1{
+    color: $blackish;
+    font-size: 18px;  
+    margin-bottom: 10px;
+}
+.descP2{
+    color: $blackish;
+    font-size: 18px;  
+    margin-bottom: 10px;
+}
+.descP3{
+    color: $blackish;
+    font-size: 18px;  
+    margin-bottom: 10px;
+}
+.bottomCont{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 70px;
+    justify-content: space-between;
+}
+.bottomCont div{
+    width: 24%;
+    background-color: white;
+}
+#container{
+    padding-top: 0px;
+}
+#container .leftDiv{order: 2;}
+#container .rightDiv{
+    padding-top: 10px;
+   
+}
+.rightDiv li{
+    font-size: 18px;
+    font-weight: 700;
+    color: $redColor;
+    margin: 20px 0px 10px 0px;
+    list-style: none;
+}
+@media all and (max-width: 1000px) {
+    .container{
+        flex-direction: column;
+        padding: 30px 150px;
+    }
+    .leftDiv{
+        width: auto;
+        order: 2;
+        //padding: 20px 30px;
+        overflow: hidden;
+        padding-top: 0px;
+    }
+    .leftDiv img{
+        height: auto;
+        width: 90%;
+        margin-top: 50px;
+    }
+    .rightDiv{
+        width: 100%;
+        padding: 50px 20px;
+        padding-top: 50px;
+        order: 1;
+    }
+}
+@media all and (max-width: 800px) {
+    .container{
+        padding: 30px 50px;
+    }
+    .mainCont{
+        padding: 100px 20px 0px 20px;
+      }
+}
+@media all and (max-width: 600px) {
+    .container{
+        padding: 30px 20px;
+    }
+    .mainCont{
+        padding: 100px 10px 0px 10px;
+      }
+}
+@media all and (max-width: 430px) {
+    .mainCont{
+        padding: 70px 0px 0px 0px;
+      }
+    .subTitleP{
+        font-size: 35px;
+        margin-bottom: 5px;
+    }
+    .titleP{
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+    .container{
+        min-height: 400px;
+        padding: 30px 0px;
+    }
+    .rightDiv{
+        padding: 0px 20px;
+        padding-top: 20px;
+        order: 1;
+    }
+    }

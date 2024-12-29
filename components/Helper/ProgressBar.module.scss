@@ -1,0 +1,63 @@
+$primaryColor: #EFA832;
+$secondaryColor: #FED800;
+$darkTheme:#00fac8;
+$greenTheme: #17A589;
+$redColor:#CB1E31;
+.cont{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.0);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    z-index: 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cont p{
+   color: $redColor;
+   font-size: 16px;
+   margin-top: 10px;
+   font-weight: 600;
+}
+.loadingBar{
+    height: 100px;
+    width: 100px;
+    background-color: yellow;
+}
+ .spinner2 {
+   
+    height:50px;
+    width:50px;
+    -webkit-animation: rotation .2s infinite linear;
+    -moz-animation: rotation .2s infinite linear;
+    -o-animation: rotation .2s infinite linear;
+    animation: rotation .8s infinite linear;
+    border-left:5px solid $redColor;
+    border-right:5px solid $redColor;
+    border-bottom:5px solid $redColor;
+    border-top:5px solid  rgba(255, 255, 255, 0.1);
+    border-radius:75px;
+ }
+ @-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to {-webkit-transform: rotate(359deg);}
+ }
+ @-moz-keyframes rotation {
+    from {-moz-transform: rotate(0deg);}
+    to {-moz-transform: rotate(359deg);}
+ }
+ @-o-keyframes rotation {
+    from {-o-transform: rotate(0deg);}
+    to {-o-transform: rotate(359deg);}
+ }
+ @keyframes rotation {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(359deg);}
+ }

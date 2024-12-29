@@ -1,0 +1,299 @@
+$primaryColor: hsl(203, 68%, 25%);
+$redColor: #CB1E31;
+$blackish: #292f51;
+
+.container2 {
+  box-sizing: border-box;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+  min-height: 400px;
+  height: 100vh;
+  background-color: #eee;
+  // border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
+  width: 500px;
+  min-width: 25vw;
+  margin-top: 10px;
+  overflow-y: auto;
+}
+
+.container2 input {
+  //border: none;
+  outline: none;
+  color: $blackish;
+}
+
+.container2::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.container2::-webkit-scrollbar-button {
+  background: red
+}
+
+.container2::-webkit-scrollbar-track-piece {
+  background: green
+}
+
+.container2::-webkit-scrollbar-thumb {
+  background: blue
+}
+
+.listHeadP {
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 10px;
+  text-align: center;
+  color: $redColor;
+  margin-top:20px;
+}
+
+.listCont {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  //background-color:red;
+}
+
+.listDiv {
+  box-sizing: border-box;
+  height: auto;
+  width: 100%;
+  border: 1px solid #eee;
+  background-color: white;
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.theCont0 {
+  width: 100%;
+}
+
+.theCont01 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $blackish;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+  padding-top: 10px;
+  font-weight: 500;
+}
+
+.theCont {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.theContLeft {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0px;
+
+}
+
+.theContRight {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0px;
+
+}
+
+.P1 {
+  margin-top: 10px;
+  color: $blackish;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border-width: 1px;
+}
+
+.p1Points {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  width: 50%;
+  margin-right: -28px;
+}
+
+.scoreP1 {
+  color: $blackish;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.scoreP2 {
+  color: $redColor;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.imgDiv1 {
+  height: 84px;
+  width: 84px;
+  border-radius: 80px;
+  background-color: $redColor;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border: 4px solid transparent;
+  align-items: center;
+
+}
+
+.imgDiv2 {
+  height: 84px;
+  width: 84px;
+  border-radius: 80px;
+  background-color: $blackish;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border: 4px solid transparent;
+  align-items: center;
+}
+
+.theImg1 {
+  height: 60px;
+  width: 60px;
+  object-fit: contain;
+}
+
+.P2 {
+  margin-top: 10px;
+  color: #c1c1c1;
+  font-size: 14px;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border-width: 1px;
+}
+
+.p2Points {
+  font-size: 20px;
+  font-weight: 700;
+  width: 50%;
+  text-align: center;
+  margin-left: -28px;
+}
+
+.dateDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -10px;
+  color: $blackish;
+  padding-top: 0px;
+}
+
+.usP {
+  margin: 0px 20px;
+  color: $redColor;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.sepIc {
+  margin-top: 20px;
+  font-size: 40px;
+  color: $redColor;
+}
+
+.teamIC {
+  color: white;
+  font-size: 50px;
+}
+
+.headP {
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 10px;
+  border-bottom: 1px solid #dadada;
+  padding-bottom: 5px;
+  color: $blackish;
+}
+
+.submitBtn {
+  background-color: $redColor;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: none;
+  width: 200px;
+  align-self: center;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media all and (max-width: 800px) {
+  .listDiv {
+    width: 48%;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 5px;
+  }
+
+}
+
+@media all and (max-width: 600px) {
+  .listDiv {
+    width: 100%;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 10px;
+  }
+
+  .scoreP1 {
+    font-size: 20px;
+  }
+
+  .scoreP2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+@media all and (max-width: 430px) {
+  .listDiv {
+    padding: 20px;
+    margin: 0px;
+    margin-bottom: 10px;
+  }
+
+  .scoreP1 {
+    font-size: 18px;
+  }
+}
+
+@media all and (max-width: 360px) {
+  .listDiv {
+    padding: 10px 10px 30px 10px;
+  }
+}

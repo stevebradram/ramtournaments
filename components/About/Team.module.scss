@@ -1,0 +1,161 @@
+  $primaryColor: #ff8801;
+  $secondaryColor: #FED800;
+  $blackish:#292f51;
+  $redColor:#CB1E31;
+  .container{
+    //height: 75vh;
+    min-height: 500px;
+    //padding-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box; 
+    padding: 50px 70px 50px 70px;
+    background-color: white;
+}
+.cardCont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.listDiv{
+    width: 30%;
+    min-height: 250px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px 10px;
+    border: 1px dotted #eee;
+    padding: 20px 10px;
+    
+}
+.header1P{
+    text-align: center;
+    color: $blackish;
+    font-size: 50px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    text-align: center;
+    padding: 0px 10px;
+    margin-bottom: 50px;
+}
+.header2P{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding: 0px 10px;
+    color: $redColor;
+   
+}
+.img1{
+    height:200px;
+    width:200px;
+    border-radius: 140px;
+    z-index: 3;
+    object-fit: cover;
+    background-color: #eff1fe;
+    padding: 10px;
+}
+.detP1{
+    box-sizing: border-box;
+    font-weight: 700;
+    font-size: 32px;
+    color: $blackish;
+    margin: 5px 10px;
+    text-align: center;
+    margin-top: 15px;
+}
+.detP2{
+    box-sizing: border-box;
+    font-size: 24px;
+    color: $redColor;
+    margin: 10px 10px;
+    text-align: center;
+}
+.imgCont{
+    display: flex;
+    justify-content: center;
+}
+.imgDiv1{
+    border-radius: 240px;
+    border: 2px dotted #eff1fe;
+    height: 240px;
+    width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.imgDiv2{
+    border-radius: 220px;
+    border: 2px dotted #eff1fe;
+    height: 220px;
+    width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.headDiv{
+    display: flex;
+    align-items: center;
+    padding: 10px 5px;
+    //background-color: #dddddd;
+   
+}
+#headDiv2{
+    background-color: #dddddd;
+}
+.addIC{
+    color: #CB1E31;
+    font-size: 40px;
+    margin-right: 10px;
+}
+.headLowerDiv{
+    margin-left: 10px;
+}
+.nameP{
+    font-size: 18px;
+    font-weight: 600;
+}
+.titP{
+    font-size: 16px;
+    color: #808080;
+}
+@media all and (max-width: 1300px) {
+    .listDiv{
+        width: 45%;  
+    }
+}
+@media all and (max-width: 1000px) {
+    .container{
+        padding: 50px 50px 50px 50px;
+    }
+}
+@media all and (max-width: 800px) {
+    .listDiv{
+        width: 90%;  
+        margin-bottom: 20px;
+    }
+}
+@media all and (max-width: 600px) {
+    .container{
+        padding: 50px 20px 50px 20px;
+    }
+    .listDiv{
+        width:100%;  
+        margin-bottom: 20px;
+    }
+}
+@media all and (max-width: 430px) {
+.header1P{
+    font-size: 35px;
+    margin-bottom: 30px;
+}
+}
+
+@media all and (max-width: 350px) {
+    .container{
+        padding: 50px 10px 50px 10px;
+    } 
+}

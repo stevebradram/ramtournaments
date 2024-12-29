@@ -1,0 +1,134 @@
+$primaryColor: hsl(203, 68%, 25%);
+$redColor: #CB1E31;
+$blackish:#292f51;
+.container{
+  position: fixed;
+  //background-color: red;
+  height: 100vh;
+  width: 100vw;
+  z-index: 4;
+  top:0;right:0;left:0;bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.container8{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.container2{
+  box-sizing: border-box;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+  min-height: 400px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
+  width: 350px;
+  min-width: 25vw;
+}
+#container2{
+  width: 400px;
+  min-width: 29vw;
+}
+.container2 h1{
+   text-align: center;
+   font-size: 20px;
+   margin-top: 20px;
+   margin-bottom: 20px;
+}
+.logInInput{
+  outline: none;
+  border: none;
+  color: #959595;
+}
+.logInInput[type='number'] {
+  -moz-appearance:textfield;
+}
+
+.logInInput::-webkit-outer-spin-button,
+.logInInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.cont1{
+  border-bottom: 1px solid #eee;
+  padding: 10px 0px 15px 0px;
+  margin-bottom:5px;
+  display: flex;
+  align-items: center;
+
+}
+.P1{
+  margin-top: 25px;
+  color: #353535;
+  font-size: 12px;
+}
+.logInIcon{
+  font-size: 18px;
+  margin-right:5px;
+  color: #959595;
+}
+.ul{
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-bottom: 50px;
+}
+.ul li{
+  margin-top: 10px;
+  font-size: 12px;
+  color: #959595;
+  
+} 
+.ul span{
+  color:$redColor;
+  cursor: pointer;
+  
+}
+.logInBtn{
+  margin-top: 30px;
+  padding: 12px 8px;
+  border-radius: 50px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  color: white;
+  background: linear-gradient(to right, #CB1E31 0%, #fa495e 100%);
+}
+.pErr{
+  color: red;
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: -2px;
+}
+.resetP{
+  font-size: 12px;
+  margin-top: 20px;
+}
+.backP{
+  text-align: center;
+  margin-top: 20px;
+  color: $blackish;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.dataPrivacyP{
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: 500;
+  //color: #666666;
+}
+@media all and (max-width: 430px) {
+  .container2{
+    min-height: 400px;
+    padding: 20px 20px;
+    width:90%;
+    min-width:auto;
+  }
+  #container2{
+    max-width:90%;
+    min-width:auto;
+  }
+}

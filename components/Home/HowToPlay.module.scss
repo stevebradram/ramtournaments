@@ -1,0 +1,131 @@
+  $primaryColor: #ff8801;
+  $secondaryColor: #FED800;
+  $blackish:#292f51;
+  .container{
+    //height: 75vh;
+    min-height: 500px;
+    //padding-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box; 
+    padding: 50px 70px 50px 70px;
+    background-color: white;
+}
+.cardCont{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.listDiv{
+    width: 32%;
+    min-height: 250px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+.header1P{
+    text-align: center;
+    color: $blackish;
+    font-size: 50px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    text-align: center;
+    padding: 0px 10px;
+}
+.header2P{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 50px;
+    padding: 0px 10px;
+   
+}
+.img1{
+    height:140px;
+    width:140px;
+    border-radius: 140px;
+    z-index: 3;
+    object-fit: cover;
+    background-color: #eff1fe;
+    padding: 10px;
+}
+.detP1{
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 24px;
+    color: $blackish;
+    margin: 5px 10px;
+    text-align: center;
+    margin-top: 15px;
+}
+.detP2{
+    box-sizing: border-box;
+    font-size: 18px;
+    color: $blackish;
+    margin: 10px 10px;
+    text-align: center;
+}
+.imgCont{
+    display: flex;
+    justify-content: center;
+}
+.imgDiv1{
+    border-radius: 100px;
+    border: 2px dotted #eff1fe;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.imgDiv2{
+    border-radius: 100px;
+    border: 2px dotted #eff1fe;
+    height: 160px;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.addIC{
+    color: #CB1E31;
+    font-size: 40px;
+    margin-right: 10px;
+}
+.headLowerDiv{
+    margin-left: 10px;
+}
+@media all and (max-width: 1000px) {
+    .container{
+        padding: 50px 50px 50px 50px;
+    }
+}
+@media all and (max-width: 800px) {
+    .listDiv{
+        width: 49%;  
+    }
+}
+@media all and (max-width: 600px) {
+    .container{
+        padding: 50px 20px 50px 20px;
+    }
+    .listDiv{
+        width:100%;  
+        margin-bottom: 20px;
+    }
+}
+@media all and (max-width: 430px) {
+.header1P{
+    font-size: 35px;
+    margin-bottom: 5px;
+}
+}
+
+@media all and (max-width: 350px) {
+    .container{
+        padding: 50px 10px 50px 10px;
+    } 
+}
