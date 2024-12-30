@@ -31,7 +31,8 @@ class UFCEvent extends Component {
     this.previous = this.previous.bind(this);
   }
   componentDidMount() {
-    this.checkUpcomingPastGames()
+    this.checkForSelectedEvent()
+    //this.checkUpcomingPastGames()
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
 
@@ -50,6 +51,32 @@ class UFCEvent extends Component {
   }
   previous() {
     this.slider.slickPrev();
+  }
+  checkForSelectedEvent=async(userId)=>{
+    var userInfoDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
+    await  userInfoDb.once('value',dataSnapshot=>{
+      if (!dataSnapshot.val()) {
+        this.checkUpcomingPastGames()
+        return
+      }
+      var theData=dataSnapshot.val()
+      var endTime=theData.endTime
+      var theEventKey=theData.id
+      var time=theData.time
+      var theEventTitle=theData.title
+      var sportType = theData.sportType
+      //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
+      this.setState({theEventTitle, theEventKey, time,endTime,sportType},()=>{
+        console.log('items',theEventTitle,theEventKey,time,endTime,sportType)
+        if(sportType==='NCAAF'){
+         this.getNCAAFMatches()
+        }else{
+          this.getUfcMatches(userId)
+        }
+        
+      })
+      console.log('theData000000',theData)
+    })
   }
   checkUpcomingPastGames=async(userId)=>{
     //return
@@ -261,7 +288,7 @@ class UFCEvent extends Component {
                 </div>
         <Slider ref={c => (this.slider = c)} {...settings}>
           {this.state.theItems.map((item) => {
-            console.log('iteeeem',item)
+           // console.log('iteeeem',item)
             var playStat = ''
             var playStatCol = ''
             if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
@@ -293,7 +320,7 @@ class UFCEvent extends Component {
                     {/*<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>*/}
                     <div className={style.theCont}>
                       <div className={style.theContLeft}>
-                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
+                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'?null:'white'}}>
                           <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                         </div>
@@ -302,7 +329,7 @@ class UFCEvent extends Component {
                       </div>
                       <BsFillLightningFill className={style.sepIc} />
                       <div className={style.theContRight}>
-                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
+                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'?null:'white'}}>
                           <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                         </div>

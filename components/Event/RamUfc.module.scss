@@ -457,12 +457,44 @@ $theDark:#b2b2b2;
     padding: 5px 20px;
     border-radius: 5px;
     display: flex;
-    flex-direction: column;
+   // flex-direction: column;
     align-items: center;
     color: $blackish;
     font-weight: 600;
     cursor: pointer;
     margin-bottom: 10px;
+    position: relative;
+}
+.selectHomeEventDiv{
+    position: absolute;
+    top:0;right:0;bottom: 0;left: 0;
+    background-color: white;
+    font-size: 12px;
+    color: $blackish;
+    border-radius: 5px;
+    background-color: #00000011;
+    display: flex;
+    justify-content: flex-end;
+}
+.selectHomeEventDiv button{
+   border: 1px solid #eee;
+   padding: 4px 7px;
+   border-radius: 5px;
+   background-color: $redColor;
+   margin-top: 2px;
+   margin-right: 5px;
+   cursor: pointer;
+   height: 30px;
+   font-size: 12px;
+   color: white;
+   margin-right: 35px;
+   
+}
+.headListDiv2{
+    display: flex;
+    margin-top: 0px;
+    align-items: center;
+    margin-right: 10px;
 }
 .headListP1{
     font-size: 14px; 
@@ -474,11 +506,7 @@ $theDark:#b2b2b2;
  .headListP3{
      font-size: 10px; 
  }
- .headList div{
-     display: flex;
-     margin-top: 0px;
-     align-items: center;
- }
+
  .resultsCont{
     display: flex;
     flex-wrap: wrap;

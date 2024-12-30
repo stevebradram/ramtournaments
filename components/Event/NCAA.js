@@ -14,6 +14,7 @@ import { MdInfoOutline } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { ToastContainer, toast } from 'react-toastify';
 import { RiTeamFill } from "react-icons/ri";
+import { SlOptionsVertical } from "react-icons/sl";
 import axios from "axios"
 import dayjs from 'dayjs';
 var allMatches = []
@@ -136,7 +137,7 @@ class NCAA extends Component {
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false
   }
   componentDidMount = () => {
     //this.sendMatchesToFirebase()
@@ -400,11 +401,12 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var title = data.val().title
         var sportType = data.val().sportType
         var endTime = data.val().endTime
+        var theData = data.val()
         //var currentSelection = data.val().currentSelection
         var currentSelection='quarterFinals'
 
 
-        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection }
+        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
         allGames.push(theEvents)
 
         if (gamesCount === i) {
@@ -697,7 +699,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         return
       }
       this.setState({ theEventKey, theEventTitle, expired }, () => {
-        this.getUfcMatches()
+        this.getNCAAFMatches()
       })
     })
   }
@@ -1025,6 +1027,24 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       })
     )
   }
+  chooseHomeEvent=(event)=>{
+  event.stopPropagation()
+  event.preventDefault()
+  this.setState({selectHomeEvent:true})
+  }
+  sendEvent=(event,data,id)=>{
+    event.stopPropagation()
+    event.preventDefault()
+    data['id']=id
+    console.log('data',data)
+    var theDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
+    theDb.set(data,error=>{
+      if(!error){
+        this.setState({selectHomeEvent:false})
+        this.notify('Selected Succesfully')
+      }
+    })
+    }
   render() {
    // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
@@ -1068,10 +1088,12 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
             }
             return (
               <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
-              <p className={style.headListP1}>{item.title}</p>
-               <div><p className={style.headListP2}>{eventTime}</p>
+               <div><p className={style.headListP1}>{item.title}</p>
+               <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
-               <p className={style.headListP3}>{timing}</p></div>
+               <p className={style.headListP3}>{timing}</p></div></div>
+               {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||this.state.userId==='zZTNto5p3XVSLYeovAwWXHjvkN43'||this.state.userId==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event)}/>
+                {this.state.selectHomeEvent?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
               </div>  
             )
           })}

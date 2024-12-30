@@ -14,6 +14,7 @@ import { TypeAnimation } from 'react-type-animation';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios"
 import dayjs from 'dayjs';
+import { SlOptionsVertical } from "react-icons/sl";
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 class RamUfc extends Component {
   state={theMenu:'mainCard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:false,theEvent:'Upcoming Events',currentID:1,
@@ -22,7 +23,7 @@ class RamUfc extends Component {
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
-    showGetMatchesModal:false,UFCLinkInput:''
+    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:''
   }
   componentDidMount=()=>{
    //console.log('on raaaaaaaaaaaaam ufc')
@@ -232,6 +233,7 @@ class RamUfc extends Component {
       var title=data.val().title
       var sportType=data.val().sportType
       var endTime=data.val().endTime
+      var theData = data.val()
 
       var theItem=''
       //allGames.push(theItem)
@@ -245,7 +247,7 @@ class RamUfc extends Component {
           upcomingG={id:key,time:time,title:title}
           upcomingGames.push(upcomingG)
         }*/
-          var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime}
+          var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,theData:theData}
           allGames.push(theItem)
       }
       if(theCount===i){
@@ -691,6 +693,25 @@ inputChange = async (e) => {
   var value = e.target.value
   await this.setState({[e.target.id]: value})
 }
+chooseHomeEvent=(event,id)=>{
+  event.stopPropagation()
+  event.preventDefault()
+  this.setState({selectHomeEvent:true,selectHomeEventId:id})
+  }
+  sendEvent=(event,data,id)=>{
+    event.stopPropagation()
+    event.preventDefault()
+    data['id']=id
+    var theDb=firebase.database().ref("/theEvents/eventToShowHomePage/")
+    theDb.set(data,(error) => {
+      if (error) {
+        this.notify('An error occured while updating')
+      }else{
+        this.setState({selectHomeEvent:false})
+        this.notify('Selected Succesfully')
+      }
+  })
+    }
   render() {
    var flockTeamName=''
    var itemToModals=''
@@ -722,11 +743,13 @@ inputChange = async (e) => {
            }
             return(
               <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
-                <p className={style.headListP1}>{item.title}</p>
-               <div><p className={style.headListP2}>{eventTime}</p>
+               <div><p className={style.headListP1}>{item.title}</p>
+               <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
-               <p className={style.headListP3}>{timing}</p></div>
-               </div>  
+               <p className={style.headListP3}>{timing}</p></div></div>
+               {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||this.state.userId==='zZTNto5p3XVSLYeovAwWXHjvkN43'||this.state.userId==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item.id)}/>
+                {this.state.selectHomeEvent&&this.state.selectHomeEventId==item.id?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
+              </div>  
             )
           })}
         </div>
