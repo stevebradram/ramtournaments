@@ -152,14 +152,33 @@ class leaderboard extends Component {
       
       //console.log('theId',theId,'theData',theData)
       var userInfoDb=firebase.database().ref('/users/').child(theId).child('/ramData/events/'+sportType+'/'+theEventKey+'/details/')
-     
+      var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
+      var theDet={}
+      if(this.state.isAdmin){
+      userInfoDb2.once('value',dataSnapshot=>{
+        var theD=dataSnapshot.val()
+        theDet['phone']=theD.phoneNo
+        theDet['email']=theD.email
+      })}
       userInfoDb.once('value',dataSnapshot=>{
         //console.log('here at nulll',scoreBoardNo,i,dataSnapshot.val())
        if(!dataSnapshot.val())return
           var data=dataSnapshot.val()
-          var theUserData={id:theId,flockName:data.flockName,teamName:data.teamName,bestPossibleScore:data.bestPossibleScore,currentScore:0.00}
+           //theUserData={id:theId,flockName:data.flockName,teamName:data.teamName,bestPossibleScore:data.bestPossibleScore,currentScore:0.00}
           
-          theAllData.push(theUserData)
+           theDet['id']=theId
+           theDet['flockName']=data.flockName
+           theDet['teamName']=data.teamName
+           theDet['bestPossibleScore']=data.bestPossibleScore
+           theDet['currentScore']=0.00
+           if(sportType==="NCAAF"){
+            var theCurrentScore=Number(userBetData.firstRoundScore)+Number(userBetData.quarterFinalsScore)+Number(userBetData.semiFinalsScore)+Number(userBetData.finalsScore)
+            theDet['finalsScore']=0.00
+            theDet['firstRoundScore']=0.00
+            theDet['quarterFinalsScore']=0.00
+            theDet['semiFinalsScore']=0.00
+          }
+          theAllData.push(theDet)
           if(scoreBoardNo===i){
             this.setState({nullData:theAllData,showProgressBar:false})
            // console.log('theAllData 0005',theAllData)
@@ -218,7 +237,6 @@ class leaderboard extends Component {
            // //console.log('dataSnapshot.val()',dataSnapshot.val())
            
           theDet['id']=theId
-         
           theDet['flockName']=userBetData.flockName
           theDet['teamName']=userBetData.teamName
           theDet['bestPossibleScore']=userBetData.bestPossibleScore
