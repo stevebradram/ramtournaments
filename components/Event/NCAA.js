@@ -893,7 +893,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       if(this.state.currentSelection!=='firstRound'){
         var theDbRef=firebase.database().ref('/userBets/scoreBoards/NCAAF/'+this.state.theEventKey)
         theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-           if(dataSnapshot.val()){this.setState({ openLoginModal:false,opendetailsModal: true })}
+          console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+           if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
            else{this.notify("Can't make a pick when the event has already started")}
         })
       }else{
