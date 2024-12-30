@@ -14,9 +14,13 @@ class About extends Component {
         <div className={style.rightDiv}>
          <p className={style.titleP}>A Few Words About Us</p>
          <p className={style.subTitleP}>RAM: Risk-Adjusted Madness</p>
+         <li>What is RAM?</li>
          <p className={style.descP1}>RAM allows people from all circles to enjoy every round of major sports events with newfound excitement as you'll never have so much fun rooting for the underdogs.  It's the way your sports-viewing experience should be!  </p>
+         <li>How does RAM work?</li>
          <p className={style.descP2}>Players get to make picks in each round of a major sports playoffs or a world famous tournament (as the event unfolds and independently of other rounds).  In this way, unlike a normal bracket contest - you won't lose interest if your top teams are eliminated in the early rounds.  This feature allows fans to adjust their views on the tournament as surprising teams emerge and more information unfolds between rounds.</p>
+         <li>How do you win?</li>
          <p className={style.descP3}> Winning picks for each matchup are rewarded points relative to the risk a RAM tournament player is taking so you can selectively choose your underdog picks and favorites to have your optimal Fantasy Tournament experience. The points you earn are commensurate with the actual risks you take.</p>
+         <li>What makes the madness 'Risk-Adjusted'?</li>
          <p className={style.descP3}>RAM Tournament players pick a winner of a game (or series of games) and then points are assigned via a weighted-points scoring approach.  For example, if the tournament was the NCAA Men's Basketball Tournament and you pick a 16-seed to win (and they actually did), then you would net around 76  RAM points for that one pick (versus around 1.2 RAM points for picking the 1-seed).  NOTE:  The first round of each RAM Tournament presents the best chance of scoring the greatest amount of points since there are the most choices to be made in that initial round.</p>
         </div>
       </div>
