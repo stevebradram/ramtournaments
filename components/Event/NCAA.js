@@ -894,7 +894,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
     editDbRef.once('value', dataSnapshot => {
       console.log('zeve mbyu',dataSnapshot.val()-new Date().getTime())
-     if((dataSnapshot.val()-new Date().getTime()) < 600000){
+     if((new Date().getTime()<dataSnapshot.val())){
       this.notify('Event pick/edit time expired')
      }
      else{
