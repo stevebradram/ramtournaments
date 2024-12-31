@@ -253,12 +253,20 @@ class NCAA extends Component {
   checkForOutcome=async () => {
     try {
       //theEvents::NCAAF::ncaaf20242025::firstRound
+      var scoreName=''
       if(!this.state.theEventKey||this.state.theEventKey.length<3)return
-      var theLink='theEvents::NCAAF::'+this.state.theEventKey+'::'+this.state.currentSelection
+      
       //var theLink2='theEvents::ramUfc::'+theK
+      if(this.state.currentSelection==='firstRound'){scoreName='firstRoundScore'}
+      if(this.state.currentSelection==='quarterFinals'){scoreName='quarterFinalsScore'}
+      if(this.state.currentSelection==='semiFinals'){scoreName='semiFinalsScore'}
+      if(this.state.currentSelection==='finals'){scoreName='finalsScore'}
+      var theLink='theEvents::NCAAF::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+      
       var theQuery=encodeURIComponent(theLink) 
-     
+      console.log('ncaaf query',theQuery)
+      //return
       await axios.get("http://localhost:4000/getNCAAFResults?term="+theQuery)
         .then((res) => {
           //console.log('theItems',res)
@@ -886,7 +894,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
     editDbRef.once('value', dataSnapshot => {
       console.log('zeve mbyu',dataSnapshot.val()-new Date().getTime())
-     if((dataSnapshot.val()-new Date().getTime()) < 7200000){
+     if((dataSnapshot.val()-new Date().getTime()) < 600000){
       this.notify('Event pick/edit time expired')
      }
      else{

@@ -27,7 +27,7 @@ var theItems=[]
     ]*/
 //var scoreBoardArr
 class leaderboard extends Component {
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:''}
   componentDidMount=()=>{
      //this.getScoreBoardData()
@@ -72,6 +72,29 @@ class leaderboard extends Component {
     })
   })
  }
+ checkForSelectedEvent=async(sportType,theEventKey,theTime)=>{
+  var userInfoDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
+  await  userInfoDb.once('value',dataSnapshot=>{
+    if (!dataSnapshot.val()) {
+      this.getScoreBoardData(sportType,theEventKey,theTime)
+      return
+    }
+    var theData=dataSnapshot.val()
+    var endTime=theData.endTime
+    var theEventKey=theData.id
+    var theTime=theData.time
+    var theEventTitle=theData.title
+    var sportType = theData.sportType
+    //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
+    this.setState({theEventTitle, theEventKey, theTime,endTime,sportType},()=>{
+      console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
+      this.getScoreBoardData(sportType,theEventKey,theTime)
+      
+      
+    })
+    console.log('theData000000',theData)
+  })
+}
  checkUpcomingPastGames=async(userId)=>{
   //return
   
@@ -104,7 +127,7 @@ class leaderboard extends Component {
           //console.log('teeeeeee',allGames)
           theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time']
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime},()=>{
-          this.getScoreBoardData(sportType,theEventKey,theTime)
+          this.checkForSelectedEvent(sportType,theEventKey,theTime)
           console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
           })
