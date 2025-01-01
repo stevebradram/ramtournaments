@@ -568,7 +568,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       })
       userInfoDb.once('value', dataSnapshot => {
         if (!dataSnapshot.val()) return
-        //console.log('the type user info', dataSnapshot.val())
+        console.log('the type user 0000000000000', dataSnapshot.val())
         if (dataSnapshot.val()) {
           var theInfo = dataSnapshot.val()
           this.setState({ currentEventUserInfo: theInfo, currentRank: theInfo.currentRank })
@@ -614,7 +614,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
           i++
-          console.log('thank DAATA',selection,data.val())
+        //  console.log('thank DAATA',selection,data.val())
           thetrrrr.map((item) => {
             ////console.log('thank you sir',item.winner)
             if (item.id === data.key) {
@@ -656,6 +656,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           if (itemsCount === i) {
 
             this.setState({ dataAvailable: true })
+            return
             /* if(this.state.theMenu==='mainCard'){this.setState({ramUfcMaincardArray:this.state.theItems})}
              if(this.state.theMenu==='prelimms'){this.setState({ramUfcPrelimsArray:this.state.theItems})}
              if(this.state.theMenu==='earlyPrelims'){this.setState({ramUfcEarlyPrelimsArray:this.state.theItems})}*/

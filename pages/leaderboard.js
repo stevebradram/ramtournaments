@@ -28,7 +28,7 @@ var theItems=[]
 //var scoreBoardArr
 class leaderboard extends Component {
   state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',
-    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:''}
+    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:''}
   componentDidMount=()=>{
      //this.getScoreBoardData()
      this.showProgressBar()
@@ -85,8 +85,9 @@ class leaderboard extends Component {
     var theTime=theData.time
     var theEventTitle=theData.title
     var sportType = theData.sportType
+    var currentSelection = theData.currentSelection
     //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
-    this.setState({theEventTitle, theEventKey, theTime,endTime,sportType},()=>{
+    this.setState({theEventTitle, theEventKey, theTime,endTime,sportType,currentSelection},()=>{
       console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
       this.getScoreBoardData(sportType,theEventKey,theTime)
       
@@ -115,6 +116,7 @@ class leaderboard extends Component {
       var title=data.val().title
       var sportType=data.val().sportType
       var endTime=data.val().endTime
+      var currentSelection = data.val().currentSelection
       //console.log('value',time,dataSnapshot.val())
       //console.log('nowDate',nowDate,'time',time,'title',title)
       
@@ -125,8 +127,8 @@ class leaderboard extends Component {
         if(allGames.length>0){
           allGames=allGames.sort(function(a, b){return b.time - a.time});
           //console.log('teeeeeee',allGames)
-          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time']
-          this.setState({allGames,theEventTitle,theEventKey,sportType,theTime},()=>{
+          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],theTime=allGames[0]['currentSelection']
+          this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
           this.checkForSelectedEvent(sportType,theEventKey,theTime)
           console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
@@ -265,6 +267,7 @@ class leaderboard extends Component {
           theDet['bestPossibleScore']=userBetData.bestPossibleScore
           if(sportType==="NCAAF"){
             var theCurrentScore=Number(userBetData.firstRoundScore)+Number(userBetData.quarterFinalsScore)+Number(userBetData.semiFinalsScore)+Number(userBetData.finalsScore)
+            theCurrentScore=theCurrentScore.toFixed(2)
             theDet['finalsScore']=userBetData.finalsScore
             theDet['firstRoundScore']=userBetData.firstRoundScore
             theDet['quarterFinalsScore']=userBetData.quarterFinalsScore
@@ -349,7 +352,7 @@ class leaderboard extends Component {
           {this.state.sportType==='NCAAF'?null:<th>Best Possible<br/>Score</th>}
           {this.state.sportType==='NCAAF'?
            <>
-           <th>Best Possible<br/>Score</th>
+           <th>Best Score<br/>{' '+this.state.currentSelection}</th>
            <th>First Round<br/>Score</th>
            <th>Quarter Finals</th>
            <th>Semi Finals<br/></th>
