@@ -86,6 +86,7 @@ class leaderboard extends Component {
     var theEventTitle=theData.title
     var sportType = theData.sportType
     var currentSelection = theData.currentSelection
+    //currentSelection='semiFinals'
     //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
     this.setState({theEventTitle, theEventKey, theTime,endTime,sportType,currentSelection},()=>{
       console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
@@ -117,6 +118,7 @@ class leaderboard extends Component {
       var sportType=data.val().sportType
       var endTime=data.val().endTime
       var currentSelection = data.val().currentSelection
+      //currentSelection='semiFinals'
       //console.log('value',time,dataSnapshot.val())
       //console.log('nowDate',nowDate,'time',time,'title',title)
       
@@ -202,6 +204,7 @@ class leaderboard extends Component {
             theDet['firstRoundScore']=0.00
             theDet['quarterFinalsScore']=0.00
             theDet['semiFinalsScore']=0.00
+            theDet['currentSelection']=data.currentPick
           }
           theAllData.push(theDet)
           if(scoreBoardNo===i){
@@ -272,7 +275,8 @@ class leaderboard extends Component {
             theDet['firstRoundScore']=userBetData.firstRoundScore
             theDet['quarterFinalsScore']=userBetData.quarterFinalsScore
             theDet['semiFinalsScore']=userBetData.semiFinalsScore
-            theDet['currentScore']=theCurrentScore
+            theDet['currentScore']=theCurrentScore,
+            theDet['currentSelection']=userBetData.currentPick
           }else{
             theDet['currentScore']=theData
           }
@@ -341,6 +345,11 @@ class leaderboard extends Component {
       2000)
   }
   itemComponent=(theItems)=>{
+    var BSPTitle=''
+    if(this.state.currentSelection==='firstRound'){BSPTitle='First Round'}
+    if(this.state.currentSelection==='quarterFinals'){BSPTitle='Quarter Finals'}
+    if(this.state.currentSelection==='semiFinals'){BSPTitle='Semi Finals'}
+    if(this.state.currentSelection==='finals'){BSPTitle='Finals'}
     return(
     <div id={styles.table1Div}>
       <table className={styles.table1}>
@@ -352,7 +361,7 @@ class leaderboard extends Component {
           {this.state.sportType==='NCAAF'?null:<th>Best Possible<br/>Score</th>}
           {this.state.sportType==='NCAAF'?
            <>
-           <th>Best Score<br/>{' '+this.state.currentSelection}</th>
+           <th>Best Score<br/>{' '+BSPTitle}</th>
            <th>First Round<br/>Score</th>
            <th>Quarter Finals</th>
            <th>Semi Finals<br/></th>
@@ -371,7 +380,7 @@ class leaderboard extends Component {
               {this.state.sportType==='NCAAF'?null:<td>{item.bestPossibleScore}</td>}
               {this.state.sportType==='NCAAF'?
               <>
-              <td>{item.bestPossibleScore}</td>
+              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>
               <td>{item.firstRoundScore}</td>
               <td>{item.quarterFinalsScore}</td>
               <td>{item.semiFinalsScore}</td>

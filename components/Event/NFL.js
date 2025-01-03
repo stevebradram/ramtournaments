@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import style from "./NCAA.module.scss";
+import style from "./NFL.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { BsFillLightningFill } from "react-icons/bs";
 import Countdown from 'react-countdown';
@@ -137,7 +137,7 @@ class NCAA extends Component {
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:''
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false
   }
   componentDidMount = () => {
     //this.sendMatchesToFirebase()
@@ -239,7 +239,6 @@ class NCAA extends Component {
       var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
       console.log('queeeeeeeeeeeeeeery',theQuery)
-      //return
       var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
         console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
@@ -420,7 +419,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var endTime = data.val().endTime
         var theData = data.val()
         //var currentSelection = data.val().currentSelection
-        var currentSelection='semiFinals'
+        var currentSelection='quarterFinals'
 
 
         theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
@@ -611,10 +610,10 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
         console.log('selection',selection,'itemsCount',itemsCount)
-            if(itemsCount===4){this.setState({isFirstRoundPicked:true,BPSTitle:'First Round'})}
-            if(itemsCount===8){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,BPSTitle:'Quarter Finals'})}
-            if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,BPSTitle:'Semi Finals'})}
-            if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true,BPSTitle:'Finals'})}
+            if(itemsCount===4){this.setState({isFirstRoundPicked:true})}
+            if(itemsCount===8){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true})}
+            if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true})}
+            if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true})}
             if(selection==='firstRound'&&itemsCount<4)return
             if(selection==='quarterFinals'&&itemsCount<8)return
             if(selection==='semiFinals'&&itemsCount<10)return
@@ -901,12 +900,11 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       return
     }*/
    console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
-   //return
     var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
     editDbRef.once('value', dataSnapshot => {
       console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
      if((new Date().getTime()>dataSnapshot.val())){
-      this.notify('Event pick/edit not available at the moment')
+      this.notify('Event pick/edit time expired')
      }
      else{
       if(this.state.currentSelection!=='firstRound'){
@@ -925,7 +923,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
   opeModal2 = () => {
     if (this.state.expired) {
-      this.notify('Event pick/edit not available at the moment')
+      this.notify('Event pick/edit time expired')
       return
     }
     this.setState({ editDetailsModal: true })
@@ -1168,7 +1166,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
         <div className={style.scoresCont}>
           <div className={style.scoresCont1}>
-            <p className={style.currentP}>{this.state.BPSTitle}</p>
+            <p className={style.currentP}>{this.state.currentSelection}</p>
             <p className={style.scoreP1}>Best possibe Score:<br/></p>
             <p className={style.scoreP2}>{this.state.dataAvailable ? this.state.currentEventUserInfo['bestPossibleScore'] : '0.00'} points</p>
           </div>
@@ -1183,7 +1181,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         </div>
         <div className={style.divCont}>
           <div className={style.divCont}>
-            <p className={style.titleP}>First Round</p>
+            <p className={style.titleP}>Wild Card</p>
             <div className={style.listCont}>           
         {this.state.firstRoundArray.map((item, index) => {
         var playStat = ''
@@ -1210,7 +1208,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                <p>NCAAF First Round</p>
+                <p>NFL Wild Card Round</p>
                 <p>{theTime}</p>
               </div>
 
@@ -1258,7 +1256,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   })}
               </div></div>
           <div className={style.divCont}>
-            <p className={style.titleP}>Quarter Finals</p>
+            <p className={style.titleP}>Divisional Round</p>
             <div className={style.listCont}>{/*this.itemComponent(this.state.quarterFinalsArray, 'NCAAF Quarter Finals')*/}
             {this.state.quarterFinalsArray.map((item, index) => {
         var playStat = ''
@@ -1285,7 +1283,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                <p>NCAAF Quarter Finals</p>
+                <p>NFL Divisional Round</p>
                 <p>{theTime}</p>
               </div>
 
@@ -1333,7 +1331,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   })}
               </div></div>
           <div className={style.divCont}>
-            <p className={style.titleP}>Semi Finals</p>
+            <p className={style.titleP}>Conference Championship</p>
             <div className={style.listCont}>
         {this.state.semiFinalsArray.map((item, index) => {
         var playStat = ''
@@ -1360,7 +1358,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                <p>NCAAF Semi Finals</p>
+                <p>NFL Conference Championship</p>
                 <p>{theTime}</p>
               </div>
 
@@ -1406,7 +1404,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           </div>
         )
   })}</div></div>
-          <p className={style.titleP}>Finals</p>
+          <p className={style.titleP}>Super Bowl</p>
           <div className={style.listCont} style={{ justifyContent: 'center' }}>           
         {this.state.finalArray.map((item, index) => {
         var playStat = ''
@@ -1433,7 +1431,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                <p>NCAAF Finals</p>
+                <p>Super Bowl</p>
                 <p>{theTime}</p>
               </div>
 

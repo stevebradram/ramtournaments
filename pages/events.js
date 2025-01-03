@@ -7,6 +7,7 @@ import DetailsModal from '../components/Event/DetailsModal'
 import EditDetails from '../components/Event/DetailsModalCopy'
 import RamUfc from '../components/Event/RamUfc'
 import NCAA from '../components/Event/NCAA'
+import NFL from '../components/Event/NFL'
 import LogIn from '../components/LogInReg/LogIn'
 import localStorage from 'local-storage'
 import firebase from '../components/FirebaseClient'
@@ -130,7 +131,7 @@ class events extends Component {
           var colorP='',clickable=true
           if(item.name==='March Madness'&&this.state.theMarchMadness===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='NCAAF'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
-          if(item.name==='NFL Playoffs'&&this.state.theNfl===false){colorP='#b2b2b2',clickable=false}
+          if(item.name==='NFL Playoffs'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='RAM UFC'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           return(
@@ -162,6 +163,7 @@ class events extends Component {
         </div>
           {this.state.selectedEvent==='RAM UFC'?<RamUfc isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NCAAF'?<NCAA isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}
       </div>
       </>
     )

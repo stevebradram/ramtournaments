@@ -8,14 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../Helper/ProgressBar'
 import Router from 'next/router';
 var flockTeamName=''
-const mainCard=[
-  {id:1,matchNo:1,time:'Nov 3 2024, 03:00PM',player1:'Brandon Moreno-Mexico',p1Rec:'21-8-2',p1Points:'1.42',player2:'Amir Albazi-Iraq',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'notPlayed',bestPossibleScore:'', status2:'',bet:'',winner:'player1',match:'Mens Flyweight'},
-  {id:2,matchNo:2,time:'Nov 3 2024, 03:00PM',player1:'Erin Blanchfield-USA',p1Rec:'21-8-2',p1Points:'1.42',player2:'Rose Namajunas-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player3.png',p2Photo:'player4.png',status1:'ongoing',bestPossibleScore:'',status2:'',bet:'player1',winner:'player2',match:'Womens Flyweight'},
-  {id:3,matchNo:3,time:'Nov 3 2024, 03:00PM',player1:'Derrick Lewis-USA',p1Rec:'21-8-2',p1Points:'1.42',player2:'Jhonata Diniz-Brazil',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player5.png',p2Photo:'player6.png',status1:'played',bestPossibleScore:'',status2:'',bet:'',winner:'player1',match:'Mens Heavyweight'},
-  {id:4,matchNo:4,time:'Nov 3 2024, 03:00PM',player1:'Caio Machado-Brazil',p1Rec:'21-8-2',p1Points:'1.42',player2:'Brendson Ribeiro-Brazil',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player7.png',p2Photo:'player8.png',status1:'played',bestPossibleScore:'',status2:'',bet:'player2',winner:'player2',match:'Mens Light Heavyweight'},
-  {id:5,matchNo:5,time:'Nov 3 2024, 03:00PM',player1:'Marc Andre Barriault-Canada',p1Rec:'21-8-2',p1Points:'1.42',player2:'Dustin Stoltzfus-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player9.png',p2Photo:'player10.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Middleweight'},
-  {id:6,matchNo:6,time:'Nov 3 2024, 03:00PM',player1:'Mike Malott-Canada',p1Rec:'21-8-2',p1Points:'1.42',player2:'Trevin Giles-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player11.png',p2Photo:'player12.png',status1:'played',status2:'',bestPossibleScore:'',bet:'player1',winner:'player2',match:'Mens Welterweight'},
-  ]
+
 
 class DetailsModal extends Component {
   state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
@@ -241,13 +234,16 @@ class DetailsModal extends Component {
         bestPossibleScore:this.state.bestPossibleScore,
         currentScore:'0.00',
         [dataScore]:'0.00',
-        currentRank:false
+        currentRank:false, 
+        currentPick:this.props.currentSelection
       }
     }else{
       detailsData = {
         teamName:this.state.teamName,
+        bestPossibleScore:this.state.bestPossibleScore,
         flockName:this.state.flockName,
         [dataScore]:'0.00',
+        currentPick:this.props.currentSelection
       }
     }
    // detailsData[dataScore]='0.00'
