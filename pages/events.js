@@ -109,6 +109,7 @@ class events extends Component {
   })   
   }
   chooseEvent=(name)=>{
+    
     if(name==='March Madness'){this.setState({theCurrentEvent:'marchMadness'})}
     if(name==='NFL Playoffs'){this.setState({theCurrentEvent:'nfl'})}
     if(name==='RAM UFC'){this.setState({theCurrentEvent:'ramUfc'})}
@@ -131,7 +132,7 @@ class events extends Component {
           var colorP='',clickable=true
           if(item.name==='March Madness'&&this.state.theMarchMadness===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='NCAAF'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
-          if(item.name==='NFL Playoffs'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
+          if(item.name==='NFL Playoffs'&&this.state.theMarchMadness===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='RAM UFC'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           return(
@@ -163,7 +164,7 @@ class events extends Component {
         </div>
           {this.state.selectedEvent==='RAM UFC'?<RamUfc isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NCAAF'?<NCAA isUserLoggedIn={this.state.userLoggedIn}/>:null}
-          {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          {/*this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null*/}
       </div>
       </>
     )

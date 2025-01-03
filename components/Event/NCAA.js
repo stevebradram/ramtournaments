@@ -560,6 +560,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   getMatchesInfo = async (userId,selection) => {
     ////console.log('allMatches',userId,this.state.theEventKey)
     //return
+    if(userId.length<5)return
     var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAF/" + this.state.theEventKey + '/')
     var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
     var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAF/" + this.state.theEventKey + '/details/')

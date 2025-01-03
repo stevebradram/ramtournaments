@@ -86,7 +86,7 @@ class leaderboard extends Component {
     var theEventTitle=theData.title
     var sportType = theData.sportType
     var currentSelection = theData.currentSelection
-    //currentSelection='semiFinals'
+    //currentSelection='quarterFinals'  
     //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
     this.setState({theEventTitle, theEventKey, theTime,endTime,sportType,currentSelection},()=>{
       console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
@@ -118,7 +118,7 @@ class leaderboard extends Component {
       var sportType=data.val().sportType
       var endTime=data.val().endTime
       var currentSelection = data.val().currentSelection
-      //currentSelection='semiFinals'
+      //currentSelection='quarterFinals'
       //console.log('value',time,dataSnapshot.val())
       //console.log('nowDate',nowDate,'time',time,'title',title)
       
