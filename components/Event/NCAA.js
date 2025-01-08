@@ -1095,7 +1095,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.allEvents.length > 0 ? <div className={style.matchesHeadDiv}>
           {this.state.allEvents.map((item, index) => {
             var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
-          
+           console.log('the tiiiiime',item.endTime)
             var theColor='#292f51',timing='Active Event'
             if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){
               theColor='#919191'
