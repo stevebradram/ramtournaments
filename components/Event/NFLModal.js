@@ -9,19 +9,7 @@ import axios from "axios"
 import dayjs from 'dayjs';
 var theImage1 = 'https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=600'
 var theImage2 = 'https://images.pexels.com/photos/19882427/pexels-photo-19882427/free-photo-of-elevate-your-style-with-vibrant-kicks-explore-a-spectrum-of-colors-in-our-sneaker-collection-step-into-bold-hues-and-showcase-your-unique-footwear-fashion.jpeg?auto=compress&cs=tinysrgb&w=600'
-/*const wildCardEdit=[
-    {id:'idilulya1',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'First Round'},
-    {id:'idilulya2',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'First Round'},
-    {id:'idilulya3',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'First Round'},
-    {id:'idilulya4',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'First Round'},
-    ]
-const divisionalRoundEdit=[
-      {id:'idilulya5',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'Quarter Finals'},
-      {id:'idilulya6',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'Quarter Finals'},
-      {id:'idilulya7',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'Quarter Finals'},
-      {id:'idilulya8',time:'2024-12-14T19:00:00Z',timeInMillis:0,commenceTime:'',game:'NFL',winner:'',status1:'notPlayed',player1:'Team 1',p1Points:'',p1Rec:'2-5-6',p2Rec:'1-2-3',player2:'player 2',p2Points:'',p1Photo:theImage1,p2Photo:theImage2,matchType:'Quarter Finals'},
-    ]*/
-//03dd880f071a65053e37000d3d826e14
+
 const wildCardEdit = [
   { id: 'wildCardMatch1', apiId: '03dd880f071a65053e37000d3d826e14', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
   { id: 'wildCardMatch2', apiId: '08e2147df0b21744fdef99cbcdf3edb7', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
@@ -565,13 +553,6 @@ class NCAAModal extends Component {
             }
           })
         })
-        /* theItems.map((item)=>{
-           console.log('the Item', item)
-           resultsArr.map((item2)=>{
-
-           })
-         })*/
-        //console.log('theItems', theItems)
 
       })
   }
