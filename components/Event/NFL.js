@@ -3,9 +3,9 @@ import style from "./NFL.module.scss";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { BsFillLightningFill } from "react-icons/bs";
 import Countdown from 'react-countdown';
-import DetailsModal from './NCAADetailsModal'
+import DetailsModal from './NFLDetailsModal'
 import EditDetails from './DetailsModalCopy'
-import NCAAModal from './NCAAModal'
+import NFLModal from './NFLModal'
 import LogIn from '../LogInReg/LogIn'
 import localStorage from 'local-storage'
 import firebase from '../FirebaseClient'
@@ -132,9 +132,9 @@ class NCAA extends Component {
     theMenu: 'mainCard', theItems: [], opendetailsModal: false, getRamDetails: false, dataAvailable: false, theEvent: 'Upcoming Events', currentID: 1,
     theRamUfc: '', theMarchMadness: false, theNfl: false, theFifa: '', userId: '', userLoggedIn: false, eventToShow: false,
     teamName: '', flockName: '', openLoginModal: false, clickHere1: 'CLICK HERE TO MAKE YOUR PICKS', clickHere2: 'CLICK HERE TO ENTER THE GAME', theEventTime: 0,
-    currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'NCAAF', pastEventsAvailable: false,
+    currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'NFL', pastEventsAvailable: false,
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
-    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
+    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, nflModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',
     isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false
@@ -146,7 +146,7 @@ class NCAA extends Component {
     //this.getRanking()
     //this.checkForOddsUpdate()
 
-    //this.getNCAAFMatches()
+    //this.getNFLMatches()
   
     //this.getNCAAFResults()
 
@@ -229,24 +229,25 @@ class NCAA extends Component {
     //this.checkForOutcome()
   }
   handleChildClick = () => {
-    this.setState({ count: this.state.count + 1, ncaaModal: false });
+    this.setState({ count: this.state.count + 1, nflModal: false });
     //console.log('azeeza', this.state.count)
   };
   checkForOddsUpdate = async () => {
     try {
      
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
-      console.log('queeeeeeeeeeeeeeery',theQuery)
-      var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
+      console.log('theQuery',this.state.theEventKey,this.state.editType,theQuery)
+      
+      var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
-        console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+       
        if((new Date().getTime()>dataSnapshot.val())){
         this.notify('Update odds time expired')
        }
        else{
-         axios.get("http://localhost:4000/updateNCAAFOdds?term=" + theQuery)
+         axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
         .then((res) => {
           var theItems = res.data.result
           //console.log('theItems', theItems)
@@ -402,14 +403,15 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
   checkUpcomingPastGames = async (userId) => {
     //return
-
-    var gamesInfo = firebase.database().ref('/theEvents/NCAAF/eventIds/')
+console.log('naingia2222222222222')
+    var gamesInfo = firebase.database().ref('/theEvents/NFL/eventsIds/')
     var i = 0, allGames = []
 
     await gamesInfo.once('value', dataSnapshot => {
       var gamesCount = dataSnapshot.numChildren()
+      console.log('naingia 3333',gamesCount)
       dataSnapshot.forEach((data) => {
-        //console.log('naingia')
+        console.log('naingia 44444',data)
         i++
         var pastG = {}, upcomingG = {}, theEvents = {}
         var key = data.key
@@ -418,10 +420,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var sportType = data.val().sportType
         var endTime = data.val().endTime
         var theData = data.val()
-        //var currentSelection = data.val().currentSelection
-        var currentSelection='quarterFinals'
-
-
+        var currentSelection = data.val().currentSelection
         theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
         allGames.push(theEvents)
 
@@ -433,123 +432,123 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         if ((theEventTime - new Date().getTime()) < 86400000) {
           expired = true
         }
-        if ((currentSelection === 'firstRound')) {
-          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopFirstRounEdit'})
+        if ((currentSelection === 'wildCard')) {
+          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopWildCardEdit'})
         }
-        if ((currentSelection === 'quarterFinals')) {
-          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopQuarterEdit' })
+        if ((currentSelection === 'divisionalRound')) {
+          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopDivisionalRoundEdit' })
         }
-        if ((currentSelection === 'semiFinals')) {
-          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: false,editType:'stopSemiEdit'})
+        if ((currentSelection === 'conferenceChampionship')) {
+          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: false,editType:'stopConferenceChampionshipEdit'})
         }
-        if ((currentSelection === 'finals')) {
-          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopFinalEdit'})
+        if ((currentSelection === 'superBowl')) {
+          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
         }
         this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
-          this.getNCAAFMatches(userId)
+          this.getNFLMatches(userId)
           ////console.log('currentSelection',this.state.currentSelection)
         })
       })
     })
   }
-  getNCAAFMatches = (userId) => {
+  getNFLMatches = (userId) => {
     allMatches = []
     this.setState({ firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], theMenu: 'mainCard', dataAvailable: false, currentEventUserInfo: {} })
-    var userInfoDb = firebase.database().ref('/theEvents/NCAAF/').child(this.state.theEventKey)
+    var userInfoDb = firebase.database().ref('/theEvents/NFL/').child(this.state.theEventKey)
     userInfoDb.once('value', dataSnapshot => {
       ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
       ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
-      var firstRoundCount = dataSnapshot.child('firstRound').numChildren()
-      var quarterFinalsCount = dataSnapshot.child('quarterFinals').numChildren()
-      var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
-      var finalsCount = dataSnapshot.child('finals').numChildren()
+      var firstRoundCount = dataSnapshot.child('wildCard').numChildren()
+      var quarterFinalsCount = dataSnapshot.child('divisionalRound').numChildren()
+      var semiFinalsCount = dataSnapshot.child('conferenceChampionship').numChildren()
+      var finalsCount = dataSnapshot.child('superBowl').numChildren()
       var theInfo = dataSnapshot.val()
-      //console.log('the event eventSelection', theInfo)
+      console.log('the event eventSelection', theInfo)
       //console.log('ncaaf20242025', theInfo.finals)
-      if (theInfo.firstRound) {
+      if (theInfo.wildCard) {
         var array1 = []
         var i = 0
-        for (var key in theInfo.firstRound) {
+        for (var key in theInfo.wildCard) {
           i++
-          var theData = theInfo.firstRound[key]
+          var theData = theInfo.wildCard[key]
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === firstRoundCount) {
-            ////console.log('whole maincard Array',array1)
+            console.log('whole maincard Array',array1)
             this.setState({ firstRoundArray: array1, theItems: array1 })
           }
         }
       }
-      if (theInfo.quarterFinals) {
+      if (theInfo.divisionalRound) {
         var array1 = []
         ////console.log('iko prelimsssssss')
         var i = 0
-        for (var key in theInfo.quarterFinals) {
+        for (var key in theInfo.divisionalRound) {
           i++
-          var theData = theInfo.quarterFinals[key]
+          var theData = theInfo.divisionalRound[key]
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === quarterFinalsCount) {
             ////console.log('whole prelimms Array',array1)
             this.setState({ quarterFinalsArray: array1 })
-            this.getMatchesInfo(this.state.userId,'firstRound')
+            this.getMatchesInfo(this.state.userId,'wildCard')
           }
         }
         //prelimsArray
       } else {
         ////console.log('hakuna prelimsssssss')
         if (this.state.userId.length > 3) {
-          this.getMatchesInfo(this.state.userId,'firstRound')
+          this.getMatchesInfo(this.state.userId,'wildCard')
         }
       }
       //console.log('iko finalssssssssssssssssss 0000')
-      if (theInfo.semiFinals) {
+      if (theInfo.conferenceChampionship) {
         var array1 = []
         ////console.log('iko earlyPrelims')
         var i = 0
-        for (var key in theInfo.semiFinals) {
+        for (var key in theInfo.conferenceChampionship) {
           i++
-          var theData = theInfo.semiFinals[key]
+          var theData = theInfo.conferenceChampionship[key]
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === semiFinalsCount) {
             console.log('wholesemiFinalsArray',array1)
             this.setState({ semiFinalsArray: array1 })
             if (this.state.userId.length > 3) {
-              this.getMatchesInfo(this.state.userId,'quarterFinals')
+              this.getMatchesInfo(this.state.userId,'divisionalRound')
               //this.getMatchesInfo(this.state.userId,'semiFinals')
             }
           }
         }
       } else {
         if (this.state.userId.length > 3) {
-          this.getMatchesInfo(this.state.userId,'quarterFinals')
+          this.getMatchesInfo(this.state.userId,'divisionalRound')
           ////console.log('hakuna early prelimsssssss')
         }
       }
       //console.log('iko finalssssssssssssssssss 1111')
-      if (theInfo.finals) {
+      if (theInfo.superBowl) {
         var array1 = []
         //console.log('iko finalssssssssssssssssss 2222')
         var i = 0
-        for (var key in theInfo.finals) {
+        for (var key in theInfo.superBowl) {
           i++
-          var theData = theInfo.finals[key]
+          var theData = theInfo.superBowl[key]
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === finalsCount) {
             ////console.log('whole early prelimms Array',array1)
             this.setState({ finalArray: array1 })
             if (this.state.userId.length > 3) {
-              this.getMatchesInfo(this.state.userId,'semiFinals')
-              this.getMatchesInfo(this.state.userId,'finals')
+              this.getMatchesInfo(this.state.userId,'conferenceChampionship')
+              this.getMatchesInfo(this.state.userId,'superBowl')
               
             }
           }
         }
       } else {
         if (this.state.userId.length > 3) {
-          this.getMatchesInfo(this.state.userId,'semiFinals')
+          this.getMatchesInfo(this.state.userId,'conferenceChampionship')
           ////console.log('hakuna early prelimsssssss')
         }
       }
@@ -559,11 +558,11 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   getMatchesInfo = async (userId,selection) => {
     ////console.log('allMatches',userId,this.state.theEventKey)
     //return
-    var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAF/" + this.state.theEventKey + '/')
+    var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NFL/" + this.state.theEventKey + '/')
     var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
-    var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAF/" + this.state.theEventKey + '/details/')
-    var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAF/" + this.state.theEventKey + '/bets/')
-    var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NCAAF/')
+    var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NFL/" + this.state.theEventKey + '/details/')
+    var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NFL/" + this.state.theEventKey + '/bets/')
+    var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NFL/')
     var currentEventUserInfo = '',totalScore=0
     await selectedMatchesKeyDb.once('value', dataSnapshot => {
       ////console.log('the key',dataSnapshot.val())
@@ -589,35 +588,35 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       var thetrrrr = ''
       //console.log('this.state.currentSelection', this.state.currentSelection)
      // console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
-      if (selection === 'firstRound') {
+      if (selection === 'wildCard') {
         thetrrrr = this.state.firstRoundArray
       }
-      if (selection === 'quarterFinals') {
+      if (selection === 'divisionalRound') {
         thetrrrr = this.state.quarterFinalsArray
       }
-      if (selection === 'semiFinals') {
+      if (selection === 'conferenceChampionship') {
         thetrrrr = this.state.semiFinalsArray
       }
-      if (selection === 'finals') {
+      if (selection === 'superBowl') {
         thetrrrr = this.state.finalArray
       }
 
       //var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
-      ////console.log('thetrrrr',thetrrrr)
+      
       userBetsDb.once('value', dataSnapshot => {
         ////console.log('the bets data',dataSnapshot.val())
         ////console.log('this.state.theItems',this.state.theItems)
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
         console.log('selection',selection,'itemsCount',itemsCount)
-            if(itemsCount===4){this.setState({isFirstRoundPicked:true})}
-            if(itemsCount===8){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true})}
-            if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true})}
-            if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true})}
-            if(selection==='firstRound'&&itemsCount<4)return
-            if(selection==='quarterFinals'&&itemsCount<8)return
-            if(selection==='semiFinals'&&itemsCount<10)return
-            if(selection==='finals'&&itemsCount<12)return
+            if(itemsCount===6){this.setState({isFirstRoundPicked:true})}
+            if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true})}
+            if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true})}
+            if(itemsCount===13){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true})}
+            if(selection==='wildCard'&&itemsCount<4)return
+            if(selection==='divisionalRound'&&itemsCount<8)return
+            if(selection==='conferenceChampionship'&&itemsCount<10)return
+            if(selection==='superBowl'&&itemsCount<12)return
             // console.log('MEGA count',itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
@@ -716,7 +715,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         return
       }
       this.setState({ theEventKey, theEventTitle, expired }, () => {
-        this.getNCAAFMatches()
+        this.getNFLMatches()
       })
     })
   }
@@ -879,7 +878,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     this.setState({ opendetailsModal: false })
     //////console.log('Button clicked!');
   };
-  openTheModal = () => {
+  openTheModal =async () => {
     //this.notify("Can't make a pick at the moment")
     //return
     console.log('ratatata',this.state.userLoggedIn)
@@ -890,6 +889,21 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       this.setState({openLoginModal:true})
       return
     }
+   var i=0,pointMissing=false
+   await this.state.theItems.map((item,index)=>{
+    i++
+      console.log('item.p1Points',item.p1Points)
+      if(item.p1Points==='N/A'||item.p2Points==='N/A'){
+        pointMissing=true
+      }
+     if(this.state.theItems.length===index+1){
+     if(pointMissing===true){
+      this.notify('Event points not yet populated')
+     }else{
+      this.openTheModal2()
+     }
+     }
+    })
     
     /*if(isAvailable===false){
       this.notify("Can't make a pick at the moment")
@@ -899,28 +913,30 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       this.notify('Event pick/edit time expired')
       return
     }*/
-   console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
-    var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
-    editDbRef.once('value', dataSnapshot => {
-      console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
-     if((new Date().getTime()>dataSnapshot.val())){
-      this.notify('Event pick/edit time expired')
-     }
-     else{
-      if(this.state.currentSelection!=='firstRound'){
-        var theDbRef=firebase.database().ref('/userBets/scoreBoards/NCAAF/'+this.state.theEventKey)
-        theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-          console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
-           if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
-           else{this.notify("Can't make a pick when the event has already started")}
-        })
-      }else{
-        this.setState({ openLoginModal: true, opendetailsModal: false })
-      }
-     }
-   })
-  }
 
+  }
+ openTheModal2=()=>{
+  console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
+  var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
+  editDbRef.once('value', dataSnapshot => {
+    console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+   if((new Date().getTime()>dataSnapshot.val())){
+    this.notify('Event pick/edit time expired')
+   }
+   else{
+    if(this.state.currentSelection!=='wildCard'){
+      var theDbRef=firebase.database().ref('/userBets/scoreBoards/NFL/'+this.state.theEventKey)
+      theDbRef.child(this.state.userId).once('value', dataSnapshot => {
+        console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+         if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
+         else{this.notify("Can't make a pick when the event has already started")}
+      })
+    }else{
+      this.setState({ openLoginModal:false, opendetailsModal:true})
+    }
+   }
+ })
+ }
   opeModal2 = () => {
     if (this.state.expired) {
       this.notify('Event pick/edit time expired')
@@ -938,112 +954,6 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       draggable: true,
       progress: undefined,
     });
-  }
-  itemComponent = (compItems, eventType,isThereData) => {
-    var isAvailable = false, is1 = false, is2 = false, is3 = false, is4 = false
-    //this.setState({isFirstRoundDataAvailable:true,isQuarterFinalsDataAvailable:false,isSemiFinalsDataAvailable:false,isFinalsDataAvailable:false})
-    var currentSelection=this.state.currentSelection
-    if (eventType === 'NCAAF First Round') {
-      if ((currentSelection === 'firstRound')) {
-        if (this.state.isFirstRoundDataAvailable === true) {
-          isAvailable = true
-        } else {isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Quarter Finals') {
-      if ((currentSelection === 'quarterFinals')) {
-        if (this.state.isQuarterFinalsDataAvailable === true) {
-          isAvailable = true
-        } else { isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Semi Finals') {
-      if ((currentSelection === 'semiFinals')) {
-        if (this.state.isSemiFinalsDataAvailable === true) {
-          isAvailable = true
-        } else { isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Finals') {
-      if ((currentSelection === 'finals')) {
-        if (this.state.isFinalsDataAvailable === true) {
-          isAvailable = true
-        } else {isAvailable=false }
-      }
-    }
-    return (
-      compItems.map((item, index) => {
-        var playStat = ''
-        var playStatCol = ''
-        if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
-        if (item.status1 === 'ongoing') { playStat = 'Ongoing Event', playStatCol = '#CB1E31' }
-        if (item.status1 === 'played') { playStat = 'Finished Event', playStatCol = '#919191' }
-        var timeDiff = item.timeInMillis - new Date().getTime()
-        var statP1 = item.winner === 'player1' ? 'Won' : 'Lost'
-        var statP2 = item.winner === 'player2' ? 'Won' : 'Lost'
-        var player1Color = ''
-        var player2Color = ''
-        var myOutcome = 'LOST', myOutcomeSpan = '+0', myOutcomeCol = '#CB1E31'
-        if (item.winner === 'player1') { player1Color = '#1ecb97' } else { player1Color = '#CB1E31' }
-        if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
-        if (item.winner === 'player1' && item.bet === 'player1') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
-        if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
-        //myOutcome
-        var myPick = ''
-        if (item.bet === 'player1') {myPick = item.player1}
-        if (item.bet === 'player2') {myPick = item.player2}
-        var theTime=dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
-        return (
-          <div className={style.listDiv} key={index}>
-            <div className={style.theCont0}>
-              <div className={style.theCont01}>
-                <p>{eventType}</p>
-                <p>{theTime}</p>
-              </div>
-
-              {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
-                <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
-
-
-              <div className={style.theCont}>
-                <div className={style.theContLeft}>
-                  <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
-                    {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
-                  </div>
-                  <p className={style.P1}>{item.player1}</p>
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
-                </div>
-                <BsFillLightningFill className={style.sepIc} />
-                <div className={style.theContRight}>
-                  <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
-                    {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
-                  </div>
-                  <p className={style.P1}>{item.player2}</p>
-                  <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
-                </div>
-              </div>
-              <div className={style.dateDiv}>
-                <p className={style.p1Points}>{item.p1Points}</p>
-                <p className={style.usP}>POINTS</p>
-                <p className={style.p2Points}>{item.p2Points}</p>
-              </div>
-              {isThereData&&this.state.userLoggedIn? <div id={style.statDiv}>
-                <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
-                <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
-                <p></p>
-              </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(isAvailable)}>MAKE YOUR PICK</button></div>
-              }
-            </div>
-          </div>
-        )
-      })
-    )
   }
   chooseHomeEvent=(event)=>{
   event.stopPropagation()
@@ -1076,10 +986,10 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     isPastEvent=false
    }else{ isPastEvent=true}
 
-    if (this.state.currentSelection === 'firstRound') { itemToModals = this.state.firstRoundArray}
-    if (this.state.currentSelection === 'quarterFinals') { itemToModals = this.state.quarterFinalsArray }
-    if (this.state.currentSelection === 'semiFinals') { itemToModals = this.state.semiFinalsArray }
-    if (this.state.currentSelection === 'finals') { itemToModals = this.state.finalArray }
+    if (this.state.currentSelection === 'wildCard') { itemToModals = this.state.firstRoundArray}
+    if (this.state.currentSelection === 'divisionalRound') { itemToModals = this.state.quarterFinalsArray }
+    if (this.state.currentSelection === 'conferenceChampionship') { itemToModals = this.state.semiFinalsArray }
+    if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray }
 
 
 
@@ -1128,7 +1038,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           </div>
         </div>
         {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div>
-          <p className={style.eventP} onClick={() => this.setState({ ncaaModal: true })}>Enter Event Details</p>
+          <p className={style.eventP} onClick={() => this.setState({ nflModal: true })}>Enter Event Details</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
@@ -1175,7 +1085,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
             <p className={style.scoreP2}>{this.state.dataAvailable ? this.state.currentEventUserInfo['currentScore'] : '0.00'} points</p>
           </div>
           <div className={style.scoresCont3}>
-            <p className={style.scoreP1}>Current Rank in NCAAF</p>
+            <p className={style.scoreP1}>Current Rank in NFL</p>
             <p className={style.scoreP2}>{this.state.dataAvailable && this.state.currentRank ? this.state.currentRank : 'N/A'}</p>
           </div>
         </div>
@@ -1222,7 +1132,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  <p className={style.P1}>{item.player1NickName}</p>
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1232,7 +1142,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  <p className={style.P1}>{item.player2NickName}</p>
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1482,7 +1392,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.openLoginModal ? <div className={style.detailsModal} onClick={() => this.setState({ openLoginModal: false })}><LogIn /></div> : null}
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
-        {this.state.ncaaModal ? <div className={style.detailsModal} onClick={() => this.setState({ ncaaModal: false })}><NCAAModal onClick={this.handleChildClick} /></div> : null}
+        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal onClick={this.handleChildClick} /></div> : null}
         <ToastContainer />
       </>
     )

@@ -225,7 +225,7 @@ class DetailsModal extends Component {
     const theTime = new Date().getTime()
     var detailsData = {}
     var dataScore=this.props.currentSelection+'Score'
-    if(this.props.currentSelection==='firstRound'){
+    if(this.props.currentSelection==='wildCard'){
       
       detailsData = {
         teamName:this.state.teamName,
@@ -361,7 +361,7 @@ class DetailsModal extends Component {
     var theEvent=''
     if(this.props.currentEvent==='ramUfc'){theEvent='RAM UFC'}
     if(this.props.currentEvent==='NCAAF'){theEvent='NCAAF'}
-    
+    if(this.props.currentEvent==='NFL'){theEvent='NFL'}
     return (
       <><div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
                     <h1>Enter RAM Details</h1>

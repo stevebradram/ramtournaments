@@ -419,8 +419,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var sportType = data.val().sportType
         var endTime = data.val().endTime
         var theData = data.val()
-        //var currentSelection = data.val().currentSelection
-        var currentSelection='semiFinals'
+        var currentSelection = data.val().currentSelection
+        //var currentSelection='semiFinals'
 
 
         theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
@@ -446,7 +446,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         if ((currentSelection === 'finals')) {
           this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopFinalEdit'})
         }
-        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
+       this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
           this.getNCAAFMatches(userId)
           ////console.log('currentSelection',this.state.currentSelection)
         })
@@ -1073,11 +1073,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     //console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
     var flockTeamName = ''
     var itemToModals = ''
-    var isPastEvent=''
     var todayInMillis=new Date().getTime()
-   if(this.state.endTime<todayInMillis&&(this.state.endTime-todayInMillis)<-86400000){
-    isPastEvent=false
-   }else{ isPastEvent=true}
+
 
     if (this.state.currentSelection === 'firstRound') { itemToModals = this.state.firstRoundArray}
     if (this.state.currentSelection === 'quarterFinals') { itemToModals = this.state.quarterFinalsArray }
