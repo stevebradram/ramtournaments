@@ -122,7 +122,7 @@ class leaderboard extends Component {
       //console.log('value',time,dataSnapshot.val())
       //console.log('nowDate',nowDate,'time',time,'title',title)
       
-      var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime}
+      var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,currentSelection:currentSelection}
       allGames.push(theItem)
       if(theCount===i){
         var theEventTitle='',theEventKey='',sportType='',theTime=''
@@ -206,6 +206,13 @@ class leaderboard extends Component {
             theDet['semiFinalsScore']=0.00
             theDet['currentSelection']=data.currentPick
           }
+          if(sportType==="NFL"){
+            theDet['superBowlScore']=0.00
+            theDet['wildCardScore']=0.00
+            theDet['divisionalRoundScore']=0.00
+            theDet['conferenceChampionshipScore']=0.00
+            theDet['currentSelection']=data.currentPick
+          }
           theAllData.push(theDet)
           if(scoreBoardNo===i){
             this.setState({nullData:theAllData,showProgressBar:false})
@@ -277,6 +284,16 @@ class leaderboard extends Component {
             theDet['semiFinalsScore']=userBetData.semiFinalsScore
             theDet['currentScore']=theCurrentScore,
             theDet['currentSelection']=userBetData.currentPick
+          }
+          else if(sportType==="NFL"){
+            var theCurrentScore=Number(userBetData.wildCardScore)+Number(userBetData.divisionalRoundScore)+Number(userBetData.conferenceChampionshipScore)+Number(userBetData.superBowlScore)
+            theCurrentScore=theCurrentScore.toFixed(2)
+            theDet['superBowlScore']=userBetData.superBowlScore
+            theDet['wildCardScore']=userBetData.wildCardScore
+            theDet['divisionalRoundScore']=userBetData.divisionalRoundScore
+            theDet['conferenceChampionshipScore']=userBetData.conferenceChampionshipScore
+            theDet['currentScore']=theCurrentScore,
+            theDet['currentSelection']=userBetData.currentPick
           }else{
             theDet['currentScore']=theData
           }
@@ -285,12 +302,12 @@ class leaderboard extends Component {
           allData.push(theDet)
           this.setState({theItems:allData})
           
-          console.log('all data checked',allData)
+         // console.log('all data checked',allData)
         })
         
         if(i===scoreBoardNo){
           
-          console.log('all data checked',allData)
+         // console.log('all data checked',allData)
           this.setState({showProgressBar:false})
          // console.log('all data',allData)
          // console.log('hureeeeeeeeeeeeeeeeeeeee')
@@ -314,7 +331,8 @@ class leaderboard extends Component {
     var value = e.target.value
   }
 
-  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle)=>{
+  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,item)=>{
+    console.log('whole item',item)
     this.showProgressBar()
     if (navigator.onLine === false) {
       this.notify('No internet! please check your internet connection')
@@ -323,7 +341,7 @@ class leaderboard extends Component {
     if(!this.state.userLoggedIn){
       this.notify('Please Log In to continue')
     }else{
-      this.setState({theEventKey,theEventTitle})
+      this.setState({theEventKey,theEventTitle,currentSelection})
       this.getScoreBoardData(sportType,theEventKey,theTime)
     }
   }
@@ -350,6 +368,11 @@ class leaderboard extends Component {
     if(this.state.currentSelection==='quarterFinals'){BSPTitle='Quarter Finals'}
     if(this.state.currentSelection==='semiFinals'){BSPTitle='Semi Finals'}
     if(this.state.currentSelection==='finals'){BSPTitle='Finals'}
+
+    if(this.state.currentSelection==='wildCard'){BSPTitle='Wild Card'}
+    if(this.state.currentSelection==='divisionalRound'){BSPTitle='Divisional'}
+    if(this.state.currentSelection==='conferenceChampionship'){BSPTitle='Conference'}
+    if(this.state.currentSelection==='superBowl'){BSPTitle='Super Bowl'}
     return(
     <div id={styles.table1Div}>
       <table className={styles.table1}>
@@ -357,8 +380,8 @@ class leaderboard extends Component {
           <th>Overall <br/>Rank</th>
           <th>RAM Name</th>
           <th>Flock Name</th>
-          <th>{this.state.sportType==='NCAAF'?'Cumulative':'Current'}<br/>Score</th>
-          {this.state.sportType==='NCAAF'?null:<th>Best Possible<br/>Score</th>}
+          <th>{this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?'Cumulative':'Current'}<br/>Score</th>
+          {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<th>Best Possible<br/>Score</th>}
           {this.state.sportType==='NCAAF'?
            <>
            <th>Best Score<br/>{' '+BSPTitle}</th>
@@ -366,6 +389,16 @@ class leaderboard extends Component {
            <th>Quarter Finals</th>
            <th>Semi Finals<br/></th>
            <th>Finals</th>
+           </>
+          :null}
+          
+          {this.state.sportType==='NFL'?
+           <>
+           <th>Best Score<br/>{' '+BSPTitle}</th>
+           <th>Wild Card</th>
+           <th>Divisional</th>
+           <th>Conference<br/></th>
+           <th>Super Bowl</th>
            </>
           :null}
            {this.state.isAdmin?<><th>Phone</th><th>Email</th></>:null}
@@ -377,7 +410,7 @@ class leaderboard extends Component {
               <td>{item.teamName}</td>
               <td>{item.flockName}</td>
               <td>{item.currentScore}</td>
-              {this.state.sportType==='NCAAF'?null:<td>{item.bestPossibleScore}</td>}
+              {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<td>{item.bestPossibleScore}</td>}
               {this.state.sportType==='NCAAF'?
               <>
               <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>
@@ -385,6 +418,14 @@ class leaderboard extends Component {
               <td>{item.quarterFinalsScore}</td>
               <td>{item.semiFinalsScore}</td>
               <td>{item.finalsScore}</td>
+              </>:null}
+              {this.state.sportType==='NFL'?
+              <>
+              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>
+              <td>{item.wildCardScore}</td>
+              <td>{item.divisionalRoundScore}</td>
+              <td>{item.conferenceChampionshipScore}</td>
+              <td>{item.superBowlScore}</td>
               </>:null}
               {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}
             </tr>
@@ -430,7 +471,7 @@ class leaderboard extends Component {
              theColor='#CB1E31'
            }
           return(
-            <div className={styles.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvents(item.sportType,item.id,item.time,item.title)}>
+            <div className={styles.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvents(item.sportType,item.id,item.time,item.title,item.currentSelection,item)}>
               <p className={styles.headListP1}>{item.title}</p>
                <div><p className={styles.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>

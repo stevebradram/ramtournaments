@@ -233,6 +233,9 @@ class DetailsModal extends Component {
         created: theTime,
         bestPossibleScore:this.state.bestPossibleScore,
         currentScore:'0.00',
+        divisionalRoundScore:'0',
+        conferenceChampionshipScore:'0',
+        superBowlScore:'0',
         [dataScore]:'0.00',
         currentRank:false, 
         currentPick:this.props.currentSelection
