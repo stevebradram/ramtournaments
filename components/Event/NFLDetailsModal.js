@@ -12,20 +12,20 @@ var flockTeamName=''
 
 class DetailsModal extends Component {
   state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
-    userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',
+    userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',submitedFlockName:'',
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],flockNameModal:false,openNewFlockModal:true}
   componentDidMount=()=>{
-    console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
+    //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
-    //console.log('this.props.currentSelection 5555',this.props.currentSelection)
-    //console.log('userId 55555555555',userId,upcomingRamUfcDetails)
-    //console.log('this.props.flockTeamName',this.props.flockTeamName)
+    ////console.log('this.props.currentSelection 5555',this.props.currentSelection)
+    ////console.log('userId 55555555555',userId,upcomingRamUfcDetails)
+    
     if(this.props.flockTeamName!==false){
-      //console.log('this.props.flockTeamName yoooooooooooooh')
+      ////console.log('this.props.flockTeamName yoooooooooooooh')
       flockTeamName=this.props.flockTeamName.split('::')
-      this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1]})
+      this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
     this.setState({currentEvent:this.props.currentEvent,ramFlockNames:[]})
     if (upcomingRamUfcDetails === 'true') { this.setState({upcomingRamUfcDetails:true,userId:userId})}
@@ -35,14 +35,14 @@ class DetailsModal extends Component {
   }
   inputChange = async (e) => {
     var value = e.target.value
-    //console.log('theId', e.target.id)
+    ////console.log('theId', e.target.id)
     value=value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
     await this.setState({[e.target.id]: value})
       if (e.target.id ==='teamName'){
         if (this.state.teamName.length>=3){this.setState({teamNameErr:''})}
       }
       if (e.target.id ==='flockName'){
-        //console.log('hapa tu',e.target.id)
+        ////console.log('hapa tu',e.target.id)
         if (this.state.flockName.length>=3){this.setState({flockNameErr:''})}
       }
   }
@@ -65,26 +65,31 @@ class DetailsModal extends Component {
     myFlockNamesRef.once('value',dataSnapshot=>{
       var flockCount=dataSnapshot.numChildren()
       if(!dataSnapshot.val()){
-        console.log('hakuna kitu mzeeee')
+        //console.log('hakuna kitu mzeeee')
         this.setState({openNewFlockModal:false})
-      }else{console.log('kunaaaaaaaaaa kitu mzeeee')}
+      }else{
+      //console.log('kunaaaaaaaaaa kitu mzeeee')
       dataSnapshot.forEach((data,index) => {
         i++
-       console.log('the flock names',data.key,flockCount)
+       //console.log('the flock names',data.key,flockCount)
        var theKey=data.key.replace(/_/g,' ')
        flocks.push(theKey)
        if(flockCount===i){
         this.setState({ramFlockNames:flocks})
-        console.log('the flockssss',flocks)
+        //console.log('the flockssss',flocks)
        }
       })
+    }
     })
   }
   submitFlockName=()=>{
+    this.setState({submitedFlockName:'',flockNameErr:''})
     if (!this.state.buttonClick)return
     this.buttonClickStat()
-    if (this.state.flockName<3){this.setState({flockNameErr:'Flock Name must be selected'});return}
-    this.checkAuth('submitFlockName')
+    if (this.state.flockName<3){
+      this.notify('Flock Name must be selected')
+      this.setState({flockNameErr:'Flock Name must be selected'})}
+    else{this.checkAuth('submitFlockName')}
   }
   flockNameToDatabase=(userId)=>{
     var theFlockName=this.state.flockName.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
@@ -95,9 +100,12 @@ class DetailsModal extends Component {
     var uniqueFlockNameRef = firebase.database().ref('/flockNames/uniques/'+theFlockName)
     var uniqueFlockMembersRef = firebase.database().ref('/flockNames/members/'+theFlockName).child(userId);
    
+    
+   
     uniqueFlockNameRef.once('value',dataSnapshot=>{
+      
       if(!dataSnapshot.val()){
-       console.log('there is no data')
+       //console.log('there is no data')
        uniqueFlockNameRef.set(userId)
     uniqueFlockMembersRef.set('Admin')
     myFlockNamesRef.child(theFlockName).set(userId,(error) => {
@@ -106,30 +114,33 @@ class DetailsModal extends Component {
         }else{
           var flocks=this.state.ramFlockNames
           flocks.push(this.state.flockName)
-          this.setState({flockNameModal:false,openNewFlockModal:true,ramFlockNames:flocks,flockName2:this.state.flockName})
+          this.setState({flockNameModal:false,openNewFlockModal:true,ramFlockNames:flocks,flockName2:this.state.flockName,submitedFlockName:this.state.flockName})
           this.notify('Flock name updated successfully')
         }
     })
       }else{
-        console.log('there is dataaaa',dataSnapshot.val())
-        //this.notify('Flock Name already taken, please enter another name')
-        this.setState({flockNameErr:'Flock Name already taken, please enter another name'});
-        return
+        this.notify('Flock Name already taken, please enter another name')
+        this.setState({flockNameErr:'Flock Name already taken, please enter another name',flockName:'',flockNameModal:false,submitedFlockName:''});
+        
       }
       })
       
   }
   submitDetails=()=>{
+    this.setState({flockNameErr:''})
     if (!this.state.buttonClick)return
     this.buttonClickStat()
     var mySelection=[]
-    //console.log('this.state.theItems',this.state.theItems)
+    ////console.log('this.state.theItems',this.state.theItems)
     //return
-    //console.log('the details',this.state.theItems)
-    //console.log('the user id',this.state.userId)
+    ////console.log('the details',this.state.theItems)
+    ////console.log('the user id',this.state.userId)
 
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
-    if (this.state.flockName<3){this.setState({flockNameErr:'Flock Name must be 3 characters and above'});return}
+    if (this.state.submitedFlockName<3){this.setState({
+      flockNameErr:'Flock Name must be 3 characters and above'})
+      this.notify('Flock Name must be 3 characters and above')
+      return}
     var i=0,theAmount=[]
     this.state.theItems.map((item,index)=>{
       
@@ -137,48 +148,48 @@ class DetailsModal extends Component {
       var amount=0
       if(item.bet==='player1'){
         amount=Number(item.p1Points)
-        //console.log('the amount 1',Number(item.p1Points))
+        ////console.log('the amount 1',Number(item.p1Points))
         theAmount.push(amount)
       }
       if(item.bet==='player2'){
         amount=Number(item.p2Points)
-        //console.log('the amount 2',Number(item.p2Points))
+        ////console.log('the amount 2',Number(item.p2Points))
         theAmount.push(amount)
       }
       
-      //console.log('the amount',theAmount)
-      //if(!item.bet||item.bet===''){console.log('it iiiis',item.bet,index)}
+      ////console.log('the amount',theAmount)
+      //if(!item.bet||item.bet===''){//console.log('it iiiis',item.bet,index)}
       if(!item.bet||item.bet===''){
         this.setState({allPicked:false})
         this.notify('Ensure all matches are picked to proceed')
       return}
       var theArr={id:item.id,player1:item.player1,player2:item.player2,bet:item.bet,matchNo:item.matchNo}
       mySelection.push(theArr)
-      //console.log('mySelection',mySelection)
+      ////console.log('mySelection',mySelection)
       i++
       if(i===this.state.theItems.length){
         const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-        //console.log('the suummmm',sum)
+        ////console.log('the suummmm',sum)
         this.setState({allPicked:true,mySelection:mySelection,bestPossibleScore:sum.toFixed(2)},()=>{
         this.checkAuth('submitDetails')
  
         })
-        //console.log('tumemalizaaaaaa',this.state.mySelection)
+        ////console.log('tumemalizaaaaaa',this.state.mySelection)
         //return
        
       }
       
     })
-    /*//console.log('this.state.userId',this.state.userId)
+    /*////console.log('this.state.userId',this.state.userId)
     if(!this.state.userId)return
-    //console.log('looooooooobo')
+    ////console.log('looooooooobo')
     //return
     var userInfoDb = firebase.database().ref('users').child(this.state.userId)
     
      userInfoDb.child('teamName').set(this.state.teamName)
      userInfoDb.child('flockName').set(this.state.flockName)
      .then(det=>{
-      //console.log('the det ttttttttttttt',det)
+      ////console.log('the det ttttttttttttt',det)
      })
      localStorage.set('upcomingRamUfcDetails', 'true');
      this.setState({upcomingRamUfcDetails:true})*/
@@ -221,7 +232,7 @@ class DetailsModal extends Component {
     if(!this.state.userId)return
     var eventKey=this.props.theEventKey
     var itemsData={}
-    //console.log('looooooooobo')
+    ////console.log('looooooooobo')
     const theTime = new Date().getTime()
     var detailsData = {}
     var dataScore=this.props.currentSelection+'Score'
@@ -252,14 +263,14 @@ class DetailsModal extends Component {
    // detailsData[dataScore]='0.00'
     var i=0
     this.state.theItems.map((item,index)=>{
-      console.log('iteeem',item.id,item.bet)
+      //console.log('iteeem',item.id,item.bet)
       i++
       itemsData[item.id]=item.bet
           if(this.state.theItems.length===i){
            
         
     //return
-    //console.log('detailsData',detailsData)
+    ////console.log('detailsData',detailsData)
     var theTeamName=this.state.teamName.replace(/ /g,"_")
     var theFlockName=this.state.flockName.replace(/ /g,"_")
     var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
@@ -267,8 +278,8 @@ class DetailsModal extends Component {
     uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
       var theName=dataSnapshot.key
-      console.log('theName',theName,'theInfo',theInfo)
-      console.log('flockTeamName[0]',flockTeamName[0])
+      //console.log('theName',theName,'theInfo',theInfo)
+      //console.log('flockTeamName[0]',flockTeamName[0])
      // return
       if(!theInfo){
         if(flockTeamName[0]){
@@ -285,11 +296,11 @@ class DetailsModal extends Component {
             uniqueRamNamesRef.child(name1).set(null)
           }
           this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName)
-          console.log('continue 222222')
+          //console.log('continue 222222')
         }else{
         this.notify('RAM Name already taken')
         this.setState({teamNameErr:'RAM Name already taken, please try another one'})}
-          //console.log('change that shit')
+          ////console.log('change that shit')
       }})
 
     }
@@ -308,9 +319,9 @@ class DetailsModal extends Component {
     adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
     ramsBets.child(this.props.theEventKey+'/').child(this.state.userId).update(itemsData,(error) => {
       if (error) {
-        //console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
+        ////console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
       } else {
-        //console.log('Your picks have been submitted successfully') 
+        ////console.log('Your picks have been submitted successfully') 
         this.notify('Your picks have been submitted successfully')
         Router.push('/reload')        
       }
@@ -323,7 +334,7 @@ class DetailsModal extends Component {
     event.stopPropagation()
    }
    selectedItems=(id,index,theBet,player1Points,player2Points)=>{
-    //console.log('the idddddddd',id,index,theBet,player1Points,player2Points)
+    ////console.log('the idddddddd',id,index,theBet,player1Points,player2Points)
     //return
     const theItems = [...this.state.theItems];
     const targetIndex = theItems.findIndex(f=>f.id===id); 
@@ -340,7 +351,7 @@ class DetailsModal extends Component {
     }
     this.setState({theItems})
 
-//console.log('theItems 1111111111',theItems)
+////console.log('theItems 1111111111',theItems)
    }
    notify=(message)=>{
     toast.warn(message, {
@@ -395,11 +406,11 @@ class DetailsModal extends Component {
                     {this.state.flockNameModal?<div className={styles.flockNameModal}>
                      {this.state.openNewFlockModal?this.state.ramFlockNames.map((item,index)=>{
                       return(
-                        <p key={index} className={styles.flockNameList} onClick={()=>this.setState({flockName:item,flockName2:item,flockNameModal:false})}>{item}</p>
+                        <p key={index} className={styles.flockNameList} onClick={()=>this.setState({flockName:item,submitedFlockName:item,flockName2:item,flockNameModal:false})}>{item}</p>
                       )
                      }):<div>
                       <p className={styles.noFlockP}>N/B You are not a member of any RAM flock/group at the moment. Flock names allow you to connect and play besides your family and friens as a group. Please fill in a Flock Name below and submit to continue.</p>
-                      <input  className={styles.flockNameInput} placeholder='Enter your Flock Name' type='text' id='flockName' style={{color:'#000'}} onChange={(event)=>this.inputChange(event)}></input>  
+                      <input  className={styles.flockNameInput} placeholder='Enter your Flock Name' type='text' id='flockName' style={{color:'#000'}} value={this.state.flockName} onChange={(event)=>this.inputChange(event)}></input>  
                       <p className={styles.flockSubmitP} onClick={()=>this.submitFlockName()}>Submit</p>
                       </div>}
                     </div>:null}
@@ -434,7 +445,7 @@ class DetailsModal extends Component {
                             {tableArray.map((item, index) => {
                               var theItem=item.split('#')
                               var selected=theItem[2]
-                             // //console.log('the item',item)
+                             // ////console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>
                               if(index===0&&selected==='player1'){
                                 selectedToShow=<div className={styles.boxDiv3}><MdCheck color="#fff" size={15} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}/></div>

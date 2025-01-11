@@ -12,7 +12,7 @@ var flockTeamName=''
 
 class DetailsModal extends Component {
   state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
-    userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',
+    userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',submitedFlockName:'',
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],flockNameModal:false,openNewFlockModal:true}
   componentDidMount=()=>{
     console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
@@ -25,7 +25,7 @@ class DetailsModal extends Component {
     if(this.props.flockTeamName!==false){
       //console.log('this.props.flockTeamName yoooooooooooooh')
       flockTeamName=this.props.flockTeamName.split('::')
-      this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1]})
+      this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
     this.setState({currentEvent:this.props.currentEvent,ramFlockNames:[]})
     if (upcomingRamUfcDetails === 'true') { this.setState({upcomingRamUfcDetails:true,userId:userId})}
@@ -81,10 +81,13 @@ class DetailsModal extends Component {
     })
   }
   submitFlockName=()=>{
+    this.setState({submitedFlockName:'',flockNameErr:''})
     if (!this.state.buttonClick)return
     this.buttonClickStat()
-    if (this.state.flockName<3){this.setState({flockNameErr:'Flock Name must be selected'});return}
-    this.checkAuth('submitFlockName')
+    if (this.state.flockName<3){
+      this.notify('Flock Name must be selected')
+      this.setState({flockNameErr:'Flock Name must be selected'})}
+    else{this.checkAuth('submitFlockName')}
   }
   flockNameToDatabase=(userId)=>{
     var theFlockName=this.state.flockName.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
@@ -106,20 +109,20 @@ class DetailsModal extends Component {
         }else{
           var flocks=this.state.ramFlockNames
           flocks.push(this.state.flockName)
-          this.setState({flockNameModal:false,openNewFlockModal:true,ramFlockNames:flocks,flockName2:this.state.flockName})
+          this.setState({flockNameModal:false,openNewFlockModal:true,ramFlockNames:flocks,flockName2:this.state.flockName,submitedFlockName:this.state.flockName})
           this.notify('Flock name updated successfully')
         }
     })
       }else{
-        console.log('there is dataaaa',dataSnapshot.val())
-        //this.notify('Flock Name already taken, please enter another name')
-        this.setState({flockNameErr:'Flock Name already taken, please enter another name'});
+        this.notify('Flock Name already taken, please enter another name')
+        this.setState({flockNameErr:'Flock Name already taken, please enter another name',flockName:'',flockNameModal:false,submitedFlockName:''});
         return
       }
       })
       
   }
   submitDetails=()=>{
+    this.setState({flockNameErr:''})
     if (!this.state.buttonClick)return
     this.buttonClickStat()
     var mySelection=[]
@@ -129,7 +132,10 @@ class DetailsModal extends Component {
     //console.log('the user id',this.state.userId)
 
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
-    if (this.state.flockName<3){this.setState({flockNameErr:'Flock Name must be 3 characters and above'});return}
+    if (this.state.submitedFlockName<3){this.setState({
+      flockNameErr:'Flock Name must be 3 characters and above'})
+      this.notify('Flock Name must be 3 characters and above')
+      return}
     var i=0,theAmount=[]
     this.state.theItems.map((item,index)=>{
       
@@ -395,11 +401,11 @@ class DetailsModal extends Component {
                     {this.state.flockNameModal?<div className={styles.flockNameModal}>
                      {this.state.openNewFlockModal?this.state.ramFlockNames.map((item,index)=>{
                       return(
-                        <p key={index} className={styles.flockNameList} onClick={()=>this.setState({flockName:item,flockName2:item,flockNameModal:false})}>{item}</p>
+                        <p key={index} className={styles.flockNameList} onClick={()=>this.setState({flockName:item,flockName2:item,submitedFlockName:item,flockNameModal:false})}>{item}</p>
                       )
                      }):<div>
                       <p className={styles.noFlockP}>N/B You are not a member of any RAM flock/group at the moment. Flock names allow you to connect and play besides your family and friens as a group. Please fill in a Flock Name below and submit to continue.</p>
-                      <input  className={styles.flockNameInput} placeholder='Enter your Flock Name' type='text' id='flockName' style={{color:'#000'}} onChange={(event)=>this.inputChange(event)}></input>  
+                      <input  className={styles.flockNameInput} placeholder='Enter your Flock Name' type='text' id='flockName' style={{color:'#000'}} value={this.state.flockName} onChange={(event)=>this.inputChange(event)}></input>  
                       <p className={styles.flockSubmitP} onClick={()=>this.submitFlockName()}>Submit</p>
                       </div>}
                     </div>:null}
