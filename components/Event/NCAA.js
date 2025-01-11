@@ -238,7 +238,7 @@ class NCAA extends Component {
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
       var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
-      console.log('queeeeeeeeeeeeeeery',theQuery)
+      //console.log('queeeeeeeeeeeeeeery',theQuery)
       //return
       var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
@@ -274,8 +274,7 @@ class NCAA extends Component {
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
       
       var theQuery=encodeURIComponent(theLink) 
-      console.log('ncaaf query',theQuery)
-      //return
+    
       await axios.get("http://localhost:4000/getNCAAFResults?term="+theQuery)
         .then((res) => {
           //console.log('theItems',res)
@@ -448,7 +447,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         }
        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
           this.getNCAAFMatches(userId)
-          ////console.log('currentSelection',this.state.currentSelection)
+          //console.log('currentSelection',this.state.currentSelection)
         })
       })
     })
@@ -615,11 +614,11 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
             if(itemsCount===4){this.setState({isFirstRoundPicked:true,BPSTitle:'First Round'})}
             if(itemsCount===8){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,BPSTitle:'Quarter Finals'})}
             if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,BPSTitle:'Semi Finals'})}
-            if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true,BPSTitle:'Finals'})}
+            if(itemsCount===11){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true,BPSTitle:'Finals'})}
             if(selection==='firstRound'&&itemsCount<4)return
             if(selection==='quarterFinals'&&itemsCount<8)return
             if(selection==='semiFinals'&&itemsCount<10)return
-            if(selection==='finals'&&itemsCount<12)return
+            if(selection==='finals'&&itemsCount<11)return
             // console.log('MEGA count',itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
@@ -881,18 +880,29 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     this.setState({ opendetailsModal: false })
     //////console.log('Button clicked!');
   };
-  openTheModal = () => {
-    //this.notify("Can't make a pick at the moment")
-    //return
-    console.log('ratatata',this.state.userLoggedIn)
-    //this.sendMatchesToFirebase()
-    //return
+  openTheModal = (items) => {
+   
     if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
       return
     }
-    
+    var i=0,pointMissing=false
+    items.map((item,index)=>{
+     i++
+       console.log('item.p1Points',item.p1Points)
+       if(item.p1Points==='N/A'||item.p2Points==='N/A'){
+         pointMissing=true
+       }
+      if(items.length===index+1){
+      if(pointMissing===true){
+        console.log('missing shiiit')
+       this.notify('Event points not yet populated')
+      }else{
+       this.openTheModal2()
+      }
+      }
+     })
     /*if(isAvailable===false){
       this.notify("Can't make a pick at the moment")
       return
@@ -901,29 +911,31 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       this.notify('Event pick/edit time expired')
       return
     }*/
-   console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
-   //return
-    var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
-    editDbRef.once('value', dataSnapshot => {
-      console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
-     if((new Date().getTime()>dataSnapshot.val())){
-      this.notify('Event pick/edit not available at the moment')
-     }
-     else{
-      if(this.state.currentSelection!=='firstRound'){
-        var theDbRef=firebase.database().ref('/userBets/scoreBoards/NCAAF/'+this.state.theEventKey)
-        theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-          console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
-           if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
-           else{this.notify("Can't make a pick when the event has already started")}
-        })
-      }else{
-        this.setState({ openLoginModal: true, opendetailsModal: false })
-      }
-     }
-   })
-  }
 
+  }
+  openTheModal2=()=>{
+    console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
+    //return
+     var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
+     editDbRef.once('value', dataSnapshot => {
+       console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+      if((new Date().getTime()>dataSnapshot.val())){
+       this.notify('Event pick/edit not available at the moment')
+      }
+      else{
+       if(this.state.currentSelection!=='firstRound'){
+         var theDbRef=firebase.database().ref('/userBets/scoreBoards/NCAAF/'+this.state.theEventKey)
+         theDbRef.child(this.state.userId).once('value', dataSnapshot => {
+           console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+            if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
+            else{this.notify("Can't make a pick when the event has already started")}
+         })
+       }else{
+         this.setState({ openLoginModal: true, opendetailsModal: false })
+       }
+      }
+    })
+  }
   opeModal2 = () => {
     if (this.state.expired) {
       this.notify('Event pick/edit not available at the moment')
@@ -942,112 +954,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       progress: undefined,
     });
   }
-  itemComponent = (compItems, eventType,isThereData) => {
-    var isAvailable = false, is1 = false, is2 = false, is3 = false, is4 = false
-    //this.setState({isFirstRoundDataAvailable:true,isQuarterFinalsDataAvailable:false,isSemiFinalsDataAvailable:false,isFinalsDataAvailable:false})
-    var currentSelection=this.state.currentSelection
-    if (eventType === 'NCAAF First Round') {
-      if ((currentSelection === 'firstRound')) {
-        if (this.state.isFirstRoundDataAvailable === true) {
-          isAvailable = true
-        } else {isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Quarter Finals') {
-      if ((currentSelection === 'quarterFinals')) {
-        if (this.state.isQuarterFinalsDataAvailable === true) {
-          isAvailable = true
-        } else { isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Semi Finals') {
-      if ((currentSelection === 'semiFinals')) {
-        if (this.state.isSemiFinalsDataAvailable === true) {
-          isAvailable = true
-        } else { isAvailable = false }
-      }
-    }
-    if (eventType === 'NCAAF Finals') {
-      if ((currentSelection === 'finals')) {
-        if (this.state.isFinalsDataAvailable === true) {
-          isAvailable = true
-        } else {isAvailable=false }
-      }
-    }
-    return (
-      compItems.map((item, index) => {
-        var playStat = ''
-        var playStatCol = ''
-        if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
-        if (item.status1 === 'ongoing') { playStat = 'Ongoing Event', playStatCol = '#CB1E31' }
-        if (item.status1 === 'played') { playStat = 'Finished Event', playStatCol = '#919191' }
-        var timeDiff = item.timeInMillis - new Date().getTime()
-        var statP1 = item.winner === 'player1' ? 'Won' : 'Lost'
-        var statP2 = item.winner === 'player2' ? 'Won' : 'Lost'
-        var player1Color = ''
-        var player2Color = ''
-        var myOutcome = 'LOST', myOutcomeSpan = '+0', myOutcomeCol = '#CB1E31'
-        if (item.winner === 'player1') { player1Color = '#1ecb97' } else { player1Color = '#CB1E31' }
-        if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
-        if (item.winner === 'player1' && item.bet === 'player1') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
-        if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
-        //myOutcome
-        var myPick = ''
-        if (item.bet === 'player1') {myPick = item.player1}
-        if (item.bet === 'player2') {myPick = item.player2}
-        var theTime=dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
-        return (
-          <div className={style.listDiv} key={index}>
-            <div className={style.theCont0}>
-              <div className={style.theCont01}>
-                <p>{eventType}</p>
-                <p>{theTime}</p>
-              </div>
-
-              {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
-                <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
-
-
-              <div className={style.theCont}>
-                <div className={style.theContLeft}>
-                  <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
-                    {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
-                  </div>
-                  <p className={style.P1}>{item.player1}</p>
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
-                </div>
-                <BsFillLightningFill className={style.sepIc} />
-                <div className={style.theContRight}>
-                  <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
-                    {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
-                  </div>
-                  <p className={style.P1}>{item.player2}</p>
-                  <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
-                </div>
-              </div>
-              <div className={style.dateDiv}>
-                <p className={style.p1Points}>{item.p1Points}</p>
-                <p className={style.usP}>POINTS</p>
-                <p className={style.p2Points}>{item.p2Points}</p>
-              </div>
-              {isThereData&&this.state.userLoggedIn? <div id={style.statDiv}>
-                <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
-                <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
-                <p></p>
-              </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(isAvailable)}>MAKE YOUR PICK</button></div>
-              }
-            </div>
-          </div>
-        )
-      })
-    )
-  }
+ 
   chooseHomeEvent=(event)=>{
   event.stopPropagation()
   event.preventDefault()
@@ -1124,14 +1031,14 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           <div className={style.detailsDiv}>
             <p>RAM Name: {this.state.dataAvailable ? this.state.currentEventUserInfo['teamName'] : 'N/A'}</p>
             <p>Flock Name: {this.state.dataAvailable ? this.state.currentEventUserInfo['flockName'] : 'N/A'}</p>
-            {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal()}>Make Picks</p>}
+            {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal(itemToModals)}>Make Picks</p>}
           </div>
         </div>
         {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div>
           <p className={style.eventP} onClick={() => this.setState({ ncaaModal: true })}>Enter Event Details</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-        <div className={style.picksDiv} onClick={() => this.openTheModal()}>
+        <div className={style.picksDiv} onClick={() => this.openTheModal(itemToModals)}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
           {this.state.dataAvailable ?
             <TypeAnimation
@@ -1248,7 +1155,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
               </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
+                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
           </div>
@@ -1323,7 +1230,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
               </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
+                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
           </div>
@@ -1398,7 +1305,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
               </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
+                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
           </div>
@@ -1471,7 +1378,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
               </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
+                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
           </div>
