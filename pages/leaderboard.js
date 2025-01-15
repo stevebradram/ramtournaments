@@ -168,7 +168,9 @@ class leaderboard extends Component {
     var dbLink="/userBets/"+sportType+'/'+theEventKey+'/' 
     var scoreBoardDb=firebase.database().ref(dbLink)
     scoreBoardDb.once('value',dataSnapshot=>{
-      
+      if(!dataSnapshot.val()){
+      this.setState({dataAvailable:false,isTherNormalData:false,isThereNullData:false})
+      this.notify('No data to show at the moment');return}
       if(!dataSnapshot.val())return
       this.setState({isThereNullData:true,dataAvailable:true,isTherNormalData:false})
       var scoreBoardNo=dataSnapshot.numChildren()
@@ -228,24 +230,26 @@ class leaderboard extends Component {
   
     if(!this.state.userLoggedIn)return
     this.setState({eventStartTime:theTime,sportType})
-    console.log('curentttttttt',sportType,theEventKey,theTime)
+    console.log('curentttttttt 500000',sportType,theEventKey,theTime)
     var dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
     //var dbLink2="/userBets/scoreBoards/ramUfc/ufc-310-December72024/"
     var scoreBoardDb=firebase.database().ref(dbLink)
    var data3=[]
     scoreBoardDb.once('value',dataSnapshot=>{
-      
+      console.log('dataSnapshot',dataSnapshot.exists())
       if(!dataSnapshot.val()){
-        
+        console.log('hapa hakuna data 22222')
         var nowMillis=new Date().getTime()
         if((theTime-nowMillis)<1200000||this.state.isAdmin){
+          console.log('hapa hakuna data 55555555')
           this.getNullScoreBoardData(sportType,theEventKey)
         }else{
+          console.log('hapa hakuna data 666666666')
           this.setState({dataAvailable:false,isTherNormalData:false,isThereNullData:false})
           this.notify('No data to show at the moment')
         }
       }else{
-        
+        console.log('hapa hakuna data 333333')
       this.setState({dataAvailable:true,isTherNormalData:true,isThereNullData:false})
       var i=0,allData=[]
       var scoreBoardNo=dataSnapshot.numChildren()
@@ -487,7 +491,8 @@ class leaderboard extends Component {
       {this.state.userLoggedIn?<>{this.state.dataAvailable?this.itemComponent(theItems):
       <div className={styles.noDataDiv}>
          <PiFolderDashedThin  className={styles.noDataIc}/>
-        <p>No data available at the moment. Data will be available once the events start</p>
+         {this.state.isAdmin?<p>No data available at the moment. Data will be available once there is available data</p>
+        :<p>No data available at the moment. Data will be available once the event start</p>}
       </div>}</>:
       <div className={styles.noDataDiv}>
       <PiFolderDashedThin  className={styles.noDataIc}/>

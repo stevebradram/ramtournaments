@@ -45,18 +45,24 @@ class RamUfc extends Component {
 //this.checkForOddsUpdate()
   //this.checkForOutcome()
   }
-      checkForOddsUpdate=async () => {
+  checkForOddsUpdate=async () => {
       try {
-        ///theEvents/ramUfc/ufc-fight-night-november-23-2024-November232024/
+        var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+    timeInfoDb.once('value',dataSnapshot=>{
+      var theEventTime=dataSnapshot.val()
+      if((new Date().getTime()>theEventTime)){
+        this.notify('Event odds update time expired')
+       }else{
         var theLink='theEvents::ramUfc::'+this.state.theEventKey
         var theQuery=encodeURIComponent(theLink) 
       
-        await axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             console.log('theItems',theOutcome)
-            
-          })
+})
+        }
+      })
           } catch (error) {
             console.log('error',error)
           }
@@ -643,8 +649,8 @@ getUfcItems=async(name)=>{
     })
    }
   openTheModal= () => {
-    var userInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
-    userInfoDb.once('value',dataSnapshot=>{
+    var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+    timeInfoDb.once('value',dataSnapshot=>{
       var theEventTime=dataSnapshot.val()
       if((new Date().getTime()>theEventTime)){
         this.notify('Event pick/edit time expired')
