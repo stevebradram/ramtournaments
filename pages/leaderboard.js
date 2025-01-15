@@ -491,7 +491,7 @@ class leaderboard extends Component {
       {this.state.userLoggedIn?<>{this.state.dataAvailable?this.itemComponent(theItems):
       <div className={styles.noDataDiv}>
          <PiFolderDashedThin  className={styles.noDataIc}/>
-         {this.state.isAdmin?<p>No data available at the moment. Data will be available once there is available data</p>
+         {this.state.isAdmin?<p>No data available at the moment. Data will be shown once the users make picks</p>
         :<p>No data available at the moment. Data will be available once the event start</p>}
       </div>}</>:
       <div className={styles.noDataDiv}>
