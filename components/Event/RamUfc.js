@@ -63,13 +63,23 @@ class RamUfc extends Component {
       }
       checkForNewEvents=async () => {
         if(this.state.UFCLinkInput.length<10){
-        this.notify('The Link input must be properly filled')
-        return
-        }
-        if(this.state.UFCLinkInput.startsWith('https://www.ufc.com/event/')){
-          console.log('starts with that shit')
-          await axios.get("http://localhost:4000/getMatches?term=" + this.state.UFCLinkInput)
-        }else{ console.log('does not start with that shit')}
+          this.notify('The Link input must be properly filled')
+          return
+          }
+        try {
+         if(this.state.UFCLinkInput.startsWith('https://www.ufc.com/event/')){
+            console.log('starts with that shit')
+          var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
+          await axios.get("http://localhost:4000/getMatches?term="+theQuery)
+            .then((res) => {
+              var theOutcome = res.data
+              this.notify(theOutcome)
+              this.setState({showGetMatchesModal:false,UFCLinkInput:''})
+            })
+          }else{this.notify('The Link input must be properly filled')}
+            } catch (error) {
+              console.log('error',error)
+            }
         
       }
       checkForOutcome=async () => {
@@ -633,10 +643,10 @@ getUfcItems=async(name)=>{
     })
    }
   openTheModal= () => {
-    var userInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/stopEdit/')
+    var userInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
     userInfoDb.once('value',dataSnapshot=>{
       var theEventTime=dataSnapshot.val()
-      if((theEventTime-new Date().getTime())<600000){
+      if((new Date().getTime()>theEventTime)){
         this.notify('Event pick/edit time expired')
        }else{
         if(this.state.userLoggedIn===true){

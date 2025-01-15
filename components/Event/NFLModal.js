@@ -9,36 +9,81 @@ import axios from "axios"
 import dayjs from 'dayjs';
 var theImage1 = 'https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=600'
 var theImage2 = 'https://images.pexels.com/photos/19882427/pexels-photo-19882427/free-photo-of-elevate-your-style-with-vibrant-kicks-explore-a-spectrum-of-colors-in-our-sneaker-collection-step-into-bold-hues-and-showcase-your-unique-footwear-fashion.jpeg?auto=compress&cs=tinysrgb&w=600'
-
-const wildCardEdit = [
-  { id: 'wildCardMatch1', apiId: '03dd880f071a65053e37000d3d826e14', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
-  { id: 'wildCardMatch2', apiId: '08e2147df0b21744fdef99cbcdf3edb7', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
-  { id: 'wildCardMatch3', apiId: '4290cfcaa959dc5b452481cfff521b45', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
-  { id: 'wildCardMatch4', apiId: 'edbc8c5b53a7705b9caa5e1908109e19', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
-  { id: 'wildCardMatch5', apiId: 'afde2a86c73e9809e147d457d4d40f62', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
-  { id: 'wildCardMatch6', apiId: 'a190a79160476a82ba6004f69be5729d', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+var wildCardEdit3 = [
+  { id: 'wildCardMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+  { id: 'wildCardMatch2', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+  { id: 'wildCardMatch3', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+  { id: 'wildCardMatch4', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+  { id: 'wildCardMatch5', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
+  { id: 'wildCardMatch6', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
 ]
-const divisionalRoundEdit = [
+var divisionalRoundEdit3 = [
   { id: 'divisionalRoundMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
   { id: 'divisionalRoundMatch2', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
   { id: 'divisionalRoundMatch3', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
   { id: 'divisionalRoundMatch4', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' }
 ]
-const conferenceChampionshipEdit = [
+var conferenceChampionshipEdit3 = [
   { id: 'conferenceChampionshipMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Conference Championship' },
   { id: 'conferenceChampionshipMatch2', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Conference Championship' },
 ]
-const superBowlEdit = [
+var superBowlEdit3 = [
   { id: 'superBowlMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Super Bowl' }
 ]
+var wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
 
+var wildCardEdit2=wildCardEdit3,divisionalRoundEdit2=divisionalRoundEdit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
 class NCAAModal extends Component {
-  state = { wildCardEdit: wildCardEdit, divisionalRoundEdit: divisionalRoundEdit, conferenceChampionshipEdit: conferenceChampionshipEdit, superBowlEdit: superBowlEdit, submitErr: "", showProgressBar: false, currentSelection: 'wildCard' }
+  state = { wildCardEdit: wildCardEdit, divisionalRoundEdit: divisionalRoundEdit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNFLModal,isItSubmit:false}
+  
+  componentDidMount=()=>{
+    var incomingData=this.props.itemsToNFLModal
+    console.log('incomingData',this.state.currentSelection,incomingData)
+    if(incomingData.length>1){
+      wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
+      if(this.state.currentSelection==='wildCard'){
+        var i=0
+        incomingData.map((item,index)=>{
+          i++
+      if(item.p1Photo==='N/A'){incomingData[index]['p1Photo']=''}
+      if(item.p2Photo==='N/A'){incomingData[index]['p2Photo']=''}
+      if(item.p1Points==='N/A'){incomingData[index]['p1Points']=''}
+      if(item.p2Points==='N/A'){incomingData[index]['p2Points']=''}
+      if(item.player1==='N/A'){incomingData[index]['player1']=''}
+      if(item.player2==='N/A'){incomingData[index]['player2']=''}
+        if(item.matchType==="NFL Wild Card Round"){wildCardEdit.push(item)}
+        if(item.matchType==="NFL Divisional Round"){divisionalRoundEdit.push(item)}
+        if(item.matchType==="NFL Conference Championship"){conferenceChampionshipEdit.push(item)}
+        if(item.matchType==="NFL Super Bowl"){superBowlEdit.push(item)}
+        if(incomingData.length===i){
+        this.setState({wildCardEdit,divisionalRoundEdit,conferenceChampionshipEdit,superBowlEdit})  
+        }
+        })
+      }
+    if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=incomingData,this.setState({divisionalRoundEdit})}
+    if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=incomingData,this.setState({conferenceChampionshipEdit})}
+    if(this.state.currentSelection==='superBowl'){superBowlEdit=incomingData,this.setState({superBowlEdit})}}
+    else{
+      console.log('kasaluo')
+      if(this.state.currentSelection==='wildCard'){
+        wildCardEdit=wildCardEdit3
+        divisionalRoundEdit=divisionalRoundEdit3
+        conferenceChampionshipEdit=conferenceChampionshipEdit3
+        superBowlEdit=superBowlEdit3
+      }
+      if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=divisionalRoundEdit3}
+      if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=conferenceChampionshipEdit3}
+      if(this.state.currentSelection==='superBowl'){superBowlEdit=superBowlEdit3}
+    }
+   
+    console.log('incomingData',this.state.currentSelection,'divisionalRoundEdit',divisionalRoundEdit,'the length',incomingData.length)
+  }
   doNothing = (event) => {
     event.preventDefault()
     event.stopPropagation()
   }
   inputChange = async (e, index, type) => {
+    this.setState({isItSubmit:false})
     var value = e.target.value
     console.log('theId', e.target.id)
     if (type === 'wildCard') {
@@ -162,7 +207,7 @@ class NCAAModal extends Component {
                     if (l === 1) {
                       this.setState({superBowlEdit})
                       this.getOddsApiData(wildCardEdit)
-                      console.log('nimemalizaaaaaaaaaaaaaa')
+                      console.log('nimemalizaaaaaaaaaaaaaa rankadaaaaaaa')
                       console.log('wildCardEdit', this.state.wildCardEdit)
                       console.log('divisionalRoundEdit', this.state.divisionalRoundEdit)
                       console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
@@ -177,82 +222,22 @@ class NCAAModal extends Component {
       })
   }
   divisionalRoundSubmit = () => {
-    var yearNow = new Date().getFullYear()
-    var j = 0, k = 0, l = 0
+    var i = 0
     this.state.divisionalRoundEdit.map((item, index) => {
-      if (item.time === '') {
-        divisionalRoundEdit[index]['error'] = 'Match time field must be filled'
-        this.setState({ divisionalRoundEdit })  
+      if (item.apiId === '') {
+        divisionalRoundEdit[index]['error'] = 'API ID field must be filled'
+        this.setState({ divisionalRoundEdit })
         return
       } else {
-        var theYear = item.time.split('-')[0]
-        if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-          divisionalRoundEdit[index]['error'] = 'Year field badly formatted'
-          this.setState({ divisionalRoundEdit })
-          return
-        } else {
-          j++
-          var timeInMillis = new Date(item.time).getTime()
-          var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-          divisionalRoundEdit[index]['commenceTime'] = theTime
-          divisionalRoundEdit[index]['timeInMillis'] = timeInMillis
-          divisionalRoundEdit[index]['error'] = ''
-        }
+        i++
+        divisionalRoundEdit[index]['error'] = ''
+        divisionalRoundEdit[index]['p1Points'] = 'N/A'
+        divisionalRoundEdit[index]['p2Points'] = 'N/A'
       }
-      if (j === 4) {
-        this.setState({ divisionalRoundEdit })
-        this.state.conferenceChampionshipEdit.map((item, index) => {
-          if (item.time === '') {
-            conferenceChampionshipEdit[index]['error'] = 'Match time field must be filled'
-            this.setState({ conferenceChampionshipEdit })
-            return
-          } else {
-            var theYear = item.time.split('-')[0]
-            if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-              conferenceChampionshipEdit[index]['error'] = 'Year field badly formatted'
-              this.setState({ conferenceChampionshipEdit })
-              return
-            } else {
-              k++
-              var timeInMillis = new Date(item.time).getTime()
-              var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-              conferenceChampionshipEdit[index]['commenceTime'] = theTime
-              conferenceChampionshipEdit[index]['timeInMillis'] = timeInMillis
-              conferenceChampionshipEdit[index]['error'] = ''
-
-            }
-          }
-          if (k === 2) {
-            this.setState({ conferenceChampionshipEdit })
-            this.state.superBowlEdit.map((item, index) => {
-              if (item.time === '') {
-                superBowlEdit[index]['error'] = 'Match time field must be filled'
-                this.setState({ superBowlEdit })
-                return
-              } else {
-                if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-                  superBowlEdit[index]['error'] = 'Year field badly formatted'
-                  this.setState({ superBowlEdit })
-                  return
-                } else {
-                  l++
-                  var timeInMillis = new Date(item.time).getTime()
-                  var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-                  superBowlEdit[index]['commenceTime'] = theTime
-                  superBowlEdit[index]['timeInMillis'] = timeInMillis
-                  superBowlEdit[index]['error'] = ''
-                }
-              }
-              if (l === 1) {
-                this.setState({ superBowlEdit })
-                this.getOddsApiData(divisionalRoundEdit)
-                console.log('divisionalRoundEdit', this.state.divisionalRoundEdit)
-                console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
-                console.log('superBowlEdit', this.state.superBowlEdit)
-              }
-            })
-          }
-        })
+      if (i === 4) {
+        this.setState({ divisionalRoundEdit})
+        console.log('divisionalRoundEdit',divisionalRoundEdit)
+       this.getOddsApiData(divisionalRoundEdit)
       }
     })
   }
@@ -341,38 +326,80 @@ class NCAAModal extends Component {
       }
     })
   }
-  sendToFirebaseSingle=async(theArr,editTime,theSelection)=>{
-    console.log('at send to firebase',this.state.currentSelection)
-    if(this.state.currentSelection==='wildCard'){}
-    if(this.state.currentSelection==='divisionalRound'){}
-    if(this.state.currentSelection==='conferenceChampionship'){}
-    if(this.state.currentSelection==='superBowl'){}
-    var minTime = Math.min(...theArr.map(item => item.timeInMillis));
-    var toDbArr={},v = 0
-    var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
-    var generalDb = firebase.database().ref('/events2222/NFL/' + eventKey + '/')
-    var eventsIdDb = firebase.database().ref('/events2222/')
-    console.log('combined items',theArr.length, theArr)
-    theArr.map((item,index) => {
-      v++
-      delete item.error;
-      if(item.p1Photo===''){theArr[index]['p1Photo']='N/A'}
-      if(item.p2Photo===''){theArr[index]['p2Photo']='N/A'}
-      if(item.p1Points===''){theArr[index]['p1Points']='N/A'}
-      if(item.p2Points===''){theArr[index]['p2Points']='N/A'}
-      if(item.player1===''){theArr[index]['player1']='N/A'}
-      if(item.player2===''){theArr[index]['player2']='N/A'}
-      console.log('matchType',item.matchType)
-      toDbArr[item.id] = item
-      if (theArr.length === v) {
-        eventsIdDb.child('eventsIds/' + eventKey + '/'+editTime).set(minTime)
-        generalDb.child(theSelection).update(toDbArr)
+  cancelEdit=()=>{
+    wildCardEdit=wildCardEdit2,divisionalRoundEdit=divisionalRoundEdit2,conferenceChampionshipEdit=conferenceChampionshipEdit2,superBowlEdit=superBowlEdit2
+    this.setState({wildCardEdit:[],divisionalRoundEdit:[],conferenceChampionshipEdit:[],superBowlEdit:[]},()=>{
+      this.props.onClick('false','false')
+    })
+  }
+  sendToDatabase=()=>{
+    if(this.state.isItSubmit){
+    if(this.state.currentSelection==='wildCard'){this.sendToFirebase()}else{
+      this.sendToFirebaseSingle()
+    }}else{
+      this.setState({isItSubmit:false})
+    }
+  }
+  sendToFirebaseSingle=async(editTime,theSelection)=>{
+    this.showProgressBar()
+    var theArr='',editTime=''
+    if(this.state.currentSelection==='divisionalRound'){theArr=this.state.divisionalRoundEdit,editTime='stopDivisionalRoundEdit'}
+    if(this.state.currentSelection==='conferenceChampionship'){theArr=this.state.conferenceChampionshipEdit,editTime='stopConferenceChampionshipEdit'}
+    if(this.state.currentSelection==='superBowl'){theArr=this.state.superBowlEdit,editTime='stopSuperBowlEdit'}
+    console.log('at sendToFirebaseSingle',this.state.currentSelection,theArr)
+    var i=0
+    theArr.map((item, index) => {
+      if (item.apiId === ''||item.player1 === ''||item.player2 === ''||item.p1Photo === ''||item.p2Photo === '') {
+        theArr[index]['error'] = 'Some field missing data'
+        this.setState({ divisionalRoundEdit })
+        return
+      } else {
+        i++
+        theArr[index]['error'] = ''
+      }
+      if (i===theArr.length) {    
+       var minTime = Math.min(...theArr.map(item => item.timeInMillis));
+       var toDbArr={},v = 0
+       var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
+       var generalDb = firebase.database().ref('/theEvents/')
+       var eventIdsLink ='/eventsIds/'+eventKey+'/'
+       var eventIdsLink2 ='/NFL/eventsIds/'+eventKey+'/'
+       var dataLink ='/NFL/'+eventKey+'/'+this.state.currentSelection//1737147600000
+       console.log('combined items',theArr.length, theArr)//1737235800000
+       var eventIdsEdit = {
+      [editTime]:minTime,currentSelection:this.state.currentSelection}
+       theArr.map((item,index) => {
+         v++
+         theArr[index]['error']=null
+         console.log('matchType',item.matchType)
+         toDbArr[item.id] = item
+         if (theArr.length === v) {
+           generalDb.child(eventIdsLink).update(eventIdsEdit)
+           generalDb.child(eventIdsLink2).update(eventIdsEdit)
+           generalDb.child(dataLink).update(toDbArr,(error) => {
+            if (error) {
+              this.notify('An error occured while uploading data')
+              this.setState({ showProgressBar: false })
+            } else {
+              this.notify('Data uploaded successfully')
+              this.setState({ showProgressBar: false })
+              var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::'+editTime
+              this.props.onClick('getOdds',oddsServerLink)
+            }
+          })
+         }
+       })
       }
     })
+    
+   
+
   }
   sendToFirebase=async()=>{
     this.showProgressBar()
-    console.log('at send to firebase',this.state.currentSelection)
+    console.log('at sendToFirebase',this.state.currentSelection)
+    //todo finish here and odds update on onclick
+    return
     if(this.state.currentSelection==='wildCard'){}
     if(this.state.currentSelection==='divisionalRound'){}
     if(this.state.currentSelection==='conferenceChampionship'){}
@@ -412,7 +439,7 @@ class NCAAModal extends Component {
       } 
       if (allItems.length === v) {
         var theArr = {
-          time: 1734728400000, sportType: 'NFL',endTime:'', 
+          time:wCMin, sportType: 'NFL',endTime:'', 
           title: 'NFL PLAYOFFS 2025',currentSelection:this.state.currentSelection,
           stopWildCardEdit:wCMin,stopDivisionalRoundEdit:dRMin,endTime:endTime,
           stopConferenceChampionshipEdit:cCMin,stopSuperBowlEdit:sPMin,startTime:wCMin        
@@ -429,75 +456,18 @@ class NCAAModal extends Component {
           } else {
             this.notify('Data uploaded successfully')
             this.setState({ showProgressBar: false })
-            this.props.onClick()
+            var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::stopWildCardEdit'
+              this.props.onClick('getOdds',oddsServerLink)
           }
         })
       }
     })
   }
   submitMatches = () => {
-
     if(this.state.currentSelection==='wildCard'){this.wildCardSubmit()}
     if(this.state.currentSelection==='divisionalRound'){this.divisionalRoundSubmit()}
     if(this.state.currentSelection==='conferenceChampionship'){this.conferenceChampionshipSubmit()}
     if(this.state.currentSelection==='superBowl'){this.superBowlSubmit()}
-    return
-    this.checkInputs()
-    return
-    this.getOddsApiData()
-    return
-    this.showProgressBar()
-    var eventKey = 'NFL2025'
-    var generalDb = firebase.database().ref('/events1000/NFL/' + eventKey + '/')
-    var eventsIdDb = firebase.database().ref('/events1000/')
-    if (navigator.onLine === false) {
-      this.notify('No internet! please check your internet connection')
-      return
-    }
-    var i = 0, allItems = [], theItems = [...wildCardEdit, ...divisionalRoundEdit]
-    theItems.map((item, index) => {
-      i++
-      if (item.id === '' || item.time === '' || item.player1 === '' || item.p1Rec === '' || item.p2Rec === '' || item.player2 === '' || item.p1Photo === '' || item.p2Photo === '') {
-        this.setState({ submitErr: 'All items must be filled' })
-        this.notify('All items must be filled')
-        this.setState({ showProgressBar: false })
-        return
-      }
-      theItems[index]['timeInMillis'] = new Date(item.time).getTime()
-      allItems.push(item)
-      if (theItems.length === i) {
-        var toDbFirstArr = {}, toDbQuarterAr = {}, v = 0
-
-        allItems.map((item) => {
-          v++
-          if (item.match === 'First Round') {
-            toDbFirstArr[item.id] = item
-          } else {
-            toDbQuarterAr[item.id] = item
-          }
-          var theArr = { time: 1734728400000, sportType: 'NCAAF', title: 'NCAAF 2024-2025' }
-          console.log('toDbFirstArr', toDbFirstArr)
-          console.log('toDbQuarterAr', toDbQuarterAr)
-          if (theItems.length === v) {
-            console.log('kufinish kumalo', toDbFirstArr, toDbQuarterAr)
-            eventsIdDb.child('eventsIds/' + eventKey + '/').update(theArr)
-            generalDb.child('firstRound').update(toDbFirstArr)
-            generalDb.child('quarterFinals').update(toDbQuarterAr, (error) => {
-              if (error) {
-                this.notify('An error occured while uploading data')
-                this.setState({ showProgressBar: false })
-              } else {
-                this.notify('Data uploaded successfully')
-                this.setState({ showProgressBar: false })
-                this.props.onClick()
-              }
-            })
-          }
-        })
-        console.log('allItems', allItems)
-      }
-
-    })
   }
   getOddsApiData = async (theArr) => {
     //this.getLogos()
@@ -509,7 +479,6 @@ class NCAAModal extends Component {
     axios.get(oddsApi)
       .then((res) => {
         var resultsArr = res.data
-
         theArr.map((item, index) => {
           resultsArr.map((item2) => {
             if (item.apiId === item2.id) {
@@ -519,6 +488,7 @@ class NCAAModal extends Component {
               theArr[index]['player1'] = item2.home_team
               theArr[index]['player2'] = item2.away_team
               theArr[index]['commenceTime'] = theTime
+              console.log('at getOddsApiData sawaaaaaaaa 222222')
               theArr[index]['time'] = time
               theArr[index]['timeInMillis'] = timeInMillis
               /* item2.bookmakers.map((item2)=>{
@@ -603,11 +573,11 @@ class NCAAModal extends Component {
             }
             if (theTeams.length === index + 1) {
               console.log('theArr 22222222', theArr)
-              if (this.state.currentSelection==='wildCard') {this.setState({wildCardEdit:theArr})}
-              if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:theArr})}
-              if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr})}
-              if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:theArr})}
-              this.sendToFirebase()
+              if (this.state.currentSelection==='wildCard') {this.setState({wildCardEdit:theArr,isItSubmit:true})}
+              if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:theArr,isItSubmit:true})}
+              if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr,isItSubmit:true})}
+              if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:theArr,isItSubmit:true})}
+              //this.sendToFirebase()
             }
           })
 
@@ -666,15 +636,19 @@ class NCAAModal extends Component {
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Divisional Round</p>
           <div className={styles.listCont}>{this.itemComponent(divisionalRoundEdit, 'divisionalRound')}</div></div>:null}
-          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='divisionalRound'||this.state.currentSelection==='conferenceChampionship'? 
+          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Conference Championship</p>
           <div className={styles.listCont}>{this.itemComponent(conferenceChampionshipEdit, 'conferenceChampionship')}</div></div>:null}
-          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='divisionalRound'||this.state.currentSelection==='conferenceChampionship'||this.state.currentSelection==='superBowl'? 
+          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='superBowl'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Super Bowl</p>
           <div className={styles.listCont}>{this.itemComponent(superBowlEdit, 'superBowl')}</div></div>:null}
-        <button className={styles.submitBtn} onClick={() => this.submitMatches()}>Submit</button>
+        
+        {this.state.isItSubmit?<div className={styles.submitDiv}>
+        <button className={styles.cancelBtn} onClick={()=>this.cancelEdit()}>Cancel</button>
+        <button className={styles.submitBtn2} onClick={() => this.sendToDatabase()}>Submit</button>
+        </div>:<button className={styles.submitBtn} onClick={()=>this.submitMatches()}>Preview</button>}
       </div>
         {this.state.showProgressBar ? <ProgressBar /> : null}
         <ToastContainer />

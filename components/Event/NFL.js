@@ -127,6 +127,180 @@ var ncaafItems=[
     "last_update": null
   }
 ]
+var scoresNfl=[
+  {
+    "id": "03dd880f071a65053e37000d3d826e14",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-11T21:35:00Z",
+    "completed": true,
+    "home_team": "Houston Texans",
+    "away_team": "Los Angeles Chargers",
+    "scores": [
+      {
+        "name": "Los Angeles Chargers",
+        "score": "12"
+      },
+      {
+        "name": "Houston Texans",
+        "score": "32"
+      }
+    ],
+    "last_update": "2025-01-12T07:05:55Z"
+  },
+  {
+    "id": "08e2147df0b21744fdef99cbcdf3edb7",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-12T01:13:00Z",
+    "completed": true,
+    "home_team": "Baltimore Ravens",
+    "away_team": "Pittsburgh Steelers",
+    "scores": [
+      {
+        "name": "Pittsburgh Steelers",
+        "score": "14"
+      },
+      {
+        "name": "Baltimore Ravens",
+        "score": "28"
+      }
+    ],
+    "last_update": "2025-01-12T07:05:55Z"
+  },
+  {
+    "id": "4290cfcaa959dc5b452481cfff521b45",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-12T18:01:00Z",
+    "completed": false,
+    "home_team": "Buffalo Bills",
+    "away_team": "Denver Broncos",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "edbc8c5b53a7705b9caa5e1908109e19",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-12T21:31:00Z",
+    "completed": false,
+    "home_team": "Philadelphia Eagles",
+    "away_team": "Green Bay Packers",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "afde2a86c73e9809e147d457d4d40f62",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-13T01:01:00Z",
+    "completed": false,
+    "home_team": "Tampa Bay Buccaneers",
+    "away_team": "Washington Commanders",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "a190a79160476a82ba6004f69be5729d",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-14T01:00:00Z",
+    "completed": false,
+    "home_team": "Los Angeles Rams",
+    "away_team": "Minnesota Vikings",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "e2845c7119bd64fe725e9f9495032d72",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Buffalo Bills",
+    "away_team": "Baltimore Ravens",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "64bd9fac5bfa8a7fc49ce53c7c784562",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Detroit Lions",
+    "away_team": "Green Bay Packers",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "ad4656a89ef49a8cccf660f2141182e0",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Detroit Lions",
+    "away_team": "Los Angeles Rams",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "4d19aa62cfee9c5118758fe4dd827a4e",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Detroit Lions",
+    "away_team": "Minnesota Vikings",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "0c95381e5634e6c64aa5ca079e669dea",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Philadelphia Eagles",
+    "away_team": "Los Angeles Rams",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "f61a619d9349872d708e481cb4c8571a",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Philadelphia Eagles",
+    "away_team": "Minnesota Vikings",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "0b1a23856259f01b20535b791fc23761",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Tampa Bay Buccaneers",
+    "away_team": "Minnesota Vikings",
+    "scores": null,
+    "last_update": null
+  },
+  {
+    "id": "727c062028788fd05ca76b3376e11dfc",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-01-19T18:00:00Z",
+    "completed": false,
+    "home_team": "Philadelphia Eagles",
+    "away_team": "Tampa Bay Buccaneers",
+    "scores": null,
+    "last_update": null
+  }
+]
 //iHA7kUpK4EdZ7iIUUV0N7yvDM5G3  Clements_Flock
 
 class NCAA extends Component {
@@ -138,12 +312,12 @@ class NCAA extends Component {
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, nflModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
-    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false
+    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',eventToNFLModal:'',
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,itemsToNFLModal:[]
   }
   componentDidMount = () => {
     //this.sendMatchesToFirebase()
-    this.checkAuth()
+    //this.checkAuth()
 
     //this.getRanking()
     //this.checkForOddsUpdate()
@@ -152,6 +326,46 @@ class NCAA extends Component {
   
     //this.getNCAAFResults()
 
+    //this.arrangeArray()
+      this.checkAuth()
+
+  }
+  arrangeArray=async()=>{
+    var fullFormatedArray=[]
+    scoresNfl.map((item,index)=>{
+      var formatedArray={}
+      console.log('scores',item.scores)  
+      formatedArray['id'] =item.id        
+    if(item.scores&&item.completed===true){
+      var homeTeam=item.home_team
+      var awayTeam=item.away_team
+      var item1Name=item.scores[0]['name']
+      var item2Name=item.scores[1]['name']
+      var homeTeamScore='',awayTeamScore='',theWinner=''
+      var item1Score=Number(item.scores[0]['score'])
+      var item2Score=Number(item.scores[1]['score'])
+      
+      if(homeTeam===item1Name){homeTeamScore=item1Score}
+      if(awayTeam===item2Name){awayTeamScore=item2Score}
+      if(homeTeam===item2Name){homeTeamScore=item2Score}
+      if(awayTeam===item1Name){awayTeamScore=item1Score}
+      if(awayTeamScore>homeTeamScore){theWinner='player2'}
+      if(awayTeamScore<homeTeamScore){theWinner='player1'}
+      scoresNfl[index]['winner']=theWinner
+      formatedArray['theWinner']=theWinner
+      /*console.log('scores 1 name',item.scores[0]['name'])
+      console.log('scores 2 name',item.scores[1]['name'])
+      console.log('scores 1 score',item.scores[0]['score'])
+      console.log('scores 2 score',item.scores[1]['score'])*/
+      
+      
+    }else{formatedArray['theWinner']=''}
+    fullFormatedArray.push(formatedArray)
+    if(scoresNfl.length===index+1){
+      console.log('worked on array',scoresNfl)
+      console.log('formatedArray',fullFormatedArray)
+    }
+    })
   }
   getNCAAFResults=()=>{
     firstRound.map((item,index)=>{
@@ -166,8 +380,8 @@ class NCAA extends Component {
         var oddsId=item2.id  
         if(gamesId===oddsId){
           var theScores=item2.scores
-          //console.log('the theScores',theScores)
-          //console.log('yeeeees ids',gamesId,yesIds)
+          ////console.log('the theScores',theScores)
+          ////console.log('yeeeees ids',gamesId,yesIds)
           if(theScores){
             var withScores = JSON.stringify(theScores);
             withScores = withScores.replace(/,/g, "|").replace(/{/g, " ").replace(/}/g, "").replace(/"/g, "").replace(/]/g, "");
@@ -179,10 +393,10 @@ class NCAA extends Component {
             var homeName2=withScores.split('|')[0].replace('[ name:','').replace( /\s\s+/g, ' ' )
             var awayName2=withScores.split('|')
             awayName2=awayName2[awayName2.length - 2].replace('name:','').replace( /\s\s+/g, ' ' )
-            console.log('awayName2',awayName2)
-            //console.log('homePoints',name1,homePoints,'awayPoints',name2,awayPoints,'theWinner',theWinner)
-            //console.log('home details oddds',item2.home_team,'db',theF1Name)
-            //console.log('away details odds',item2.away_team,'db',theF2Name)
+            //console.log('awayName2',awayName2)
+            ////console.log('homePoints',name1,homePoints,'awayPoints',name2,awayPoints,'theWinner',theWinner)
+            ////console.log('home details oddds',item2.home_team,'db',theF1Name)
+            ////console.log('away details odds',item2.away_team,'db',theF2Name)
             if(item2.home_team.includes(theF1Name)){
               var theWinner=''
               firstRound[index]['p1Points']=homePoints
@@ -197,7 +411,7 @@ class NCAA extends Component {
               if(homePoints<awayPoints){theWinner=name2}
               firstRound[index]['winner']=theWinner;
             }
-            console.log('firstRoundlllllll',firstRound)
+            //console.log('firstRoundlllllll',firstRound)
           }
         }
       })
@@ -230,18 +444,45 @@ class NCAA extends Component {
     //this.checkForOddsUpdate()
     //this.checkForOutcome()
   }
-  handleChildClick = () => {
+  handleChildClick = (title,item) => {
     this.setState({ count: this.state.count + 1, nflModal: false });
-    //console.log('azeeza', this.state.count)
+    if(title==='getOdds'&&item.length>10){
+    this.checkForOddsUpdate2(item)
+    }
+    console.log('azeeza', item)
   };
+  checkForOddsUpdate2 = async (theLink) => {
+    try {
+      var theQuery = encodeURIComponent(theLink)
+      console.log('the theLink 000000',theLink)
+      //return
+      var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
+      editDbRef.once('value', dataSnapshot => {
+       if((new Date().getTime()>dataSnapshot.val())){
+        this.notify('Update odds time expired')
+       }
+       else{
+        console.log('kufinish kudonjo')
+         axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
+        .then((res) => {
+          var theItems = res.data.result
+          ////console.log('theItems', theItems)
+
+        })
+       }})
+      
+    } catch (error) {
+      ////console.log('error', error)
+    }
+  }
   checkForOddsUpdate = async () => {
     try {
      
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection+'::'+this.state.editType
       var theQuery = encodeURIComponent(theLink)
-      console.log('theQuery',this.state.theEventKey,this.state.editType,theQuery)
-      
+      console.log('the theLink 11111',theLink)
+      //return
       var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
        
@@ -252,13 +493,13 @@ class NCAA extends Component {
          axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
         .then((res) => {
           var theItems = res.data.result
-          //console.log('theItems', theItems)
+          ////console.log('theItems', theItems)
 
         })
        }})
       
     } catch (error) {
-      //console.log('error', error)
+      ////console.log('error', error)
     }
   }
   checkForOutcome=async () => {
@@ -268,25 +509,25 @@ class NCAA extends Component {
       if(!this.state.theEventKey||this.state.theEventKey.length<3)return
       
       //var theLink2='theEvents::ramUfc::'+theK
-      if(this.state.currentSelection==='firstRound'){scoreName='firstRoundScore'}
-      if(this.state.currentSelection==='quarterFinals'){scoreName='quarterFinalsScore'}
-      if(this.state.currentSelection==='semiFinals'){scoreName='semiFinalsScore'}
-      if(this.state.currentSelection==='finals'){scoreName='finalsScore'}
-      var theLink='theEvents::NCAAF::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName
+      if(this.state.currentSelection==='wildCard'){scoreName='wildCardScore'}
+      if(this.state.currentSelection==='divisionalRound'){scoreName='divisionalRoundScore'}
+      if(this.state.currentSelection==='conferenceChampionship'){scoreName='conferenceChampionshipScore'}
+      if(this.state.currentSelection==='superBowl'){scoreName='superBowlScore'}
+      var theLink='theEvents::NFL::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
       
-      var theQuery=encodeURIComponent(theLink) 
-      console.log('ncaaf query',theQuery)
-      //return
-      await axios.get("http://localhost:4000/getNCAAFResults?term="+theQuery)
+      var theQuery=encodeURIComponent(theLink)
+      console.log('theLink',theLink)
+     
+      await axios.get("http://localhost:4000/getNFLResults?term="+theQuery)
         .then((res) => {
-          //console.log('theItems',res)
+          ////console.log('theItems',res)
           var theOutcome = res.data
-          //console.log('theItems',theOutcome)
+          ////console.log('theItems',theOutcome)
           if(theOutcome==='sucesss'){}
         })
         } catch (error) {
-          //console.log('error',error)
+          ////console.log('error',error)
         }
     }
      /*calculateRanking=(theArr)=>{
@@ -339,9 +580,9 @@ class NCAA extends Component {
         })
         scoreBoardDb.update(theAllItems,(error) => {
           if (error) {
-            //console.log('Score board noooooot updated successfully')
+            ////console.log('Score board noooooot updated successfully')
           }else{
-            //console.log('Score board updated successfully')
+            ////console.log('Score board updated successfully')
           }
       })
        }
@@ -405,15 +646,15 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
   checkUpcomingPastGames = async (userId) => {
     //return
-console.log('naingia2222222222222')
+//console.log('naingia2222222222222')
     var gamesInfo = firebase.database().ref('/theEvents/NFL/eventsIds/')
     var i = 0, allGames = []
 
     await gamesInfo.once('value', dataSnapshot => {
       var gamesCount = dataSnapshot.numChildren()
-      console.log('naingia 3333',gamesCount)
+      //console.log('naingia 3333',gamesCount)
       dataSnapshot.forEach((data) => {
-        console.log('naingia 44444',data)
+        //console.log('naingia 44444',data)
         i++
         var pastG = {}, upcomingG = {}, theEvents = {}
         var key = data.key
@@ -448,7 +689,7 @@ console.log('naingia2222222222222')
         }
         this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
           this.getNFLMatches(userId)
-          ////console.log('currentSelection',this.state.currentSelection)
+          //////console.log('currentSelection',this.state.currentSelection)
         })
       })
     })
@@ -458,15 +699,15 @@ console.log('naingia2222222222222')
     this.setState({ firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], theMenu: 'mainCard', dataAvailable: false, currentEventUserInfo: {} })
     var userInfoDb = firebase.database().ref('/theEvents/NFL/').child(this.state.theEventKey)
     userInfoDb.once('value', dataSnapshot => {
-      ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //////console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var firstRoundCount = dataSnapshot.child('wildCard').numChildren()
       var quarterFinalsCount = dataSnapshot.child('divisionalRound').numChildren()
       var semiFinalsCount = dataSnapshot.child('conferenceChampionship').numChildren()
       var finalsCount = dataSnapshot.child('superBowl').numChildren()
       var theInfo = dataSnapshot.val()
-      console.log('the event eventSelection', theInfo)
-      //console.log('ncaaf20242025', theInfo.finals)
+      //console.log('the event eventSelection', theInfo)
+      ////console.log('ncaaf20242025', theInfo.finals)
       if (theInfo.wildCard) {
         var array1 = []
         var i = 0
@@ -476,14 +717,14 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === firstRoundCount) {
-            console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ firstRoundArray: array1, theItems: array1 })
           }
         }
       }
       if (theInfo.divisionalRound) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //////console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.divisionalRound) {
           i++
@@ -491,22 +732,22 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === quarterFinalsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //////console.log('whole prelimms Array',array1)
             this.setState({ quarterFinalsArray: array1 })
             this.getMatchesInfo(this.state.userId,'wildCard')
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //////console.log('hakuna prelimsssssss')
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'wildCard')
         }
       }
-      //console.log('iko finalssssssssssssssssss 0000')
+      ////console.log('iko finalssssssssssssssssss 0000')
       if (theInfo.conferenceChampionship) {
         var array1 = []
-        ////console.log('iko earlyPrelims')
+        //////console.log('iko earlyPrelims')
         var i = 0
         for (var key in theInfo.conferenceChampionship) {
           i++
@@ -514,7 +755,7 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === semiFinalsCount) {
-            console.log('wholesemiFinalsArray',array1)
+            //console.log('wholesemiFinalsArray',array1)
             this.setState({ semiFinalsArray: array1 })
             if (this.state.userId.length > 3) {
               this.getMatchesInfo(this.state.userId,'divisionalRound')
@@ -525,13 +766,13 @@ console.log('naingia2222222222222')
       } else {
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'divisionalRound')
-          ////console.log('hakuna early prelimsssssss')
+          //////console.log('hakuna early prelimsssssss')
         }
       }
-      //console.log('iko finalssssssssssssssssss 1111')
+      ////console.log('iko finalssssssssssssssssss 1111')
       if (theInfo.superBowl) {
         var array1 = []
-        //console.log('iko finalssssssssssssssssss 2222')
+        ////console.log('iko finalssssssssssssssssss 2222')
         var i = 0
         for (var key in theInfo.superBowl) {
           i++
@@ -539,7 +780,7 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === finalsCount) {
-            ////console.log('whole early prelimms Array',array1)
+            //////console.log('whole early prelimms Array',array1)
             this.setState({ finalArray: array1 })
             if (this.state.userId.length > 3) {
               this.getMatchesInfo(this.state.userId,'conferenceChampionship')
@@ -551,14 +792,14 @@ console.log('naingia2222222222222')
       } else {
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'conferenceChampionship')
-          ////console.log('hakuna early prelimsssssss')
+          //////console.log('hakuna early prelimsssssss')
         }
       }
     })
-    ////console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
+    //////console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
   }
   getMatchesInfo = async (userId,selection) => {
-    ////console.log('allMatches',userId,this.state.theEventKey)
+    //////console.log('allMatches',userId,this.state.theEventKey)
     //return
     var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NFL/" + this.state.theEventKey + '/')
     var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
@@ -567,29 +808,29 @@ console.log('naingia2222222222222')
     var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NFL/')
     var currentEventUserInfo = '',totalScore=0
     await selectedMatchesKeyDb.once('value', dataSnapshot => {
-      ////console.log('the key',dataSnapshot.val())
+      //////console.log('the key',dataSnapshot.val())
       if (!dataSnapshot.val()) return
       photoRefDb.once('value', dataSnapshot => {
-        ////console.log('proofile photo',dataSnapshot.val())
+        //////console.log('proofile photo',dataSnapshot.val())
         if (dataSnapshot.val()) {
           this.setState({ profilePhoto: dataSnapshot.val() })
         }
       })
       userInfoDb.once('value', dataSnapshot => {
         if (!dataSnapshot.val()) return
-        console.log('the type user 0000000000000', dataSnapshot.val())
+        //console.log('the type user 0000000000000', dataSnapshot.val())
         if (dataSnapshot.val()) {
           var theInfo = dataSnapshot.val()
           this.setState({ currentEventUserInfo: theInfo, currentRank: theInfo.currentRank })
           currentEventUserInfo = dataSnapshot.val()
           totalScore=Number(theInfo.firstRoundScore)+Number(theInfo.quarterFinalsScore)+Number(theInfo.semiFinalsScore)+Number(theInfo.finalsScore)
-          console.log('the dddddddd',theInfo)
+          //console.log('the dddddddd',theInfo)
 
         }
       })
       var thetrrrr = ''
-      //console.log('this.state.currentSelection', this.state.currentSelection)
-     // console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
+      ////console.log('this.state.currentSelection', this.state.currentSelection)
+     // //console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
       if (selection === 'wildCard') {
         thetrrrr = this.state.firstRoundArray
       }
@@ -606,59 +847,59 @@ console.log('naingia2222222222222')
       //var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
       
       userBetsDb.once('value', dataSnapshot => {
-        ////console.log('the bets data',dataSnapshot.val())
-        ////console.log('this.state.theItems',this.state.theItems)
+        //////console.log('the bets data',dataSnapshot.val())
+        //////console.log('this.state.theItems',this.state.theItems)
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
-        console.log('selection',selection,'itemsCount',itemsCount)
+        //console.log('selection',selection,'itemsCount',itemsCount)
             if(itemsCount===6){this.setState({isFirstRoundPicked:true})}
             if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true})}
             if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true})}
             if(itemsCount===13){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true})}
-            if(selection==='wildCard'&&itemsCount<4)return
-            if(selection==='divisionalRound'&&itemsCount<8)return
-            if(selection==='conferenceChampionship'&&itemsCount<10)return
-            if(selection==='superBowl'&&itemsCount<12)return
-            // console.log('MEGA count',itemsCount)
+            if(selection==='wildCard'&&itemsCount<6)return
+            if(selection==='divisionalRound'&&itemsCount<10)return
+            if(selection==='conferenceChampionship'&&itemsCount<12)return
+            if(selection==='superBowl'&&itemsCount<13)return
+            console.log('MEGA count',selection,itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
           i++
-        //  console.log('thank DAATA',selection,data.val())
+        //  //console.log('thank DAATA',selection,data.val())
           thetrrrr.map((item) => {
-            ////console.log('thank you sir',item.winner)
+            //////console.log('thank you sir',item.winner)
             if (item.id === data.key) {
-              //console.log('thank you sir')
+              ////console.log('thank you sir')
               item['bet'] = data.val()
               if (item.status1 === 'played') {
 
-                ////console.log('item.winner',item.winner)
-                ////console.log('my beeeeet',data.val())
-                ////console.log('item.p1Points',item.p1Points)
-                ////console.log('item.p2Points',item.p2Points)
+                //////console.log('item.winner',item.winner)
+                //////console.log('my beeeeet',data.val())
+                //////console.log('item.p1Points',item.p1Points)
+                //////console.log('item.p2Points',item.p2Points)
                 if (item.winner === 'player1' && data.val() === 'player1') { currentScore.push(item.p1Points);thePoints.push(item.p1Points);}
                 if (item.winner === 'player2' && data.val() === 'player2') { currentScore.push(item.p2Points);thePoints.push(item.p2Points);}
-                ////console.log('p1 pointsss',currentScore)
+                //////console.log('p1 pointsss',currentScore)
 
               }else{
               if (data.val() === 'player1') {
-                thePoints.push(item.p1Points);////console.log('the points',item.p1Points)
+                thePoints.push(item.p1Points);//////console.log('the points',item.p1Points)
               }
               if (data.val() === 'player2') {
-                thePoints.push(item.p2Points);////console.log('the points',item.p2Points)
+                thePoints.push(item.p2Points);//////console.log('the points',item.p2Points)
               }}
             }
           })
           /*this.state.theItems.map((item)=>{
            if(item.id===data.key){
-            ////console.log('thank you sir')
+            //////console.log('thank you sir')
             item['bet']=data.val()
             if(item.status1==='played'){
               if(data.val()==='player1'){currentScore.push(item.p1Points);}
             if(data.val()==='player2'){currentScore.push(item.p2Points);}
             }
-            if(data.val()==='player1'){thePoints.push(item.p1Points);////console.log('the points',item.p1Points)
+            if(data.val()==='player1'){thePoints.push(item.p1Points);//////console.log('the points',item.p1Points)
               }
-            if(data.val()==='player2'){thePoints.push(item.p2Points);////console.log('the points',item.p2Points)
+            if(data.val()==='player2'){thePoints.push(item.p2Points);//////console.log('the points',item.p2Points)
               }
           }
           })*/
@@ -674,10 +915,10 @@ console.log('naingia2222222222222')
             //if (selection === 'quarterFinals') { this.setState({ quarterFinalsArray: this.state.theItems}) }
            // if (selection === 'semiFinals') { this.setState({ semiFinalsArray: this.state.theItems}) }
             //if (selection === 'finals') { this.setState({ finalArray: this.state.theItems}) }
-            ////console.log('this.state.theItems',this.state.theItems)
+            //////console.log('this.state.theItems',this.state.theItems)
             
-          console.log('thePointsssss',thePoints)
-            ////console.log('currentScore',currentScore.length)
+          //console.log('thePointsssss',thePoints)
+            //////console.log('currentScore',currentScore.length)
         //to do do current score additions
             var pointsSum = thePoints.reduce((partialSum, a) => partialSum + a, 0);
             pointsSum = pointsSum.toFixed(2)
@@ -692,7 +933,7 @@ console.log('naingia2222222222222')
 
               currentEventUserInfo['currentScore'] = scoreSum
               this.setState({ currentEventUserInfo })
-              //console.log('currentEventUserInfo', currentEventUserInfo).
+              ////console.log('currentEventUserInfo', currentEventUserInfo).
 
              // userInfoDb.child('/currentScore/').set(scoreSum)
               //userInfoDb.child(this.state.currentSelection+'Score').set(scoreSum)
@@ -736,15 +977,15 @@ console.log('naingia2222222222222')
     var userInfoDb = firebase.database().ref('/activeEvents/').child(name)
 
     userInfoDb.once('value', dataSnapshot => {
-      ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //////console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var mainCardCount = dataSnapshot.child('mainCard').numChildren()
       var prelimsCount = dataSnapshot.child('prelims').numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //////console.log('the event eventSelection',theInfo) 
       if (theInfo.mainCard) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo.mainCard)
+        //////console.log('iko maincarddddd',theInfo.mainCard)
         var i = 0
         for (var key in theInfo.mainCard) {
           i++
@@ -752,7 +993,7 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === mainCardCount) {
-            ////console.log('whole maincard Array',array1)
+            //////console.log('whole maincard Array',array1)
             this.setState({ ramUfcMaincardArray: array1 })
             this.setState({ theItems: array1 })
           }
@@ -760,7 +1001,7 @@ console.log('naingia2222222222222')
       }
       if (theInfo.prelims) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //////console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.prelims) {
           i++
@@ -768,13 +1009,13 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === prelimsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //////console.log('whole prelimms Array',array1)
             this.setState({ ramUfcPrelimsArray: array1 })
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //////console.log('hakuna prelimsssssss')
       }
     })
   }
@@ -783,10 +1024,10 @@ console.log('naingia2222222222222')
     userInfoDb.once('value', dataSnapshot => {
       var count = dataSnapshot.numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //////console.log('the event eventSelection',theInfo) 
       if (theInfo) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo)
+        //////console.log('iko maincarddddd',theInfo)
         var i = 0
         for (var key in theInfo) {
           i++
@@ -794,7 +1035,7 @@ console.log('naingia2222222222222')
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === count) {
-            ////console.log('whole maincard Array',array1)
+            //////console.log('whole maincard Array',array1)
             this.setState({ [theArr]: array1 })
           }
         }
@@ -810,7 +1051,7 @@ console.log('naingia2222222222222')
       if (event === 'marchMadness') { selectedMarchMadnesArray = theInfo }
       if (event === 'nfl') { selectedNflArray = theInfo }
       //hapa ndo nimefika
-      //////console.log('the event eventSelection',theInfo.eventSelection) 
+      ////////console.log('the event eventSelection',theInfo.eventSelection) 
       var currentRank = ''
       if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
       this.setState({
@@ -824,15 +1065,15 @@ console.log('naingia2222222222222')
 
     this.setState({ theRamUfc: theRamUfc, theMarchMadness, theNfl, theFifa })
     this.setState({ theRamUfc: theRamUfc }, () => {
-      //////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
+      ////////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
     });
-    //////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
+    ////////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
     var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents')
     if (theRamUfc === 'selected') {
       this.setState({ dataAvailable: true, clickHere1: 'CLICK HERE TO EDIT YOUR PICKS', clickHere2: 'CLICK HERE TO EDIT THE GAME' })
       userInfoDb.child('ramUfc').once('value', dataSnapshot => {
         var theInfo = dataSnapshot.val()
-        //////console.log('the event eventSelection',theInfo.eventSelection) 
+        ////////console.log('the event eventSelection',theInfo.eventSelection) 
         var currentRank = ''
         if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
         this.setState({
@@ -849,26 +1090,26 @@ console.log('naingia2222222222222')
     var i = 0, theAmount = []
     theItems.map((item, index) => {
       var amount = 0
-      //////console.log('kufinish kumalo 1')
+      ////////console.log('kufinish kumalo 1')
       i++
       if (item.status1 === 'played') {
-        //////console.log('kufinish kumalo 2',item.bet,item.winner)
+        ////////console.log('kufinish kumalo 2',item.bet,item.winner)
         if (item.bet === 'player1' && item.winner === 'player1') {
           amount = Number(item.p1Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 3')
+          ////////console.log('kufinish kumalo 3')
         }
         if (item.bet === 'player2' && item.winner === 'player2') {
           amount = Number(item.p2Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 4')
+          ////////console.log('kufinish kumalo 4')
         }
 
-        //////console.log('kufinish kumalo 4B',i,theItems.length)
+        ////////console.log('kufinish kumalo 4B',i,theItems.length)
         if (i === theItems.length) {
-          //////console.log('kufinish kumalo 5')
+          ////////console.log('kufinish kumalo 5')
           const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-          //////console.log('the current Score',sum)
+          ////////console.log('the current Score',sum)
           this.setState({ currentScore: sum.toFixed(2) })
         }
       }
@@ -878,27 +1119,32 @@ console.log('naingia2222222222222')
 
   hideModal = () => {
     this.setState({ opendetailsModal: false })
-    //////console.log('Button clicked!');
+    ////////console.log('Button clicked!');
   };
   openTheModal =async () => {
     //this.notify("Can't make a pick at the moment")
     //return
-    console.log('ratatata',this.state.userLoggedIn)
+    //console.log('ratatata',this.state.userLoggedIn)
     //this.sendMatchesToFirebase()
     //return
     if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
       return
-    }
+    }var itemToModals=''
+    if (this.state.currentSelection === 'wildCard') { itemToModals = this.state.firstRoundArray}
+    if (this.state.currentSelection === 'divisionalRound') { itemToModals = this.state.quarterFinalsArray }
+    if (this.state.currentSelection === 'conferenceChampionship') { itemToModals = this.state.semiFinalsArray }
+    if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray }
    var i=0,pointMissing=false
-   await this.state.theItems.map((item,index)=>{
+   console.log('this.state.theItems',itemToModals)
+   await itemToModals.map((item,index)=>{
     i++
-      console.log('item.p1Points',item.p1Points)
+      //console.log('item.p1Points',item.p1Points)
       if(item.p1Points==='N/A'||item.p2Points==='N/A'){
         pointMissing=true
       }
-     if(this.state.theItems.length===index+1){
+     if(itemToModals.length===index+1){
      if(pointMissing===true){
       this.notify('Event points not yet populated')
      }else{
@@ -918,18 +1164,18 @@ console.log('naingia2222222222222')
 
   }
  openTheModal2=()=>{
-  console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
+  //console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
   var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
   editDbRef.once('value', dataSnapshot => {
-    console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+    //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
    if((new Date().getTime()>dataSnapshot.val())){
-    this.notify('Event pick/edit time expired')
+    this.notify('Event pick/edit not available at the moment')
    }
    else{
     if(this.state.currentSelection!=='wildCard'){
       var theDbRef=firebase.database().ref('/userBets/scoreBoards/NFL/'+this.state.theEventKey)
       theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-        console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+        //console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
          if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
          else{this.notify("Can't make a pick when the event has already started")}
       })
@@ -966,7 +1212,7 @@ console.log('naingia2222222222222')
     event.stopPropagation()
     event.preventDefault()
     data['id']=id
-    console.log('data',data)
+    //console.log('data',data)
     var theDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
     theDb.set(data,error=>{
       if(!error){
@@ -975,23 +1221,67 @@ console.log('naingia2222222222222')
       }
     })
     }
+    openNFLModal=()=>{
+      this.setState({itemsToNFLModal:[]})
+      var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey)
+      editDbRef.once('value', dataSnapshot => {
+        var data=dataSnapshot.val()
+        var selection=data.currentSelection
+        var wildCartEditExpiry=data.stopWildCardEdit
+        var divisionalRoundEditExpiry=data.stopDivisionalRoundEdit
+        var conferenceChampionshipEditExpiry=data.stopConferenceChampionshipEdit
+        var superBowlEditExpiry=data.stopSuperBowlEdit
+        if(selection==='wildCard'&&new Date().getTime()>wildCartEditExpiry){
+          console.log('wild card expired')
+          this.setState({eventToNFLModal:'divisionalRound',nflModal:true})
+        }else if(selection==='wildCard'&&new Date().getTime()<wildCartEditExpiry){
+          var allArray=[...this.state.firstRoundArray,...this.state.quarterFinalsArray,...this.state.semiFinalsArray,...this.state.finalArray]
+          this.setState({eventToNFLModal:'wildCard',itemsToNFLModal:allArray,nflModal:true})
+        }
+        if(selection==='divisionalRound'&&new Date().getTime()>divisionalRoundEditExpiry){
+          console.log('divisional Round expired')
+          this.setState({eventToNFLModal:'conferenceChampionship',nflModal:true})
+        }else if(selection==='divisionalRound'&&new Date().getTime()<divisionalRoundEditExpiry){
+          this.setState({eventToNFLModal:'divisionalRound',itemsToNFLModal:this.state.quarterFinalsArray,nflModal:true})
+        }
+        if(selection==='conferenceChampionship'&&new Date().getTime()>conferenceChampionshipEditExpiry){
+          console.log('wild card expired')
+          this.setState({eventToNFLModal:'superBowl',nflModal:true})
+        }else if(selection==='conferenceChampionship'&&new Date().getTime()<conferenceChampionshipEditExpiry){
+          this.setState({eventToNFLModal:'conferenceChampionship',itemsToNFLModal:this.state.semiFinalsArray,nflModal:true})
+        }
+        if(selection==='superBowl'&&new Date().getTime()>superBowlEditExpiry){
+          console.log('wild card expired')
+          this.notify("Can't enter event details to an expired event")
+        }else if(selection==='superBowl'&&new Date().getTime()<superBowlEditExpiry){
+          this.setState({eventToNFLModal:'superBowl',itemsToNFLModal:this.state.finalArray,nflModal:true})
+        }
+        /*console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+       if((new Date().getTime()>dataSnapshot.val())){
+        this.notify('Event pick/edit time expired')
+       }*/
+      })
+      //this.setState({nflModal:true,eventToNFLModal:''})
+    }
   render() {
-   // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
-    //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
-    //console.log('this.state.isSemiFinalsDataAvailable',this.state.isSemiFinalsDataAvailable)
-    //console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
+   // //console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
+    ////console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
+    ////console.log('this.state.isSemiFinalsDataAvailable',this.state.isSemiFinalsDataAvailable)
+    ////console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
     var flockTeamName = ''
     var itemToModals = ''
     var isPastEvent=''
     var todayInMillis=new Date().getTime()
+    var showBestPossible=''
    if(this.state.endTime<todayInMillis&&(this.state.endTime-todayInMillis)<-86400000){
     isPastEvent=false
    }else{ isPastEvent=true}
 
-    if (this.state.currentSelection === 'wildCard') { itemToModals = this.state.firstRoundArray}
-    if (this.state.currentSelection === 'divisionalRound') { itemToModals = this.state.quarterFinalsArray }
-    if (this.state.currentSelection === 'conferenceChampionship') { itemToModals = this.state.semiFinalsArray }
-    if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray }
+   
+    if (this.state.currentSelection === 'wildCard') { itemToModals = this.state.firstRoundArray,showBestPossible=this.state.isFirstRoundPicked}
+    if (this.state.currentSelection === 'divisionalRound') { itemToModals = this.state.quarterFinalsArray,showBestPossible=this.state.isQuarterFinalsPicked }
+    if (this.state.currentSelection === 'conferenceChampionship') { itemToModals = this.state.semiFinalsArray,showBestPossible=this.state.isSemiFinalsPicked }
+    if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray,showBestPossible=this.state.isFinalsPicked}
 
 
 
@@ -1039,8 +1329,9 @@ console.log('naingia2222222222222')
             {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal()}>Make Picks</p>}
           </div>
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div>
-          <p className={style.eventP} onClick={() => this.setState({ nflModal: true })}>Enter Event Details</p>
+        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
+          <p className={style.eventP} onClick={() => this.openNFLModal()}>Enter Event Details</p>
+          <p className={style.eventP2} onClick={() =>this.setState({eventToNFLModal:'wildCard',nflModal:true})}>Create New NFL Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
@@ -1080,7 +1371,7 @@ console.log('naingia2222222222222')
           <div className={style.scoresCont1}>
             <p className={style.currentP}>{this.state.currentSelection}</p>
             <p className={style.scoreP1}>Best possibe Score:<br/></p>
-            <p className={style.scoreP2}>{this.state.dataAvailable ? this.state.currentEventUserInfo['bestPossibleScore'] : '0.00'} points</p>
+            <p className={style.scoreP2}>{this.state.dataAvailable&&showBestPossible?this.state.currentEventUserInfo['bestPossibleScore'] : '0.00'} points</p>
           </div>
           <div className={style.scoresCont2}>
             <p className={style.scoreP1}>Cumulative Score</p>
@@ -1394,7 +1685,7 @@ console.log('naingia2222222222222')
         {this.state.openLoginModal ? <div className={style.detailsModal} onClick={() => this.setState({ openLoginModal: false })}><LogIn /></div> : null}
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
-        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal onClick={this.handleChildClick} /></div> : null}
+        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} onClick={this.handleChildClick} /></div> : null}
         <ToastContainer />
       </>
     )

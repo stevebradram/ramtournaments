@@ -297,6 +297,10 @@ $theDark:#b2b2b2;
     color: white;
     border-color: $redColor;
 }
+.eventCreationDiv{
+    display: flex;
+    flex-wrap: wrap;
+}
 .eventP{
     border: 1px solid $blackish;
     width: 160px;
@@ -307,6 +311,21 @@ $theDark:#b2b2b2;
     font-weight: 500;
     color: $blackish;
     cursor: pointer;
+    margin-right: 20px;
+}
+.eventP2{
+    //border: 1px solid $blackish;
+    width: 180px;
+    margin-top: 20px;
+    text-align: center;
+    padding: 4px 0px;
+    border-radius: 5px;
+    font-weight: 500;
+    color: $blackish;
+    cursor: pointer;
+    background-color: $redColor;
+    color: white;
+    
 }
 #playerP2 {
     background-color: $redColor;
