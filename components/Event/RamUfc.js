@@ -648,7 +648,33 @@ getUfcItems=async(name)=>{
       console.log('expiry data',dataSnapshot.val())
     })
    }
-  openTheModal= () => {
+   openTheModal =async () => {
+    var allMatches=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
+    console.log('ratatata',this.state.userLoggedIn,allMatches)
+    if(this.state.userLoggedIn===false){
+      this.notify("Please Log In to continue")
+      this.setState({openLoginModal:true})
+      return
+    }
+   var i=0,pointMissing=false
+   console.log('this.state.theItems',allMatches)
+   await allMatches.map((item,index)=>{
+    i++
+      //console.log('item.p1Points',item.p1Points)
+      if(item.p1Points==='N/A'||item.p2Points==='N/A'){
+        pointMissing=true
+        console.log('item.p1Points',item)
+      }
+     if(allMatches.length===index+1){
+     if(pointMissing===true){
+      this.notify('All event points not yet populated, try again later')
+     }else{
+      this.openTheModal2()
+     }
+     }
+    })
+    }
+  openTheModal2= () => {
     var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
     timeInfoDb.once('value',dataSnapshot=>{
       var theEventTime=dataSnapshot.val()
