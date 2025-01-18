@@ -23,11 +23,13 @@ class RamUfc extends Component {
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
-    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:''
+    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0
   }
   componentDidMount=()=>{
    //console.log('on raaaaaaaaaaaaam ufc')
    this.checkAuth()
+
+  // console.log('dddddd',new Date('2025-01-19T05:30:00Z').getTime())
 
   //this.getRanking()
   //this.checkForOddsUpdate()
@@ -50,18 +52,19 @@ class RamUfc extends Component {
         var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
     timeInfoDb.once('value',dataSnapshot=>{
       var theEventTime=dataSnapshot.val()
-      if((new Date().getTime()>theEventTime)){
-        this.notify('Event odds update time expired')
-       }else{
-        var theLink='theEvents::ramUfc::'+this.state.theEventKey
+     // if((new Date().getTime()>theEventTime)){
+       // this.notify('Event odds update time expired')
+      // }else{
+        var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo
         var theQuery=encodeURIComponent(theLink) 
-      
+        
          axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
+            this.notify(theOutcome)
             console.log('theItems',theOutcome)
 })
-        }
+       // }
       })
           } catch (error) {
             console.log('error',error)
@@ -300,13 +303,17 @@ getUfcMatches=(userId)=>{
   this.setState({ramUfcMaincardArray:[],ramUfcPrelimsArray:[],ramUfcEarlyPrelimsArray:[],theMenu:'mainCard',dataAvailable:false,currentEventUserInfo:{}})
   var userInfoDb=firebase.database().ref('/theEvents/ramUfc/').child(this.state.theEventKey)
    userInfoDb.once('value',dataSnapshot=>{
-    //console.log('children count',dataSnapshot.child('mainCard').numChildren());
+    console.log('children count',dataSnapshot.numChildren());
+    var dataCount=dataSnapshot.numChildren()
     //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
     var mainCardCount=dataSnapshot.child('mainCard').numChildren()
     var prelimsCount=dataSnapshot.child('prelims').numChildren()
     var earlyPrelimsCount=dataSnapshot.child('earlyPrelims').numChildren()
+    if(prelimsCount===0&&earlyPrelimsCount===0){this.setState({matchTypesNo:1})}
+    if(prelimsCount>=1&&earlyPrelimsCount===0){this.setState({matchTypesNo:2})}
+    if(prelimsCount>=1&&earlyPrelimsCount>=1){this.setState({matchTypesNo:3})}
     var theInfo=dataSnapshot.val()
-    //console.log('the event eventSelection',theInfo) 
+    console.log('the event mainCardCount 323232',mainCardCount) 
     if(theInfo.mainCard){
       var array1 = []
       //console.log('iko maincarddddd',theInfo.mainCard)
@@ -318,7 +325,7 @@ getUfcMatches=(userId)=>{
        array1.push(array2)
        allMatches.push(array2)
        if(i===mainCardCount){
-        //console.log('whole maincard Array',array1)
+        console.log('whole maincard Array',array1)
         //allMatches.push(array1)
         this.setState({ramUfcMaincardArray:array1,theItems:array1})
         
@@ -864,7 +871,7 @@ chooseHomeEvent=(event,id)=>{
           if(item.status1==='notPlayed'){playStat='Upcoming Event',playStatCol='#292f51'}
           if(item.status1==='ongoing'){playStat='Ongoing Event',playStatCol='#CB1E31'}
           if(item.status1==='played'){playStat='Finished Event',playStatCol='#919191'}
-           var timeDiff=item.timeInMillis-new Date().getTime()
+           var timeDiff=Number(item.timeInMillis)-new Date().getTime()
            //if(item.status1==='notPlayed'&&timeDiff>300000){
 
            //}
@@ -894,6 +901,13 @@ chooseHomeEvent=(event,id)=>{
             //matchTime=new Date(item.timeInMillis).toDateString()
           }else{matchTime=item.time}
           //console.log('matchTime',matchTime)
+          var status1Item=''
+          if(item.status1==='notPlayed'&&(new Date().getTime()<item.timeInMillis)){status1Item=<div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount}/></div>}
+          if(item.status1==='notPlayed'&&(new Date().getTime()>item.timeInMillis)){status1Item=<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}
+          if(item.status1==='played'){status1Item=<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>}
+          if(item.status1==='ongoing'){status1Item=<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}
+          if(item.status1==="cancelled"){status1Item=<p className={style.eventStatP} style={{color:'#CB1E31'}}>Cancelled</p>}
+          //console.log('item.status1',item.id,item.status1)
           return(
          <div className={style.listDiv} key={index}>
                 <div className={style.theCont0}>
@@ -902,8 +916,9 @@ chooseHomeEvent=(event,id)=>{
                         <p>{matchTime}</p>
                       </div>
                       
-                      {item.status1==='notPlayed'?<>{timeDiff>300000?<div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount}/></div>:<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}</>:
-                      <p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>}
+                      {status1Item}
+                      {/*item.status1==='notPlayed'?<>{timeDiff>300000?<div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount}/></div>:<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}</>:
+                      <p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>*/}
 
 
                       <div className={style.theCont}>
