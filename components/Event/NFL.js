@@ -518,7 +518,7 @@ class NCAA extends Component {
       
       var theQuery=encodeURIComponent(theLink)
       console.log('theLink',theLink)
-     
+      return
       await axios.get("http://localhost:4000/getNFLResults?term="+theQuery)
         .then((res) => {
           ////console.log('theItems',res)

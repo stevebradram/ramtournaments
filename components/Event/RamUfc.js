@@ -99,6 +99,8 @@ class RamUfc extends Component {
           //var theLink2='theEvents::ramUfc::'+theK
           if(!this.state.theEventKey||this.state.theEventKey.length===0)return
           var theQuery=encodeURIComponent(theLink) 
+          console.log('theLink rrraaa',theLink)
+          //return
           await axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
             .then((res) => {
               console.log('theItems',res)
@@ -451,7 +453,7 @@ getMatchesInfo=async(userId,allMatches)=>{
         //console.log('this.state.theItems',this.state.theItems)
         //console.log('thePointsssss',thePoints)
         //console.log('currentScore',currentScore.length)
-       
+        return
         var pointsSum = thePoints.reduce((partialSum, a) => partialSum + a, 0);
         pointsSum=pointsSum.toFixed(2)
         
