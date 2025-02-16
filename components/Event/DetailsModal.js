@@ -66,24 +66,19 @@ class DetailsModal extends Component {
       5000)
   }
   getFlockNames=(userId)=>{
+  
     var flocks=[],i=0
-    var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/userData/').child('flockNames')
+    var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
     myFlockNamesRef.once('value',dataSnapshot=>{
-      var flockCount=dataSnapshot.numChildren()
-      if(!dataSnapshot.val()){
-        console.log('hakuna kitu mzeeee')
-        this.setState({openNewFlockModal:false})
-      }else{console.log('kunaaaaaaaaaa kitu mzeeee')}
-      dataSnapshot.forEach((data,index) => {
-        i++
-       console.log('the flock names',data.key,flockCount)
-       var theKey=data.key.replace(/_/g,' ')
-       flocks.push(theKey)
-       if(flockCount===i){
-        this.setState({ramFlockNames:flocks})
-        console.log('the flockssss',flocks)
-       }
-      })
+     // this.setState({openNewFlockModal:false})
+      if(dataSnapshot.exists()){
+      var theFlockName=dataSnapshot.val().name
+      theFlockName=theFlockName.split("|").join(" ")
+      flocks.push(theFlockName)
+      this.setState({ramFlockNames:flocks})
+      }else{
+
+      }
     })
   }
   submitFlockName=()=>{

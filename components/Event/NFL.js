@@ -444,6 +444,7 @@ class NCAA extends Component {
     //this.checkForOddsUpdate()
     //this.checkForOutcome()
   }
+
   handleChildClick = (title,item) => {
     this.setState({ count: this.state.count + 1, nflModal: false });
     if(title==='getOdds'&&item.length>10){
@@ -518,7 +519,7 @@ class NCAA extends Component {
       
       var theQuery=encodeURIComponent(theLink)
       console.log('theLink',theLink)
-      return
+      //return
       await axios.get("http://localhost:4000/getNFLResults?term="+theQuery)
         .then((res) => {
           ////console.log('theItems',res)
@@ -1169,6 +1170,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   editDbRef.once('value', dataSnapshot => {
     //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
    if((new Date().getTime()>dataSnapshot.val())){
+    console.log('now 005',new Date().getTime(),dataSnapshot.val())
     this.notify('Event pick/edit not available at the moment')
    }
    else{
@@ -1221,6 +1223,12 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       }
     })
     }
+    updateEvent=async()=>{
+      var oddsApi="https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
+      const response = await axios.get(oddsApi)
+      var theOddsJson=response.data
+      sortOddsJson(theOddsJson)
+    }
     openNFLModal=()=>{
       this.setState({itemsToNFLModal:[]})
       var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey)
@@ -1233,20 +1241,21 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var superBowlEditExpiry=data.stopSuperBowlEdit
         if(selection==='wildCard'&&new Date().getTime()>wildCartEditExpiry){
           console.log('wild card expired')
-          this.setState({eventToNFLModal:'divisionalRound',nflModal:true})
+          this.setState({eventToNFLModal:'divisionalRound',itemsToNFLModal:this.state.quarterFinalsArray,nflModal:true})
         }else if(selection==='wildCard'&&new Date().getTime()<wildCartEditExpiry){
           var allArray=[...this.state.firstRoundArray,...this.state.quarterFinalsArray,...this.state.semiFinalsArray,...this.state.finalArray]
           this.setState({eventToNFLModal:'wildCard',itemsToNFLModal:allArray,nflModal:true})
         }
         if(selection==='divisionalRound'&&new Date().getTime()>divisionalRoundEditExpiry){
           console.log('divisional Round expired')
-          this.setState({eventToNFLModal:'conferenceChampionship',nflModal:true})
+          this.setState({eventToNFLModal:'conferenceChampionship',itemsToNFLModal:this.state.semiFinalsArray,nflModal:true})
         }else if(selection==='divisionalRound'&&new Date().getTime()<divisionalRoundEditExpiry){
           this.setState({eventToNFLModal:'divisionalRound',itemsToNFLModal:this.state.quarterFinalsArray,nflModal:true})
         }
         if(selection==='conferenceChampionship'&&new Date().getTime()>conferenceChampionshipEditExpiry){
-          console.log('wild card expired')
-          this.setState({eventToNFLModal:'superBowl',nflModal:true})
+          console.log('hapa kwa superbowl 111',this.state.finalArray)
+          //return
+          this.setState({eventToNFLModal:'superBowl',itemsToNFLModal:this.state.finalArray,nflModal:true})
         }else if(selection==='conferenceChampionship'&&new Date().getTime()<conferenceChampionshipEditExpiry){
           this.setState({eventToNFLModal:'conferenceChampionship',itemsToNFLModal:this.state.semiFinalsArray,nflModal:true})
         }
@@ -1254,6 +1263,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           console.log('wild card expired')
           this.notify("Can't enter event details to an expired event")
         }else if(selection==='superBowl'&&new Date().getTime()<superBowlEditExpiry){
+          console.log('hapa kwa superbowl')
+          return
           this.setState({eventToNFLModal:'superBowl',itemsToNFLModal:this.state.finalArray,nflModal:true})
         }
         /*console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
@@ -1500,7 +1511,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  <p className={style.P1}>{item.player1NickName}</p>
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1510,7 +1521,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  <p className={style.P1}>{item.player2NickName}</p>
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1575,7 +1586,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  <p className={style.P1}>{item.player1NickName}</p>
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1585,7 +1596,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  <p className={style.P1}>{item.player2NickName}</p>
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1648,7 +1659,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  <p className={style.P1}>{item.player1NickName}</p>
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1658,7 +1669,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  <p className={style.P1}>{item.player2NickName}</p>
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>

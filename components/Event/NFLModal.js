@@ -7,6 +7,7 @@ import firebase from '../FirebaseClient'
 import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
+import theRamOdds from './ramOdds.json'
 var theImage1 = 'https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=600'
 var theImage2 = 'https://images.pexels.com/photos/19882427/pexels-photo-19882427/free-photo-of-elevate-your-style-with-vibrant-kicks-explore-a-spectrum-of-colors-in-our-sneaker-collection-step-into-bold-hues-and-showcase-your-unique-footwear-fashion.jpeg?auto=compress&cs=tinysrgb&w=600'
 var wildCardEdit3 = [
@@ -34,12 +35,15 @@ var wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBo
 
 var wildCardEdit2=wildCardEdit3,divisionalRoundEdit2=divisionalRoundEdit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
 class NCAAModal extends Component {
-  state = { wildCardEdit: wildCardEdit, divisionalRoundEdit: divisionalRoundEdit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNFLModal,isItSubmit:false}
+  state = { wildCardEdit: wildCardEdit, divisionalRoundEdit: divisionalRoundEdit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNFLModal,isItSubmit:false,
+    eventStartTime:0,eventEndTime:'',theNewArr:[]
+  }
   
   componentDidMount=()=>{
     var incomingData=this.props.itemsToNFLModal
+    //return
     console.log('incomingData',this.state.currentSelection,incomingData)
-    if(incomingData.length>1){
+    if(incomingData.length>0){
       wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
       if(this.state.currentSelection==='wildCard'){
         var i=0
@@ -60,9 +64,9 @@ class NCAAModal extends Component {
         }
         })
       }
-    if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=incomingData,this.setState({divisionalRoundEdit})}
-    if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=incomingData,this.setState({conferenceChampionshipEdit})}
-    if(this.state.currentSelection==='superBowl'){superBowlEdit=incomingData,this.setState({superBowlEdit})}}
+    if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=incomingData,this.setState({divisionalRoundEdit}),this.fillEventDetails('divisionalRoundEdit')}
+    if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=incomingData,this.setState({conferenceChampionshipEdit}),this.fillEventDetails('conferenceChampionshipEdit')}
+    if(this.state.currentSelection==='superBowl'){superBowlEdit=incomingData,this.setState({superBowlEdit}),this.fillEventDetails('superBowlEdit')}}
     else{
       console.log('kasaluo')
       if(this.state.currentSelection==='wildCard'){
@@ -76,7 +80,118 @@ class NCAAModal extends Component {
       if(this.state.currentSelection==='superBowl'){superBowlEdit=superBowlEdit3}
     }
    
-    console.log('incomingData',this.state.currentSelection,'divisionalRoundEdit',divisionalRoundEdit,'the length',incomingData.length)
+    //console.log('incomingData',this.state.currentSelection,'divisionalRoundEdit',divisionalRoundEdit,'the length',incomingData.length)
+  }
+  fillEventDetails=async(menu)=>{
+   
+    this.showProgressBar()
+    var idStart=''
+    if(this.state.currentSelection==='wildCard'){idStart='wildCardMatch'}
+    if(this.state.currentSelection==='divisionalRound'){idStart='divisionalRoundMatch'}
+    if(this.state.currentSelection==='conferenceChampionship'){idStart='conferenceChampionshipMatch'}
+    if(this.state.currentSelection==='superBowl'){idStart='superBowlMatch'}
+    var incomingData=this.props.itemsToNFLModal
+    var firstEventTime = await Math.min(...incomingData.map(item => item.timeInMillis));
+    var lastEventTime = await Math.max(...incomingData.map(item => item.timeInMillis));
+    firstEventTime=new Date(firstEventTime-86400000).toLocaleDateString()
+    firstEventTime=firstEventTime.split('/')
+    var theMonthFirst='',theDateFirst=''
+    if(firstEventTime[0].length<=1){theMonthFirst='0'+firstEventTime[0]}else{theMonthFirst=firstEventTime[0]}
+    if(firstEventTime[1].length<=1){theDateFirst='0'+firstEventTime[1]}else{theDateFirst=firstEventTime[1]}
+    firstEventTime=firstEventTime[2]+'-'+theMonthFirst+'-'+theDateFirst+'T21:00:00Z'
+    lastEventTime=new Date(lastEventTime+(86400000*2)).toLocaleDateString()
+    lastEventTime=lastEventTime.split('/')
+    var theMonthLast='',theDateLast=''
+    if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
+    if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
+    lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
+    //firstEventTime=dayjs(firstEventTime)
+    console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
+    //return
+
+    var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
+    //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
+    console.log('oddsApi',oddsApi)
+    //return
+    const response = await axios.get(oddsApi)
+    var theOddsJson=response.data
+    console.log('theOddsJson',theOddsJson)
+    this.sortOddsJson(theOddsJson,idStart,menu,incomingData)
+  }
+   sortOddsJson=async(theOddsJson,idStart,menu,incomingData)=>{
+   
+    try {
+      //console.log('theOddsJson',theOddsJson)
+      //return
+      var jCount=0
+    theOddsJson.map((item1,index)=>{
+        var i=0,newOddsJson=[]
+        jCount++
+        item1.bookmakers.map((item2)=>{
+            i++
+            var draftkingsMarket=[]
+            if(item2.key==='draftkings'){
+               
+                draftkingsMarket=item2.markets
+                //console.log('draftkings markets',item2.markets)
+                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+                draftkingsMarket.map((item3)=>{
+                    //console.log('draftkingsMarket 006',item3.outcomes)
+                   const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
+                     theOddsJson[index].draftkingsOdds=obj
+                })
+            }
+           
+            if(item1.bookmakers.length===i){
+                //console.log('new array',theOddsJson)
+               
+                var m=0
+                theOddsJson.map((item12,index)=>{
+                    m++
+                    //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                    var awayPoints=0,homePoints=0
+                    if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
+                        //console.log('shit is undefined')
+                    }else{
+                        var homeFighterName=item12.home_team
+                        var awayFighterName=item12.away_team
+                        awayPoints=item12.draftkingsOdds[awayFighterName]
+                        homePoints=item12.draftkingsOdds[homeFighterName]
+                }
+
+          var hTPointsNum=Number(theRamOdds[homePoints])
+          var aTPointsNum=Number(theRamOdds[awayPoints])
+          if(homePoints<-10000){hTPointsNum=1.01}
+          if(awayPoints<-10000){aTPointsNum=1.01}
+          if(homePoints>12620){hTPointsNum=1247.20}
+          if(awayPoints>12620){aTPointsNum=1247.20}
+          //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
+         
+          if(homePoints<=101&&homePoints>=-101){hTPointsNum=2.03}
+          if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
+
+
+          console.log('hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
+
+                var matchTime= new Date(item12.commence_time);
+                var newItem={player2:item12.away_team,player1:item12.home_team,apiId:item12.id,commenceTime:item12.commence_time,timeInMillis:matchTime.getTime(),
+                  p2Points:aTPointsNum,p1Points:hTPointsNum,id:idStart+index,
+                }
+               
+                newOddsJson.push(newItem)
+                })
+                if(m===theOddsJson.length){
+                  this.setState({theNewArr:newOddsJson})
+                  //newOddsJson
+                  this.getLogos2(newOddsJson,menu,incomingData)
+                  console.log('new array laaast',newOddsJson)
+                }
+            }
+        })
+    })
+  } catch (error) {
+    console.log('ERROR OCURRED AT SORTING ODDS', error)
+  }
   }
   doNothing = (event) => {
     event.preventDefault()
@@ -242,6 +357,8 @@ class NCAAModal extends Component {
     })
   }
   conferenceChampionshipSubmit = () => {
+    return
+    console.log('submitting conferenceChampionshipSubmit')
     var yearNow = new Date().getFullYear()
     var k = 0, l = 0
     this.state.conferenceChampionshipEdit.map((item, index) => {
@@ -424,6 +541,8 @@ class NCAAModal extends Component {
       if(item.p2Points===''){allItems[index]['p2Points']='N/A'}
       if(item.player1===''){allItems[index]['player1']='N/A'}
       if(item.player2===''){allItems[index]['player2']='N/A'}
+      if(item.player1===''){allItems[index]['player1NickName']='N/A'}
+      if(item.player2===''){allItems[index]['player2NickName']='N/A'}
       console.log('matchType',item.matchType)
       if (item.matchType === 'NFL Wild Card Round') {
         toDbWildCardArr[item.id] = item
@@ -572,7 +691,7 @@ class NCAAModal extends Component {
               })
             }
             if (theTeams.length === index + 1) {
-              console.log('theArr 22222222', theArr)
+              console.log('theArr 22222222 kufinish', theArr)
               if (this.state.currentSelection==='wildCard') {this.setState({wildCardEdit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr,isItSubmit:true})}
@@ -585,7 +704,90 @@ class NCAAModal extends Component {
 
       })
   }
+  getLogos2 = async (theArr,menu,incomingData) => {
+    var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
+    //const response = await axios.get(logosUrl);
+    //console.log(response.data);
+    var smallResultsArr = []
+    axios.get(logosUrl)
+      .then((res) => {
+        var resultsArr = res.data['sports']
+        console.log('the logos 1111', resultsArr.length)
+        var i = 0
+        resultsArr.map((item, index) => {
+          var theTeams = item['leagues'][index]['teams']
+          theTeams.map((item, index) => {
+            var theItem = item.team
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            // console.log('the team logos',theItem['logos'][0]['href'])
+            var myItems = {}
+            myItems['name'] = theItem['displayName']
+            myItems['logo'] = theItem['logos'][0]['href']
+            myItems['nickName'] = theItem['nickname']
+            smallResultsArr.push(myItems)
+
+            if (theTeams.length === index + 1) {
+              console.log('smallResultsArr', smallResultsArr)
+              theArr.map((item1, index) => {
+
+                //return
+                smallResultsArr.map((item2) => {
+                  // console.log('item1.player1',item1.player1)
+                  if (item1.player1 === item2.name) {
+                    theArr[index]['p1Photo'] = item2.logo
+                    theArr[index]['player1NickName'] = item2.nickName
+                    console.log('ikooooooooooooooo')
+                  }
+                  if (item1.player2 === item2.name) {
+                    theArr[index]['p2Photo'] = item2.logo
+                    console.log('hakunaaaaaaaaaaaaaaa')
+                    theArr[index]['player2NickName'] = item2.nickName
+                  }
+
+                })
+
+              })
+            }
+            if (theTeams.length === index + 1) {
+              theArr.map((item,index)=>{
+              incomingData[index]['player2']=item.player2
+              incomingData[index]['player1']=item.player1
+              incomingData[index]['apiId']=item.apiId
+              incomingData[index]['p2Points']=item.p2Points
+              incomingData[index]['p1Points']=item.p1Points
+              incomingData[index]['p2Photo']=item.p2Photo
+              incomingData[index]['player2NickName']=item.player2NickName
+              incomingData[index]['p1Photo']=item.p1Photo
+              incomingData[index]['player1NickName']=item.player1NickName
+
+              incomingData[index]['timeInMillis']=item.timeInMillis
+              incomingData[index]['commenceTime']=item.commenceTime
+              incomingData[index]['time']=item.commenceTime.slice(0,16)
+              if(theArr.length===index+1){
+                console.log('this.state.currentSelection',this.state.currentSelection)
+                console.log('theArr 22222222 kufinish', theArr)
+                console.log('theArr 22222222 incomingData', incomingData)
+                if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:incomingData,isItSubmit:true})}
+                if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:incomingData,isItSubmit:true})}
+                if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:incomingData,isItSubmit:true});console.log('haapa kwa sssssssssssss')}
+                this.setState({ showProgressBar: false })
+              }
+              }) 
+             
+             
+              return
+             
+              //this.sendToFirebase()
+            }
+          })
+
+        })
+
+      })
+  }
   itemComponent = (compItems, type) => {
+  console.log('compItems',compItems)
     return (
       compItems.map((item, index) => {
         return (

@@ -1,0 +1,310 @@
+$blackish:#292f51;
+$redColor:#CB1E31;
+$pastEve:#919191;
+
+$pastEve2:#dc9600;
+.container {
+    padding-top: 1200px;
+    padding: 160px 90px 100px 90px;
+    min-height: 100vh;
+    //min-width: 1200px;
+}
+.headerCont{
+    display: flex;
+    margin: 20px 10px 5px 0px;
+    //justify-content: center;
+}
+.headerDiv{
+    margin-right: 15px;
+    border: 1px solid $blackish;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: $blackish;
+    color: white;
+    cursor: pointer;
+    //width: 30%;
+    text-align: center;
+}
+.headerDiv2{
+    margin-right: 15px;
+    border: 1px solid $blackish;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: $blackish;
+    cursor: pointer;
+    //width: 30%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+}
+.menu2Div0{
+    display: flex;
+    justify-content: space-between;
+}
+.menu2Div1 {
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    margin: -10px 0px 50px 0px;
+    //box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 18px;
+    width: 49.5%;
+    position: relative;
+}
+.eventsCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.eventsP {
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid $blackish;
+    color: $blackish;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0px 20px;
+    font-size: 14px;
+}
+#playerP1 {
+    background-color: $redColor;
+    color: white;
+    border-color: $redColor;
+}
+
+#playerP2 {
+    background-color: $redColor;
+    color: white;
+    border-color: $redColor;
+}
+.titleP {
+    display: flex;
+    color: white;
+    padding: 15px 15px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: $blackish;
+    border-bottom: 1px solid #a2a2a2;
+    
+}
+.titleP span{
+    margin-left: 5px;
+    color: $redColor;
+}
+.eveP{
+    font-weight: 600;
+    color: $blackish; 
+    font-size: 30px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    padding-right: 20px;
+    //text-align: center;
+    margin-top: 20px;
+    margin-bottom:30px;
+}
+.eveP span{
+    color: $redColor;
+}
+#table1Div {
+    margin: 20px 20px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding-top: 0px;
+    
+    // min-width: 1000px;
+}
+
+.table1 {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid rgb(231, 231, 231);
+    //min-width: 1100px;
+}
+
+.table1 td {
+    border-bottom: 1px solid rgb(231, 231, 231);
+    padding: 15px 8px;
+}
+
+.table1 th {
+    border: 1px solid rgb(231, 231, 231);
+    padding: 15px 8px;
+}
+
+.table1 th {
+    font-size: 14px;
+}
+
+.table1 {
+    box-sizing: border-box;
+}
+
+#table1Tr1 th {
+    min-width: 120px;
+    font-weight: 600;
+    color: $blackish;
+}
+#table1Tr2{
+    color: $blackish;
+}
+#table1Tr2 th {
+   
+    font-weight: 400;
+    color: $redColor;
+}
+
+#table1Tr2 td {
+    font-size: 14px;
+    text-align: center;
+    //color: $blackish;
+    font-weight: 500;
+}
+
+.table1 tr:nth-child(even) {
+    background-color: rgb(231, 231, 231);
+}
+
+#table tr:nth-child(even) {
+    background-color: #30334e
+}
+
+.table tr:hover {
+    background-color: rgb(241, 241, 241);
+}
+
+#table tr:hover {
+    background-color: #404466
+}
+.noDataDiv{
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+}
+.noDataIc{
+    font-size: 150px;
+    color: $blackish;
+}
+.noDataDiv p{
+    font-size: 30px;
+    width: 50%;
+    text-align: center;
+    color: $blackish;
+    margin-top: 20px;
+}
+.headCont{
+    display: flex;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+.headList{
+    margin-right: 20px;
+    border: 1px solid $blackish;
+    padding: 5px 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $blackish;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.headListP1{
+    font-size: 14px; 
+ }
+ .headListP2{
+     font-size: 10px; 
+     
+ }
+ .headListP3{
+     font-size: 10px; 
+ }
+ .headList div{
+     display: flex;
+     margin-top: 0px;
+     align-items: center;
+ }
+
+
+ @media all and (max-width: 1000px) {
+ .menu2Div0{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.menu2Div1 {
+    padding-bottom: 20px;
+    margin: -10px 0px 50px 0px;
+    width: 100%;
+    
+}
+ }
+@media all and (max-width: 800px) {
+    .container {
+        padding: 150px 40px 100px 40px;
+    }
+    .noDataDiv{
+        display: flex;
+        flex-direction: column;
+        min-height: 200px;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 20px;
+    }
+    .noDataIc{
+        font-size: 120px;
+        color: #706f6f;
+    }
+    .noDataDiv p{
+        font-size: 25px;
+        width: 70%;
+        text-align: center;
+        color: #706f6f;
+    }
+}
+
+@media all and (max-width: 600px) {
+    .container {
+        padding: 150px 40px 100px 40px;
+    }
+}
+
+@media all and (max-width: 430px) {
+    .container {
+        padding: 120px 20px 100px 20px;
+    }
+    .noDataIc{
+        font-size: 100px;
+        
+    }
+    .noDataDiv p{
+        font-size: 22px;
+        width: 90%;
+        margin-top: 20px;
+    }
+    .eveP{
+        font-size: 26px;
+    }
+}
+
+@media all and (max-width: 360px) {
+    .container {
+        padding: 120px 10px 100px 10px;
+    }
+}

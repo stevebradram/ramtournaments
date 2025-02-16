@@ -1,33 +1,15 @@
 import React, { Component } from 'react'
-import styles from "@/styles/Leaderboard.module.scss";
+import styles from "@/styles/community.module.scss";
 import firebase from '../components/FirebaseClient'
 import { MdOutlineFolderOff } from "react-icons/md";
 import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
-var theItems=[]
-/*const importList = [
-    { id: 1, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 2, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 3, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 4, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 5, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 6, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 7, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 8, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 9, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 10, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 11, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 12, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 13, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 14, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 15, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    { id: 16, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
-    ]*/
-//var scoreBoardArr
+var theFlockArr=[{name:'Clement',score:20},{name:'Billygoat',score:30},
+  {name:'Elaine Kiiru',score:40},{name:'RAM Man',score:50}]
 class leaderboard extends Component {
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',communitySelection:'My Flocks',
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:''}
   componentDidMount=()=>{
      //this.getScoreBoardData()
@@ -99,7 +81,7 @@ class leaderboard extends Component {
 }
  checkUpcomingPastGames=async(userId)=>{
   //return
-  //this.setState({isEventExpired:false})
+  
   var userInfoDb=firebase.database().ref('/theEvents/eventsIds')
   var i=0,upcomingGames=[],pastGames=[],allGames=[]
   var nowDate= await new Date().getTime()
@@ -124,19 +106,12 @@ class leaderboard extends Component {
       
       var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,currentSelection:currentSelection}
       allGames.push(theItem)
-
-      //if(nowDate>(endTime+86400000)){this.setState({isEventExpired:true})}
-     // else{this.setState({isEventExpired:false})}
-      
       if(theCount===i){
         var theEventTitle='',theEventKey='',sportType='',theTime=''
         if(allGames.length>0){
-          allGames=allGames.sort(function(a, b){return b.endTime - a.endTime});
+          allGames=allGames.sort(function(a, b){return b.time - a.time});
           //console.log('teeeeeee',allGames)
           theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],theTime=allGames[0]['currentSelection']
-          var firstEndTime=allGames[0]['endTime']
-          if(nowDate>(firstEndTime+86400000)){this.setState({isEventExpired:true})}
-          else{this.setState({isEventExpired:false})}
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
           this.checkForSelectedEvent(sportType,theEventKey,theTime)
           console.log('sportType555555555',sportType)
@@ -342,7 +317,7 @@ class leaderboard extends Component {
     var value = e.target.value
   }
 
-  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,item,isExpired)=>{
+  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,item)=>{
     console.log('whole item',item)
     this.showProgressBar()
     if (navigator.onLine === false) {
@@ -352,7 +327,7 @@ class leaderboard extends Component {
     if(!this.state.userLoggedIn){
       this.notify('Please Log In to continue')
     }else{
-      this.setState({theEventKey,theEventTitle,currentSelection,isEventExpired:isExpired})
+      this.setState({theEventKey,theEventTitle,currentSelection})
       this.getScoreBoardData(sportType,theEventKey,theTime)
     }
   }
@@ -395,7 +370,7 @@ class leaderboard extends Component {
           {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<th>Best Possible<br/>Score</th>}
           {this.state.sportType==='NCAAF'?
            <>
-           {this.state.isEventExpired?<th>Best Possible<br/>Score</th>:<th>Best Score<br/>{' '+BSPTitle}</th>}
+           <th>Best Score<br/>{' '+BSPTitle}</th>
            <th>First Round<br/>Score</th>
            <th>Quarter Finals</th>
            <th>Semi Finals<br/></th>
@@ -405,7 +380,7 @@ class leaderboard extends Component {
           
           {this.state.sportType==='NFL'?
            <>
-           {this.state.isEventExpired?<th>Best Possible<br/>Score</th>:<th>Best Score<br/>{' '+BSPTitle}</th>}
+           <th>Best Score<br/>{' '+BSPTitle}</th>
            <th>Wild Card</th>
            <th>Divisional</th>
            <th>Conference<br/></th>
@@ -421,13 +396,10 @@ class leaderboard extends Component {
               <td>{item.teamName}</td>
               <td>{item.flockName}</td>
               <td>{item.currentScore}</td>
-
-
-              {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<td>{this.state.isEventExpired?item.currentScore:item.bestPossibleScore}</td>}
+              {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<td>{item.bestPossibleScore}</td>}
               {this.state.sportType==='NCAAF'?
               <>
-              {this.state.isEventExpired?<td>{item.currentScore}</td>:
-              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>}
+              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>
               <td>{item.firstRoundScore}</td>
               <td>{item.quarterFinalsScore}</td>
               <td>{item.semiFinalsScore}</td>
@@ -435,8 +407,7 @@ class leaderboard extends Component {
               </>:null}
               {this.state.sportType==='NFL'?
               <>
-              {this.state.isEventExpired?<td>{item.currentScore}</td>:
-              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>}
+              <td>{item.currentSelection===this.state.currentSelection?item.bestPossibleScore:'0.00'}</td>
               <td>{item.wildCardScore}</td>
               <td>{item.divisionalRoundScore}</td>
               <td>{item.conferenceChampionshipScore}</td>
@@ -450,44 +421,40 @@ class leaderboard extends Component {
       </div>)
   }
     render() {
-      //console.log('isThereNullData',this.state.isThereNullData)
       var theItems=[]
       var noData=false 
       var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore    )
       var nullData=this.state.nullData.sort((a, b) => b.bestPossibleScore - a.bestPossibleScore)
       if(this.state.isThereNullData===true){theItems=nullData}
       if(this.state.isTherNormalData===true){theItems=sortData}
-     /* if(this.state.dataAvailable===true){theItems=sortData}
-      if(this.state.isThereNullData===false&&this.state.dataAvailable===false){
-        noData=true
-      }*/
-
-      
-      //console.log('sortData',sortData)
+     
         return (
           <>
             <div className={styles.container}>
-              <p className={styles.titleP}>Leaderboard {this.state.isAdmin?<span> | Admin</span>:null}</p>
-              {/*<div className={styles.eventsCont}>
-        <p className={styles.eventsP} id={this.state.theEvent==='Upcoming Events'?styles.playerP1:styles.playerP} onClick={()=>this.setState({theEvent:'Upcoming Events'})}>UPCOMING EVENTS</p>
-        <p className={styles.eventsP} style={{color:'#b2b2b2',borderColor:'#b2b2b2'}} id={this.state.theEvent==='Past Events'?styles.playerP1:styles.playerP} onClick={()=>this.setState({theEvent:'Past Events'})}>PAST EVENTS</p>
-        </div>*/}
+              <p className={styles.titleP}>Community</p>
+              <div className={styles.headerCont}>
+              {['My Flocks','News & Videos','Hall of Fame'].map((item,index)=>{
+              return(
+                <div className={this.state.communitySelection===item?styles.headerDiv:styles.headerDiv2} key={index} onClick={()=>this.setState({communitySelection:item})}>
+                    <p>{item}</p>
+                </div>
+              )
+              })}</div>
         <div className={styles.headCont}>
           {this.state.allGames.map((item,index)=>{
           var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
           var todayInMillis=new Date().getTime()
           //console.log('todayInMillis',item)
-          var theColor='#292f51',timing='Active Event',isExpired=false
-          if(todayInMillis>(item.endTime+86400000)){
+          var theColor='#292f51',timing='Active Event'
+           if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){
              theColor='#919191'
-             timing='Past Event' 
-             isExpired=true
+             timing='Past Event'
            }
            if(this.state.theEventKey===item.id){
              theColor='#CB1E31'
            }
           return(
-            <div className={styles.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvents(item.sportType,item.id,item.time,item.title,item.currentSelection,item,isExpired)}>
+            <div className={styles.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvents(item.sportType,item.id,item.time,item.title,item.currentSelection,item)}>
               <p className={styles.headListP1}>{item.title}</p>
                <div><p className={styles.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -498,9 +465,9 @@ class leaderboard extends Component {
           })}
         </div>
               <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-              <div className={styles.menu2Div1}>
+              <div className={styles.menu2Div0}>
                             
-      {this.state.userLoggedIn?<>{this.state.dataAvailable?this.itemComponent(theItems):
+      {/*this.state.userLoggedIn?<>{this.state.dataAvailable?this.itemComponent(theItems):
       <div className={styles.noDataDiv}>
          <PiFolderDashedThin  className={styles.noDataIc}/>
          {this.state.isAdmin?<p>No data available at the moment. Data will be shown once the users make picks</p>
@@ -509,39 +476,44 @@ class leaderboard extends Component {
       <div className={styles.noDataDiv}>
       <PiFolderDashedThin  className={styles.noDataIc}/>
      <p>Please LOG IN to view data in this page</p>
-   </div>}
-      </div>
-                          {/*<div className={styles.menu2Div1}>
-                            <p className={styles.titleP}>Leaderboard</p>
+   </div>*/}
+   <div className={styles.menu2Div1}>
+      <p className={styles.titleP}>RAMS IN YOUR FLOCK</p>
       <div id={styles.table1Div}>
       <table className={styles.table1}>
         <tr id={styles.table1Tr1}>
           <th>Overall <br/>Rank</th>
           <th>RAM Name</th>
-          <th>Flock Name</th>
-          <th>Cumulative<br/>Score</th>
-          <th>Round of 64</th>
-          <th>Round of 32</th>
-          <th>Cumulative Final<br/>Round Score</th>
-          <th>Final Round<br/>Sweet 16</th>
-        </tr>
-        {importList.map((item, index) => {
+          <th>Cumulative <br/>Score</th></tr>
+          {theFlockArr.map((item, index) => {
           return (
-
-            <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===3?'red':null,color:item.id===3?'white':null}}>
-              <td>{item.id}</td>
-              <td>{item.RAMName}</td>
-              <td>{item.flockName}</td>
-              <td>{item.cumScore}</td>
-              <td>{item.round64}</td>
-              <td>{item.round32}</td>
-              <td>{item.finRoundScore}</td>
-              <td>{item.sweet16}</td>
-            </tr>)
-        })}
-      </table>
+            <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===this.state.userId?'#292f51':null,color:item.id===this.state.userId?'white':'#292f51'}}>
+              <td>{index+1}</td>
+              <td>{item.name}</td>
+              <td>{item.score}</td></tr>)
+          })}
+          </table>
+      </div> </div> 
+      <div className={styles.menu2Div1}>
+      <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
+      <div id={styles.table1Div}>
+      <table className={styles.table1}>
+        <tr id={styles.table1Tr1}>
+          <th>Flock Rank <br/>In Herd</th>
+          <th>Flock Names</th>
+          <th>Average Points<br/>Per RAM</th></tr>
+          {theFlockArr.map((item, index) => {
+          return (
+            <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===this.state.userId?'#292f51':null,color:item.id===this.state.userId?'white':'#292f51'}}>
+              <td>{index+1}</td>
+              <td>{item.name}</td>
+              <td>{item.score}</td></tr>)
+          })}
+          </table>
+      </div> </div> 
+     
+      
       </div>
-      </div>*/}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>

@@ -238,7 +238,7 @@ class NCAA extends Component {
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
       var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
-      //console.log('queeeeeeeeeeeeeeery',theQuery)
+      console.log('queeeeeeeeeeeeeeery',theQuery)
       //return
       var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
@@ -274,6 +274,8 @@ class NCAA extends Component {
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
       
       var theQuery=encodeURIComponent(theLink) 
+      console.log('theLink',theLink)
+     // return
     
       await axios.get("http://localhost:4000/getNCAAFResults?term="+theQuery)
         .then((res) => {

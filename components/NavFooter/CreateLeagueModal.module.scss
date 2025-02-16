@@ -1,0 +1,197 @@
+$primaryColor: hsl(203, 68%, 25%);
+$redColor: #CB1E31;
+$blackish:#292f51;
+.container2{
+    box-sizing: border-box;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    min-height: 450px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px;
+    width: 350px;
+    min-width: 25vw;
+  }
+  #container2{
+    width: 400px;
+    min-width: 29vw;
+  }
+  .container2 h1{
+     text-align: center;
+     font-size: 20px;
+     margin-top: 20px;
+     margin-bottom: 20px;
+  }
+  .cont1{
+    border-bottom: 1px solid #eee;
+    padding: 10px 0px 15px 0px;
+    margin-bottom:5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: left;
+  }
+  .cont1B{
+    display: flex;
+    align-items: center;
+  }
+  .cont2{
+    border-bottom: 1px solid #eee;
+    padding: 10px 0px 15px 0px;
+    margin-bottom:5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .theEventsArrModal{
+    width: 100%;
+    position: absolute;
+    min-height: 120px;
+    height: 120px;
+    background-color: #fff;
+    margin-top: 170px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    padding: 5px 0px;
+    z-index: 100;
+    //bottom: 0;right: 0;left: 0;
+  }
+  .eventsNameList{
+    padding: 5px 10px;
+    font-weight: 400;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  .dropIcon{
+    align-self: flex-end;
+    position: absolute;
+    right: 0;top: 0;
+    margin-top: 0px;
+    font-size: 30px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  .noFlockP{
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 16px;
+    color: #727272;
+    padding-right: 10px;
+  }
+  .nameCont{
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+  }
+  .P1{
+    color: #353535;
+    font-size: 12px;
+  }
+  .nameIC{
+    font-size: 14px;
+    margin-left: 3px;
+    color: #353535;
+    cursor: pointer;
+  }
+  .logInIcon{
+    font-size: 18px;
+    margin-right:5px;
+    color: #959595;
+  }
+  .logInInput{
+    outline: none;
+    border: none;
+    color: #959595;
+    padding-right: 15px;
+  }
+  .pErr{
+    color: red;
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: -2px;
+  }
+  .whyP{
+    margin: 10px 0px;
+    font-weight: 500;
+  }
+  .theTextsDiv{
+    //width: 50%;
+    overflow: hidden;
+  }
+  #nextP{
+    margin: 10px 0px;
+    color:red;
+    font-weight: 500;
+    //max-width: 50px;
+    text-wrap: wrap;
+    word-wrap: break-word
+  }
+  .logInIcon{
+    font-size: 16px;
+    margin-right:5px;
+    color: #959595;
+  }
+  .logInBtn{
+    margin-top: 30px;
+    padding: 12px 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    color: white;
+    background: linear-gradient(to right, #CB1E31 0%, #fa495e 100%);
+    margin-bottom: 50px;
+  }
+
+  .imageDiv{
+    margin-right: 20px;
+    border-radius: 70px;
+    width: 70px;
+    height:70px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    align-self: center;
+}
+.imageDiv img{
+    height: 100%;
+    object-fit: cover;
+}
+.addDiv{
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000044;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.pickPhoto{
+  position: absolute;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  color: transparent;
+  background-color: transparent;
+}
+.addIC{
+ 
+  font-size: 40px;
+  color: white;
+  //top: 0;left: 0;right: 0;
+}
+.personIC{
+  color: #eee;
+  font-size: 50px;
+}

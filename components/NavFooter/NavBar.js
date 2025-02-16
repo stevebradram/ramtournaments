@@ -11,6 +11,7 @@ import LogIn from '../LogInReg/LogIn'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
+import CreateLeagueModal from './CreateLeagueModal'
 class NavBar extends Component {
   constructor(props) {
     super(props)
@@ -20,7 +21,11 @@ class NavBar extends Component {
       openLogInModal: false,
       isLogged: false,
       progress: false,
-      count:0
+      count:0,
+      createLeagueModal:false,
+      showEventCreator:true,
+      count:0,
+      isAdmin:false
     }
   }
   onScroll = () => {
@@ -35,6 +40,13 @@ class NavBar extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.onScroll, false);
     this.checkAuth()
+    console.log('the time 001',new Date().getTime())
+    console.log('the time 0025999',new Date('2025-01-26T20:00:00Z').getTime())
+
+    var linkInfo = window.location.href.split("/");
+    linkInfo=linkInfo.pop()
+    if(linkInfo.length>15){this.setState({showEventCreator:false})}
+    console.log('linkInfo naaav',linkInfo)
   }
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onScroll, false);
@@ -68,6 +80,9 @@ class NavBar extends Component {
         var emailVerified=user.emailVerified
         this.getUserInfo(userId)
         console.log('the user info',user)
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
+          this.setState({isAdmin:true})
+         }
         this.setState({ isLogged: true,openLogInModal:false })
         localStorage.set('loggedIn', 'true');
         localStorage.set('userId', userId);
@@ -134,9 +149,19 @@ class NavBar extends Component {
       progress: undefined,
     });
   };
-   handleChildClick = () => {
+  /* handleChildClick = () => {
     this.setState({openLogInModal:false})
     console.log('openLogInModal')
+  };*/
+  handleChildClick = (title) => {
+    this.setState({ count: this.state.count + 1});
+    if(title==='closeLogInModal'){
+    this.setState({openLogInModal: false})
+    }
+    if(title==='closeLeagueModal'){
+      this.setState({createLeagueModal:false})
+    }
+    
   };
   render() {
     return (
@@ -174,7 +199,7 @@ class NavBar extends Component {
                   <Link href="/events" className={styles.navMainLi}>EVENT SCORES</Link>
                   {/*<Link href="/"   className={styles.navMainLi}>HOW TO PLAY</Link>*/}
                   <Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>
-                  {/*<Link href="/" passHref className={styles.navMainLi}>CONTACT US</Link>*/}
+                  <Link href="/community" passHref className={styles.navMainLi}>COMMUNITY</Link>
                 </div>
               </div>
               <div className={styles.logDiv}>
@@ -197,7 +222,7 @@ class NavBar extends Component {
             <Link href="/about" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>ABOUT US</Link>
             <Link href="/events" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>EVENT SCORES</Link>
             <Link href="/leaderboard" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>LEADERBOARD</Link>
-            {/*<Link href="/" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>CONTACT US</Link>*/}
+            <Link href="/community" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>COMMUNITY</Link>
             {/*<Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv2}>LOG IN</Link>
                 <Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv3}>SIGN UP</Link>*/}
             
@@ -206,12 +231,16 @@ class NavBar extends Component {
           
           </div> : null}
           <ToastContainer />
-
+           {this.state.isAdmin&&this.state.showEventCreator?<div className={styles.flockDiv} onClick={()=>this.setState({createLeagueModal:true})}>
+            <p className={styles.flockDivP1}>Create a Flock...</p>
+            <p className={styles.flockDivP2}>Invite Your Friends</p>
+           </div>:null}
         </div>
         {this.state.openLogInModal ? <div className={styles.logInModal} onClick={() => this.setState({ openLogInModal: false })}>
           <LogIn onClick={()=>this.handleChildClick}/>
         </div> : null}
         {this.state.progress ? <ProgressBar message='Logging Out' /> : null}
+        {this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
       </>
     )
   }

@@ -35,7 +35,7 @@ export class Footer extends Component {
           {/*<Link href="/" className={styles.linkP}>CONTACT US</Link>*/}
           </div>
           <div className={styles.footerDiv3}>
-            <p>Copyright © 2024 RAM. All Rights Reserved</p>
+            <p>Copyright © 2025 RAM. All Rights Reserved</p>
           </div>
           {/*<p className={styles.footNote}>Developed by Clement 0724998745</p>*/}
         </div>

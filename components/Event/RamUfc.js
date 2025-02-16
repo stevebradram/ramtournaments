@@ -38,7 +38,7 @@ class RamUfc extends Component {
   goToServer=()=>{
  
  //this.checkForOutcome()
- this.checkForOddsUpdate()
+ this.getTimeUfcOdds()
 
 
 
@@ -47,29 +47,46 @@ class RamUfc extends Component {
 //this.checkForOddsUpdate()
   //this.checkForOutcome()
   }
-  checkForOddsUpdate=async () => {
+
+  checkForOddsUpdate=async (firstEventTime,lastEventTime) => {
       try {
-        var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
-    timeInfoDb.once('value',dataSnapshot=>{
-      var theEventTime=dataSnapshot.val()
-     // if((new Date().getTime()>theEventTime)){
-       // this.notify('Event odds update time expired')
-      // }else{
-        var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo
+        var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
         var theQuery=encodeURIComponent(theLink) 
-        
          axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
             console.log('theItems',theOutcome)
 })
-       // }
-      })
           } catch (error) {
             console.log('error',error)
           }
       }
+      getTimeUfcOdds=async()=>{
+        var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+        timeInfoDb.once('value',dataSnapshot=>{
+          var theEventTime=dataSnapshot.val()
+          if((new Date().getTime()>theEventTime)){
+            this.notify('Event odds update time expired')
+           }else{
+            console.log('goinf to server',theEventTime)
+    var millisNow=theEventTime//new Date().getTime()
+    var firstEventTime = new Date(millisNow-(86400000*2)).toLocaleDateString()
+    var lastEventTime = new Date(millisNow+(86400000*4)).toLocaleDateString()
+    firstEventTime=firstEventTime.split('/')
+    var theMonthFirst='',theDateFirst=''
+    if(firstEventTime[0].length<=1){theMonthFirst='0'+firstEventTime[0]}else{theMonthFirst=firstEventTime[0]}
+    if(firstEventTime[1].length<=1){theDateFirst='0'+firstEventTime[1]}else{theDateFirst=firstEventTime[1]}
+    firstEventTime=firstEventTime[2]+'-'+theMonthFirst+'-'+theDateFirst+'T21:00:00Z'
+    lastEventTime=lastEventTime.split('/')
+    var theMonthLast='',theDateLast=''
+    if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
+    if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
+    lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
+    this.checkForOddsUpdate(firstEventTime,lastEventTime)
+    //console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
+       } })
+  }
       checkForNewEvents=async () => {
         if(this.state.UFCLinkInput.length<10){
           this.notify('The Link input must be properly filled')
@@ -670,9 +687,13 @@ getUfcItems=async(name)=>{
    await allMatches.map((item,index)=>{
     i++
       //console.log('item.p1Points',item.p1Points)
-      if(item.p1Points==='N/A'||item.p2Points==='N/A'){
+      if((item.p1Points==='N/A'||item.p2Points==='N/A')&&item.status1!=='cancelled'){
         pointMissing=true
         console.log('item.p1Points',item)
+      }
+      if(item.status1==='cancelled'&&item.p1Points==='N/A'){
+        allMatches[index]['p1Points']=0
+        allMatches[index]['p2Points']=0
       }
      if(allMatches.length===index+1){
      if(pointMissing===true){
@@ -909,7 +930,7 @@ chooseHomeEvent=(event,id)=>{
           if(item.status1==='played'){status1Item=<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>}
           if(item.status1==='ongoing'){status1Item=<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}
           if(item.status1==="cancelled"){status1Item=<p className={style.eventStatP} style={{color:'#CB1E31'}}>Cancelled</p>}
-          //console.log('item.status1',item.id,item.status1)
+          console.log('item.status1 rakada',item.id,item.status1,new Date().getTime(),item.timeInMillis)
           return(
          <div className={style.listDiv} key={index}>
                 <div className={style.theCont0}>
