@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './CreateLeagueModal.module.scss'
-import { MdLockOutline ,MdArrowDropDown ,MdInfoOutline,MdOutlineAddBox,MdOutlinePersonOutline  } from "react-icons/md";
+import { MdLockOutline ,MdArrowDropDown ,MdInfoOutline,MdOutlineAddBox,MdOutlinePersonOutline,MdOutlineClose   } from "react-icons/md";
 import firebase from '../FirebaseClient'
 import localStorage from 'local-storage'
 import Router from 'next/router';
@@ -14,7 +14,7 @@ import { IoPersonOutline } from "react-icons/io5";
 var theDetails=''
 class DetailsModal extends Component {
   state={leagueName:'',leagueId:'',flockName:'',buttonClick:true,showProgressBar:false,userId:'',flockNameErr:'',leagueNameErr:'',createdEvent:false,theEventsArr:[],startTime:'',sportType:'',
-    theLink:'',eventsArrModal:false,creatorName:''}
+    theLink:'',eventsArrModal:false,creatorName:'',creatorEmail:"",creatorPhoneNo:''}
   componentDidMount=()=>{
     this.checkAuth()
   }
@@ -33,18 +33,20 @@ class DetailsModal extends Component {
      if (user) {
       console.log('userrrrrrrr',user)
        var userId=user.uid
-       this.getName(userId)
+       this.getUserDetails(userId)
        this.setState({userId})
      } else {
        Router.push('/')
      }
    })
  }
- getName=(userId)=>{
-  var userRef = firebase.database().ref('/users/'+userId+'/userData/name')
+ getUserDetails=(userId)=>{
+  var userRef = firebase.database().ref('/users/'+userId+'/userData/')
   userRef.once('value', dataSnapshot => {
-   var creatorName=dataSnapshot.val()
-   this.setState({creatorName})
+   var creatorName=dataSnapshot.val().name
+   var creatorEmail=dataSnapshot.val().email
+   var creatorPhoneNo=dataSnapshot.val().phoneNo
+   this.setState({creatorName,creatorEmail,creatorPhoneNo})
    console.log('creatorName',creatorName)
   })
  }
@@ -95,7 +97,8 @@ class DetailsModal extends Component {
     console.log('looooooooobo 111')
     console.log('looooooooobo',this.state.leagueName.length,this.state.flockName.length)
     var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId+'/unique')
-    var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId+'/members')
+    var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId)
+    var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId+'/admin')
     var generalDb = firebase.database().ref()
     // var gamesDataRef = firebase.database().ref('users/'+this.state.userId+'/ramData/events/'+this.state.currentEvent+'/'+this.props.theEventKey+'/details/')
     
@@ -129,19 +132,26 @@ class DetailsModal extends Component {
           this.setState({flockName:''})
         }
       }else{
-      var userFlockData={'creator':this.state.userId,'name':flockNameWithNoSpaces}
-      membersFlockNamesRef.child(flockNameWithNoSpaces).child(this.state.userId).set(this.state.creatorName)
-      generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.leagueId).set(userFlockData)
-      generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/flockCreators/'+this.state.userId).set(flockNameWithNoSpaces)
-      uniqueFlockNamesRef.child(flockNameWithNoSpaces).set(theArr,(error) => {
-        if (!error){
-          var startLink=''
+        var startLink=''
           if(this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'){
             startLink='http://localhost:3000/'
           }else{
             startLink='https://ramtournament.com/'
           }
-          var theLink=startLink+'invitetojoin~'+this.state.leagueId+'~'+flockNameWithNoSpaces+'~'+userIdLink
+      var toAdmin='$$$'+this.state.creatorName+'!!'+this.state.creatorEmail+'!!'+this.state.creatorPhoneNo
+      var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
+      var theFlockData={creator:this.state.userId,membersNo:0,score:0,avScore:0}
+      var theLink=startLink+'invitetojoin~'+this.state.leagueId+'~'+flockNameWithNoSpaces+'~'+userIdLink
+      var userFlockData={'creator':this.state.userId,'name':flockNameWithNoSpaces,'link':theLink}
+      membersFlockNamesRef.child('/members/'+flockNameWithNoSpaces).child(this.state.userId).set('$$$'+this.state.creatorName)
+      adminRef.child(this.state.userId).set(toAdmin)
+      generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.leagueId).set(userFlockData)
+      generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/flockCreators/'+this.state.userId).set(flockNameWithNoSpaces)
+      generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/theFlocks/'+flockNameWithNoSpaces).update(theFlockData)
+      membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData)
+      uniqueFlockNamesRef.child(flockNameWithNoSpaces).set(theArr,(error) => {
+        if (!error){
+          
           this.setState({theLink,createdEvent:true})
           console.log('theLink',this.state.leagueId,theLink)
           this.notify('Event Created Succesfully')
@@ -253,12 +263,20 @@ copyLink=()=>{
   navigator.clipboard.writeText(this.state.theLink)
   this.notify('Link copied successfully')
 }
+closeModal=()=>{
+  this.props.onClick('closeLeagueModal')
+  Router.push('/community')
+}
+
+//this.props.onClick('closeLeagueModal')
   render() {
     
     return (
       <>
       <div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
-      {!this.state.createdEvent?<h1>Enter Flock Details</h1>:<h1 style={{color:'red',textAlign:'left'}}>Flock Created Successfully!</h1>}
+      <MdOutlineClose className={styles.closeIC} onClick={()=>this.props.onClick('closeLeagueModal')}/>
+      {!this.state.createdEvent?
+             <h1>Enter Flock Details</h1>:<h1 style={{color:'red',textAlign:'left'}}>Flock Created Successfully!</h1>}
                     <div className={styles.nameCont}>
                     <p className={styles.P1}>Event Name</p>
                     <MdInfoOutline className={styles.nameIC}/>
@@ -294,7 +312,7 @@ copyLink=()=>{
                     <div className={styles.theTextsDiv}>{!this.state.createdEvent?<p className={styles.whyP}>Why? Creating a Flock will activate your “My Leagues” page for engaging in the world’s best sporting events with your coworkers, friends, and/or family.</p>:<p className={styles.whyP} style={{color:'black'}}>To add members to your Flock, simply copy/paste this link via text or email with your coworkers, friends, and/or family:</p>}
                     {!this.state.createdEvent?<p id={styles.nextP}>Next Steps? After you click submit, you can copy and share your Join My Flock link via a group text or email to build your league.</p>:<p id={styles.nextP} style={{color:'blue',cursor:'pointer'}} onClick={() => this.copyLink()}>{this.state.theLink}</p>}</div>
                     {!this.state.createdEvent?<button className={styles.logInBtn} onClick={()=>this.state.buttonClick?this.submitDetails():null}>SUBMIT</button>
-                    : <button className={styles.logInBtn} onClick={()=> Router.push('/')}>CLOSE</button>}
+                    : <button className={styles.logInBtn} onClick={()=>this.closeModal()}>CLOSE</button>}
                 </div>
                 {this.state.showProgressBar ? <ProgressBar /> : null}
                 <ToastContainer/>

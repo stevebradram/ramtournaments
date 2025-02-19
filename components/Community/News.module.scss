@@ -1,0 +1,166 @@
+$primaryColor: #fcaa17;
+$hoverColor:#FBCD00;
+@mixin limitLine {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+  }
+.container{
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    margin-top: 23px;
+   
+}
+.reactPlayerDiv{
+    width: 31.5%;
+    height: 310px;
+    margin-right: 15px;
+    margin-bottom: 30px;
+    position: relative;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.1);
+    //background-color: yellow;
+   
+}
+.listVidCont{
+  width: 100%;
+  height: 265px;
+}
+.artName{
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    @include limitLine();
+    font-family: 'Rubik', sans-serif;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.artTitle{
+    font-size: 16px;
+    font-weight: 500;
+    @include limitLine();
+    line-height: 20px;
+    font-family: 'Rubik', sans-serif;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.reactPlayerDiv2{
+    height: 80%;
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.playDiv{
+    height: 35px;
+    width: 50px;  
+    background-color: $primaryColor;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.playIC{
+  color: white;
+  font-size: 20px;
+}
+.playDiv:hover{
+    background-color: red;
+    transform: scale(1.1);
+    
+    
+  }
+  .reactPlayerDiv3{
+      height: 80%;
+      width: 100%;
+      background-color: black;
+  }
+@media all and (max-width: 975px) {
+    .reactPlayerDiv{
+        width: 48%;
+        height: 285px;
+        margin-right: 15px;
+        margin-bottom: 15px;
+       
+    }
+
+}
+@media all and (max-width: 900px) {
+    .reactPlayerDiv{
+        width: 47%;
+        height: 285px;
+        margin-right: 15px;
+        margin-bottom: 23px;
+       
+    }
+
+}
+@media all and (max-width: 675px) {
+    .reactPlayerDiv{
+        width: 100%;
+        height: 412px;
+        margin-bottom: 23px;
+       
+    }
+
+}
+@media all and (max-width: 525px) {
+    .reactPlayerDiv{
+        width: 100%;
+        height: 322px;
+        margin-bottom: 23px;
+        margin-right: 0px;
+    }
+
+}
+@media all and (max-width: 450px) {
+    .reactPlayerDiv{
+        width: 100%;
+        height: 290px;
+        margin-bottom: 23px;
+       
+    }
+
+}
+@media all and (max-width: 375px) {
+    .reactPlayerDiv{
+        width: 100%;
+        height: 290px;
+        margin-bottom: 23px;
+       
+    }
+
+}
+@media all and (max-width: 300px) {
+    .reactPlayerDiv{
+        width: 100%;
+        height: 187px;
+        margin-bottom: 15px;
+       
+    }
+    .artName{
+        font-size: 14px;
+        font-weight: 800;
+        margin-top: 4px;
+        line-height: 19px;
+       
+    }
+    .artTitle{
+        font-size: 14px;
+        font-weight: 400;
+        @include limitLine();
+       // font-family: 'Roboto', sans-serif;
+    }
+
+}

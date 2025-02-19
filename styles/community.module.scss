@@ -38,7 +38,7 @@ $pastEve2:#dc9600;
     font-size: 18px;
 }
 .menu2Div0{
-    display: flex;
+    //display: flex;
     justify-content: space-between;
 }
 .menu2Div1 {
@@ -46,12 +46,26 @@ $pastEve2:#dc9600;
     background-color: white;
     border-radius: 5px;
     padding-bottom: 20px;
-    margin: -10px 0px 50px 0px;
+    margin: 10px 0px 50px 0px;
     //box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
     font-weight: 600;
     font-size: 18px;
-    width: 49.5%;
+    //width: 70%;
     position: relative;
+}
+.menuHeader{
+    display: flex;
+    margin-top: -10px;
+    margin-bottom: 30px;
+}
+.menuHeader p{
+ font-size: 18px;
+ margin-right:20px;
+ border-bottom: 1px solid $blackish;
+ padding-bottom: 3px;
+ font-weight: 500;
+ color: $blackish;
+ cursor: pointer;
 }
 .eventsCont {
     width: 100%;
@@ -75,6 +89,29 @@ $pastEve2:#dc9600;
     font-weight: 600;
     padding: 0px 20px;
     font-size: 14px;
+}
+.noDataP0{
+    font-size: 16px;
+    color: $redColor;  
+    text-decoration: underline;
+    margin-top: -10px;
+    margin-bottom: 5px;
+}
+.noDataP1{
+    font-size: 20px;
+    color: $blackish;
+    
+}
+.noDataP2{
+    background-color: $redColor;
+    width: 150px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
 }
 #playerP1 {
     background-color: $redColor;
@@ -100,7 +137,7 @@ $pastEve2:#dc9600;
     
 }
 .titleP span{
-    margin-left: 5px;
+    margin-right: 4px;
     color: $redColor;
 }
 .eveP{

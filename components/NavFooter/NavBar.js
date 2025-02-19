@@ -100,7 +100,7 @@ class NavBar extends Component {
       console.log('Signed Out');
       localStorage.set('loggedIn', 'false');
       this.setState({progress:false})
-      Router.push('/reload')
+      Router.push('/')
     }, function(error) {
       this.setState({progress:false})
       console.error('Sign Out Error', error);
