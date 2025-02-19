@@ -55,7 +55,7 @@ class News extends Component {
         
       }
     render() {
-        const videoList=this.state.videoArray.slice(0,this.props.vidCount).map(item=>{
+        const videoList=this.state.videoArray.slice(0,this.props.vidCount).map((item,index)=>{
             let playerToShow=''
             if (item.video===this.state.currentId) {
                 playerToShow=<ReactPlayer ref={(video) => { this.video = video }}
@@ -73,7 +73,7 @@ class News extends Component {
              </div> 
             }
             return(
-                <div  className={style.reactPlayerDiv}>
+                <div  className={style.reactPlayerDiv} key={index}>
                     <div  className={style.reactPlayerDiv3} >
                     {playerToShow}
                     </div>
