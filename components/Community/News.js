@@ -65,9 +65,9 @@ class News extends Component {
                 playing={true}
                 onPlay={console.log('ready to play')}
                 controls url={item.video}
-                />
+                key={index}/>
             } else {
-                playerToShow=<div className={style.reactPlayerDiv2} style={{backgroundImage:"url(" + item.thumbnail + ")"}} onClick={()=>this.startvideo(item.video)}>
+                playerToShow=<div className={style.reactPlayerDiv2} style={{backgroundImage:"url(" + item.thumbnail + ")"}} onClick={()=>this.startvideo(item.video)} key={index}>
                <div className={style.playDiv}>
                <FaPlay className={style.playIC}/></div> 
              </div> 
