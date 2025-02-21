@@ -29,7 +29,7 @@ export class Footer extends Component {
           <div className={styles.footerDiv2}>
           <Link href="/" className={styles.linkP}>HOME</Link>
           <Link href="/about" className={styles.linkP}>ABOUT US</Link>
-          <Link href="/event" className={styles.linkP}>EVENT SCORES</Link>
+          <Link href="/events" className={styles.linkP}>EVENT SCORES</Link>
           <Link href="/leaderboard" className={styles.linkP}>LEADERBOARD</Link>
           {this.state.isAdmin?<Link href="/admin" className={styles.linkP}>ADMIN</Link>:null}
           {/*<Link href="/" className={styles.linkP}>CONTACT US</Link>*/}

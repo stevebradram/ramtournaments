@@ -80,9 +80,9 @@ class NavBar extends Component {
         var emailVerified=user.emailVerified
         this.getUserInfo(userId)
         console.log('the user info',user)
-        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
+       // if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
           this.setState({isAdmin:true})
-         }
+        // }
         this.setState({ isLogged: true,openLogInModal:false })
         localStorage.set('loggedIn', 'true');
         localStorage.set('userId', userId);
@@ -231,7 +231,7 @@ class NavBar extends Component {
           
           </div> : null}
           <ToastContainer />
-           {this.state.isAdmin&&this.state.showEventCreator?<div className={styles.flockDiv} onClick={()=>this.setState({createLeagueModal:true})}>
+           {this.state.isLogged&&this.state.showEventCreator?<div className={styles.flockDiv} onClick={()=>this.setState({createLeagueModal:true})}>
             <p className={styles.flockDivP1}>Create a Flock...</p>
             <p className={styles.flockDivP2}>Invite Your Friends</p>
            </div>:null}

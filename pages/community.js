@@ -262,7 +262,7 @@ class leaderboard extends Component {
           <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
           <div className={styles.menu2Div0}>
             <div className={styles.menuHeader}>
-              {['Rams in your flock', 'Flocks among flocks', this.state.isAdmin?'Admin':null].map((item, index) => {
+              {['Rams In Your Flock', 'Flocks Among Flocks', this.state.isAdmin?'Admin':null].map((item, index) => {
 
                 return (
                   <p style={{ color: this.state.menuToShow === item ? '#CB1E31' : null, borderBottomColor: this.state.menuToShow === item ? '#CB1E31' : null }} key={index} onClick={() => this.setState({ menuToShow: item })}>{item}</p>

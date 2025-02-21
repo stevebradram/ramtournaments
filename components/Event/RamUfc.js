@@ -940,7 +940,7 @@ chooseHomeEvent=(event,id)=>{
           </div>
           <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
           {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
-          <p>Share Link</p>
+          <p>Flock Invite Link</p>
           <MdOutlineShare />
           </div>:null}
           
@@ -949,7 +949,7 @@ chooseHomeEvent=(event,id)=>{
           {this.state.dataAvailable?
           this.theTypeAnimation('CLICK HERE TO MAKE YOUR PICKS','CLICK HERE TO ENTER THE GAME')
            :
-           this.theTypeAnimation('CLICK HERE TO EDIT YOUR PICKS','CLICK HERE TO EDIT THE GAME')
+           this.theTypeAnimation('CLICK HERE TO EDIT YOUR PICKS','CLICK HERE TO ENTER THE GAME')
            }
             </div>
                 {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?
