@@ -64,7 +64,7 @@ class invite extends Component {
         if (dataSnapshot.exists()) {
           this.notify('You are already a flock member of this event')
         }else{
-  var toAdmin='$$$'+this.state.myName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
+  var toAdmin='$$$'+this.state.myName+'!!'+this.state.flockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
   var userFlockData={'creator':this.state.creatorId,'name':this.state.flockName2,'link':window.location.href}
   var scoreData={BPS:0,score:0,ramName:this.state.myName,picked:false}
   var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId)

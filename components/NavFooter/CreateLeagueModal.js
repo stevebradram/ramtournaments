@@ -138,7 +138,7 @@ class DetailsModal extends Component {
           }else{
             startLink='https://ramtournament.com/'
           }
-      var toAdmin='$$$'+this.state.creatorName+'!!'+this.state.creatorEmail+'!!'+this.state.creatorPhoneNo
+      var toAdmin='$$$'+this.state.creatorName+'!!'+this.state.flockName+'!!'+this.state.creatorEmail+'!!'+this.state.creatorPhoneNo
       var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
       var theFlockData={creator:this.state.userId,membersNo:0,score:0,avScore:0}
       var theLink=startLink+'invitetojoin~'+this.state.leagueId+'~'+flockNameWithNoSpaces+'~'+userIdLink

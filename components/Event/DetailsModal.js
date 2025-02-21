@@ -311,11 +311,14 @@ getUserDetails=(userId)=>{
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey)
     var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey+'/admin')
     
-    var toAdmin=this.state.teamName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
+    var toAdmin=this.state.teamName+'!!'+this.state.ramFlockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
 
-    membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
-    adminRef.child(this.state.userId).set(toAdmin)
-    membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
+    if(this.state.ramFlockName!=='Flockless'){
+      membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
+      adminRef.child(this.state.userId).set(toAdmin)
+      membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
+    }
+   
     keysDbRef.child(this.props.theEventKey).set(true)
     gamesDataRef.child(this.props.theEventKey+'/details/').update(detailsData)
     gamesDataRef.child(this.props.theEventKey+'/bets/').update(itemsData)

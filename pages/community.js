@@ -104,7 +104,7 @@ class leaderboard extends Component {
           i++
           var theData = data.val()
           var theUserId = data.key
-          var theArr = { uid: theUserId, theName: theData.name, picked: theData.picked, BPS: Number(theData.BPS), score: theData.score }
+          var theArr = { uid: theUserId, theName: theData.ramName, picked: theData.picked, BPS: Number(theData.BPS), score: theData.score }
           allArr.push(theArr)
           if (count === i) {
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
