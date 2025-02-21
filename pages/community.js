@@ -13,7 +13,7 @@ var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 3
 class leaderboard extends Component {
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',
-    dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams in your flock',
+    dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
     currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: []
   }
   componentDidMount = () => {
@@ -269,7 +269,7 @@ class leaderboard extends Component {
                 )
               })}
             </div>
-            {this.state.menuToShow === 'Rams in your flock' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
+            {this.state.menuToShow === 'Rams In Your Flock' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}><span>{this.state.currentFlockName}</span> - RAMS IN YOUR FLOCK</p>
               <div id={styles.table1Div}>
                 <table className={styles.table1}>
@@ -295,7 +295,7 @@ class leaderboard extends Component {
               <p className={styles.noDataP1}>No "Rams in your flock" data available for this event</p>
               <p className={styles.noDataP2} style={{ backgroundColor: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Expired Event' : 'Create Event'}</p>
             </div>}</> : null}
-            {this.state.menuToShow === 'Flocks among flocks' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
+            {this.state.menuToShow === 'Flocks Among Flocks' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
               <div id={styles.table1Div}>
                 <table className={styles.table1}>
