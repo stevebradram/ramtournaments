@@ -307,7 +307,7 @@ class leaderboard extends Component {
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : null, color: item.id === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
-                        <td>{item.flockName}</td>
+                        <td>{item.flockName.split("|").join(' ')}</td>
                         <td>{item.score}</td></tr>)
                   })}
                 </table>

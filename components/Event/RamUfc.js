@@ -36,9 +36,84 @@ class RamUfc extends Component {
   //this.getRanking()
   //this.checkForOddsUpdate()
   //this.getServerData()
+ 
+   //this.calculateFlocksUsFlocks()
   
   }
+ calculateFlocksUsFlocks=()=>{
+  var theAllArr=[]
+  var eventKey='ufc-fight-night-february-22-2025-February222025'
+  var flockScoresRef = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/membersScores2')
+  var flockScoreRef = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/theFlocks/')
+ /* adminRef.once('value',dataSnapshot=>{
+    if (dataSnapshot.exists()) {
+      dataSnapshot.forEach((data) => {
+       // if(data.val().includes('$$$'))return
+        var theUserid=data.key
+        var theData=data.val()
+        theData = theData.split('!!')
+        var flockName=theData[1]
+        flockName=flockName.split(' ').join('|')
+        console.log('flockName rrrrrrr',flockName,theUserid)
+        flockScoresRef.child(flockName+'/'+theUserid+'/score').once('value',dataSnapshot=>{
+          var theData=dataSnapshot.val()
+          var theArr={flock:flockName,uid:theUserid,theScore:theData}
+          theAllArr.push(theArr)
+          console.log('dataSnapshot rrrrrrr',theAllArr)
+        })
+       // membersFlockNamesRef.child('/membersScores/'+flockName).child(theUid).child('BPS').set(bestPossSum)
+      })
+      }
+})*/
+  flockScoresRef.once('value', dataSnapshot => {
+    var theCount1=dataSnapshot.numChildren()
+    var i=0
+    dataSnapshot.forEach((data) => {
+     
+      var theKey=data.key
+      var theItem=data.val()
+      i++
+      //console.log('data daaaaaaaata',data.key, theItem)
+      flockScoresRef.child(theKey).once('value', dataSnapshot => {
+        var theCount=dataSnapshot.numChildren()
+        var k=0,theTotal=[],j=0
+        //console.log('flocks',theKey,theCount)
+        
+        dataSnapshot.forEach((data) => {
+          k++
+          var scoreData=data.val()
+          if(scoreData.picked===true){
+            j++
+            theTotal.push(scoreData.score)
+          }
+          if(theCount===k){
+            var sumScores = theTotal.reduce((partialSum, a) => partialSum + a, 0);
+            var avScore=sumScores/j
+            avScore=Number(avScore.toFixed(2))
+            var sumScores2=Number(sumScores.toFixed(2))
+           console.log('the total',theKey,theTotal,j,sumScores2,avScore)
+           var flockScoreToDb={avScore:avScore,score:sumScores2,membersNo:j}
+           flockScoreRef.child(theKey).update(flockScoreToDb)
+           console.log('flockScoreToDb',flockScoreToDb)
+          }
+          //console.log('data daaaaaaaata 22222',scoreData)
+        })
+        
+      })
+       if(theCount1===i){
+        console.log('nime finish kumalo',i,theCount1)
+       }
+    })
 
+  })
+  /*flockScoresRef.once('value', dataSnapshot => {
+    dataSnapshot.forEach((data) => {
+      var theItem=data.val()
+      console.log('data daaaaaaaata',data.key, theItem.toString())
+    })
+
+  })*/
+ }
   goToServer=()=>{
  
  //this.checkForOutcome()
@@ -63,7 +138,8 @@ class RamUfc extends Component {
       try {
         var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
         var theQuery=encodeURIComponent(theLink) 
-         axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         //axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
@@ -94,8 +170,8 @@ class RamUfc extends Component {
     if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
     if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
     lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
-    //this.checkForOddsUpdate(firstEventTime,lastEventTime)
-    this.getServerData(firstEventTime,lastEventTime)
+    this.checkForOddsUpdate(firstEventTime,lastEventTime)
+    //this.getServerData(firstEventTime,lastEventTime)
     
     ////console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
        } })
