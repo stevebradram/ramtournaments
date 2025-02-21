@@ -5,31 +5,35 @@ import { MdClose } from "react-icons/md";
 import Router,{useRouter,withRouter} from 'next/router'
 import firebase from '../components/FirebaseClient'
 import LogIn from '../components/LogInReg/LogIn2'
+import { ToastContainer, toast } from 'react-toastify';
 class invite extends Component {
-  state={creatorName:'',creatorId:'',eventTitle:'',flockName:'',flockName2:'',startTime:'',sportType:'',eventId:'',userId:'',detailsReady:false,sucessSubmiting:false,userLoggedIn:false,openLogInModal1:true,myName:'',myEmail:'',myPhoneNo:''}
+  state={creatorName:'',creatorId:'',eventTitle:'',flockName:'',flockNameWithSpaces:'',flockNameWithoutSpaces:'',startTime:'',sportType:'',eventId:'',userId:'',detailsReady:false,sucessSubmiting:false,userLoggedIn:false,openLogInModal1:true,myName:'',myEmail:'',myPhoneNo:''}
  componentDidMount(){
    this.getLinkAuthDetails()
  
  }
  getLinkAuthDetails=()=>{
-  console.log('routerr',window.location.href)
-  var linkInfo = window.location.href.split("/");
+  if(!window)return
+  console.log('routerr',decodeURIComponent(window.location.href))
+  var linkInfo = decodeURIComponent(window.location.href).split("/");
   linkInfo=linkInfo.pop().split("~")
   var eventId=linkInfo[1]
-  var flockName=linkInfo[2]
-  flockName=flockName.replace(/%7C/g,' ')
-  var flockName2=linkInfo[2].replace(/%7C/g,'|')
-  console.log('eventId',eventId,'flockName',flockName,'flockName2',flockName2)
-  this.checkAuth(eventId,flockName2,flockName)
+  var flockNameWithSpaces=linkInfo[2].split('|').join(' ')
+  var flockNameWithoutSpaces=linkInfo[2]//.replace(/%7C/g,'|')
+  console.log('linkInfo',linkInfo)
+  console.log('eventId',eventId,'flockNameWithSpaces',flockNameWithSpaces,'flockNameWithoutSpaces',flockNameWithoutSpaces)
+ 
+  this.checkAuth(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
+  this.setState({flockNameWithSpaces})
  }
- checkAuth = (eventId,flockName2,flockName) => {
+ checkAuth = (eventId,flockNameWithoutSpaces,flockNameWithSpaces) => {
   firebase.auth().onAuthStateChanged((user) => {
    if (user) {
     console.log('userrrrrrrr',user)
      var userId=user.uid
      this.getUserDetails(userId)
      this.setState({userId,userLoggedIn:true})
-     this.getDetails(eventId,flockName2,flockName)
+     this.getDetails(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
    } else {
     this.setState({userLoggedIn:false})
     // Router.push('/')
@@ -47,14 +51,15 @@ class invite extends Component {
    console.log('myName',myName)
   })
  }
- getDetails=(eventId,flockName2,flockName)=>{
-  console.log('eventId 0002',eventId,'flockName',flockName)
-  var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+eventId+'/unique/'+flockName2)
+ getDetails=(eventId,flockNameWithoutSpaces,flockNameWithSpaces)=>{
+  console.log('eventId 0002',eventId,'flockNameWithSpaces',flockNameWithSpaces)
+  console.log('creatorName 01000',flockNameWithSpaces,flockNameWithoutSpaces)
+  var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+eventId+'/unique/'+flockNameWithoutSpaces)
   uniqueFlockNamesRef.once('value', dataSnapshot => {
     var theData=dataSnapshot.val()
     console.log('theData000',theData)
-    this.setState({creatorName:theData.creatorName,creatorId:theData.creatorId,eventTitle:theData.eventName,flockName,startTime:theData.startTime,sportType:theData.sportType,eventId,flockName2,detailsReady:true})
-    //console.log('creatorName',creatorName)
+    this.setState({creatorName:theData.creatorName,creatorId:theData.creatorId,eventTitle:theData.eventName,flockNameWithSpaces,startTime:theData.startTime,sportType:theData.sportType,eventId,flockNameWithoutSpaces,detailsReady:true})
+   
    })
  }
  confirm=()=>{
@@ -63,16 +68,17 @@ class invite extends Component {
       .once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {
           this.notify('You are already a flock member of this event')
+          Router.push('/community')
         }else{
-  var toAdmin='$$$'+this.state.myName+'!!'+this.state.flockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
-  var userFlockData={'creator':this.state.creatorId,'name':this.state.flockName2,'link':window.location.href}
+  var toAdmin='$$$'+this.state.myName+'!!'+this.state.flockNameWithSpaces+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
+  var userFlockData={'creator':this.state.creatorId,'name':this.state.flockNameWithoutSpaces,'link':window.location.href}
   var scoreData={BPS:0,score:0,ramName:this.state.myName,picked:false}
   var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId)
   var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId+'/admin')
   var generalDb = firebase.database().ref()
   adminRef.child(this.state.userId).set(toAdmin)
-  membersFlockNamesRef.child('/members/'+this.state.flockName2).child(this.state.userId).set('$$$'+this.state.myName)
-  membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData)
+  membersFlockNamesRef.child('/members/'+this.state.flockNameWithoutSpaces).child(this.state.userId).set('$$$'+this.state.myName)
+  membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData)
   generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.eventId).set(userFlockData,(error) => {
     if (!error){
       this.setState({sucessSubmiting:true})
@@ -82,16 +88,27 @@ class invite extends Component {
 })
   //console.log('')
   //var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId+'/members')
-  //membersFlockNamesRef.child(this.state.flockName2).child(this.state.userId).set(this.state.creatorName)
+  //membersFlockNamesRef.child(this.state.flockNameWithoutSpaces).child(this.state.userId).set(this.state.creatorName)
  }
  handleChildClick = (title) => {
   this.setState({ count: this.state.count + 1});
   //this.notify('Account created successfully')
   this.getLinkAuthDetails()
 };
+notify = (message) => {
+  toast.warn(message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
   render() {
     return (
-      <div className={styles.container}>
+      <><div className={styles.container}>
         <Community/>
         {!this.state.userLoggedIn?
         <>
@@ -109,7 +126,7 @@ class invite extends Component {
         <div className={styles.inviteModal}>
         <MdClose className={styles.closeIC} onClick={()=>Router.push('/')}/>
          <p className={styles.inviteP1}>Confirm Flock Invite</p>
-         <p className={styles.inviteP2}>{this.state.creatorName} is inviting you to join his "{this.state.flockName}" RAM Fantasy Tournament Flock for the {this.state.eventTitle} event on {new Date(this.state.startTime).toDateString()}.</p>
+         <p className={styles.inviteP2}>{this.state.creatorName} is inviting you to join his "{this.state.flockNameWithSpaces}" RAM Fantasy Tournament Flock for the {this.state.eventTitle} event on {new Date(this.state.startTime).toDateString()}.</p>
          <p className={styles.inviteP3}>Click on the button below to confirm</p>
          <button onClick={()=>this.confirm()}>CONFIRM</button>
         </div>
@@ -124,6 +141,7 @@ class invite extends Component {
         </div>:null}</>}
        
       </div>
+       <ToastContainer/></>
     )
   }
 }

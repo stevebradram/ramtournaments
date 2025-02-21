@@ -11,6 +11,7 @@ import Resizer  from "react-image-file-resizer";
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../Helper/ProgressBar'
 import { IoPersonOutline } from "react-icons/io5";
+import copy from 'copy-to-clipboard';
 var theDetails=''
 class DetailsModal extends Component {
   state={leagueName:'',leagueId:'',flockName:'',buttonClick:true,showProgressBar:false,userId:'',flockNameErr:'',leagueNameErr:'',createdEvent:false,theEventsArr:[],startTime:'',sportType:'',
@@ -260,7 +261,8 @@ openFlockModal=()=>{
   this.setState({flockNameModal:!this.state.flockNameModal})
 }
 copyLink=()=>{
-  navigator.clipboard.writeText(this.state.theLink)
+  //navigator.clipboard.writeText(this.state.theLink)
+  copy(this.state.theLink);
   this.notify('Link copied successfully')
 }
 closeModal=()=>{

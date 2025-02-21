@@ -16,6 +16,7 @@ import { MdOutlineShare } from "react-icons/md";
 import axios from "axios"
 import dayjs from 'dayjs';
 import { SlOptionsVertical } from "react-icons/sl";
+import copy from 'copy-to-clipboard';
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 class RamUfc extends Component {
   state={theMenu:'mainCard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:false,theEvent:'Upcoming Events',currentID:1,
@@ -805,7 +806,8 @@ chooseHomeEvent=(event,id)=>{
   })
     }
     copyLink=()=>{
-      navigator.clipboard.writeText(this.state.theLink)
+      //navigator.clipboard.writeText(this.state.theLink)
+      copy(this.state.theLink);
       this.notify('Link copied successfully')
     }
   render() {

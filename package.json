@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.13",
     "firebase": "^8.10.0",
     "framer-motion": "^11.11.9",

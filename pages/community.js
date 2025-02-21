@@ -80,6 +80,7 @@ class leaderboard extends Component {
 
   }
   getRamsInFlock = (theEventKey, isEventStarted) => {
+   
     this.setState({ ramsInMyFlockArr: [], theFlocksArr: [] })
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
     var flocksDataRef = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
@@ -88,6 +89,7 @@ class leaderboard extends Component {
         var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
         this.setState({ currentFlockName: theFName, flockNameAvailable: true })
         this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted)
+        
       } else {
         this.setState({ currentFlockName: '', flockNameAvailable: false })
       }
@@ -96,6 +98,7 @@ class leaderboard extends Component {
   getRamMembersData = (theEventKey, flockNameWithNoSpaces, isEventStarted) => {
     var allArr = []
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores/' + flockNameWithNoSpaces)
+    console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey)
     membersFlockNamesRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
