@@ -4,7 +4,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { BsFillLightningFill } from "react-icons/bs";
 import Countdown from 'react-countdown';
 import DetailsModal from '../components/Event/DetailsModal'
-import EditDetails from '../components/Event/DetailsModalCopy'
+import EditDetails from '../components/Event/DetailsModalCopy' 
 import RamUfc from '../components/Event/RamUfc'
 import NCAA from '../components/Event/NCAA'
 import NFL from '../components/Event/NFL'

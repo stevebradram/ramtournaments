@@ -935,11 +935,11 @@ chooseHomeEvent=(event,id)=>{
           <div className={style.detailsDiv}>
             <p>RAM Name: {this.state.dataAvailable?this.state.currentEventUserInfo['teamName']:'N/A'}</p>
             <p>Flock Name: {this.state.dataAvailable?this.state.currentEventUserInfo['flockName']:'N/A'}</p>
-            {this.state.dataAvailable?<p id={style.editP} onClick={()=>this.opeModal2()}>Edit Profile</p>:<p id={style.editP} onClick={()=>this.openTheModal()}>Make Picks</p>}
+            {this.state.dataAvailable?<p id={style.editP} onClick={()=>this.opeModal2()}>Edit Profile</p>:<p id={style.editP} onClick={()=>this.openTheModal()} >Make Picks</p>}
             </div>
           </div>
           <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-          {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
+          {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()} onTouchStart={()=>this.copyLink()}>
           <p>Flock Invite Link</p>
           <MdOutlineShare />
           </div>:null}
