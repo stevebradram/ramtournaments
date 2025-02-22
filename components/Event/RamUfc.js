@@ -138,8 +138,8 @@ class RamUfc extends Component {
       try {
         var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
         var theQuery=encodeURIComponent(theLink) 
-         //axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
-         axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
+         axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         //axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
@@ -939,7 +939,7 @@ chooseHomeEvent=(event,id)=>{
             </div>
           </div>
           <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-          {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()} onTouchStart={()=>this.copyLink()}>
+          {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
           <p>Flock Invite Link</p>
           <MdOutlineShare />
           </div>:null}

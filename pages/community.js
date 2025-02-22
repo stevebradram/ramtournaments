@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from "@/styles/community.module.scss";
 import firebase from '../components/FirebaseClient'
-import { MdOutlineFolderOff } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,9 +12,9 @@ var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 3
 { name: 'Elaine Kiiru', score: 40 }, { name: 'RAM Man', score: 50 }]
 class leaderboard extends Component {
   state = {
-    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',
+    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
-    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: []
+    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',
   }
   componentDidMount = () => {
     this.showProgressBar()
@@ -83,7 +83,6 @@ class leaderboard extends Component {
    
     this.setState({ ramsInMyFlockArr: [], theFlocksArr: [] })
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
-    var flocksDataRef = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
     userInfoDb.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
@@ -98,7 +97,11 @@ class leaderboard extends Component {
   getRamMembersData = (theEventKey, flockNameWithNoSpaces, isEventStarted) => {
     var allArr = []
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores/' + flockNameWithNoSpaces)
+    var flockCreatorRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/unique/' + flockNameWithNoSpaces+'/creatorId')
     console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey)
+    flockCreatorRef.once('value', dataSnapshot => {
+      var creatorId=dataSnapshot.val()
+      this.setState({creatorId})
     membersFlockNamesRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
@@ -107,7 +110,7 @@ class leaderboard extends Component {
           i++
           var theData = data.val()
           var theUserId = data.key
-          var theArr = { uid: theUserId, theName: theData.ramName, picked: theData.picked, BPS: Number(theData.BPS), score: theData.score }
+          var theArr = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS: Number(theData.BPS), score: theData.score,creatorId:creatorId}
           allArr.push(theArr)
           if (count === i) {
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
@@ -118,6 +121,7 @@ class leaderboard extends Component {
         })
       }
     })
+  })
     var theFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/theFlocks/')
     theFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
@@ -191,7 +195,7 @@ class leaderboard extends Component {
     } else {
       var isEventStarted = true
       if (new Date().getTime() < theTime) { isEventStarted = false }
-      this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted })
+      this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted,sportType })
       this.getRamsInFlock(theEventKey, isEventStarted)
       {this.state.isAdmin?this.loadAdminData(theEventKey):null}
     }
@@ -212,6 +216,30 @@ class leaderboard extends Component {
     this.timerHandle = setTimeout(
       () => this.setState({ showProgressBar: false }),
       2000)
+  }
+  deleteMamber= () => {
+  var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)
+  var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey+'/admin')
+  var generalDb = firebase.database().ref()
+
+  var gamesDataRef = firebase.database().ref('users/').child(this.state.userIdToBeDeleted+'/ramData/').child('events').child(this.state.sportType)
+  var ramsBets = firebase.database().ref('userBets/'+this.state.sportType+'/')
+
+  gamesDataRef.child(this.state.theEventKey+'/details/').set(null)
+  gamesDataRef.child(this.state.theEventKey+'/bets/').set(null)
+  generalDb.child('users/'+this.state.userIdToBeDeleted+'/ramData/upcomingEvents/'+this.state.sportType+'/').child(this.state.theEventKey).set(null)
+  ramsBets.child(this.state.theEventKey+'/'+this.state.userIdToBeDeleted).set(null)
+  adminRef.child(this.state.userIdToBeDeleted).set(null)
+  membersFlockNamesRef.child('/members/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+  membersFlockNamesRef.child('/membersScores/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+  //generalDb.child('users/'+this.state.userIdToBeDeleted+'/flockData/flockNames/'+this.state.theEventKey).set(null)
+  generalDb.child('users/'+this.state.userIdToBeDeleted+'/flockData/flockNames/'+this.state.theEventKey).set(null,(error) => {
+    if (!error){
+      const updatedArr = this.state.ramsInMyFlockArr.filter(item => item.uid !== this.state.userIdToBeDeleted);
+      this.setState({ramsInMyFlockArr:updatedArr,deleteModal:false})
+      this.notify('Member removed successfully')
+  }
+})
   }
   render() {
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
@@ -278,16 +306,21 @@ class leaderboard extends Component {
                     <th>RAM Name</th>
                     <th>Picked?</th>
                     <th>Best Possible<br />Score</th>
-                    <th>Cumulative <br />Score</th></tr>
+                    <th>Cumulative <br />Score</th>
+                    {this.state.creatorId===this.state.userId?<th>Action</th>:null}
+                    </tr>
                   {this.state.ramsInMyFlockArr.map((item, index) => {
-                    console.log('picked', item.picked)
+                    console.log('picked', item)
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : null, color: item.id === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.theName}</td>
                         <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
                         <td>{item.BPS}</td>
-                        <td>{item.score}</td></tr>)
+                        <td>{item.score}</td>
+                        {this.state.creatorId===this.state.userId?<td>{item.uid===this.state.userId?null:<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>}</td>:null}
+                    
+                        </tr>)
                   })}
                 </table>
               </div> </div> : <div>
@@ -349,6 +382,17 @@ class leaderboard extends Component {
           {this.state.communitySelection==='News & Videos'?<News/>:null}
           {this.state.communitySelection==='Hall of Fame'?<HallOfFame/>:null}
         </div>
+        {this.state.deleteModal?<div className={styles.modal}>
+        <div className={styles.delModal}>
+          <p className={styles.delModalP1}>Confirm Delete?</p>
+          <p className={styles.delModalP2}>Are you sure you want to delete "{this.state.deleteName}" from your flock?</p>
+          <p className={styles.delModalP2} style={{color:'red'}}>This cannot be reversed!</p>
+          <div>
+            <button className={styles.delModalDelBtn} onClick={()=>this.deleteMamber()}>Delete</button>
+            <button className={styles.canModalDelBtn} onClick={()=>this.setState({deleteModal:false})}>Cancel</button>
+          </div>
+        </div>
+        </div>:null}
         {this.state.showProgressBar ? <ProgressBar /> : null}
         <ToastContainer />
       </>
