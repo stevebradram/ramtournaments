@@ -133,7 +133,7 @@ class leaderboard extends Component {
         if(allGames.length>0){
           allGames=allGames.sort(function(a, b){return b.endTime - a.endTime});
           //console.log('teeeeeee',allGames)
-          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],theTime=allGames[0]['currentSelection']
+          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],currentSelection=allGames[0]['currentSelection']
           var firstEndTime=allGames[0]['endTime']
           if(nowDate>(firstEndTime+86400000)){this.setState({isEventExpired:true})}
           else{this.setState({isEventExpired:false})}

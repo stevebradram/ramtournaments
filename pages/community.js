@@ -63,12 +63,12 @@ class leaderboard extends Component {
           if (allGames.length > 0) {
             allGames = allGames.sort(function (a, b) { return b.endTime - a.endTime });
             console.log('allGames 9000000',allGames)
-            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], theTime = allGames[0]['currentSelection']
+            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], currentSelection = allGames[0]['currentSelection']
             var isEventStarted = true
             if (new Date().getTime() < allGames[0]['time']) { isEventStarted = false }
               this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted }, () => {
               this.getRamsInFlock(theEventKey, isEventStarted)
-              {this.state.isAdmin?this.loadAdminData(theEventKey):null}
+              {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
               console.log('sportType555555555', sportType, theEventKey)
             })
           }
@@ -218,6 +218,9 @@ class leaderboard extends Component {
       2000)
   }
   deleteMamber= () => {
+    if((new Date().getTime()>this.state.theTime)){
+      this.notify("Can't delete a member on an already started event")
+     }else{
   var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)
   var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey+'/admin')
   var generalDb = firebase.database().ref()
@@ -240,6 +243,7 @@ class leaderboard extends Component {
       this.notify('Member removed successfully')
   }
 })
+  }
   }
   render() {
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)

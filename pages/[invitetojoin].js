@@ -14,26 +14,28 @@ class invite extends Component {
  }
  getLinkAuthDetails=()=>{
   if(!window)return
-  console.log('routerr',decodeURIComponent(window.location.href))
+  //console.log('routerr',decodeURIComponent(window.location.href))
   var linkInfo = decodeURIComponent(window.location.href).split("/");
   linkInfo=linkInfo.pop().split("~")
   var eventId=linkInfo[1]
   var flockNameWithSpaces=linkInfo[2].split('|').join(' ')
   var flockNameWithoutSpaces=linkInfo[2]//.replace(/%7C/g,'|')
-  console.log('linkInfo',linkInfo)
-  console.log('eventId',eventId,'flockNameWithSpaces',flockNameWithSpaces,'flockNameWithoutSpaces',flockNameWithoutSpaces)
+  var creatorId=linkInfo[3]
+  //console.log('linkInfo',creatorId,linkInfo)
+  //console.log('eventId',eventId,'flockNameWithSpaces',flockNameWithSpaces,'flockNameWithoutSpaces',flockNameWithoutSpaces)
  
   this.checkAuth(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
   this.setState({flockNameWithSpaces})
+  this.getEventDetails(creatorId,eventId)
  }
  checkAuth = (eventId,flockNameWithoutSpaces,flockNameWithSpaces) => {
   firebase.auth().onAuthStateChanged((user) => {
    if (user) {
-    console.log('userrrrrrrr',user)
+    //console.log('userrrrrrrr',user)
      var userId=user.uid
      this.getUserDetails(userId)
      this.setState({userId,userLoggedIn:true})
-     this.getDetails(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
+     //this.getDetails(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
    } else {
     this.setState({userLoggedIn:false})
     // Router.push('/')
@@ -48,19 +50,54 @@ class invite extends Component {
    var myEmail=dataSnapshot.val().email
    var myPhoneNo=dataSnapshot.val().phoneNo
    this.setState({myName,myEmail,myPhoneNo})
-   console.log('myName',myName)
+   //console.log('myName',myName)
   })
  }
+ chunkString(str, length) {
+  return str.match(new RegExp('.{1,' + length + '}', 'g'));
+}
+ getEventDetails=(creatorId,eventId)=>{
+ //var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+eventId+'/unique/'+flockNameWithoutSpaces)
+  var theSplitNo=Math.ceil(creatorId.length/4)
+  var userIdChunk=this.chunkString(creatorId,theSplitNo)
+  var generalDb = firebase.database().ref()
+ // var userIdLink=userIdChunk[2]+userIdChunk[0]+userIdChunk[1]+userIdChunk[3]
+  var userIdLink=userIdChunk[1]+userIdChunk[2]+userIdChunk[0]+userIdChunk[3]
+  console.log('userIdLink yyyyyyyyyyyyyy',userIdLink)
+  generalDb.child('users/'+userIdLink+'/flockData/flockNames/'+eventId+'/name/')
+      .once('value', dataSnapshot => {
+        console.log('userIdLink dataSnapshot',dataSnapshot.val())
+        var name=dataSnapshot.val()
+        var flockNameWithSpaces=name.split('|').join(' ')
+        var flockNameWithoutSpaces=name
+        this.getDetails(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
+      })
+  
+ }
  getDetails=(eventId,flockNameWithoutSpaces,flockNameWithSpaces)=>{
-  console.log('eventId 0002',eventId,'flockNameWithSpaces',flockNameWithSpaces)
-  console.log('creatorName 01000',flockNameWithSpaces,flockNameWithoutSpaces)
+  //console.log('eventId 0002',eventId,'flockNameWithSpaces',flockNameWithSpaces)
+  //console.log('creatorName 01000',flockNameWithSpaces,flockNameWithoutSpaces)
   var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+eventId+'/unique/'+flockNameWithoutSpaces)
   uniqueFlockNamesRef.once('value', dataSnapshot => {
     var theData=dataSnapshot.val()
-    console.log('theData000',theData)
+    //console.log('theData000',theData)
     this.setState({creatorName:theData.creatorName,creatorId:theData.creatorId,eventTitle:theData.eventName,flockNameWithSpaces,startTime:theData.startTime,sportType:theData.sportType,eventId,flockNameWithoutSpaces,detailsReady:true})
    
    })
+ }
+ checkTime=()=>{
+   var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.eventId+'/time/')
+   timeInfoDb.once('value',dataSnapshot=>{
+     var theEventTime=dataSnapshot.val()
+     if((new Date().getTime()>theEventTime)){
+       this.notify('Link Expired. Event already started')
+       setTimeout(() => {
+        Router.push('/')
+      }, 3000);
+      }else{
+        this.confirm()
+      }
+    })
  }
  confirm=()=>{
    var generalDb=firebase.database().ref()
@@ -86,7 +123,7 @@ class invite extends Component {
     })
   }
 })
-  //console.log('')
+  ////console.log('')
   //var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId+'/members')
   //membersFlockNamesRef.child(this.state.flockNameWithoutSpaces).child(this.state.userId).set(this.state.creatorName)
  }
@@ -128,7 +165,7 @@ notify = (message) => {
          <p className={styles.inviteP1}>Confirm Flock Invite</p>
          <p className={styles.inviteP2}>{this.state.creatorName} is inviting you to join his "{this.state.flockNameWithSpaces}" RAM Fantasy Tournament Flock for the {this.state.eventTitle} event on {new Date(this.state.startTime).toDateString()}.</p>
          <p className={styles.inviteP3}>Click on the button below to confirm</p>
-         <button onClick={()=>this.confirm()}>CONFIRM</button>
+         <button onClick={()=>this.checkTime()}>CONFIRM</button>
         </div>
         </div>:null}
         {this.state.sucessSubmiting?<div className={styles.modal}>
