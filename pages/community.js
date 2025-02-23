@@ -130,7 +130,7 @@ class leaderboard extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          var theArr = { flockName: data.key, score: theData.avScore }
+          var theArr = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo}
           allArr.push(theArr)
           if (count === i) {
             allArr = allArr.sort(function (a, b) { return b.score - a.score })
@@ -339,13 +339,18 @@ class leaderboard extends Component {
                   <tr id={styles.table1Tr1}>
                     <th>Flock Rank In Herd</th>
                     <th>Flock Names</th>
+                    <th>Members No</th>
+                    <th>Total Points</th>
                     <th>Average Points<br />Per RAM</th></tr>
                   {this.state.theFlocksArr.map((item, index) => {
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : null, color: item.flockName === this.state.myFlockName ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.flockName.split("|").join(' ')}</td>
-                        <td>{item.score}</td></tr>)
+                        <td>{item.membersNo}</td>
+                        <td>{item.score}</td>
+                        <td>{item.avScore}</td>
+                        </tr>)
                   })}
                 </table>
               </div> </div> : <div>
