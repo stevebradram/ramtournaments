@@ -43,28 +43,9 @@ class RamUfc extends Component {
  calculateFlocksUsFlocks=()=>{
   var theAllArr=[]
   var eventKey='ufc-fight-night-february-22-2025-February222025'
-  var flockScoresRef = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/membersScores2')
+  var flockScoresRef = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/membersScores')
   var flockScoreRef = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/theFlocks/')
- /* adminRef.once('value',dataSnapshot=>{
-    if (dataSnapshot.exists()) {
-      dataSnapshot.forEach((data) => {
-       // if(data.val().includes('$$$'))return
-        var theUserid=data.key
-        var theData=data.val()
-        theData = theData.split('!!')
-        var flockName=theData[1]
-        flockName=flockName.split(' ').join('|')
-        console.log('flockName rrrrrrr',flockName,theUserid)
-        flockScoresRef.child(flockName+'/'+theUserid+'/score').once('value',dataSnapshot=>{
-          var theData=dataSnapshot.val()
-          var theArr={flock:flockName,uid:theUserid,theScore:theData}
-          theAllArr.push(theArr)
-          console.log('dataSnapshot rrrrrrr',theAllArr)
-        })
-       // membersFlockNamesRef.child('/membersScores/'+flockName).child(theUid).child('BPS').set(bestPossSum)
-      })
-      }
-})*/
+  var flockScoreRef3 = firebase.database().ref('/flocksSystem/flockNames/'+eventKey+'/theFlocks3/')
   flockScoresRef.once('value', dataSnapshot => {
     var theCount1=dataSnapshot.numChildren()
     var i=0
@@ -73,30 +54,29 @@ class RamUfc extends Component {
       var theKey=data.key
       var theItem=data.val()
       i++
-      //console.log('data daaaaaaaata',data.key, theItem)
       flockScoresRef.child(theKey).once('value', dataSnapshot => {
         var theCount=dataSnapshot.numChildren()
         var k=0,theTotal=[],j=0
-        //console.log('flocks',theKey,theCount)
-        
         dataSnapshot.forEach((data) => {
           k++
           var scoreData=data.val()
+         
           if(scoreData.picked===true){
             j++
             theTotal.push(scoreData.score)
           }
           if(theCount===k){
+            if(theTotal.length>0){
             var sumScores = theTotal.reduce((partialSum, a) => partialSum + a, 0);
             var avScore=sumScores/j
             avScore=Number(avScore.toFixed(2))
             var sumScores2=Number(sumScores.toFixed(2))
            console.log('the total',theKey,theTotal,j,sumScores2,avScore)
            var flockScoreToDb={avScore:avScore,score:sumScores2,membersNo:j}
-           flockScoreRef.child(theKey).update(flockScoreToDb)
+           flockScoreRef3.child(theKey).update(flockScoreToDb)
            console.log('flockScoreToDb',flockScoreToDb)
+            }
           }
-          //console.log('data daaaaaaaata 22222',scoreData)
         })
         
       })
@@ -106,13 +86,6 @@ class RamUfc extends Component {
     })
 
   })
-  /*flockScoresRef.once('value', dataSnapshot => {
-    dataSnapshot.forEach((data) => {
-      var theItem=data.val()
-      console.log('data daaaaaaaata',data.key, theItem.toString())
-    })
-
-  })*/
  }
   goToServer=()=>{
  
@@ -201,7 +174,7 @@ class RamUfc extends Component {
         
         try {
           if(!this.state.theEventKey||this.state.theEventKey.length<3)return
-          var theLink='theEvents::ramUfc::'+this.state.theEventKey
+          var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo
           //var theLink2='theEvents::ramUfc::'+theK
           if(!this.state.theEventKey||this.state.theEventKey.length===0)return
           var theQuery=encodeURIComponent(theLink) 
