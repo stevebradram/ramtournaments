@@ -14,7 +14,7 @@ class leaderboard extends Component {
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
-    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',
+    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',
   }
   componentDidMount = () => {
     this.showProgressBar()
@@ -86,7 +86,7 @@ class leaderboard extends Component {
     userInfoDb.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
-        this.setState({ currentFlockName: theFName, flockNameAvailable: true })
+        this.setState({ currentFlockName: theFName, flockNameAvailable: true,myFlockName:dataSnapshot.val()})
         this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted)
         
       } else {
@@ -310,9 +310,9 @@ class leaderboard extends Component {
                     {this.state.creatorId===this.state.userId?<th>Action</th>:null}
                     </tr>
                   {this.state.ramsInMyFlockArr.map((item, index) => {
-                    console.log('picked', item)
+                    //console.log('picked', item)
                     return (
-                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : null, color: item.id === this.state.userId ? 'white' : '#292f51' }}>
+                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.theName}</td>
                         <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
@@ -338,7 +338,7 @@ class leaderboard extends Component {
                     <th>Average Points<br />Per RAM</th></tr>
                   {this.state.theFlocksArr.map((item, index) => {
                     return (
-                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : null, color: item.id === this.state.userId ? 'white' : '#292f51' }}>
+                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : null, color: item.flockName === this.state.myFlockName ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.flockName.split("|").join(' ')}</td>
                         <td>{item.score}</td></tr>)
@@ -362,8 +362,9 @@ class leaderboard extends Component {
                     <th>Phone No</th>
                   </tr>
                   {this.state.theAdminFlocksArr.map((item, index) => {
+                    console.log('itttm',item)
                     return (
-                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : null, color: item.id === this.state.userId ? 'white' : '#292f51' }}>
+                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.flockName}</td>
