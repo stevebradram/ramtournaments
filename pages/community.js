@@ -133,7 +133,7 @@ class leaderboard extends Component {
           var theArr = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo}
           allArr.push(theArr)
           if (count === i) {
-            allArr = allArr.sort(function (a, b) { return b.score - a.score })
+            allArr = allArr.sort(function (a, b) { return b.avScore - a.avScore })
             this.setState({ theFlocksArr: allArr })
             console.log('theFlocksArr', allArr)
           }
