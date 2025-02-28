@@ -28,10 +28,16 @@ $blackish:#292f51;
     background-color: white;
     padding: 20px;
 }
+.eventHeadP{
+    font-weight: 600;
+    color: $blackish;
+    text-decoration: underline;
+}
 .eventTitleP{
-    margin-top:15px;
-    font-size: 14px;
+    margin-top:20px;
+    font-size: 12px;
     font-weight: 500;
+    color: $blackish;
 }
 .eventErrorP{
     color: $redColor;
@@ -41,6 +47,11 @@ $blackish:#292f51;
 }
 .submitBtn{
     margin-top: 20px;
+    padding: 7px 30px;
+    border: none;
+    background-color: $blackish;
+    color: white;
+    cursor: pointer;
 }
 .eventInput{
     outline: none;

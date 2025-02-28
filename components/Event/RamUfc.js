@@ -971,7 +971,7 @@ chooseHomeEvent=(event,id)=>{
            this.theTypeAnimation('CLICK HERE TO EDIT YOUR PICKS','CLICK HERE TO ENTER THE GAME')
            }
             </div>
-                {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?
+                {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||this.state.userId==='zZTNto5p3XVSLYeovAwWXHjvkN43'||this.state.userId==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'?
                 <><div className={style.resultsCont}>
                   <div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={()=>this.setState({showGetMatchesModal:!this.state.showGetMatchesModal})}>Check For New Events</button>
