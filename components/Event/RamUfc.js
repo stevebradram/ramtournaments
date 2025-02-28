@@ -194,15 +194,32 @@ class RamUfc extends Component {
           var theQuery=encodeURIComponent(theLink) 
           //console.log('theLink rrraaa',theLink)
           //return
-          await axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
-         // await axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
-            .then((res) => {
-              //console.log('theItems',res)
-              var theOutcome = res.data
-              //console.log('theItems',theOutcome)
-              if(theOutcome==='sucesss'){}
-              //this.getRanking()
-            })
+         // await axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
+      
+      
+         var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+         timeInfoDb.once('value',dataSnapshot=>{
+           var theEventTime=dataSnapshot.val()
+           if((theEventTime>new Date().getTime())){
+            this.notify('Event has not yet started')
+           }
+           if((new Date().getTime()>(theEventTime+100400000))){
+             this.notify('Event results update time expired')
+            }else{
+               axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
+              // axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
+              .then((res) => {
+                //console.log('theItems',res)
+                var theOutcome = res.data
+                //console.log('theItems',theOutcome)
+                if(theOutcome==='sucesss'){}
+                //this.getRanking()
+              })
+            }
+          })
+      
+      
+       
             } catch (error) {
               //console.log('error',error)
             }
