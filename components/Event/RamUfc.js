@@ -25,7 +25,7 @@ class RamUfc extends Component {
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
-    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:''
+    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:''
   }
   componentDidMount=()=>{
    ////console.log('on raaaaaaaaaaaaam ufc')
@@ -90,7 +90,7 @@ class RamUfc extends Component {
   goToServer=()=>{
  
  //this.checkForOutcome()
- this.getTimeUfcOdds()
+ this.getTimeUfcOdds(this.state.theEventKey,this.state.matchTypesNo)
 
 
 
@@ -107,12 +107,12 @@ class RamUfc extends Component {
         console.log('from server',res.data)
       })
 }
-  checkForOddsUpdate=async (firstEventTime,lastEventTime) => {
+  checkForOddsUpdate=async (firstEventTime,lastEventTime,theEventKey,matchTypesNo) => {
       try {
-        var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
+        var theLink='theEvents::ramUfc::'+theEventKey+"::"+matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
         var theQuery=encodeURIComponent(theLink) 
-         axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
-         //axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
+         //axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
@@ -122,8 +122,8 @@ class RamUfc extends Component {
             //console.log('error',error)
           }
       }
-      getTimeUfcOdds=async()=>{
-        var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+      getTimeUfcOdds=async(theEventKey,matchTypesNo)=>{
+        var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+theEventKey+'/time/')
         timeInfoDb.once('value',dataSnapshot=>{
           var theEventTime=dataSnapshot.val()
           if((new Date().getTime()>theEventTime)){
@@ -143,7 +143,7 @@ class RamUfc extends Component {
     if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
     if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
     lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
-    this.checkForOddsUpdate(firstEventTime,lastEventTime)
+    this.checkForOddsUpdate(firstEventTime,lastEventTime,theEventKey,matchTypesNo)
     //this.getServerData(firstEventTime,lastEventTime)
     
     ////console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
@@ -158,10 +158,24 @@ class RamUfc extends Component {
          if(this.state.UFCLinkInput.startsWith('https://www.ufc.com/event/')){
             //console.log('starts with that shit')
           var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
-          await axios.get("http://localhost:4000/getMatches?term="+theQuery)
+          console.log('theQuery',this.state.UFCLinkInput)
+          
+          axios.get("https://theramtournament.com/getMatches?term="+theQuery)
+          //await axios.get("http://localhost:4000/getMatches?term="+theQuery)
             .then((res) => {
               var theOutcome = res.data
-              this.notify(theOutcome)
+              if(theOutcome.includes('UFC Matches Populated successfully')){
+                theOutcome=theOutcome.split('::')
+                console.log('theOutcome',theOutcome)
+                this.notify(theOutcome[0])
+                var howManyExist=theOutcome[1]
+                var eventKey=theOutcome[2]
+                var sportType=theOutcome[3]
+                this.getTimeUfcOdds(eventKey,howManyExist)
+
+              }else{
+                this.notify(theOutcome)
+              }
               this.setState({showGetMatchesModal:false,UFCLinkInput:''})
             })
           }else{this.notify('The Link input must be properly filled')}
@@ -180,7 +194,8 @@ class RamUfc extends Component {
           var theQuery=encodeURIComponent(theLink) 
           //console.log('theLink rrraaa',theLink)
           //return
-          await axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
+          await axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
+         // await axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
             .then((res) => {
               //console.log('theItems',res)
               var theOutcome = res.data
@@ -327,12 +342,20 @@ class RamUfc extends Component {
     var i=0
     dataSnapshot.forEach((data) => {
       i++
+    
       var pastG={},upcomingG={}
       var key=data.key
       var time=data.val().time
       var title=data.val().title
       var sportType=data.val().sportType
       var endTime=data.val().endTime
+      var getEventsTimeUpdate=data.val().getEventsTimeUpdate
+      if(!getEventsTimeUpdate){getEventsTimeUpdate='N/A'}else{getEventsTimeUpdate=new Date(getEventsTimeUpdate).toLocaleString()}
+      var oddsTimeUpdate=data.val().oddsTimeUpdate
+      if(!oddsTimeUpdate){oddsTimeUpdate='N/A'}else{oddsTimeUpdate=new Date(oddsTimeUpdate).toLocaleString()}
+      var fetchResultsTimeUpdate=data.val().fetchResultsTimeUpdate
+      if(!fetchResultsTimeUpdate){fetchResultsTimeUpdate='N/A'}else{fetchResultsTimeUpdate=new Date().getTime(fetchResultsTimeUpdate).toLocaleString()}
+
       var theData = data.val()
 
       var theItem=''
@@ -347,16 +370,19 @@ class RamUfc extends Component {
           upcomingG={id:key,time:time,title:title}
           upcomingGames.push(upcomingG)
         }*/
-          var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,theData:theData}
+          var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,theData:theData,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate}
           allGames.push(theItem)
       }
       if(theCount===i){
+        console.log('data.val() 555555',allGames)
+        //return
         var theEventTitle='',theEventKey='',sportType='',theTime='',endTime=0
         if(allGames.length>0){
           allGames=allGames.sort(function(a, b){return b.time - a.time});
          // //console.log('teeeeeee',allGames)
-          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],endTime=allGames[0]['endTime']
-          this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,endTime},()=>{
+          theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],endTime=allGames[0]['endTime'],
+          getEventsTimeUpdate=allGames[0]['getEventsTimeUpdate'],oddsTimeUpdate=allGames[0]['oddsTimeUpdate'],fetchResultsTimeUpdate=allGames[0]['fetchResultsTimeUpdate']
+          this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,endTime,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate},()=>{
           this.getUfcMatches(userId)
             //this.getNullScoreBoardData(sportType,theEventKey)
           })
@@ -482,6 +508,8 @@ getMatchesInfo=async(userId,allMatches)=>{
     console.log('flocksDataRef the key',dataSnapshot.val())
     if(dataSnapshot.exists()){
       this.setState({theLink:dataSnapshot.val()})
+    }else{
+      this.setState({theLink:''})
     }
   })
   await  selectedMatchesKeyDb.once('value',dataSnapshot=>{
@@ -567,8 +595,8 @@ selectEvent= (theMenu,theItems) => {
   this.setState({theMenu,theItems})
 }
 
-loadOtherFights=async(theEventKey,theEventTitle)=>{
-  
+loadOtherFights=async(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime)=>{
+  this.setState({theTime,theLink:''})
   var eventsInfo=firebase.database().ref('/theEvents/eventsIds/'+theEventKey+'/time')
   await  eventsInfo.once('value',dataSnapshot=>{
     var theInfo=dataSnapshot.val()
@@ -581,7 +609,8 @@ loadOtherFights=async(theEventKey,theEventTitle)=>{
     this.notify('No internet! please check your internet connection')
     return
   }
-   this.setState({theEventKey,theEventTitle,expired},()=>{
+
+   this.setState({theEventKey,theEventTitle,expired,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime},()=>{
     this.getUfcMatches()
   })
 })
@@ -889,7 +918,7 @@ chooseHomeEvent=(event,id)=>{
              theColor='#CB1E31'
            }
             return(
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.fetchResultsTimeUpdate,item.getEventsTimeUpdate,item.oddsTimeUpdate,item.time)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -912,7 +941,7 @@ chooseHomeEvent=(event,id)=>{
             </div>
           </div>
           <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-          {this.state.theLink.length>1?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
+          {this.state.theLink.length>1&&new Date().getTime()<this.state.theTime?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
           <p>Flock Invite Link</p>
           <MdOutlineShare />
           </div>:null}
@@ -929,15 +958,15 @@ chooseHomeEvent=(event,id)=>{
                 <><div className={style.resultsCont}>
                   <div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={()=>this.setState({showGetMatchesModal:!this.state.showGetMatchesModal})}>Check For New Events</button>
-                  <p className={style.lastUpdateP}>Last Update 12/12/2024</p>
+                  <p className={style.lastUpdateP}>Last Update {this.state.getEventsTimeUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={()=>this.goToServer()}>Update Match Odds</button>
-                  <p className={style.lastUpdateP}>Last Update 12/12/2024</p>
+                  <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={()=>this.checkForOutcome()}>Fetch Results Updates</button>
-                  <p className={style.lastUpdateP}>Last Update 12/12/2024</p>
+                  <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
                   </div>
                   </div>
                   {this.state.showGetMatchesModal?<div className={style.ufcLinkDiv}>

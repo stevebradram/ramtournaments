@@ -8,6 +8,7 @@ import EditDetails from '../components/Event/DetailsModalCopy'
 import RamUfc from '../components/Event/RamUfc'
 import NCAA from '../components/Event/NCAA'
 import NFL from '../components/Event/NFL'
+import MarchMadness from '../components/Event/MarchMadness'
 import LogIn from '../components/LogInReg/LogIn'
 import localStorage from 'local-storage'
 import firebase from '../components/FirebaseClient'
@@ -16,25 +17,6 @@ import { IoPersonSharp } from "react-icons/io5";
 import { MdInfoOutline } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
-var myPhoto='https://images.pexels.com/photos/26150470/pexels-photo-26150470/free-photo-of-brunette-man-posing-wearing-black-suit-jacket-and-white-shirt-with-arms-crossed.jpeg?auto=compress&cs=tinysrgb&w=600'
-const mainCard=[
-    {id:1,time:'Nov 3 2024, 03:00PM',player1:'Brandon Moreno-Mexico',p1Points:'1.42',player2:'Amir Albazi-Iraq',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'notPlayed',status2:'',bet:'player1',winner:'player1',match:'Mens Flyweight'},
-    {id:2,time:'Nov 3 2024, 03:00PM',player1:'Erin Blanchfield-USA',p1Points:'1.42',player2:'Rose Namajunas-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player3.png',p2Photo:'player4.png',status1:'ongoing',status2:'',bet:'player1',winner:'player2',match:'Womens Flyweight'},
-    {id:3,time:'Nov 3 2024, 03:00PM',player1:'Derrick Lewis-USA',p1Points:'1.42',player2:'Jhonata Diniz-Brazil',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player5.png',p2Photo:'player6.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Heavyweight'},
-    {id:4,time:'Nov 3 2024, 03:00PM',player1:'Caio Machado-Brazil',p1Points:'1.42',player2:'Brendson Ribeiro-Brazil',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player7.png',p2Photo:'player8.png',status1:'played',status2:'',bet:'player1',winner:'player2',match:'Mens Light Heavyweight'},
-    {id:5,time:'Nov 3 2024, 03:00PM',player1:'Marc Andre Barriault-Canada',p1Points:'1.42',player2:'Dustin Stoltzfus-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player9.png',p2Photo:'player10.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Middleweight'},
-    {id:6,time:'Nov 3 2024, 03:00PM',player1:'Mike Malott-Canada',p1Points:'1.42',player2:'Trevin Giles-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player11.png',p2Photo:'player12.png',status1:'played',status2:'',bet:'player1',winner:'player2',match:'Mens Welterweight'},
-    ]
-    const prelims=[
-      {id:1,time:'Nov 3 2024, 03:00PM',player1:'Aiemann-Zahabi-Canada',p1Points:'1.42',player2:'Pedro Munhoz-Brazil',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'notPlayed',status2:'',bet:'player1',winner:'player1',match:'Mens Bantamweight'},
-      {id:2,time:'Nov 3 2024, 03:00PM',player1:'Ariane Da Silva-Brazil',p1Points:'1.42',player2:'Jasmine Jasudavicius-Canada',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'ongoing',status2:'',bet:'player1',winner:'player2',match:'Womens Flyweight'},
-      {id:3,time:'Nov 3 2024, 03:00PM',player1:'Charles Jourdain-Canada',p1Points:'1.42',player2:'Victor Henry-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Bantamweight'},
-      {id:4,time:'Nov 3 2024, 03:00PM',player1:'Jack Shore-Wales',p1Points:'1.42',player2:'Youssef Zalal-Morocco',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player2',match:'Mens Featherweight'},
-      {id:5,time:'Nov 3 2024, 03:00PM',player1:'Alexandr Romanov-Moldova',p1Points:'1.42',player2:'Rodrigo Nascimento-Brazil',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Heavyweight'},
-      {id:6,time:'Nov 3 2024, 03:00PM',player1:'Serhiy Sidey-Ukraine',p1Points:'1.42',player2:'Garrett Armfield-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player2',match:'Mens Bantamweight'},
-      {id:7,time:'Nov 3 2024, 03:00PM',player1:'Chad Anheliger-Canada',p1Points:'1.42',player2:'Cody Gibson-USA',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Bantamweight'},
-      {id:8,time:'Nov 3 2024, 03:00PM',player1:'Jamey Lyn Horth-Canada',p1Points:'1.42',player2:'Ivana Petrovic-Croatia',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'played',status2:'',bet:'player1',winner:'player2',match:'Womens Flyweight'},
-      ]
       const theEvents=[
         {id:1,name:'RAM UFC'},
         {id:2,name:'NCAAF'},
@@ -45,9 +27,9 @@ const mainCard=[
 
 class events extends Component {
   state={theMenu:'maincard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:'',theEvent:'Current Events',currentID:1,
-    theRamUfc:'',theMarchMadness:false,theNfl:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'RAM UFC',eventToShow:false,
+    theRamUfc:false,theMarchMadness:false,theNfl:false,theNcaaf:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'March Madness',eventToShow:false,
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME', 
-    currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,
+    currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'marchMadness',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',
     allGames:[],theEventTitle:'',theEventKey:'',sportType:'',theTime:'',endTime:''
@@ -109,7 +91,6 @@ class events extends Component {
   })   
   }
   chooseEvent=(name)=>{
-    if(name==='NFL Playoffs')return
     if(name==='March Madness'){this.setState({theCurrentEvent:'marchMadness'})}
     if(name==='NFL Playoffs'){this.setState({theCurrentEvent:'nfl'})}
     if(name==='RAM UFC'){this.setState({theCurrentEvent:'ramUfc'})}
@@ -130,11 +111,11 @@ class events extends Component {
         <div className={style.eventsDiv}>
         {theEvents.map((item,index)=>{
           var colorP='',clickable=true
-          if(item.name==='March Madness'&&this.state.theMarchMadness===false){colorP='#b2b2b2',clickable=false}
-          if(item.name==='NCAAF'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
+          if(item.name==='March Madness'&&this.state.theMarchMadness===true){colorP='#b2b2b2',clickable=false}
+          if(item.name==='NCAAF'&&this.state.theNcaaf===true){colorP='#b2b2b2',clickable=false}
           if(item.name==='NFL Playoffs'&&this.state.theNfl===true){colorP='#b2b2b2',clickable=false}
-          if(item.name==='RAM UFC'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
-          if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
+          if(item.name==='RAM UFC'&&this.state.theRamUfc===true){colorP='#b2b2b2',clickable=false}
+          //if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           return(
             <div key={index} onClick={()=>this.chooseEvent(item.name)}>
               <p className={style.listP} style={{color:colorP,borderColor:colorP}} id={this.state.selectedEvent===item.name?style.playerP3:style.playerP} onClick={()=>clickable?this.setState({selectedEvent:item.name}):null} >{item.name}</p>
@@ -164,7 +145,9 @@ class events extends Component {
         </div><div style={{marginTop:10}}>
           {this.state.selectedEvent==='RAM UFC'?<RamUfc isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NCAAF'?<NCAA isUserLoggedIn={this.state.userLoggedIn}/>:null}
-          {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}</div>
+          {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          {this.state.selectedEvent==='March Madness'?<MarchMadness isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          </div>
       </div>
       </>
     )
