@@ -17,12 +17,13 @@ import axios from "axios"
 import dayjs from 'dayjs';
 import { SlOptionsVertical } from "react-icons/sl";
 import copy from 'copy-to-clipboard';
+import ProgressBar from '../Helper/ProgressBar'
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 class RamUfc extends Component {
   state={theMenu:'mainCard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:false,theEvent:'Upcoming Events',currentID:1,
     theRamUfc:'',theMarchMadness:false,theNfl:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'RAM UFC',eventToShow:false,
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME',theEventTime:0, 
-    currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,
+    currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,showProgressBar:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
     showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:''
@@ -107,6 +108,17 @@ class RamUfc extends Component {
         console.log('from server',res.data)
       })
 }
+showProgressBar=()=>{
+  this.setState({showProgressBar:true})
+  this.timerHandle = setTimeout(
+    () => this.setState({showProgressBar:false}), 
+    180000)
+}
+showProgressBar2=()=>{
+  this.timerHandle = setTimeout(
+    () => this.setState({showProgressBar:false}), 
+    5000)
+}
   checkForOddsUpdate=async (firstEventTime,lastEventTime,theEventKey,matchTypesNo) => {
       try {
         var theLink='theEvents::ramUfc::'+theEventKey+"::"+matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
@@ -116,6 +128,7 @@ class RamUfc extends Component {
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
+            this.setState({showProgressBar:false})
             //console.log('theItems',theOutcome)
 })
           } catch (error) {
@@ -160,6 +173,7 @@ class RamUfc extends Component {
           var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
           console.log('theQuery',this.state.UFCLinkInput)
           
+          this.showProgressBar()
           axios.get("https://theramtournament.com/getMatches?term="+theQuery)
           //await axios.get("http://localhost:4000/getMatches?term="+theQuery)
             .then((res) => {
@@ -172,15 +186,21 @@ class RamUfc extends Component {
                 var eventKey=theOutcome[2]
                 var sportType=theOutcome[3]
                 this.getTimeUfcOdds(eventKey,howManyExist)
+                this.showProgressBar2()
 
               }else{
+                this.setState({showProgressBar:false})
                 this.notify(theOutcome)
               }
               this.setState({showGetMatchesModal:false,UFCLinkInput:''})
             })
-          }else{this.notify('The Link input must be properly filled')}
+          }else{
+            this.notify('The Link input must be properly filled')
+            this.setState({showProgressBar:false})
+          }
             } catch (error) {
               //console.log('error',error)
+              this.setState({showProgressBar:false})
             }
         
       }
@@ -1113,6 +1133,7 @@ chooseHomeEvent=(event,id)=>{
       {this.state.openLoginModal?<div className={style.detailsModal} onClick={()=>this.setState({openLoginModal:false})}><LogIn/></div>:null}
       {this.state.editDetailsModal?<div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({editDetailsModal:false})} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName']+'::'+this.state.currentEventUserInfo['flockName']+'::'+this.state.profilePhoto+'::'+this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey}/></div>:null}
       <ToastContainer/>
+      {this.state.showProgressBar?<ProgressBar/>:null}
       </>
     )
   }

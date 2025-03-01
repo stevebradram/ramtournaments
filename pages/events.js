@@ -27,7 +27,7 @@ var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 
 class events extends Component {
   state={theMenu:'maincard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:'',theEvent:'Current Events',currentID:1,
-    theRamUfc:false,theMarchMadness:false,theNfl:false,theNcaaf:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'March Madness',eventToShow:false,
+    theRamUfc:false,theMarchMadness:false,theNfl:false,theNcaaf:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'RAM UFC',eventToShow:false,
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME', 
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'marchMadness',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],
