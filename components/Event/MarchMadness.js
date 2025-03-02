@@ -33,7 +33,7 @@ const nationalChampionship = [
   { id: 'nationalChampionship1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'National Championship' },
 ]
 class MarchMadness extends Component {
-  state = { firstFourDate: '', showCreateEventModal: true, round1: '2025-03-20T00:00', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', finalErr: 'Date must be filled' }
+  state = { firstFourDate: '', showCreateEventModal:false, round1: '2025-03-20T00:00', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', finalErr: 'Date must be filled' }
   inputChange = async (e) => {
 
     var value = e.target.value
