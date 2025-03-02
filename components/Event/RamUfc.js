@@ -208,7 +208,7 @@ showProgressBar2=()=>{
         
         try {
           if(!this.state.theEventKey||this.state.theEventKey.length<3)return
-          var theLink='theEvents::ramUfc::'+this.state.theEventKey+"::"+this.state.matchTypesNo
+          var theLink='theEvents::ramUfc::'+this.state.theEventKey//+"::"+this.state.matchTypesNo
           //var theLink2='theEvents::ramUfc::'+theK
           if(!this.state.theEventKey||this.state.theEventKey.length===0)return
           var theQuery=encodeURIComponent(theLink) 
@@ -226,7 +226,7 @@ showProgressBar2=()=>{
            if((new Date().getTime()>(theEventTime+100400000))){
              this.notify('Event results update time expired')
             }else{
-               axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
+            axios.get("https://theramtournament.com/checkForOutcome?term="+theQuery)
               // axios.get("http://localhost:4000/checkForOutcome?term="+theQuery)
               .then((res) => {
                 //console.log('theItems',res)
