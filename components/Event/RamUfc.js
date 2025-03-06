@@ -391,7 +391,7 @@ showProgressBar2=()=>{
       var oddsTimeUpdate=data.val().oddsTimeUpdate
       if(!oddsTimeUpdate){oddsTimeUpdate='N/A'}else{oddsTimeUpdate=new Date(oddsTimeUpdate).toLocaleString()}
       var fetchResultsTimeUpdate=data.val().fetchResultsTimeUpdate
-      if(!fetchResultsTimeUpdate){fetchResultsTimeUpdate='N/A'}else{fetchResultsTimeUpdate=new Date().getTime(fetchResultsTimeUpdate).toLocaleString()}
+      if(!fetchResultsTimeUpdate){fetchResultsTimeUpdate='N/A'}else{fetchResultsTimeUpdate=new Date(fetchResultsTimeUpdate).toLocaleString()}
 
       var theData = data.val()
 

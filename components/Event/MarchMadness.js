@@ -48,7 +48,7 @@ class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:'',theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[]}
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -196,6 +196,7 @@ getNCAABMatches = () => {
   this.getNCAABMatches2()
   this.getNCAABMatches3()
   this.getNCAABMatches4()
+  this.getNCAABFinal4()
 }
 getNCAABMatches2 = () => {
   var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
@@ -359,6 +360,35 @@ getNCAABMatches4 = () => {
 
   })
 }
+getNCAABFinal4 = () => {
+  var final4Arr=[],finalArr=[],i=0,j=0
+  this.setState({ final4Arr:[],finalArr:[]})
+  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/final4/')
+  matchesRef.once('value', dataSnapshot => {
+    var final4Count = dataSnapshot.numChildren()
+    dataSnapshot.forEach((data) => {
+      i++
+       var theData = data.val()
+       final4Arr.push(theData)
+       if(final4Count===i){
+        this.setState({final4Arr})
+        console.log('finalArr 4444444',final4Arr)
+       }
+    })  })
+    var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/nationalChampionship/')
+    matchesRef.once('value', dataSnapshot => {
+      var finalCount = dataSnapshot.numChildren()
+      dataSnapshot.forEach((data) => {
+        j++
+         var theData = data.val()
+         finalArr.push(theData)
+         if(finalCount===j){
+          this.setState({finalArr})
+          console.log('finalArr 222222',finalArr)
+         }
+      })  })
+   
+}
   createEvent = () => {
     var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
 
@@ -485,11 +515,12 @@ getNCAABMatches4 = () => {
     });
   }
   selectEvent= (theMenu) => {
-   
-    if(theMenu==='east'){this.setState({currentItems:this.state.eastRound1Arr,theSubMenu:'round1'})}
-    if(theMenu==='west'){this.setState({currentItems:this.state.westRound1Arr,theSubMenu:'round1'})}
-    if(theMenu==='south'){this.setState({currentItems:this.state.southRound1Arr,theSubMenu:'round1'})}
-    if(theMenu==='midwest'){this.setState({currentItems:this.state.midWestRound1Arr,theSubMenu:'round1'})}
+    if(theMenu==='east'){this.setState({currentItems:this.state.eastRound1Arr,theSubMenu:'round1',showUpperBar:true})}
+    if(theMenu==='west'){this.setState({currentItems:this.state.westRound1Arr,theSubMenu:'round1',showUpperBar:true})}
+    if(theMenu==='south'){this.setState({currentItems:this.state.southRound1Arr,theSubMenu:'round1',showUpperBar:true})}
+    if(theMenu==='midwest'){this.setState({currentItems:this.state.midWestRound1Arr,theSubMenu:'round1',showUpperBar:true})}
+    if(theMenu==='final4'){this.setState({currentItems:this.state.final4Arr,theSubMenu:'round1',showUpperBar:false})}
+    if(theMenu==='championship'){this.setState({currentItems:this.state.finalArr,theSubMenu:'round1',showUpperBar:false})}
     this.setState({theMenu}) 
   }
   selectSubEvent=(type,theMenu)=>{
@@ -628,12 +659,12 @@ getNCAABMatches4 = () => {
                   <p id={this.state.theMenu==='championship'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('championship',this.state.theChampionshipArr)}>CHAMPIONSHIP</p>
                   
            </div>
-           <div className={style.eve2Div}>
+           {this.state.showUpperBar?<div className={style.eve2Div}>
             <p id={this.state.theSubMenu==='round1'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('round1',this.state.theMenu)}>Round 1</p>
             <p id={this.state.theSubMenu==='round2'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('round2',this.state.theMenu)}>Round 2</p>
             <p id={this.state.theSubMenu==='sweet16'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('sweet16',this.state.theMenu)}>Sweet 16</p>
             <p id={this.state.theSubMenu==='elite8'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('elite8',this.state.theMenu)}>Elite 8</p>
-           </div>
+           </div>:null}
            
            <div className={style.listCont}>           
         {this.state.currentItems.map((item, index) => {
@@ -661,7 +692,8 @@ getNCAABMatches4 = () => {
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                <p>March Madness {item.matchType} - {title1}</p>
+                {this.state.showUpperBar?<p>March Madness {item.matchType} - {title1}</p>:
+                <p>March Madness - {item.matchType}</p>}
                 <p>{theTime}</p>
               </div>
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :

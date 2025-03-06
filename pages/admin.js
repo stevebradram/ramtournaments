@@ -21,7 +21,7 @@ class leaderboard extends Component {
     firebase.auth().onAuthStateChanged((user) => {
      if (user) {
        userId=user.uid
-       if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='TPiIj5meOuXnj0SUgd8p2ad4rX12'){
+       if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'){
         this.setState({isAdmin:true})
         this.getUsers()
        }else{
