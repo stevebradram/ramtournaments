@@ -207,6 +207,31 @@ $pastEve2:#dc9600;
      margin-top: 0px;
      align-items: center;
  }
+ #exportDiv{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -20px;
+ }
+ #exportDiv1{
+    font-size: 20px;
+    width: 170px;
+    color: $redColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+   
+ }
+ .exportP{
+    font-size: 16px;
+    border: 1px solid $redColor;
+    margin-top: 10px;
+    padding: 2px 10px;
+    font-weight: 500;
+    cursor: pointer;
+  
+ }
 @media all and (max-width: 800px) {
     .container {
         padding: 150px 40px 100px 40px;

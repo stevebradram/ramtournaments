@@ -6,6 +6,7 @@ import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 var theItems=[]
 /*const importList = [
     { id: 1, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
@@ -27,6 +28,10 @@ var theItems=[]
     ]*/
 //var scoreBoardArr
 class leaderboard extends Component {
+  constructor() {
+    super();
+    this.tableRef = React.createRef(null);
+ }
   state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:''}
   componentDidMount=()=>{
@@ -386,7 +391,7 @@ class leaderboard extends Component {
     if(this.state.currentSelection==='superBowl'){BSPTitle='Super Bowl'}
     return(
     <div id={styles.table1Div}>
-      <table className={styles.table1}>
+      <table className={styles.table1} ref={ this.tableRef}>
         <tr id={styles.table1Tr1}>
           <th>Overall <br/>Rank</th>
           <th>RAM Name</th>
@@ -498,8 +503,14 @@ class leaderboard extends Component {
           })}
         </div>
               <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-              <div className={styles.menu2Div1}>
-                            
+              <div className={styles.menu2Div1}>    
+              {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
+                    filename={this.state.theEventKey}
+                    sheet="users"
+                    currentTableRef={this.tableRef.current}        
+                >
+                  <p className={styles.exportP}>Export Document</p>
+                  </DownloadTableExcel> </div></div>:null}
       {this.state.userLoggedIn?<>{this.state.dataAvailable?this.itemComponent(theItems):
       <div className={styles.noDataDiv}>
          <PiFolderDashedThin  className={styles.noDataIc}/>
