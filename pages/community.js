@@ -59,14 +59,14 @@ class leaderboard extends Component {
         var theItem = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection }
         allGames.push(theItem)
         if (theCount === i) {
-          var theEventTitle = '', theEventKey = '', sportType = '', theTime = ''
+          var theEventTitle = '', theEventKey = '', sportType = '', theTime = '',endTime=''
           if (allGames.length > 0) {
             allGames = allGames.sort(function (a, b) { return b.endTime - a.endTime });
             console.log('allGames 9000000',allGames)
-            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], currentSelection = allGames[0]['currentSelection']
+            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'],endTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection']
             var isEventStarted = true
             if (new Date().getTime() < allGames[0]['time']) { isEventStarted = false }
-              this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted }, () => {
+              this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted,endTime }, () => {
               this.getRamsInFlock(theEventKey, isEventStarted)
               {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
               console.log('sportType555555555', sportType, theEventKey)
@@ -182,7 +182,7 @@ class leaderboard extends Component {
     var value = e.target.value
   }
 
-  loadOtherEvents = async (sportType, theEventKey, theTime, theEventTitle, currentSelection, item) => {
+  loadOtherEvents = async (sportType, theEventKey, theTime, theEventTitle, currentSelection, item,endTime) => {
     console.log('whole item', item)
     this.showProgressBar()
 
@@ -195,7 +195,7 @@ class leaderboard extends Component {
     } else {
       var isEventStarted = true
       if (new Date().getTime() < theTime) { isEventStarted = false }
-      this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted,sportType })
+      this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted,sportType,endTime })
       this.getRamsInFlock(theEventKey, isEventStarted)
       {this.state.isAdmin?this.loadAdminData(theEventKey):null}
     }
@@ -249,6 +249,13 @@ class leaderboard extends Component {
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
     var theItems = []
     var noData = false
+    var statToShow='',statCol=''
+    if(this.state.eventStarted&&new Date().getTime()>(this.state.endTime+36000000)){statToShow='Expired Event',statCol='#919191'}
+    if(this.state.eventStarted&&new Date().getTime()<(this.state.endTime+36000000)){statToShow='Active Event'}
+    if(!this.state.eventStarted){statToShow='Upcoming Event'}
+
+
+
     var sortData = this.state.theItems.sort((a, b) => b.currentScore - a.currentScore)
     var nullData = this.state.nullData.sort((a, b) => b.bestPossibleScore - a.bestPossibleScore)
     if (this.state.isThereNullData === true) { theItems = nullData }
@@ -281,7 +288,7 @@ class leaderboard extends Component {
                 theColor = '#CB1E31'
               }
               return (
-                <div className={styles.headList} key={index} style={{ color: theColor, borderColor: theColor }} onClick={() => this.loadOtherEvents(item.sportType, item.id, item.time, item.title, item.currentSelection, item)}>
+                <div className={styles.headList} key={index} style={{ color: theColor, borderColor: theColor }} onClick={() => this.loadOtherEvents(item.sportType, item.id, item.time, item.title, item.currentSelection, item,item.endTime)}>
                   <p className={styles.headListP1}>{item.title}</p>
                   <div><p className={styles.headListP2}>{eventTime}</p>
                     <p style={{ marginLeft: 2, marginRight: 2 }}>-</p>
@@ -328,9 +335,9 @@ class leaderboard extends Component {
                   })}
                 </table>
               </div> </div> : <div>
-              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Past Event' : 'Upcoming Event'}</p>
+              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No "Rams in your flock" data available for this event</p>
-              <p className={styles.noDataP2} style={{ backgroundColor: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Expired Event' : 'Create Event'}</p>
+              <p className={styles.noDataP2}>Check Events</p>
             </div>}</> : null}
             {this.state.menuToShow === 'Flocks Among Flocks' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
@@ -354,9 +361,9 @@ class leaderboard extends Component {
                   })}
                 </table>
               </div> </div> : <div>
-              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Past Event' : 'Upcoming Event'}</p>
+              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No "Your flocks among flocks" data available for this event</p>
-              <p className={styles.noDataP2} style={{ backgroundColor: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Expired Event' : 'Create Event'}</p>
+              <p className={styles.noDataP2} >Check Events</p>
             </div>}</> : null}
             {this.state.menuToShow==='Admin'&&this.state.isAdmin? <>{this.state.theAdminFlocksArr.length > 0 ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>ADMIN VIEW</p>
@@ -384,7 +391,7 @@ class leaderboard extends Component {
                   })}
                 </table>
               </div> </div> : <div>
-              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? '#919191' : null }}>{this.state.eventStarted ? 'Past Event' : 'Upcoming Event'}</p>
+              <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No Admin data available for this event</p>
             </div>}</> : null}
 

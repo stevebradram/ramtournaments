@@ -103,15 +103,16 @@ $pastEve2:#dc9600;
     
 }
 .noDataP2{
-    background-color: $redColor;
+    //background-color: $redColor;
     width: 150px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: $blackish;
     margin-top: 10px;
     cursor: pointer;
+    border: 1px solid $blackish;
 }
 #playerP1 {
     background-color: $redColor;
