@@ -34,9 +34,18 @@ const round2 = [
 const sweet16 = [
   { id: 'sweet16A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
   { id: 'sweet16B', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16C', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16D', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16E', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16F', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16G', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
+  { id: 'sweet16H', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
 ]
 const elite8 = [
   { id: 'elite8A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Elite 8' },
+  { id: 'elite8B', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Elite 8' },
+  { id: 'elite8C', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Elite 8' },
+  { id: 'elite8D', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Elite 8' },
 ]
 const final4 = [
   { id: 'final4A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Final 4' },
@@ -47,9 +56,10 @@ const nationalChampionship = [
 ]
 class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
-    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:'',theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
+    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',theLink:'',theTime:''}
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
+  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[]}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -93,10 +103,13 @@ class MarchMadness extends Component {
   var i = 0, allGames = []
 
   await gamesInfo.once('value', dataSnapshot => {
-    if(!dataSnapshot.exists()){this.setState({noEventToShow:true});return}
+    if(!dataSnapshot.exists()){
+      this.setState({noEventToShow:true});
+      console.log('no event to shooooooooooooooow')
+    }
     else{
       this.setState({noEventToShow:false})
-    }
+    
     var gamesCount = dataSnapshot.numChildren()
     //console.log('naingia 3333',gamesCount)
     dataSnapshot.forEach((data) => {
@@ -139,6 +152,7 @@ class MarchMadness extends Component {
         //////console.log('currentSelection',this.state.currentSelection)
       })
     })
+  }
   })
 }
 getMatchesInfo=async(userId)=>{
@@ -153,168 +167,183 @@ getMatchesInfo=async(userId)=>{
   })
 }
 getNCAABMatches = () => {
-  var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
+  var round1EastArr=[],round1WestArr=[],round1SouthArr=[],round1midWestArr=[], allMatches = []
   this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
-  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+this.state.theMenu)
+  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+'round1')
   matchesRef.once('value', dataSnapshot => {
-    var round1Count = dataSnapshot.child('round1').numChildren()
-    var round2Count = dataSnapshot.child('round2').numChildren()
-    var sweet16Count = dataSnapshot.child('sweet16').numChildren()
-    var elite8Count = dataSnapshot.child('elite8').numChildren()
+    var eastCount = dataSnapshot.child('east').numChildren()
+    var westCount = dataSnapshot.child('west').numChildren()
+    var southCount = dataSnapshot.child('south').numChildren()
+    var midWestCount = dataSnapshot.child('midWest').numChildren()
     var theInfo=dataSnapshot.val()
-    var round1=theInfo.round1
-    var round2=theInfo.round2
-    var sweet16=theInfo.sweet16
-    var elite8=theInfo.elite8
+    var east=theInfo.east
+    var west=theInfo.west
+    var south=theInfo.south
+    var midWest=theInfo.midWest
     var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in round1) {
+    for (var key in east) {
       i++
-      var theData = round1[key]
-      round1Arr.push(theData)
-      if(round1Count===i){
-        this.setState({eastRound1Arr:round1Arr,currentItems:round1Arr})
-        console.log('round1Arr',round1Arr)
+      var theData = east[key]
+      round1EastArr.push(theData)
+      allMatches.push(theData)
+      if(eastCount===i){
+        this.setState({round1EastArr:round1EastArr,currentItems:round1EastArr})
+        console.log('round1EastArr',round1EastArr)
       }
     }
-    for (var key in round2) {
+    for (var key in west) {
       g++
-      var theData = round2[key]
-      round2Arr.push(theData)
-      if(round2Count===g){
-        this.setState({eastRound2Arr:round2Arr})
-        console.log('round2Arr',round2Arr)
+      var theData = west[key]
+      round1WestArr.push(theData)
+      allMatches.push(theData)
+      if(westCount===g){
+        this.setState({round1WestArr:round1WestArr})
+        console.log('round1WestArr',round1WestArr)
       }
     }
-    for (var key in sweet16) {
+    for (var key in south) {
       h++
-      var theData = sweet16[key]
-      sweet16Arr.push(theData)
-      if(sweet16Count===h){
-        this.setState({eastSweet16Arr:sweet16Arr})
-        console.log('sweet16Arr',sweet16Arr)
+      var theData = south[key]
+      round1SouthArr.push(theData)
+      allMatches.push(theData)
+      if(southCount===h){
+        this.setState({round1SouthArr:round1SouthArr})
+        console.log('round1SouthArr',round1SouthArr)
       }
     }
-    for (var key in elite8) {
+    for (var key in midWest) {
       j++
-      var theData = elite8[key]
-      elite8Arr.push(theData)
-      if(elite8Count===j){
-        this.setState({eastElite8Arr:elite8Arr})
-        console.log('theInfo 001000',elite8Arr)
+      var theData = midWest[key]
+      round1midWestArr.push(theData)
+      allMatches.push(theData)
+      if(midWestCount===j){
+        this.setState({round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches})
+        console.log('theInfo 001000',round1midWestArr)
         
       }
     }
 
   })
+  
   this.getNCAABMatches2()
-  this.getNCAABMatches3()
+  this.getNCAABMatchesFinal()
+  return
   this.getNCAABMatches4()
   this.getNCAABFinal4()
   //this.getMatchesInfo()
 }
 getNCAABMatches2 = () => {
-  var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
-  this.setState({ westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
-  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+this.state.theMenu)
+  var round2EastArr=[],round2WestArr=[],round2SouthArr=[],round2midWestArr=[], allMatches = []
+  this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
+  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+'round2')
   matchesRef.once('value', dataSnapshot => {
-    var round1Count = dataSnapshot.child('round1').numChildren()
-    var round2Count = dataSnapshot.child('round2').numChildren()
-    var sweet16Count = dataSnapshot.child('sweet16').numChildren()
-    var elite8Count = dataSnapshot.child('elite8').numChildren()
+    var eastCount = dataSnapshot.child('east').numChildren()
+    var westCount = dataSnapshot.child('west').numChildren()
+    var southCount = dataSnapshot.child('south').numChildren()
+    var midWestCount = dataSnapshot.child('midWest').numChildren()
     var theInfo=dataSnapshot.val()
-    var round1=theInfo.round1
-    var round2=theInfo.round2
-    var sweet16=theInfo.sweet16
-    var elite8=theInfo.elite8
+    var east=theInfo.east
+    var west=theInfo.west
+    var south=theInfo.south
+    var midWest=theInfo.midWest
     var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in round1) {
+    for (var key in east) {
       i++
-      var theData = round1[key]
-      round1Arr.push(theData)
-      if(round1Count===i){
-        this.setState({westRound1Arr:round1Arr})
-        console.log('round1Arr',round1Arr)
+      var theData = east[key]
+      round2EastArr.push(theData)
+      allMatches.push(theData)
+      if(eastCount===i){
+        this.setState({round2EastArr:round2EastArr})
+        console.log('round2EastArr',round2EastArr)
       }
     }
-    for (var key in round2) {
+    for (var key in west) {
       g++
-      var theData = round2[key]
-      round2Arr.push(theData)
-      if(round2Count===g){
-        this.setState({westRound2Arr:round2Arr})
-        console.log('round2Arr',round2Arr)
+      var theData = west[key]
+      round2WestArr.push(theData)
+      allMatches.push(theData)
+      if(westCount===g){
+        this.setState({round2WestArr:round2WestArr})
+        console.log('round2WestArr',round2WestArr)
       }
     }
-    for (var key in sweet16) {
+    for (var key in south) {
       h++
-      var theData = sweet16[key]
-      sweet16Arr.push(theData)
-      if(sweet16Count===h){
-        this.setState({westSweet16Arr:sweet16Arr})
-        console.log('sweet16Arr',sweet16Arr)
+      var theData = south[key]
+      round2SouthArr.push(theData)
+      allMatches.push(theData)
+      if(southCount===h){
+        this.setState({round2SouthArr:round2SouthArr})
+        console.log('round2SouthArr',round2SouthArr)
       }
     }
-    for (var key in elite8) {
+    for (var key in midWest) {
       j++
-      var theData = elite8[key]
-      elite8Arr.push(theData)
-      if(elite8Count===j){
-        this.setState({westElite8Arr:elite8Arr})
-        console.log('theInfo 001000',elite8Arr)
+      var theData = midWest[key]
+      round2midWestArr.push(theData)
+      allMatches.push(theData)
+      if(midWestCount===j){
+        this.setState({round2midWestArr:round2midWestArr,allRound2MatchesArr:allMatches})
+        console.log('theInfo 001000',round2midWestArr)
+        
       }
     }
 
   })
 }
-getNCAABMatches3 = () => {
-  var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
+getNCAABMatchesFinal = () => {
+  var sweet16Arr=[],elite8Arr=[],final4Arr=[],finalArr=[], allMatches = []
   this.setState({ southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
-  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+this.state.theMenu)
+  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/final/')
   matchesRef.once('value', dataSnapshot => {
-    var round1Count = dataSnapshot.child('round1').numChildren()
-    var round2Count = dataSnapshot.child('round2').numChildren()
     var sweet16Count = dataSnapshot.child('sweet16').numChildren()
     var elite8Count = dataSnapshot.child('elite8').numChildren()
+    var final4Count = dataSnapshot.child('final4').numChildren()
+    var finalCount = dataSnapshot.child('nationalChampionship').numChildren()
     var theInfo=dataSnapshot.val()
-    var round1=theInfo.round1
-    var round2=theInfo.round2
     var sweet16=theInfo.sweet16
     var elite8=theInfo.elite8
+    var final4=theInfo.final4
+    var final=theInfo.nationalChampionship
     var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in round1) {
-      i++
-      var theData = round1[key]
-      round1Arr.push(theData)
-      if(round1Count===i){
-        this.setState({southRound1Arr:round1Arr})
-        console.log('round1Arr',round1Arr)
-      }
-    }
-    for (var key in round2) {
-      g++
-      var theData = round2[key]
-      round2Arr.push(theData)
-      if(round2Count===g){
-        this.setState({southRound2Arr:round2Arr})
-        console.log('round2Arr',round2Arr)
-      }
-    }
     for (var key in sweet16) {
-      h++
+      i++
       var theData = sweet16[key]
       sweet16Arr.push(theData)
-      if(sweet16Count===h){
-        this.setState({southSweet16Arr:sweet16Arr})
+      allMatches.push(theData)
+      if(sweet16Count===i){
+        this.setState({sweet16Arr:sweet16Arr})
         console.log('sweet16Arr',sweet16Arr)
       }
     }
     for (var key in elite8) {
-      j++
+      g++
       var theData = elite8[key]
       elite8Arr.push(theData)
-      if(elite8Count===j){
-        this.setState({southElite8Arr:elite8Arr})
-        console.log('theInfo 001000',elite8Arr)
+      allMatches.push(theData)
+      if(elite8Count===g){
+        this.setState({elite8Arr:elite8Arr})
+        console.log('round2Arr',elite8Arr)
+      }
+    }
+    for (var key in final4) {
+      h++
+      var theData = final4[key]
+      final4Arr.push(theData)
+      allMatches.push(theData)
+      if(final4Count===h){
+        this.setState({final4Arr:final4Arr})
+        console.log('final4Arr',final4Arr)
+      }
+    }
+    for (var key in final) {
+      j++
+      var theData = final[key]
+      finalArr.push(theData)
+      allMatches.push(theData)
+      if(finalCount===j){
+        this.setState({finalArr:finalArr,allRoundFinalArr:allMatches})
+        console.log('finalArr 001000',finalArr)
       }
     }
 
@@ -524,7 +553,7 @@ getNCAABFinal4 = () => {
     console.log('round1 length', round1.length)
     var eventKey = 'marchMadness' + new Date().getFullYear()
     var eventTitle = 'March Madness' + new Date().getFullYear()
-    var generalDb = firebase.database().ref('/theEvents9/NCAAB/' + eventKey)
+    var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
    /* console.log('this.state.round1', this.state.round1)
     console.log('this.state.round2', this.state.round2)
@@ -549,7 +578,7 @@ getNCAABFinal4 = () => {
         round1[index]['time'] = this.state.round1
         round1Arr[item.id] = item
         if (round1.length === index + 1) {
-          var round1Ref=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/round64')
+          var round1Ref=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/round1')
           round1Ref.child('/west/').update(round1Arr)
           round1Ref.child('/east/').update(round1Arr)
           round1Ref.child('/south/').update(round1Arr)
@@ -564,7 +593,7 @@ getNCAABFinal4 = () => {
         round2[index]['time'] = this.state.round2
         round2Arr[item.id] = item
         if (round2.length === index + 1) {
-          var round2Ref=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/round32')
+          var round2Ref=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/round2')
           round2Ref.child('/west/').update(round2Arr)
           round2Ref.child('/east/').update(round2Arr)
           round2Ref.child('/south/').update(round2Arr)
@@ -578,7 +607,7 @@ getNCAABFinal4 = () => {
         sweet16[index]['time'] = this.state.sweet16
         sweet16Arr[item.id] = item
         if (sweet16.length === index + 1) {
-          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          var finalRef=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/final')
           finalRef.child('/sweet16/').update(sweet16Arr)
         }
       })
@@ -589,7 +618,7 @@ getNCAABFinal4 = () => {
         elite8[index]['time'] = this.state.elite8
         elite8Arr[item.id] = item
         if (elite8.length === index + 1) {
-          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          var finalRef=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/final')
           finalRef.child('/elite8/').update(elite8Arr)
         }
       })
@@ -600,7 +629,7 @@ getNCAABFinal4 = () => {
         final4[index]['time'] = this.state.final4
         final4Arr[item.id] = item
         if (final4.length === index + 1) {
-          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          var finalRef=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/final')
           finalRef.child('final4').update(final4Arr)
         }
       })
@@ -611,7 +640,7 @@ getNCAABFinal4 = () => {
         nationalChampionship[index]['time'] = this.state.final
         finalArr[item.id] = item
         if (nationalChampionship.length === index + 1) {
-          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          var finalRef=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/final')
           finalRef.child('nationalChampionship').update(finalArr,(error) => {
             if (error) {
               this.notify('An error occured while creating event, try again')
@@ -645,12 +674,21 @@ getNCAABFinal4 = () => {
     });
   }
   selectEvent= (theMenu) => {
-    if(theMenu==='east'){this.setState({currentItems:this.state.eastRound1Arr,theSubMenu:'round1',showUpperBar:true})}
-    if(theMenu==='west'){this.setState({currentItems:this.state.westRound1Arr,theSubMenu:'round1',showUpperBar:true})}
-    if(theMenu==='south'){this.setState({currentItems:this.state.southRound1Arr,theSubMenu:'round1',showUpperBar:true})}
-    if(theMenu==='midwest'){this.setState({currentItems:this.state.midWestRound1Arr,theSubMenu:'round1',showUpperBar:true})}
-    if(theMenu==='final4'){this.setState({currentItems:this.state.final4Arr,theSubMenu:'round1',showUpperBar:false})}
-    if(theMenu==='championship'){this.setState({currentItems:this.state.finalArr,theSubMenu:'round1',showUpperBar:false})}
+    if(this.state.currentRound==='round1'){
+    if(theMenu==='east'){this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1'})}
+    if(theMenu==='west'){this.setState({currentItems:this.state.round1WestArr,theSubMenu:'round1'})}
+    if(theMenu==='south'){this.setState({currentItems:this.state.round1SouthArr,theSubMenu:'round1'})}
+    if(theMenu==='midwest'){this.setState({currentItems:this.state.round1midWestArr,theSubMenu:'round1'})}}
+    if(this.state.currentRound==='round2'){
+      if(theMenu==='east'){this.setState({currentItems:this.state.round2EastArr,theSubMenu:'round2'})}
+      if(theMenu==='west'){this.setState({currentItems:this.state.round2WestArr,theSubMenu:'round2'})}
+      if(theMenu==='south'){this.setState({currentItems:this.state.round2SouthArr,theSubMenu:'round2'})}
+      if(theMenu==='midwest'){this.setState({currentItems:this.state.round2midWestArr,theSubMenu:'round2'})}}
+      if(this.state.currentRound==='finalRound'){
+        if(theMenu==='sweet16'){this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound'})}
+        if(theMenu==='elite8'){this.setState({currentItems:this.state.elite8Arr,theSubMenu:'finalRound'})}
+        if(theMenu==='final4'){this.setState({currentItems:this.state.final4Arr,theSubMenu:'finalRound'})}
+        if(theMenu==='finalRound'){this.setState({currentItems:this.state.finalArr,theSubMenu:'finalRound'})}}
     this.setState({theMenu}) 
   }
   selectSubEvent=(type,theMenu)=>{
@@ -682,7 +720,15 @@ getNCAABFinal4 = () => {
       this.setState({theSubMenu:type})
   }
   getCurrentRound=(round)=>{
+    console.log('roundddd',round,this.state.sweet16Arr)
     this.setState({currentRound:round})
+    if(round==='round1'){
+     this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1',theMenu:'east'})}
+    if(round==='round2'){
+     this.setState({currentItems:this.state.round2EastArr,theSubMenu:'round2',theMenu:'east'})}
+     if(round==='finalRound'){
+      this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound',theMenu:'sweet16'})}
+       
   }
   openTheModal=()=>{
     this.notify('Not availabe at the moment')
@@ -713,6 +759,7 @@ getNCAABFinal4 = () => {
     return (
       <>
         <div className={style.container}>
+          
         {this.state.allEvents.length > 0 ? <><div className={style.matchesHeadDiv}>
           {this.state.allEvents.map((item, index) => {
             var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
@@ -789,28 +836,30 @@ getNCAABFinal4 = () => {
             <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
             <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
           </div> : null}
-          {this.state.noEventToShow?<div className={style.noEventDiv}>
-            <p>No event to show at the moment</p>
-            {this.state.isAdmin? <button>Create Event</button>
-            :null}
-          </div>:null}
+         
           <div className={style.eve2Div}>
             <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
             <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
             <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
             
            </div>
-          {this.state.currentRound==='round1'||this.state.currentRound==='round2'?<div className={style.eveDiv}>
+          {this.state.currentRound==='round1'?<div className={style.eveDiv}>
+                  <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>EAST</p>
+                  <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>WEST</p>
+                  <p id={this.state.theMenu==='south'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('south')}>SOUTH</p>
+                  <p id={this.state.theMenu==='midwest'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('midwest')}>MID WEST</p>  
+           </div>:null}
+           {this.state.currentRound==='round2'?<div className={style.eveDiv}>
                   <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>EAST</p>
                   <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>WEST</p>
                   <p id={this.state.theMenu==='south'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('south')}>SOUTH</p>
                   <p id={this.state.theMenu==='midwest'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('midwest')}>MID WEST</p>  
            </div>:null}
            {this.state.currentRound==='finalRound'?<div className={style.eveDiv}>
-                  <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>SWEET 16</p>
-                  <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>ELITE 8</p>
-                  <p id={this.state.theMenu==='south'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('south')}>FINAL 4</p>
-                  <p id={this.state.theMenu==='championship'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('championship',this.state.theChampionshipArr)}>CHAMPIONSHIP</p>
+                  <p id={this.state.theMenu==='sweet16'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('sweet16')}>SWEET 16</p>
+                  <p id={this.state.theMenu==='elite8'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('elite8')}>ELITE 8</p>
+                  <p id={this.state.theMenu==='final4'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('final4')}>FINAL 4</p>
+                  <p id={this.state.theMenu==='final'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('finalRound')}>CHAMPIONSHIP</p>
                   
            </div>:null}
            {/*this.state.showUpperBar?<div className={style.eve2Div}>
@@ -846,7 +895,7 @@ getNCAABFinal4 = () => {
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                {this.state.showUpperBar?<p>March Madness {item.matchType} - {title1}</p>:
+                {this.state.showUpperBar?<p>March Madness {item.matchType} {this.state.theSubMenu!=='finalRound'? '- '+title1:null}</p>:
                 <p>March Madness - {item.matchType}</p>}
                 <p>{theTime}</p>
               </div>
@@ -898,7 +947,12 @@ getNCAABFinal4 = () => {
 
 
 
-
+           {this.state.noEventToShow?
+          <div className={style.noEventDiv}>
+            <p>No event to show at the moment</p>
+            {this.state.isAdmin? <button onClick={()=>this.setState({showCreateEventModal:true})}>Create Event</button>
+            :null}
+          </div>:null}
 
 
           {this.state.showCreateEventModal ? <div className={style.modal}>
@@ -923,7 +977,7 @@ getNCAABFinal4 = () => {
               <p className={style.eventTitleP}>Enter National Championship Start Date/Time</p>
               <input className={style.eventInput} id='final' placeholder='Enter your RAM name' type='datetime-local' value={this.state.final} onChange={(event) => this.inputChange(event)}></input>
               <p className={style.eventErrorP}>{this.state.finalErr}</p>
-              <button className={style.submitBtn} onClick={() => this.createEvent()}>Create Event</button>
+              <button className={style.submitBtn} onClick={() => this.createEvent2()}>Create Event</button>
             </div>
           </div> : null}
         </div>
