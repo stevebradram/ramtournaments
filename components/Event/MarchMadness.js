@@ -7,11 +7,12 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import firebase from '../FirebaseClient'
 import { IoPersonSharp } from "react-icons/io5";
-import { MdInfoOutline } from "react-icons/md";
+import { MdOutlineShare } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { RiTeamFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
 import Countdown from 'react-countdown';
+import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
 const round1 = [
@@ -48,7 +49,7 @@ class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:'',theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true}
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',theLink:'',theTime:''}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -113,8 +114,8 @@ class MarchMadness extends Component {
       allGames.push(theEvents)
 
       if (gamesCount === i) {
-        var theEventTitle = '', theEventKey = '', theEventTime = 0
-        if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime']}
+        var theEventTitle = '', theEventKey = '', theEventTime = 0,theTime=''
+        if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],theTime = allGames[0]['time'],endTime= allGames[0]['endTime']}
       }
       var expired = false
       if ((theEventTime - new Date().getTime()) < 86400000) {
@@ -132,11 +133,23 @@ class MarchMadness extends Component {
       if ((currentSelection === 'superBowl')) {
         this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
       }*/
-      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
+      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,theTime }, () => {
         this.getNCAABMatches()
+        this.getMatchesInfo(userId)
         //////console.log('currentSelection',this.state.currentSelection)
       })
     })
+  })
+}
+getMatchesInfo=async(userId)=>{
+  var flocksDataRef = firebase.database().ref('users/').child(userId+'/flockData/flockNames/'+this.state.theEventKey+'/link')
+  flocksDataRef.once('value',dataSnapshot=>{
+    console.log('flocksDataRef the key',dataSnapshot.val())
+    if(dataSnapshot.exists()){
+      this.setState({theLink:dataSnapshot.val()})
+    }else{
+      this.setState({theLink:''})
+    }
   })
 }
 getNCAABMatches = () => {
@@ -197,6 +210,7 @@ getNCAABMatches = () => {
   this.getNCAABMatches3()
   this.getNCAABMatches4()
   this.getNCAABFinal4()
+  //this.getMatchesInfo()
 }
 getNCAABMatches2 = () => {
   var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
@@ -503,6 +517,122 @@ getNCAABFinal4 = () => {
 
     }
   }
+
+  createEvent2 = () => {
+    var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
+
+    console.log('round1 length', round1.length)
+    var eventKey = 'marchMadness' + new Date().getFullYear()
+    var eventTitle = 'March Madness' + new Date().getFullYear()
+    var generalDb = firebase.database().ref('/theEvents9/NCAAB/' + eventKey)
+
+   /* console.log('this.state.round1', this.state.round1)
+    console.log('this.state.round2', this.state.round2)
+    console.log('this.state.sweet16', this.state.sweet16)
+    console.log('this.state.elite8', this.state.elite8)
+    console.log('this.state.final4', this.state.final4)
+    console.log('this.state.final', this.state.final)*/
+    if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
+    if (this.state.round2.length >= 3) { this.setState({ round2Err: '' }) } else { this.setState({ round2Err: 'Date must be filled' }) }
+    if (this.state.sweet16.length >= 3) { this.setState({ sweet16Err: '' }) } else { this.setState({ sweet16Err: 'Date must be filled' }) }
+    if (this.state.elite8.length >= 3) { this.setState({ elite8Err: '' }) } else { this.setState({ elite8Err: 'Date must be filled' }) }
+    if (this.state.final4.length >= 3) { this.setState({ final4Err: '' }) } else { this.setState({ final4Err: 'Date must be filled' }) }
+    if (this.state.final.length >= 3) { this.setState({ finalErr: '' }) } else { this.setState({ finalErr: 'Date must be filled' }) }
+    if (this.state.round1.length < 1 || this.state.round2.length < 1 || this.state.sweet16.length < 1 ||
+      this.state.elite8.length < 1 || this.state.final4.length < 1 || this.state.final.length < 1
+    ) {
+      this.notify('All fields must be filled')
+    } else {
+      round1.map((item, index) => {
+        round1[index]['timeInMillis'] = new Date(this.state.round1).getTime()
+        round1[index]['commenceTime'] = this.state.round1
+        round1[index]['time'] = this.state.round1
+        round1Arr[item.id] = item
+        if (round1.length === index + 1) {
+          var round1Ref=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/round64')
+          round1Ref.child('/west/').update(round1Arr)
+          round1Ref.child('/east/').update(round1Arr)
+          round1Ref.child('/south/').update(round1Arr)
+          round1Ref.child('/midWest/').update(round1Arr)
+        }
+      })
+  
+  
+      round2.map((item, index) => {
+        round2[index]['timeInMillis'] = new Date(this.state.round2).getTime()
+        round2[index]['commenceTime'] = this.state.round2
+        round2[index]['time'] = this.state.round2
+        round2Arr[item.id] = item
+        if (round2.length === index + 1) {
+          var round2Ref=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/round32')
+          round2Ref.child('/west/').update(round2Arr)
+          round2Ref.child('/east/').update(round2Arr)
+          round2Ref.child('/south/').update(round2Arr)
+          round2Ref.child('/midWest/').update(round2Arr)
+        }
+      })
+  
+      sweet16.map((item, index) => {
+        sweet16[index]['timeInMillis'] = new Date(this.state.sweet16).getTime()
+        sweet16[index]['commenceTime'] = this.state.sweet16
+        sweet16[index]['time'] = this.state.sweet16
+        sweet16Arr[item.id] = item
+        if (sweet16.length === index + 1) {
+          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          finalRef.child('/sweet16/').update(sweet16Arr)
+        }
+      })
+  
+      elite8.map((item, index) => {
+        elite8[index]['timeInMillis'] = new Date(this.state.elite8).getTime()
+        elite8[index]['commenceTime'] = this.state.elite8
+        elite8[index]['time'] = this.state.elite8
+        elite8Arr[item.id] = item
+        if (elite8.length === index + 1) {
+          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          finalRef.child('/elite8/').update(elite8Arr)
+        }
+      })
+  
+      final4.map((item, index) => {
+        final4[index]['timeInMillis'] = new Date(this.state.final4).getTime()
+        final4[index]['commenceTime'] = this.state.final4
+        final4[index]['time'] = this.state.final4
+        final4Arr[item.id] = item
+        if (final4.length === index + 1) {
+          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          finalRef.child('final4').update(final4Arr)
+        }
+      })
+  
+        nationalChampionship.map((item, index) => {
+        nationalChampionship[index]['timeInMillis'] = new Date(this.state.final).getTime()
+        nationalChampionship[index]['commenceTime'] = this.state.final
+        nationalChampionship[index]['time'] = this.state.final
+        finalArr[item.id] = item
+        if (nationalChampionship.length === index + 1) {
+          var finalRef=firebase.database().ref('/theEvents9/NCAAB/' + eventKey+'/final')
+          finalRef.child('nationalChampionship').update(finalArr,(error) => {
+            if (error) {
+              this.notify('An error occured while creating event, try again')
+            } else {
+              var toTheEventsIds = { time:new Date(this.state.round1).getTime(), title:eventTitle, sportType:'NCAAB', endTime:new Date(this.state.final).getTime(), getEventsTimeUpdate: new Date().getTime(),
+                stopRound1Edit:'N/A',stopRound2Edit:'N/A',stopSweet16Edit:'N/A',stopElite8Edit:'N/A',stopFinal4Edit:'N/A',stopFinalEdit:'N/A',currentSelection:'round1'
+               }
+              var editDbRef=firebase.database().ref('/theEvents/eventsIds/'+eventKey+'/')
+              var editDbRef2=firebase.database().ref('/theEvents/NCAAB/eventsIds/'+eventKey+'/')
+              editDbRef.set(toTheEventsIds)
+              editDbRef2.set(toTheEventsIds)
+              this.notify('Event created successfully')
+              this.setState({showCreateEventModal:false})
+            }
+          })
+        }
+      })
+
+    }
+  }
+
   notify = (message) => {
     toast.warn(message, {
       position: "top-right",
@@ -551,8 +681,8 @@ getNCAABFinal4 = () => {
     }
       this.setState({theSubMenu:type})
   }
-  openTheModal=()=>{
-    this.notify('Not availabe at the moment')
+  getCurrentRound=(round)=>{
+    this.setState({currentRound:round})
   }
   openTheModal=()=>{
     this.notify('Not availabe at the moment')
@@ -562,6 +692,16 @@ getNCAABFinal4 = () => {
   }
   openTheModal=()=>{
     this.notify('Not availabe at the moment')
+  }
+  openTheModal=()=>{
+    this.notify('Not availabe at the moment')
+  }
+  loadOtherEvent=(id,title,time)=>{
+    this.setState({theTime:time})
+  }
+  copyLink=()=>{
+    copy(this.state.theLink);
+    this.notify('Link copied successfully')
   }
   render() {
     var todayInMillis=new Date().getTime()
@@ -586,7 +726,7 @@ getNCAABFinal4 = () => {
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.time)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -610,9 +750,13 @@ getNCAABFinal4 = () => {
         </div>
         {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
           <p className={style.eventP} onClick={() => this.openNFLModal()}>Enter Event Details</p>
-          <p className={style.eventP2} onClick={() =>this.setState({nflModal:true})}>Create New March Madness Event</p>
+          <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New March Madness Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+        {this.state.theLink.length>1&&new Date().getTime()<this.state.theTime?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
+          <p>Flock Invite Link</p>
+          <MdOutlineShare />
+          </div>:null}
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
           {this.state.dataAvailable ?
@@ -650,21 +794,31 @@ getNCAABFinal4 = () => {
             {this.state.isAdmin? <button>Create Event</button>
             :null}
           </div>:null}
-          <div className={style.eveDiv}>
+          <div className={style.eve2Div}>
+            <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
+            <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
+            <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
+            
+           </div>
+          {this.state.currentRound==='round1'||this.state.currentRound==='round2'?<div className={style.eveDiv}>
                   <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>EAST</p>
                   <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>WEST</p>
                   <p id={this.state.theMenu==='south'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('south')}>SOUTH</p>
-                  <p id={this.state.theMenu==='midwest'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('midwest')}>MID WEST</p>
-                  <p id={this.state.theMenu==='final4'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('final4',this.state.theFinal4Arr)}>FINAL 4</p>
+                  <p id={this.state.theMenu==='midwest'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('midwest')}>MID WEST</p>  
+           </div>:null}
+           {this.state.currentRound==='finalRound'?<div className={style.eveDiv}>
+                  <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>SWEET 16</p>
+                  <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>ELITE 8</p>
+                  <p id={this.state.theMenu==='south'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('south')}>FINAL 4</p>
                   <p id={this.state.theMenu==='championship'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('championship',this.state.theChampionshipArr)}>CHAMPIONSHIP</p>
                   
-           </div>
-           {this.state.showUpperBar?<div className={style.eve2Div}>
+           </div>:null}
+           {/*this.state.showUpperBar?<div className={style.eve2Div}>
             <p id={this.state.theSubMenu==='round1'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('round1',this.state.theMenu)}>Round 1</p>
             <p id={this.state.theSubMenu==='round2'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('round2',this.state.theMenu)}>Round 2</p>
             <p id={this.state.theSubMenu==='sweet16'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('sweet16',this.state.theMenu)}>Sweet 16</p>
             <p id={this.state.theSubMenu==='elite8'?style.theSubMenuP2:null} onClick={()=>this.selectSubEvent('elite8',this.state.theMenu)}>Elite 8</p>
-           </div>:null}
+           </div>:null*/}
            
            <div className={style.listCont}>           
         {this.state.currentItems.map((item, index) => {
