@@ -15,7 +15,8 @@ import Countdown from 'react-countdown';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
-import DetailsModal from './MarchMadnessDetailsModal'
+import DetailsModal from './MarchMadnessDetailsModal';
+import MarchMadnessModal from './MarchMadnessModal'
 const round1 = [
   { id: 'round1AEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
   { id: 'round1BEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
@@ -783,7 +784,7 @@ getNCAABMatchesFinal = () => {
                   <p id={this.state.theMenu==='sweet16'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('sweet16')}>SWEET 16</p>
                   <p id={this.state.theMenu==='elite8'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('elite8')}>ELITE 8</p>
                   <p id={this.state.theMenu==='final4'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('final4')}>FINAL 4</p>
-                  <p id={this.state.theMenu==='final'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('finalRound')}>CHAMPIONSHIP</p>
+                  <p id={this.state.theMenu==='finalRound'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('finalRound')}>CHAMPIONSHIP</p>
                   
            </div>:null}
            {/*this.state.showUpperBar?<div className={style.eve2Div}>
@@ -907,6 +908,7 @@ getNCAABMatchesFinal = () => {
         </div>
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent={this.state.theCurrentEvent} theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle}/></div> : null}
+        {/*<MarchMadnessModal/>*/}
       </>
     )
   }
