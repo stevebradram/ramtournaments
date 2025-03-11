@@ -697,6 +697,15 @@ $theDark:#b2b2b2;
  .shareDiv p{
     margin-right: 5px;
  }
+.detailsModal{
+    position: fixed;
+    top:0;bottom:0;left:0;right:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 @media all and (max-width: 900px) {
     .profileDiv{
         display: flex;

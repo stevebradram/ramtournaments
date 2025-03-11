@@ -1123,11 +1123,6 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     ////////console.log('Button clicked!');
   };
   openTheModal =async () => {
-    //this.notify("Can't make a pick at the moment")
-    //return
-    //console.log('ratatata',this.state.userLoggedIn)
-    //this.sendMatchesToFirebase()
-    //return
     if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
@@ -1153,16 +1148,6 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
      }
      }
     })
-    
-    /*if(isAvailable===false){
-      this.notify("Can't make a pick at the moment")
-      return
-    }
-    if (this.state.expired) {
-      this.notify('Event pick/edit time expired')
-      return
-    }*/
-
   }
  openTheModal2=()=>{
   //console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)

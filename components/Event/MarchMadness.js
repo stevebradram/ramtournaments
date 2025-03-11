@@ -15,21 +15,58 @@ import Countdown from 'react-countdown';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
+import DetailsModal from './MarchMadnessDetailsModal'
 const round1 = [
-  { id: 'round1A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1B', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1C', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1D', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1E', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1G', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1H', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
-  { id: 'round1I', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1AEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1BEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1CEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1DEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1EEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1GEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1HEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1IEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1AWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1BWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1CWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1DWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1EWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1GWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1HWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1IWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1ASouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1BSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1CSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1DSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1ESouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1GSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1HSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1ISouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1AMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1BMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1CMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1DMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1EMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1GMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1HMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
+  { id: 'round1IMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
 ]
 const round2 = [
-  { id: 'round2A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
-  { id: 'round2B', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
-  { id: 'round2C', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
-  { id: 'round2D', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2AEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2BEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2CEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2DEast',place:'east', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2AWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2BWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2CWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2DWest',place:'west', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2ASouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2BSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2CSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2DSouth',place:'south', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2AMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2BMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2CMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
+  { id: 'round2DMidWest',place:'midWest', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 2' },
 ]
 const sweet16 = [
   { id: 'sweet16A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Sweet 16' },
@@ -58,8 +95,8 @@ class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
-  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[]}
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
+  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:''}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -171,58 +208,29 @@ getNCAABMatches = () => {
   this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
   var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+'round1')
   matchesRef.once('value', dataSnapshot => {
-    var eastCount = dataSnapshot.child('east').numChildren()
-    var westCount = dataSnapshot.child('west').numChildren()
-    var southCount = dataSnapshot.child('south').numChildren()
-    var midWestCount = dataSnapshot.child('midWest').numChildren()
-    var theInfo=dataSnapshot.val()
-    var east=theInfo.east
-    var west=theInfo.west
-    var south=theInfo.south
-    var midWest=theInfo.midWest
-    var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in east) {
+    var theCount = dataSnapshot.numChildren()
+    var i=0
+    dataSnapshot.forEach((data) => {
       i++
-      var theData = east[key]
-      round1EastArr.push(theData)
-      allMatches.push(theData)
-      if(eastCount===i){
-        this.setState({round1EastArr:round1EastArr,currentItems:round1EastArr})
-        console.log('round1EastArr',round1EastArr)
+      var place=data.val().place
+      if(place==='east'){
+        round1EastArr.push(data.val())
       }
-    }
-    for (var key in west) {
-      g++
-      var theData = west[key]
-      round1WestArr.push(theData)
-      allMatches.push(theData)
-      if(westCount===g){
-        this.setState({round1WestArr:round1WestArr})
-        console.log('round1WestArr',round1WestArr)
+      if(place==='west'){
+        round1WestArr.push(data.val())
       }
-    }
-    for (var key in south) {
-      h++
-      var theData = south[key]
-      round1SouthArr.push(theData)
-      allMatches.push(theData)
-      if(southCount===h){
-        this.setState({round1SouthArr:round1SouthArr})
-        console.log('round1SouthArr',round1SouthArr)
+      if(place==='south'){
+        round1SouthArr.push(data.val())
       }
-    }
-    for (var key in midWest) {
-      j++
-      var theData = midWest[key]
-      round1midWestArr.push(theData)
-      allMatches.push(theData)
-      if(midWestCount===j){
-        this.setState({round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches})
-        console.log('theInfo 001000',round1midWestArr)
-        
+      if(place==='midWest'){
+        round1midWestArr.push(data.val())
       }
-    }
-
+      allMatches.push(data.val())
+      if(theCount===i){
+        this.setState({round1EastArr:round1EastArr,round1WestArr:round1WestArr,round1SouthArr:round1SouthArr,
+          currentItems:round1EastArr,round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches})
+      }
+    })
   })
   
   this.getNCAABMatches2()
@@ -237,58 +245,29 @@ getNCAABMatches2 = () => {
   this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
   var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+'round2')
   matchesRef.once('value', dataSnapshot => {
-    var eastCount = dataSnapshot.child('east').numChildren()
-    var westCount = dataSnapshot.child('west').numChildren()
-    var southCount = dataSnapshot.child('south').numChildren()
-    var midWestCount = dataSnapshot.child('midWest').numChildren()
-    var theInfo=dataSnapshot.val()
-    var east=theInfo.east
-    var west=theInfo.west
-    var south=theInfo.south
-    var midWest=theInfo.midWest
-    var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in east) {
+    var theCount = dataSnapshot.numChildren()
+    var i=0
+    dataSnapshot.forEach((data) => {
       i++
-      var theData = east[key]
-      round2EastArr.push(theData)
-      allMatches.push(theData)
-      if(eastCount===i){
-        this.setState({round2EastArr:round2EastArr})
-        console.log('round2EastArr',round2EastArr)
+      var place=data.val().place
+      if(place==='east'){
+        round2EastArr.push(data.val())
       }
-    }
-    for (var key in west) {
-      g++
-      var theData = west[key]
-      round2WestArr.push(theData)
-      allMatches.push(theData)
-      if(westCount===g){
-        this.setState({round2WestArr:round2WestArr})
-        console.log('round2WestArr',round2WestArr)
+      if(place==='west'){
+        round2WestArr.push(data.val())
       }
-    }
-    for (var key in south) {
-      h++
-      var theData = south[key]
-      round2SouthArr.push(theData)
-      allMatches.push(theData)
-      if(southCount===h){
-        this.setState({round2SouthArr:round2SouthArr})
-        console.log('round2SouthArr',round2SouthArr)
+      if(place==='south'){
+        round2SouthArr.push(data.val())
       }
-    }
-    for (var key in midWest) {
-      j++
-      var theData = midWest[key]
-      round2midWestArr.push(theData)
-      allMatches.push(theData)
-      if(midWestCount===j){
-        this.setState({round2midWestArr:round2midWestArr,allRound2MatchesArr:allMatches})
-        console.log('theInfo 001000',round2midWestArr)
-        
+      if(place==='midWest'){
+        round2midWestArr.push(data.val())
       }
-    }
-
+      allMatches.push(data.val())
+      if(theCount===i){
+        this.setState({round2EastArr:round2EastArr,round2WestArr:round2WestArr,round2SouthArr:round2SouthArr,
+         round2midWestArr:round2midWestArr,allRound2MatchesArr:allMatches})
+      }
+    })
   })
 }
 getNCAABMatchesFinal = () => {
@@ -349,89 +328,6 @@ getNCAABMatchesFinal = () => {
 
   })
 }
-getNCAABMatches4 = () => {
-  var round1Arr=[],round2Arr=[],sweet16Arr=[],elite8Arr=[], allMatches = []
-  this.setState({ midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
-  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+this.state.theMenu)
-  matchesRef.once('value', dataSnapshot => {
-    var round1Count = dataSnapshot.child('round1').numChildren()
-    var round2Count = dataSnapshot.child('round2').numChildren()
-    var sweet16Count = dataSnapshot.child('sweet16').numChildren()
-    var elite8Count = dataSnapshot.child('elite8').numChildren()
-    var theInfo=dataSnapshot.val()
-    var round1=theInfo.round1
-    var round2=theInfo.round2
-    var sweet16=theInfo.sweet16
-    var elite8=theInfo.elite8
-    var i=0,g=0,h=0,j=0,k=0,l=0,m=0
-    for (var key in round1) {
-      i++
-      var theData = round1[key]
-      round1Arr.push(theData)
-      if(round1Count===i){
-        this.setState({midWestRound1Arr:round1Arr})
-        console.log('round1Arr',round1Arr)
-      }
-    }
-    for (var key in round2) {
-      g++
-      var theData = round2[key]
-      round2Arr.push(theData)
-      if(round2Count===g){
-        this.setState({midWestRound2Arr:round2Arr})
-        console.log('round2Arr',round2Arr)
-      }
-    }
-    for (var key in sweet16) {
-      h++
-      var theData = sweet16[key]
-      sweet16Arr.push(theData)
-      if(sweet16Count===h){
-        this.setState({midWestSweet16Arr:sweet16Arr})
-        console.log('sweet16Arr',sweet16Arr)
-      }
-    }
-    for (var key in elite8) {
-      j++
-      var theData = elite8[key]
-      elite8Arr.push(theData)
-      if(elite8Count===j){
-        this.setState({midWestElite8Arr:elite8Arr})
-        console.log('theInfo 001000',elite8Arr)
-      }
-    }
-
-  })
-}
-getNCAABFinal4 = () => {
-  var final4Arr=[],finalArr=[],i=0,j=0
-  this.setState({ final4Arr:[],finalArr:[]})
-  var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/final4/')
-  matchesRef.once('value', dataSnapshot => {
-    var final4Count = dataSnapshot.numChildren()
-    dataSnapshot.forEach((data) => {
-      i++
-       var theData = data.val()
-       final4Arr.push(theData)
-       if(final4Count===i){
-        this.setState({final4Arr})
-        console.log('finalArr 4444444',final4Arr)
-       }
-    })  })
-    var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/nationalChampionship/')
-    matchesRef.once('value', dataSnapshot => {
-      var finalCount = dataSnapshot.numChildren()
-      dataSnapshot.forEach((data) => {
-        j++
-         var theData = data.val()
-         finalArr.push(theData)
-         if(finalCount===j){
-          this.setState({finalArr})
-          console.log('finalArr 222222',finalArr)
-         }
-      })  })
-   
-}
   createEvent = () => {
     var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
 
@@ -440,12 +336,6 @@ getNCAABFinal4 = () => {
     var eventTitle = 'March Madness' + new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
-   /* console.log('this.state.round1', this.state.round1)
-    console.log('this.state.round2', this.state.round2)
-    console.log('this.state.sweet16', this.state.sweet16)
-    console.log('this.state.elite8', this.state.elite8)
-    console.log('this.state.final4', this.state.final4)
-    console.log('this.state.final', this.state.final)*/
     if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
     if (this.state.round2.length >= 3) { this.setState({ round2Err: '' }) } else { this.setState({ round2Err: 'Date must be filled' }) }
     if (this.state.sweet16.length >= 3) { this.setState({ sweet16Err: '' }) } else { this.setState({ sweet16Err: 'Date must be filled' }) }
@@ -463,37 +353,26 @@ getNCAABFinal4 = () => {
         round1[index]['time'] = this.state.round1
         round1Arr[item.id] = item
         if (round1.length === index + 1) {
-          generalDb.child('/west/round1/').update(round1Arr)
-          generalDb.child('/east/round1/').update(round1Arr)
-          generalDb.child('/south/round1/').update(round1Arr)
-          generalDb.child('/midWest/round1/').update(round1Arr)
+          console.log('round1Arr 1111',round1Arr)
+          generalDb.child('/round1/').update(round1Arr)
         }
       })
-  
-  
       round2.map((item, index) => {
         round2[index]['timeInMillis'] = new Date(this.state.round2).getTime()
         round2[index]['commenceTime'] = this.state.round2
         round2[index]['time'] = this.state.round2
         round2Arr[item.id] = item
         if (round2.length === index + 1) {
-          generalDb.child('/west/round2/').update(round2Arr)
-          generalDb.child('/east/round2/').update(round2Arr)
-          generalDb.child('/south/round2/').update(round2Arr)
-          generalDb.child('/midWest/round2/').update(round2Arr)
+          generalDb.child('/round2/').update(round2Arr)
         }
       })
-  
       sweet16.map((item, index) => {
         sweet16[index]['timeInMillis'] = new Date(this.state.sweet16).getTime()
         sweet16[index]['commenceTime'] = this.state.sweet16
         sweet16[index]['time'] = this.state.sweet16
         sweet16Arr[item.id] = item
         if (sweet16.length === index + 1) {
-          generalDb.child('/west/sweet16/').update(sweet16Arr)
-          generalDb.child('/east/sweet16/').update(sweet16Arr)
-          generalDb.child('/south/sweet16/').update(sweet16Arr)
-          generalDb.child('/midWest/sweet16/').update(sweet16Arr)
+          generalDb.child('/final/sweet16/').update(sweet16Arr)
         }
       })
   
@@ -503,10 +382,7 @@ getNCAABFinal4 = () => {
         elite8[index]['time'] = this.state.elite8
         elite8Arr[item.id] = item
         if (elite8.length === index + 1) {
-          generalDb.child('/west/elite8/').update(elite8Arr)
-          generalDb.child('/east/elite8/').update(elite8Arr)
-          generalDb.child('/south/elite8/').update(elite8Arr)
-          generalDb.child('/midWest/elite8/').update(elite8Arr)
+          generalDb.child('/final/elite8/').update(elite8Arr)
         }
       })
   
@@ -516,7 +392,7 @@ getNCAABFinal4 = () => {
         final4[index]['time'] = this.state.final4
         final4Arr[item.id] = item
         if (final4.length === index + 1) {
-          generalDb.child('final4').update(final4Arr)
+          generalDb.child('/final/final4/').update(final4Arr)
         }
       })
   
@@ -526,7 +402,7 @@ getNCAABFinal4 = () => {
         nationalChampionship[index]['time'] = this.state.final
         finalArr[item.id] = item
         if (nationalChampionship.length === index + 1) {
-          generalDb.child('nationalChampionship').update(finalArr,(error) => {
+          generalDb.child('/final/nationalChampionship/').update(finalArr,(error) => {
             if (error) {
               this.notify('An error occured while creating event, try again')
             } else {
@@ -548,7 +424,7 @@ getNCAABFinal4 = () => {
   }
 
   createEvent2 = () => {
-    var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
+    var round1Arr={},round1EastArr = {},round1WestArr = {},round1SouthArr = {},round1MidWestArr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
 
     console.log('round1 length', round1.length)
     var eventKey = 'marchMadness' + new Date().getFullYear()
@@ -576,8 +452,20 @@ getNCAABFinal4 = () => {
         round1[index]['timeInMillis'] = new Date(this.state.round1).getTime()
         round1[index]['commenceTime'] = this.state.round1
         round1[index]['time'] = this.state.round1
-        round1Arr[item.id] = item
+       
+        round1EastArr[item.id+'east'] = item
+        round1EastArr[index]['id']=item.id+'east'
+        round1WestArr[item.id+'west'] = item
+        round1WestArr[index]['id']=item.id+'west'
+        round1SouthArr[item.id+'south'] = item
+        round1SouthArr[index]['id']=item.id+'south'
+        round1MidWestArr[item.id+'midWest'] = item
+        round1MidWestArr[index]['id']=item.id+'midWest'
         if (round1.length === index + 1) {
+          var combinedArr=[round1EastArr,round1WestArr,round1SouthArr,round1MidWestArr]
+          const newArr = Array.prototype.concat(...combinedArr);
+          console.log('combinedArr',newArr)
+          return
           var round1Ref=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/round1')
           round1Ref.child('/west/').update(round1Arr)
           round1Ref.child('/east/').update(round1Arr)
@@ -586,7 +474,7 @@ getNCAABFinal4 = () => {
         }
       })
   
-  
+    return
       round2.map((item, index) => {
         round2[index]['timeInMillis'] = new Date(this.state.round2).getTime()
         round2[index]['commenceTime'] = this.state.round2
@@ -730,18 +618,8 @@ getNCAABFinal4 = () => {
       this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound',theMenu:'sweet16'})}
        
   }
-  openTheModal=()=>{
-    this.notify('Not availabe at the moment')
-  }
-  openTheModal=()=>{
-    this.notify('Not availabe at the moment')
-  }
-  openTheModal=()=>{
-    this.notify('Not availabe at the moment')
-  }
-  openTheModal=()=>{
-    this.notify('Not availabe at the moment')
-  }
+
+
   loadOtherEvent=(id,title,time)=>{
     this.setState({theTime:time})
   }
@@ -749,7 +627,53 @@ getNCAABFinal4 = () => {
     copy(this.state.theLink);
     this.notify('Link copied successfully')
   }
+  openTheModal =async () => {
+    /*if(this.state.userLoggedIn===false){
+      this.notify("Please Log In to continue")
+      this.setState({openLoginModal:true})
+      return
+    }*/
+    //this.notify('Not available at the moment');return
+    var itemToModals='',modalTitle=''
+    var year=new Date().getFullYear()
+    if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1'}
+    if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr,modalTitle='March Madness '+year+' > Round 2' }
+    if (this.state.currentRound === 'finalRound') {
+      if(this.state.theMenu==='sweet16'){
+        itemToModals = this.state.sweet16Arr,modalTitle='March Madness '+year+' > Sweet 16'
+      }
+      if(this.state.theMenu==='elite8'){
+        itemToModals = this.state.elite8Arr,modalTitle='March Madness '+year+' > Elite 8'
+      }
+      if(this.state.theMenu==='final4'){
+        itemToModals = this.state.final4Arr,modalTitle='March Madness '+year+' > Final 4'
+      }
+      if(this.state.theMenu==='finalRound'){
+        itemToModals = this.state.finalArr,modalTitle='March Madness '+year+' > Championship'
+      }
+    }
+    this.setState({itemToModals,opendetailsModal:true,modalTitle})
+    console.log('this.state.theItems',this.state.currentRound,itemToModals)
+    return
+    var i=0,pointMissing=false
+   console.log('this.state.theItems',itemToModals)
+   await itemToModals.map((item,index)=>{
+    i++
+      //console.log('item.p1Points',item.p1Points)
+      if(item.p1Points==='N/A'||item.p2Points==='N/A'){
+        pointMissing=true
+      }
+     if(itemToModals.length===index+1){
+     if(pointMissing===true){
+      this.notify('Event points not yet populated')
+     }else{
+      this.openTheModal2()
+     }
+     }
+    })
+  }
   render() {
+    var flockTeamName=false
     var todayInMillis=new Date().getTime()
     var title1=''
     if(this.state.theMenu==='east'){title1='East'}
@@ -977,11 +901,12 @@ getNCAABFinal4 = () => {
               <p className={style.eventTitleP}>Enter National Championship Start Date/Time</p>
               <input className={style.eventInput} id='final' placeholder='Enter your RAM name' type='datetime-local' value={this.state.final} onChange={(event) => this.inputChange(event)}></input>
               <p className={style.eventErrorP}>{this.state.finalErr}</p>
-              <button className={style.submitBtn} onClick={() => this.createEvent2()}>Create Event</button>
+              <button className={style.submitBtn} onClick={() => this.createEvent()}>Create Event</button>
             </div>
           </div> : null}
         </div>
         <ToastContainer />
+        {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent={this.state.theCurrentEvent} theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle}/></div> : null}
       </>
     )
   }
