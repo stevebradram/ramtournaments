@@ -673,6 +673,13 @@ getNCAABMatchesFinal = () => {
      }
     })
   }
+  openMarchMadnessModal =async () => {
+
+  }
+  doNothing=(e)=>{
+  e.preventDefault()
+  e.stopPropagation()
+  }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
@@ -681,6 +688,10 @@ getNCAABMatchesFinal = () => {
     if(this.state.theMenu==='west'){title1='West'}
     if(this.state.theMenu==='south'){title1='South'}
     if(this.state.theMenu==='midwest'){title1='Midwest'}
+    var roundToModal=''
+    if(this.state.currentRound==='round1'){roundToModal='round1'}
+    if(this.state.currentRound==='round2'){roundToModal='round2'}
+    if(this.state.currentRound==='finalRound'){roundToModal='this.state.theMenu'}
     return (
       <>
         <div className={style.container}>
@@ -720,8 +731,8 @@ getNCAABMatchesFinal = () => {
             {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal()}>Make Picks</p>}
           </div>
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
-          <p className={style.eventP} onClick={() => this.openNFLModal()}>Enter Event Details</p>
+         {this.state.isAdmin?<div className={style.eventCreationDiv}>
+          <p className={style.eventP} onClick={() => this.openMarchMadnessModal()}>Enter Event Details</p>
           <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New March Madness Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
@@ -768,6 +779,7 @@ getNCAABMatchesFinal = () => {
             <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
             
            </div>
+           
           {this.state.currentRound==='round1'?<div className={style.eveDiv}>
                   <p id={this.state.theMenu==='east'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('east')}>EAST</p>
                   <p id={this.state.theMenu==='west'?style.playerP2:style.playerP} onClick={()=>this.selectEvent('west')}>WEST</p>
@@ -880,8 +892,8 @@ getNCAABMatchesFinal = () => {
           </div>:null}
 
 
-          {this.state.showCreateEventModal ? <div className={style.modal}>
-            <div className={style.createEventDiv}>
+          {this.state.showCreateEventModal ? <div className={style.modal} onClick={()=>this.setState({showCreateEventModal:false})}>
+            <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
               <p className={style.eventHeadP}>Create March Madness Event</p>
               <p className={style.eventTitleP}>Enter Round 1 Start Date/Time</p>
               {/*<DateTimePicker id='round1'onChange={(event)=>this.onChange(event)} value={this.state.round1} />*/}
@@ -908,7 +920,7 @@ getNCAABMatchesFinal = () => {
         </div>
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent={this.state.theCurrentEvent} theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle}/></div> : null}
-        {/*<MarchMadnessModal/>*/}
+        {/*<MarchMadnessModal currentRound={this.state.currentRound}/>*/}
       </>
     )
   }

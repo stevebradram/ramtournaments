@@ -832,11 +832,11 @@ class NCAAModal extends Component {
 
         <p className={styles.headP}>Enter NFL Match Details</p>
         {this.state.currentSelection==='wildCard'?<div className={styles.divCont}>
-          <p className={styles.listHeadP}>Wild Card</p>
+          <p className={styles.listHeadP}>Round of 64</p>
           <div className={styles.listCont}>{this.itemComponent(wildCardEdit, 'wildCard')}</div></div>:null}
           {this.state.currentSelection==='wildCard'||this.state.currentSelection==='divisionalRound'?
         <div className={styles.divCont}>
-          <p className={styles.listHeadP}>Divisional Round</p>
+          <p className={styles.listHeadP}>Round of 32</p>
           <div className={styles.listCont}>{this.itemComponent(divisionalRoundEdit, 'divisionalRound')}</div></div>:null}
           {this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
         <div className={styles.divCont}>
