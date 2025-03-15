@@ -83,6 +83,9 @@ class DetailsModal extends Component {
   return str.match(new RegExp('.{1,' + length + '}', 'g'));
 }
   submitDetails=()=>{
+    console.log('sport type',this.state.sportType)
+    
+    //return
     var theSplitNo=Math.ceil(this.state.userId.length/4)
     var userIdChunk=this.chunkString(this.state.userId,theSplitNo)
     var userIdLink=userIdChunk[2]+userIdChunk[0]+userIdChunk[1]+userIdChunk[3]
@@ -142,13 +145,21 @@ class DetailsModal extends Component {
       var toAdmin='$$$'+this.state.creatorName+'!!'+this.state.flockName+'!!'+this.state.creatorEmail+'!!'+this.state.creatorPhoneNo
       var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
       var theFlockData={creator:this.state.userId,membersNo:0,score:0,avScore:0}
+      var theFlockData2={creator:this.state.userId,membersNo:0,score:0,avScore:0,
+        round1MembersNo:0,round1Score:0,round1AvScore:0,round2MembersNo:0,round2Score:0,round2AvScore:0,
+        finalRoundMembersNo:0,finalRoundScore:0,finalRoundAvScore:0}
       var theLink=startLink+'invitetojoin~'+this.state.leagueId+'~'+flockNameWithNoSpaces+'~'+userIdLink
       var userFlockData={'creator':this.state.userId,'name':flockNameWithNoSpaces,'link':theLink}
       membersFlockNamesRef.child('/members/'+flockNameWithNoSpaces).child(this.state.userId).set('$$$'+this.state.creatorName)
       adminRef.child(this.state.userId).set(toAdmin)
       generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.leagueId).set(userFlockData)
       generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/flockCreators/'+this.state.userId).set(flockNameWithNoSpaces)
-      generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/theFlocks/'+flockNameWithNoSpaces).update(theFlockData)
+      
+      if(this.state.sportType==='NCAAB'){
+        generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/theFlocks/'+flockNameWithNoSpaces).update(theFlockData2)
+      }else{
+        generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/theFlocks/'+flockNameWithNoSpaces).update(theFlockData)
+      }
       membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData)
       uniqueFlockNamesRef.child(flockNameWithNoSpaces).set(theArr,(error) => {
         if (!error){

@@ -14,8 +14,9 @@ class DetailsModal extends Component {
   state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
     userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',submitedFlockName:'',
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],flockNameModal:false,openNewFlockModal:true,
-    ramFlockName:'',flockNameNoSpace:''}
+    ramFlockName:'',flockNameNoSpace:'',myEmail:'',myPhoneNo:''}
   componentDidMount=()=>{
+   
     //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
@@ -140,11 +141,11 @@ class DetailsModal extends Component {
     ////console.log('the user id',this.state.userId)
 
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
-    if (this.state.submitedFlockName<3){this.setState({
+    if (this.state.ramFlockName<3){this.setState({
       flockNameErr:'Flock Name must be 3 characters and above'})
       this.notify('Flock Name must be 3 characters and above')
       return}
-    var i=0,theAmount=[]
+    var i=0,theAmount=[],j=0
     this.state.theItems.map((item,index)=>{
       
      
@@ -163,9 +164,12 @@ class DetailsModal extends Component {
       ////console.log('the amount',theAmount)
       //if(!item.bet||item.bet===''){//console.log('it iiiis',item.bet,index)}
       if(!item.bet||item.bet===''){
+        j++
         this.setState({allPicked:false})
-        this.notify('Ensure all matches are picked to proceed')
-      return}
+      }
+      console.log('rrrrrrr',index,item.bet)
+      if(j===1&&(!item.bet||item.bet==='')){this.notify('Ensure all matches are picked to proceed')}
+      if(!item.bet||item.bet==='')return
       var theArr={id:item.id,player1:item.player1,player2:item.player2,bet:item.bet,matchNo:item.matchNo}
       mySelection.push(theArr)
       ////console.log('mySelection',mySelection)
@@ -197,12 +201,22 @@ class DetailsModal extends Component {
      localStorage.set('upcomingRamUfcDetails', 'true');
      this.setState({upcomingRamUfcDetails:true})*/
    }
+   getUserDetails=(userId)=>{
+    var userRef = firebase.database().ref('/users/'+userId+'/userData/')
+    userRef.once('value', dataSnapshot => {
+     var myEmail=dataSnapshot.val().email
+     var myPhoneNo=dataSnapshot.val().phoneNo
+     this.setState({myEmail,myPhoneNo})
+    
+    })
+   }
    getAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
      if (user) {
        var userId=user.uid
        this.getFlockNames(userId)
        this.setState({userId})
+       this.getUserDetails(userId)
        var emailVerified=user.emailVerified
        this.setState({userId})
        localStorage.set('loggedIn', 'true');
@@ -251,31 +265,46 @@ class DetailsModal extends Component {
     var itemsData={}
     ////console.log('looooooooobo')
     const theTime = new Date().getTime()
-    var detailsData = {}
+    var detailsData = {},scoreData={}
     var dataScore=this.props.currentSelection+'Score'
-    if(this.props.currentSelection==='wildCard'){
-      
+    var thePick=this.props.currentSelection+'Pick'
+    if(this.props.currentSelection==='round1'){
       detailsData = {
         teamName:this.state.teamName,
-        flockName:this.state.flockName,
+        flockName:this.state.ramFlockName,
         created: theTime,
         bestPossibleScore:this.state.bestPossibleScore,
         currentScore:'0.00',
-        divisionalRoundScore:'0',
-        conferenceChampionshipScore:'0',
-        superBowlScore:'0',
+        round1Score:'0',
+        round2Score:'0',
+        finalRoundScore:'0',
+        sweet16Score:'0',
+        elite8Score:'0',
+        final4Score:'0',
         [dataScore]:'0.00',
         currentRank:false, 
-        currentPick:this.props.currentSelection
+        [thePick]:true,
+        currentPick:this.props.currentSelection,
+        theMenu:this.props.theMenu
       }
+      scoreData={BPS:this.state.bestPossibleScore,score:0,
+        round1Score:'0',round2Score:'0',finalRoundScore:'0',
+        sweet16Score:'0',elite8Score:'0',final4Score:'0',
+        currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
+        ramName:this.state.teamName,picked:true, [thePick]:true}
     }else{
       detailsData = {
         teamName:this.state.teamName,
         bestPossibleScore:this.state.bestPossibleScore,
-        flockName:this.state.flockName,
+        flockName:this.state.ramFlockName,
         [dataScore]:'0.00',
-        currentPick:this.props.currentSelection
+        currentPick:this.props.currentSelection,
+        theMenu:this.props.theMenu,
+        [thePick]:true
       }
+      scoreData={BPS:this.state.bestPossibleScore,score:0,
+        currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
+        ramName:this.state.teamName,picked:true, [thePick]:true}
     }
    // detailsData[dataScore]='0.00'
     var i=0
@@ -289,7 +318,7 @@ class DetailsModal extends Component {
     //return
     ////console.log('detailsData',detailsData)
     var theTeamName=this.state.teamName.replace(/ /g,"_")
-    var theFlockName=this.state.flockName.replace(/ /g,"_")
+    var theFlockName=this.state.ramFlockName.replace(/ /g,"_")
     var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
     var uniqueFlockNamesRef = firebase.database().ref('/theNames/flockNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
     uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
@@ -304,7 +333,7 @@ class DetailsModal extends Component {
           uniqueRamNamesRef.child(name1).set(null)
         }
         ////CONTINUE
-        this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName)
+        this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)
       }
       else{
         if(theInfo===this.state.userId){
@@ -312,7 +341,7 @@ class DetailsModal extends Component {
             var name1=flockTeamName[0].replace(/ /g,"_")
             uniqueRamNamesRef.child(name1).set(null)
           }
-          this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName)
+          this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)
           //console.log('continue 222222')
         }else{
         this.notify('RAM Name already taken')
@@ -323,18 +352,32 @@ class DetailsModal extends Component {
     }
   })
    }
-   toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName)=>{
+   toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)=>{
+    console.log('detailsData',detailsData)
+    console.log('itemsData',itemsData)
+    console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,this.props.currentSelection,this.state.userId)
     var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents').child(this.state.currentEvent)
     var gamesDataRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('events').child(this.state.currentEvent)
     var ramsBets = firebase.database().ref('userBets/'+this.state.currentEvent+'/')
-    var adminRef = firebase.database().ref('userBets/admin/'+this.state.currentEvent+'/')
+    //var adminRef = firebase.database().ref('userBets/admin/'+this.state.currentEvent+'/')
+    var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey)
+    var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey+'/admin')
+    
+    var toAdmin=this.state.teamName+'!!'+this.state.ramFlockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
+
+    if(this.state.ramFlockName!=='Flockless'){
+      membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
+      adminRef.child(this.state.userId).set(toAdmin)
+      membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
+    }
+
     keysDbRef.child(this.props.theEventKey).set(true)
     gamesDataRef.child(this.props.theEventKey+'/details/').update(detailsData)
-    gamesDataRef.child(this.props.theEventKey+'/bets/').update(itemsData)
+    gamesDataRef.child(this.props.theEventKey+'/bets/'+this.props.currentSelection).update(itemsData)
     uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
-    uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
-    adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
-    ramsBets.child(this.props.theEventKey+'/').child(this.state.userId).update(itemsData,(error) => {
+   // uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
+    //adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
+    ramsBets.child(this.props.theEventKey+'/').child(this.state.userId+'/'+this.props.currentSelection+'/').update(itemsData,(error) => {
       if (error) {
         ////console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
       } else {
@@ -368,7 +411,7 @@ class DetailsModal extends Component {
     }
     this.setState({theItems})
 
-////console.log('theItems 1111111111',theItems)
+console.log('theItems 1111111111',theItems)
    }
    notify=(message)=>{
     toast.warn(message, {
@@ -431,25 +474,39 @@ class DetailsModal extends Component {
           var player2Points=item.p2Points
           var details1=item.player1
           var details2=item.player2
-          var tableArray=[details1+'#'+item.p1Points+'#'+item.bet,details2+'#'+item.p2Points+'#'+item.bet]
-          var yourPick='N/A'
+          var theSeed=''
+          var seedAvailable=false
+          var team1Seed='N/A'
+          var team2Seed='N/A'
+          if(item.team1Seed){
+            team1Seed=item.team1Seed;team2Seed=item.team2Seed
+            seedAvailable=true}
+          var tableArray=[details1+'#'+item.p1Points+'#'+item.bet+'#'+team1Seed,details2+'#'+item.p2Points+'#'+item.bet+'#'+team2Seed]
+          
+          
+         // console.log('sedddddd',theSeed)
+          var yourPick='N/A',yourPoints=''
           var pickCol='#CB1E31'
-          if(item.bet==='player1'){yourPick=item.player1,pickCol='#1ecb97'}
-          if(item.bet==='player2'){yourPick=item.player2,pickCol='#1ecb97'}
+          if(item.bet==='player1'){yourPick=item.player1,pickCol='#1ecb97',yourPoints='+'+item.p1Points}
+          if(item.bet==='player2'){yourPick=item.player2,pickCol='#1ecb97',yourPoints='+'+item.p2Points}
           return(
            <div className={styles.listDiv} key={index}>
-           <p className={styles.matchP}>Match #{index+1}</p>
+           <p className={styles.matchP}>Match #{index+1}{' - '+item.place}</p>
            <div id={styles.table1Div}>
                         <table className={styles.table1}>
                             <tr id={styles.table1Tr1}>
                                 <th><div className={styles.boxDiv}><MdCheck color="#292f51" size={15} /></div></th>
                                 <th>Name</th>
+                                <th>Seed</th>
                                 <th>Points</th>
                             </tr>
                             {tableArray.map((item, index) => {
                               var theItem=item.split('#')
                               var selected=theItem[2]
-                             // ////console.log('the item',item)
+
+                              var seed=''
+                              var seedAvailable=theItem[4]
+                              if(seedAvailable){seed=theItem[3].split('|')}
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>
                               if(index===0&&selected==='player1'){
                                 selectedToShow=<div className={styles.boxDiv3}><MdCheck color="#fff" size={15} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}/></div>
@@ -461,14 +518,16 @@ class DetailsModal extends Component {
 <tr  id={styles.table1Tr2} key={index}>
                                          <td style={{cursor:'pointer'}}>
            {selectedToShow}
+           
            </td>
                                         <td>{theItem[0]}</td>
+                                        <td style={{paddingLeft:5}}>{theItem[3]}</td>
                                         <td>+{theItem[1]}</td>
                                         </tr>
                               )
                             })}
                                         </table> </div>
-           <p className={styles.pickP}>Your pick: <span style={{color:pickCol}}>{yourPick}</span></p>
+           <p className={styles.pickP}>Your pick: <span style={{color:pickCol}}>{yourPick}</span><span style={{color:'red',marginLeft:10}}>{yourPoints}</span></p>
            </div>
           )})}</div>
                     {!this.state.allPicked?<p className={styles.nbP2}>*Ensure all matches are picked to proceed</p>:null}

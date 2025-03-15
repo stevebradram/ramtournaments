@@ -12,6 +12,7 @@ import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
 import CreateLeagueModal from './CreateLeagueModal'
+import Countdown from 'react-countdown';
 class NavBar extends Component {
   constructor(props) {
     super(props)
@@ -25,7 +26,9 @@ class NavBar extends Component {
       createLeagueModal:false,
       showEventCreator:true,
       count:0,
-      isAdmin:false
+      isAdmin:false,
+      countdownStart:1741960288732,
+      countdownStop:1742461200000
     }
   }
   onScroll = () => {
@@ -235,6 +238,9 @@ class NavBar extends Component {
             <p className={styles.flockDivP1}>Create a Flock...</p>
             <p className={styles.flockDivP2}>Invite Your Friends</p>
            </div>:null}
+           
+           {new Date().getTime()>this.state.countdownStart&&new Date().getTime()<this.state.countdownStop?<div className={styles.flockDiv} style={{backgroundColor:'#fff'}}><div className={styles.theCountDiv}><p>March Madness Countdown</p><Countdown date={this.state.countdownStop} className={styles.theCount} /></div></div>:null}
+           
         </div>
         {this.state.openLogInModal ? <div className={styles.logInModal} onClick={() => this.setState({ openLogInModal: false })}>
           <LogIn onClick={()=>this.handleChildClick}/>

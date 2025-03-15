@@ -166,11 +166,16 @@ $blackish:#292f51;
     background-color: red;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content:center;
     font-weight: 600;
     color: white;
     font-size: 17px;
     cursor: pointer;
+}
+.flockDiv2{
+    display: flex;
+    align-items: center;
+    justify-content: center;  
 }
 .flockDivP1{
  border-bottom: 2px solid white;
@@ -333,6 +338,24 @@ text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.flockDiv{
+
+}
+.theCountDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.theCountDiv p{
+    color: $redColor;
+    font-size: 14px;
+    margin-right: 10px;
+}
+.theCount{
+    font-size: 14px;
+    font-weight: 600;
+    color: $redColor;
 }
 @media all and (max-width: 1300px) {
     .navMainLi{
