@@ -16,6 +16,7 @@ import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
 import DetailsModal from './MarchMadnessDetailsModal';
+import EditDetails from './DetailsModalFlockSystem'
 import MarchMadnessModal from './MarchMadnessModal'
 var thePoints=[{seed:1,val:1.01},{seed:2,val:1.08},{seed:3,val:1.17},{seed:4,val:1.27},{seed:5,val:1.54},{seed:6,val:1.61},{seed:7,val:1.63},{seed:8,val:2.02},
   {seed:9,val:1.95},{seed:10,val:2.58},{seed:11,val:2.62},{seed:12,val:2.86},{seed:13,val:4.75},{seed:14,val:6.91},{seed:15,val:13.81},{seed:16,val:76}
@@ -100,13 +101,32 @@ class MarchMadness extends Component {
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
   midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
-  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:''}
+  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false}
   
     componentDidMount = () => {
       this.checkAuth()
+      
     }
 
-
+    /*editTheFlocks=()=>{
+      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
+      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
+      var theFlockData2={membersNo:0,score:0,avScore:0,
+        round1MembersNo:0,round1Score:0,round1AvScore:0,round2MembersNo:0,round2Score:0,round2AvScore:0,
+        finalRoundMembersNo:0,finalRoundScore:0,finalRoundAvScore:0}
+      flocksInfo.once('value', dataSnapshot => {
+        var theCount = dataSnapshot.numChildren()
+        var i=0
+        dataSnapshot.forEach((data) => {
+          i++
+        console.log('daaaaaata',data.key)
+        flocksInfo2.child(data.key).update(theFlockData2)
+        if(theCount===i){
+         this.notify('is finished')
+        }
+        })
+      })
+    }*/
     inputChange = async (e) => {
 
     var value = e.target.value
@@ -133,7 +153,7 @@ class MarchMadness extends Component {
        }
        this.setState({userId,userLoggedIn:true})
        if(userId){this.checkUpcomingPastGames(userId)}
-       
+       //this.getMatchesInfo(userId)
      }else{
       this.setState({userLoggedIn:false})
       this.checkUpcomingPastGames(userId)
@@ -190,14 +210,14 @@ class MarchMadness extends Component {
       }*/
       this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,theTime }, () => {
         this.getNCAABMatches()
-        this.getMatchesInfo(userId)
+        this.checkLink(userId)
         //////console.log('currentSelection',this.state.currentSelection)
       })
     })
   }
   })
 }
-getMatchesInfo=async(userId)=>{
+checkLink=async(userId)=>{
   var flocksDataRef = firebase.database().ref('users/').child(userId+'/flockData/flockNames/'+this.state.theEventKey+'/link')
   flocksDataRef.once('value',dataSnapshot=>{
     console.log('flocksDataRef the key',dataSnapshot.val())
@@ -206,6 +226,162 @@ getMatchesInfo=async(userId)=>{
     }else{
       this.setState({theLink:''})
     }
+  })
+}
+getMatchesInfo = async (userId) => {
+  return
+  var userId=this.state.userId
+  //console.log('allMatches',userId,this.state.theEventKey)
+ // return
+  var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAB/" + this.state.theEventKey + '/')
+  var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
+  var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAB/" + this.state.theEventKey + '/details/')
+  var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAB/" + this.state.theEventKey + '/bets/')
+  var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NCAAB/')
+  var currentEventUserInfo = '',finalRoundScore=0
+  await selectedMatchesKeyDb.once('value', dataSnapshot => {
+    //////console.log('the key',dataSnapshot.val())
+    if (!dataSnapshot.val()) return
+    photoRefDb.once('value', dataSnapshot => {
+      //////console.log('proofile photo',dataSnapshot.val())
+      if (dataSnapshot.val()) {
+        this.setState({ profilePhoto: dataSnapshot.val() })
+      }
+    })
+    userInfoDb.once('value', dataSnapshot => {
+      if (!dataSnapshot.val()) return
+      //console.log('the type user 0000000000000', dataSnapshot.val())
+      if (dataSnapshot.val()) {
+        var theInfo = dataSnapshot.val()
+        currentEventUserInfo = dataSnapshot.val()
+        finalRoundScore=Number(theInfo.sweet16Score)+Number(theInfo.elite8Score)+Number(theInfo.final4Score)+Number(theInfo.finalRoundScore)
+        this.setState({ currentEventUserInfo: theInfo,finalRoundScore,dataAvailable: true })
+      }
+    })
+    userBetsDb.once('value', dataSnapshot => {
+     var theData=dataSnapshot.val()
+     var round1Arr=[],round2Arr=[],finalRoundArr=[]
+     var round1Exists=dataSnapshot.child('round1').exists()
+     var round1Count=dataSnapshot.child('round1').numChildren()
+     var round2Count=dataSnapshot.child('round2').numChildren()
+     if(round1Exists){
+      var i=0
+      round1Arr=theData.round1
+      console.log('round 14 item',round1Count,round1Arr)
+      for (var key in round1Arr) {
+        i++
+        var theId = key
+        var betPlayer = round1Arr[key]
+        this.state.allRound1MatchesArr.map((item2,index)=>{
+          if (item2.id === theId) {
+            item2['bet'] = betPlayer
+           /* if (item2.status1 === 'played') {
+              if (item2.winner === 'player1' && betPlayer) { currentScore.push(item.p1Points);thePoints.push(item.p1Points);}
+              if (item2.winner === 'player2' && betPlayer) { currentScore.push(item.p2Points);thePoints.push(item.p2Points);}
+            }*/
+          }
+        })
+        if(round1Count===i){
+          console.log('round 19 item',this.state.allRound1MatchesArr)
+        }
+      }}
+      var round2Exists=dataSnapshot.child('round2').exists()
+      if(round2Exists){
+        var i=0
+        round2Arr=theData.round2
+        console.log('round 14 item',round2Count,round2Arr)
+        for (var key in round2Arr) {
+          i++
+          var theId = key
+          var betPlayer = round2Arr[key]
+          this.state.allRound2MatchesArr.map((item2,index)=>{
+            if (item2.id === theId) {
+              item2['bet'] = betPlayer
+            }
+          })
+          if(round2Count===i){
+            console.log('round 19 item',this.state.allRound2MatchesArr)
+          }
+        }
+      }
+    return
+    
+     var finalRoundExists=dataSnapshot.child('finalRound').exists()
+     if(finalRoundExists){finalRoundArr=theData.finalRound}
+     console.log('round1Exists',round1Exists)
+     console.log('round1 data',theData.round1)
+    })
+
+    return
+    var thetrrrr = ''
+    ////console.log('this.state.currentSelection', this.state.currentSelection)
+   // //console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
+    if (selection === 'wildCard') {
+      thetrrrr = this.state.allRound1MatchesArr
+    }
+    if (selection === 'divisionalRound') {
+      thetrrrr = this.state.allRound2MatchesArr
+    }
+    if (selection === 'conferenceChampionship') {
+      thetrrrr = this.state.semiFinalsArray
+    }
+    if (selection === 'superBowl') {
+      thetrrrr = this.state.finalArray
+    }
+
+    //var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
+    
+    userBetsDb.once('value', dataSnapshot => {
+      //////console.log('the bets data',dataSnapshot.val())
+      //////console.log('this.state.theItems',this.state.theItems)
+      if (!dataSnapshot.val()) return
+      var itemsCount = dataSnapshot.numChildren()
+      //console.log('selection',selection,'itemsCount',itemsCount)
+          if(itemsCount===6){this.setState({isFirstRoundPicked:true})}
+          if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true})}
+          if(itemsCount===12){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true})}
+          if(itemsCount===13){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,isFinalsPicked:true})}
+          if(selection==='wildCard'&&itemsCount<6)return
+          if(selection==='divisionalRound'&&itemsCount<10)return
+          if(selection==='conferenceChampionship'&&itemsCount<12)return
+          if(selection==='superBowl'&&itemsCount<13)return
+          console.log('MEGA count',selection,itemsCount)
+      var i = 0, thePoints = [], currentScore = []
+      dataSnapshot.forEach((data, index) => {
+        i++
+      //  //console.log('thank DAATA',selection,data.val())
+        thetrrrr.map((item) => {
+          //////console.log('thank you sir',item.winner)
+          if (item.id === data.key) {
+            ////console.log('thank you sir')
+            item['bet'] = data.val()
+            if (item.status1 === 'played') {
+
+              //////console.log('item.winner',item.winner)
+              //////console.log('my beeeeet',data.val())
+              //////console.log('item.p1Points',item.p1Points)
+              //////console.log('item.p2Points',item.p2Points)
+              if (item.winner === 'player1' && data.val() === 'player1') { currentScore.push(item.p1Points);thePoints.push(item.p1Points);}
+              if (item.winner === 'player2' && data.val() === 'player2') { currentScore.push(item.p2Points);thePoints.push(item.p2Points);}
+              //////console.log('p1 pointsss',currentScore)
+
+            }else{
+            if (data.val() === 'player1') {
+              thePoints.push(item.p1Points);//////console.log('the points',item.p1Points)
+            }
+            if (data.val() === 'player2') {
+              thePoints.push(item.p2Points);//////console.log('the points',item.p2Points)
+            }}
+          }
+        })
+        if (itemsCount === i) {
+
+          this.setState({ dataAvailable: true })
+          return
+        }
+      })
+    })
+
   })
 }
 getNCAABMatches = () => {
@@ -235,6 +411,7 @@ getNCAABMatches = () => {
         var combinedArr=[round1EastArr,round1WestArr,round1SouthArr,round1midWestArr]
         allMatches = Array.prototype.concat(...combinedArr);
         //allMatches=[...round1EastArr]
+        console.log('allMatches 55555555',allMatches)
         this.setState({round1EastArr:round1EastArr,round1WestArr:round1WestArr,round1SouthArr:round1SouthArr,
           currentItems:round1EastArr,round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches})
       }
@@ -331,6 +508,7 @@ getNCAABMatchesFinal = () => {
       if(finalCount===j){
         this.setState({finalArr:finalArr,allRoundFinalArr:allMatches})
         console.log('finalArr 001000',finalArr)
+        this.getMatchesInfo()
       }
     }
 
@@ -759,11 +937,46 @@ getNCAABMatchesFinal = () => {
     })
   }
   openMarchMadnessModal =async () => {
-
+    var itemToModals='',modalTitle=''
+    var year=new Date().getFullYear()
+    if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1'}
+    if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr,modalTitle='March Madness '+year+' > Round 2' }
+    if (this.state.currentRound === 'finalRound') {
+      if(this.state.theMenu==='sweet16'){
+        itemToModals = this.state.sweet16Arr,modalTitle='March Madness '+year+' > Sweet 16'
+      }
+      if(this.state.theMenu==='elite8'){
+        itemToModals = this.state.elite8Arr,modalTitle='March Madness '+year+' > Elite 8'
+      }
+      if(this.state.theMenu==='final4'){
+        itemToModals = this.state.final4Arr,modalTitle='March Madness '+year+' > Final 4'
+      }
+      if(this.state.theMenu==='finalRound'){
+        itemToModals = this.state.finalArr,modalTitle='March Madness '+year+' > Championship'
+      }
+    }
+  this.setState({itemToModals,marchMadnessModal:true,modalTitle})
+  
   }
   doNothing=(e)=>{
   e.preventDefault()
   e.stopPropagation()
+  }
+  opeModal2 = () => {
+    this.openTheModal()
+    return
+    if (this.state.expired) {
+      this.notify('Event pick/edit time expired')
+      return
+    }else{
+    if (!this.state.dataAvailable) {
+      this.notify('Event not picked')
+      this.openTheModal()
+      return
+    }else{
+      this.setState({ editDetailsModal:true})
+    }
+  }
   }
   render() {
     var flockTeamName=false
@@ -773,10 +986,12 @@ getNCAABMatchesFinal = () => {
     if(this.state.theMenu==='west'){title1='West'}
     if(this.state.theMenu==='south'){title1='South'}
     if(this.state.theMenu==='midwest'){title1='Midwest'}
-    var roundToModal=''
-    if(this.state.currentRound==='round1'){roundToModal='round1'}
-    if(this.state.currentRound==='round2'){roundToModal='round2'}
-    if(this.state.currentRound==='finalRound'){roundToModal='this.state.theMenu'}
+    var roundToModal='',titleToShow=''
+    if(this.state.currentRound==='round1'){roundToModal='round1',titleToShow='Round 1'}
+    if(this.state.currentRound==='round2'){roundToModal='round2',titleToShow='Round 2'}
+    if(this.state.currentRound==='finalRound'){roundToModal=this.state.theMenu,titleToShow='Championship'}
+    if (this.state.dataAvailable) { flockTeamName = this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] }
+    else { flockTeamName=false}
     return (
       <>
         <div className={style.container}>
@@ -857,12 +1072,27 @@ getNCAABMatchesFinal = () => {
             <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
             <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
           </div> : null}
-         
+          <div className={style.scoresCont}>
+        <div className={style.scoresCont1}>
+        <p className={style.currentP}>{titleToShow}</p>
+          <p className={style.scoreP1}>Best possibe Score:</p>
+          <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo['bestPossibleScore']:'0.00'} points</p>
+        </div>
+        <div className={style.scoresCont2}>
+        <p className={style.currentP}>{titleToShow}</p>
+        <p className={style.scoreP1}>Current Score</p>
+        <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo['currentScore']:'0.00'} points</p>
+        </div>
+        <div className={style.scoresCont3}>
+        <p className={style.currentP}>{titleToShow}</p>
+        <p className={style.scoreP1}>Current Rank in NCAAB</p>
+        <p className={style.scoreP2}>{this.state.dataAvailable&&this.state.currentRank?this.state.currentRank:'N/A'}</p>
+        </div>
+        </div>
           <div className={style.eve2Div}>
             <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
             <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
             <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
-            
            </div>
            
           {this.state.currentRound==='round1'?<div className={style.eveDiv}>
@@ -952,7 +1182,7 @@ getNCAABMatchesFinal = () => {
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isFirstRoundPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {item.bet&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1005,7 +1235,8 @@ getNCAABMatchesFinal = () => {
         </div>
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu}/></div> : null}
-        {/*<MarchMadnessModal currentRound={this.state.currentRound}/>*/}
+        {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
+        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} onClick={this.handleChildClick} /></div> : null}
       </>
     )
   }

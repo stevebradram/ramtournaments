@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import theRamOdds from './ramOdds.json'
 var theImage1 = 'https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=600'
 var theImage2 = 'https://images.pexels.com/photos/19882427/pexels-photo-19882427/free-photo-of-elevate-your-style-with-vibrant-kicks-explore-a-spectrum-of-colors-in-our-sneaker-collection-step-into-bold-hues-and-showcase-your-unique-footwear-fashion.jpeg?auto=compress&cs=tinysrgb&w=600'
-var wildCardEdit3 = [
+var round1Edit3 = [
   { id: 'wildCardMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
   { id: 'wildCardMatch2', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
   { id: 'wildCardMatch3', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
@@ -18,7 +18,7 @@ var wildCardEdit3 = [
   { id: 'wildCardMatch5', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
   { id: 'wildCardMatch6', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Wild Card Round' },
 ]
-var divisionalRoundEdit3 = [
+var round2Edit3 = [
   { id: 'divisionalRoundMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
   { id: 'divisionalRoundMatch2', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
   { id: 'divisionalRoundMatch3', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Divisional Round' },
@@ -31,21 +31,34 @@ var conferenceChampionshipEdit3 = [
 var superBowlEdit3 = [
   { id: 'superBowlMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Super Bowl' }
 ]
-var wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
+var round1Edit=[],round2Edit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
 
-var wildCardEdit2=wildCardEdit3,divisionalRoundEdit2=divisionalRoundEdit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
+var round1Edit2=round1Edit3,round2Edit2=round2Edit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
 class NCAAModal extends Component {
-  state = { wildCardEdit: wildCardEdit, divisionalRoundEdit: divisionalRoundEdit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNFLModal,isItSubmit:false,
+  state = { round1Edit: round1Edit, round2Edit: round2Edit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNCAABModal,isItSubmit:false,
     eventStartTime:0,eventEndTime:'',theNewArr:[]
   }
   
   componentDidMount=()=>{
-    var incomingData=this.props.itemsToNFLModal
-    //return
-    console.log('incomingData',this.state.currentSelection,incomingData)
+    var incomingData=this.props.itemsToNCAABModal
+    console.log('incomingData',this.props.eventToNCAABModal,this.state.currentSelection,incomingData)
+   
     if(incomingData.length>0){
-      wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
-      if(this.state.currentSelection==='wildCard'){
+      round1Edit=[],round2Edit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
+      incomingData.map((item,index)=>{
+        incomingData[index]['commenceTime']=''
+        incomingData[index]['timeInMillis']=''
+        incomingData[index]['time']=''
+        incomingData[index]['error']=''
+
+        if(this.state.currentSelection==='round1'){
+          incomingData[index]['team1Id']=''
+          incomingData[index]['team2Id']=''
+        }else{
+          incomingData[index]['apiId']=''
+        }
+      })
+     /* if(this.state.currentSelection==='round1'){
         var i=0
         incomingData.map((item,index)=>{
           i++
@@ -55,32 +68,36 @@ class NCAAModal extends Component {
       if(item.p2Points==='N/A'){incomingData[index]['p2Points']=''}
       if(item.player1==='N/A'){incomingData[index]['player1']=''}
       if(item.player2==='N/A'){incomingData[index]['player2']=''}
-        if(item.matchType==="NFL Wild Card Round"){wildCardEdit.push(item)}
-        if(item.matchType==="NFL Divisional Round"){divisionalRoundEdit.push(item)}
-        if(item.matchType==="NFL Conference Championship"){conferenceChampionshipEdit.push(item)}
-        if(item.matchType==="NFL Super Bowl"){superBowlEdit.push(item)}
-        if(incomingData.length===i){
-        this.setState({wildCardEdit,divisionalRoundEdit,conferenceChampionshipEdit,superBowlEdit})  
+      if(item.matchType==="Round 1"){round1Edit.push(item)}
+      if(item.matchType==="Round 2"){round2Edit.push(item)}
+    
+      if(incomingData.length===i){
+        this.setState({round1Edit,round2Edit}) 
+        console.log('round1Edittt',round1Edit)
+        //this.setState({round1Edit,round2Edit,conferenceChampionshipEdit,superBowlEdit})   
         }
         })
-      }
-    if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=incomingData,this.setState({divisionalRoundEdit}),this.fillEventDetails('divisionalRoundEdit')}
+      }*/
+    if(this.state.currentSelection==='round1'){round1Edit=incomingData,this.setState({round1Edit}),this.fillEventDetails('round1Edit')}
+    if(this.state.currentSelection==='round2'){round2Edit=incomingData,this.setState({round2Edit}),this.fillEventDetails('round2Edit')}
+    return
     if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=incomingData,this.setState({conferenceChampionshipEdit}),this.fillEventDetails('conferenceChampionshipEdit')}
     if(this.state.currentSelection==='superBowl'){superBowlEdit=incomingData,this.setState({superBowlEdit}),this.fillEventDetails('superBowlEdit')}}
     else{
+      return
       console.log('kasaluo')
       if(this.state.currentSelection==='wildCard'){
-        wildCardEdit=wildCardEdit3
-        divisionalRoundEdit=divisionalRoundEdit3
+        round1Edit=round1Edit3
+        round2Edit=round2Edit3
         conferenceChampionshipEdit=conferenceChampionshipEdit3
         superBowlEdit=superBowlEdit3
       }
-      if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=divisionalRoundEdit3}
+      if(this.state.currentSelection==='divisionalRound'){round2Edit=round2Edit3}
       if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=conferenceChampionshipEdit3}
       if(this.state.currentSelection==='superBowl'){superBowlEdit=superBowlEdit3}
     }
    
-    //console.log('incomingData',this.state.currentSelection,'divisionalRoundEdit',divisionalRoundEdit,'the length',incomingData.length)
+    //console.log('incomingData',this.state.currentSelection,'round2Edit',round2Edit,'the length',incomingData.length)
   }
   fillEventDetails=async(menu)=>{
    
@@ -90,7 +107,7 @@ class NCAAModal extends Component {
     if(this.state.currentSelection==='divisionalRound'){idStart='divisionalRoundMatch'}
     if(this.state.currentSelection==='conferenceChampionship'){idStart='conferenceChampionshipMatch'}
     if(this.state.currentSelection==='superBowl'){idStart='superBowlMatch'}
-    var incomingData=this.props.itemsToNFLModal
+    var incomingData=this.props.itemsToNCAABModal
     var firstEventTime = await Math.min(...incomingData.map(item => item.timeInMillis));
     var lastEventTime = await Math.max(...incomingData.map(item => item.timeInMillis));
     firstEventTime=new Date(firstEventTime-86400000).toLocaleDateString()
@@ -202,14 +219,14 @@ class NCAAModal extends Component {
     var value = e.target.value
     console.log('theId', e.target.id)
     if (type === 'wildCard') {
-      wildCardEdit[index][e.target.id] = value
-      await this.setState({ wildCardEdit })
-      console.log("wildCardEdit", wildCardEdit)
+      round1Edit[index][e.target.id] = value
+      await this.setState({ round1Edit })
+      console.log("round1Edit", round1Edit)
     }
     if (type === 'divisionalRound') {
-      divisionalRoundEdit[index][e.target.id] = value
-      await this.setState({ divisionalRoundEdit })
-      console.log("divisionalRoundEdit", divisionalRoundEdit)
+      round2Edit[index][e.target.id] = value
+      await this.setState({ round2Edit })
+      console.log("round2Edit", round2Edit)
     }
     if (type === 'conferenceChampionship') {
       conferenceChampionshipEdit[index][e.target.id] = value
@@ -240,43 +257,136 @@ class NCAAModal extends Component {
       () => this.setState({ showProgressBar: false }),
       5000)
   }
-  wildCardSubmit = () => {
+  getRandom(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  goToTeamsDataApi = async(theArr) => {
+    var apiFirebaseRef = firebase.database().ref('/apis/NCAABTeams/')
+      var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+      // const response = await axios.get(oddsApi)
+      //var theOddsJson=response.data
+      //sortOddsJson(theOddsJson)
+      axios.get(oddsApi)
+        .then((res) => {
+          var resultsArr = res.data,firebaseItem={},theItems=[]
+          console.log('api arrr',resultsArr)
+          resultsArr.map((item, index) => {
+            theArr.map((item2, index) => {
+              if(item2.team1Id===item.TeamID){
+                theArr[index]['player1']=item.School
+                theArr[index]['player1NickName']=item.Name
+                theArr[index]['p1Photo']=item.TeamLogoUrl
+              }
+              if(item2.team2Id===item.TeamID){
+                theArr[index]['player2']=item.School
+                theArr[index]['player2NickName']=item.Name
+                theArr[index]['p2Photo']=item.TeamLogoUrl
+              }
+            })
+            var theItem=''
+            if(item.Active){
+              theItem={name:item.Name,school:item.School,key:item.Key,id:item.TeamID,
+                SDN:item.ShortDisplayName,log:item.TeamLogoUrl
+              }
+              firebaseItem[item.TeamID] = theItem
+              theItems.push(theItem)
+            }
+          
+          if(resultsArr.length===index+1){
+            apiFirebaseRef.update(firebaseItem)
+            console.log('finished arrrrr',firebaseItem)
+            console.log('finished theArr',theArr)
+            this.setState({round1Edit:theArr})
+          }
+          })
+
+          return
+          theArr.map((item, index) => {
+            resultsArr.map((item2) => {
+              if (item.apiId === item2.id) {
+                var time = item2.commence_time
+                var timeInMillis = new Date(time).getTime()
+                var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
+                theArr[index]['player1'] = item2.home_team
+                theArr[index]['player2'] = item2.away_team
+                theArr[index]['commenceTime'] = theTime
+                console.log('at getOddsApiData sawaaaaaaaa 222222')
+                theArr[index]['time'] = time
+                theArr[index]['timeInMillis'] = timeInMillis
+                console.log('the Item', item2)
+                if (index + 1 === theArr.length) {
+                  this.getLogos(theArr)
+                  console.log('the theArr', theArr)
+                }
+  
+  
+              }
+            })
+          })
+  
+        })
+  }
+  round1Submit = () => {
     var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
-      this.state.wildCardEdit.map((item, index) => {
-        if (item.apiId === '') {
-          wildCardEdit[index]['error'] = 'API ID field must be filled'
-          this.setState({ wildCardEdit })
-          return
-        } else {
-          i++
-          wildCardEdit[index]['error'] = ''
-        }
+    console.log('this.state.round1Edit',this.state.round1Edit)
+    
+    var time='2025-03-20T00:00'
+    this.state.round1Edit.map((item, index) => {
+      
+      round1Edit[index]['team1Id'] =this.getRandom(1, 100);
+      round1Edit[index]['team2Id'] =this.getRandom(1, 90);
+      round1Edit[index]['time'] =time
+      if(this.state.round1Edit.length===index+1){
+        console.log('round1Edit iiiiii',round1Edit)
+      }
+    })
+    this.state.round1Edit.map((item, index) => {
+      if (item.team1Id === ''||item.team2Id === ''||item.time === '') {
+        round1Edit[index]['error'] = 'Teams id & match time field must be filled'
+        this.setState({ round1Edit })
+        return
+      } else {
+        j++
+        var timeInMillis = new Date(item.time).getTime()
+        var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
+        round1Edit[index]['commenceTime'] = theTime
+        round1Edit[index]['timeInMillis'] = timeInMillis
+        round1Edit[index]['error'] = ''
+      }
+      if(this.state.round1Edit.length===j){
+        console.log('round1Edit jjjjjjj',round1Edit)
+        this.goToTeamsDataApi(round1Edit)
+      }
+    })
+    return
+      this.state.round1Edit.map((item, index) => {
+       
         if (i === 6) {
-          this.setState({ wildCardEdit })
-          console.log('divisionalRoundEdit', this.state.divisionalRoundEdit)
-          this.state.divisionalRoundEdit.map((item, index) => {
+          this.setState({ round1Edit })
+          console.log('round2Edit', this.state.round2Edit)
+          this.state.round2Edit.map((item, index) => {
             if (item.time === '') {
-              divisionalRoundEdit[index]['error'] = 'Match time field must be filled'
-              this.setState({ divisionalRoundEdit })
+              round2Edit[index]['error'] = 'Match time field must be filled'
+              this.setState({ round2Edit })
               return
             } else {
               var theYear = item.time.split('-')[0]
               if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-                divisionalRoundEdit[index]['error'] = 'Year field badly formatted'
-                this.setState({ divisionalRoundEdit })
+                round2Edit[index]['error'] = 'Year field badly formatted'
+                this.setState({ round2Edit })
                 return
               } else {
                 j++
                 var timeInMillis = new Date(item.time).getTime()
                 var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-                divisionalRoundEdit[index]['commenceTime'] = theTime
-                divisionalRoundEdit[index]['timeInMillis'] = timeInMillis
-                divisionalRoundEdit[index]['error'] = ''
+                round2Edit[index]['commenceTime'] = theTime
+                round2Edit[index]['timeInMillis'] = timeInMillis
+                round2Edit[index]['error'] = ''
               }
             }
             if (j === 4) {
-              this.setState({ divisionalRoundEdit })
+              this.setState({ round2Edit })
               this.state.conferenceChampionshipEdit.map((item, index) => {
                 if (item.time === '') {
                   conferenceChampionshipEdit[index]['error'] = 'Match time field must be filled'
@@ -321,10 +431,10 @@ class NCAAModal extends Component {
                     }
                     if (l === 1) {
                       this.setState({superBowlEdit})
-                      this.getOddsApiData(wildCardEdit)
+                      //this.getOddsApiData(round1Edit)
                       console.log('nimemalizaaaaaaaaaaaaaa rankadaaaaaaa')
-                      console.log('wildCardEdit', this.state.wildCardEdit)
-                      console.log('divisionalRoundEdit', this.state.divisionalRoundEdit)
+                      console.log('round1Edit', this.state.round1Edit)
+                      console.log('round2Edit', this.state.round2Edit)
                       console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
                       console.log('superBowlEdit', this.state.superBowlEdit)
                     }
@@ -336,23 +446,23 @@ class NCAAModal extends Component {
         }
       })
   }
-  divisionalRoundSubmit = () => {
+  round2Submit = () => {
     var i = 0
-    this.state.divisionalRoundEdit.map((item, index) => {
+    this.state.round2Edit.map((item, index) => {
       if (item.apiId === '') {
-        divisionalRoundEdit[index]['error'] = 'API ID field must be filled'
-        this.setState({ divisionalRoundEdit })
+        round2Edit[index]['error'] = 'API ID field must be filled'
+        this.setState({ round2Edit })
         return
       } else {
         i++
-        divisionalRoundEdit[index]['error'] = ''
-        divisionalRoundEdit[index]['p1Points'] = 'N/A'
-        divisionalRoundEdit[index]['p2Points'] = 'N/A'
+        round2Edit[index]['error'] = ''
+        round2Edit[index]['p1Points'] = 'N/A'
+        round2Edit[index]['p2Points'] = 'N/A'
       }
       if (i === 4) {
-        this.setState({ divisionalRoundEdit})
-        console.log('divisionalRoundEdit',divisionalRoundEdit)
-       this.getOddsApiData(divisionalRoundEdit)
+        this.setState({ round2Edit})
+        console.log('round2Edit',round2Edit)
+       this.getOddsApiData(round2Edit)
       }
     })
   }
@@ -444,12 +554,14 @@ class NCAAModal extends Component {
     })
   }
   cancelEdit=()=>{
-    wildCardEdit=wildCardEdit2,divisionalRoundEdit=divisionalRoundEdit2,conferenceChampionshipEdit=conferenceChampionshipEdit2,superBowlEdit=superBowlEdit2
-    this.setState({wildCardEdit:[],divisionalRoundEdit:[],conferenceChampionshipEdit:[],superBowlEdit:[]},()=>{
+    round1Edit=round1Edit2,round2Edit=round2Edit2,conferenceChampionshipEdit=conferenceChampionshipEdit2,superBowlEdit=superBowlEdit2
+    this.setState({round1Edit:[],round2Edit:[],conferenceChampionshipEdit:[],superBowlEdit:[]},()=>{
       this.props.onClick('false','false')
     })
   }
   sendToDatabase=()=>{
+    this.notify('Not available at the moment');
+    return
     if(this.state.isItSubmit){
     if(this.state.currentSelection==='wildCard'){this.sendToFirebase()}else{
       this.sendToFirebaseSingle()
@@ -460,7 +572,7 @@ class NCAAModal extends Component {
   sendToFirebaseSingle=async(editTime,theSelection)=>{
     this.showProgressBar()
     var theArr='',editTime=''
-    if(this.state.currentSelection==='divisionalRound'){theArr=this.state.divisionalRoundEdit,editTime='stopDivisionalRoundEdit'}
+    if(this.state.currentSelection==='divisionalRound'){theArr=this.state.round2Edit,editTime='stopround2Edit'}
     if(this.state.currentSelection==='conferenceChampionship'){theArr=this.state.conferenceChampionshipEdit,editTime='stopConferenceChampionshipEdit'}
     if(this.state.currentSelection==='superBowl'){theArr=this.state.superBowlEdit,editTime='stopSuperBowlEdit'}
     console.log('at sendToFirebaseSingle',this.state.currentSelection,theArr)
@@ -468,7 +580,7 @@ class NCAAModal extends Component {
     theArr.map((item, index) => {
       if (item.apiId === ''||item.player1 === ''||item.player2 === ''||item.p1Photo === ''||item.p2Photo === '') {
         theArr[index]['error'] = 'Some field missing data'
-        this.setState({ divisionalRoundEdit })
+        this.setState({ round2Edit })
         return
       } else {
         i++
@@ -521,12 +633,12 @@ class NCAAModal extends Component {
     if(this.state.currentSelection==='divisionalRound'){}
     if(this.state.currentSelection==='conferenceChampionship'){}
     if(this.state.currentSelection==='superBowl'){}
-    var wCMin = Math.min(...this.state.wildCardEdit.map(item => item.timeInMillis));
-    var dRMin = Math.min(...this.state.divisionalRoundEdit.map(item => item.timeInMillis));
+    var wCMin = Math.min(...this.state.round1Edit.map(item => item.timeInMillis));
+    var dRMin = Math.min(...this.state.round2Edit.map(item => item.timeInMillis));
     var cCMin = Math.min(...this.state.conferenceChampionshipEdit.map(item => item.timeInMillis));
     var sPMin = Math.min(...this.state.superBowlEdit.map(item => item.timeInMillis));
     var endTime = Math.max(...this.state.superBowlEdit.map(item => item.timeInMillis));
-    var allItems = [...this.state.wildCardEdit, ...this.state.divisionalRoundEdit,...this.state.conferenceChampionshipEdit,...this.state.superBowlEdit]
+    var allItems = [...this.state.round1Edit, ...this.state.round2Edit,...this.state.conferenceChampionshipEdit,...this.state.superBowlEdit]
     var toDbWildCardArr={},toDbDivisionalRound={},toDbConferenceChampionshipArr={},toDbSuperBowlArr={},v = 0
     var v=0
     var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
@@ -560,7 +672,7 @@ class NCAAModal extends Component {
         var theArr = {
           time:wCMin, sportType: 'NFL',endTime:'', 
           title: 'NFL PLAYOFFS 2025',currentSelection:this.state.currentSelection,
-          stopWildCardEdit:wCMin,stopDivisionalRoundEdit:dRMin,endTime:endTime,
+          stopround1Edit:wCMin,stopround2Edit:dRMin,endTime:endTime,
           stopConferenceChampionshipEdit:cCMin,stopSuperBowlEdit:sPMin,startTime:wCMin        
         }
         eventsIdDb.child('eventsIds/' + eventKey + '/').update(theArr)
@@ -575,7 +687,7 @@ class NCAAModal extends Component {
           } else {
             this.notify('Data uploaded successfully')
             this.setState({ showProgressBar: false })
-            var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::stopWildCardEdit'
+            var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::stopround1Edit'
               this.props.onClick('getOdds',oddsServerLink)
           }
         })
@@ -583,8 +695,10 @@ class NCAAModal extends Component {
     })
   }
   submitMatches = () => {
-    if(this.state.currentSelection==='wildCard'){this.wildCardSubmit()}
-    if(this.state.currentSelection==='divisionalRound'){this.divisionalRoundSubmit()}
+   
+    if(this.state.currentSelection==='round1'){this.round1Submit()}
+    if(this.state.currentSelection==='round2'){this.round2Submit()}
+    return
     if(this.state.currentSelection==='conferenceChampionship'){this.conferenceChampionshipSubmit()}
     if(this.state.currentSelection==='superBowl'){this.superBowlSubmit()}
   }
@@ -617,18 +731,18 @@ class NCAAModal extends Component {
                    draftkingsMarket.map((item3)=>{
                      i++
                      if(item3.outcomes[i]['name']===item2.home_team){
-                       wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
+                       round1Edit[index]['p1Points']=item3.outcomes[i]['name']
                      }
                      if(item3.outcomes[i]['name']===item2.away_team){
-                       wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
+                       round1Edit[index]['p1Points']=item3.outcomes[i]['name']
                      }
                      console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
                      console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
                      
                     const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                     // wildCardEdit[index].draftkingsOdds=obj
+                     // round1Edit[index].draftkingsOdds=obj
                      console.log('draftkingsMarket obj',obj)
-                     console.log('draftkingsMarket wildCardEdit',wildCardEdit)
+                     console.log('draftkingsMarket round1Edit',round1Edit)
                  })
                  }
                })*/
@@ -692,8 +806,8 @@ class NCAAModal extends Component {
             }
             if (theTeams.length === index + 1) {
               console.log('theArr 22222222 kufinish', theArr)
-              if (this.state.currentSelection==='wildCard') {this.setState({wildCardEdit:theArr,isItSubmit:true})}
-              if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:theArr,isItSubmit:true})}
+              if (this.state.currentSelection==='wildCard') {this.setState({round1Edit:theArr,isItSubmit:true})}
+              if (this.state.currentSelection==='divisionalRound') {this.setState({round2Edit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:theArr,isItSubmit:true})}
               //this.sendToFirebase()
@@ -768,7 +882,7 @@ class NCAAModal extends Component {
                 console.log('this.state.currentSelection',this.state.currentSelection)
                 console.log('theArr 22222222 kufinish', theArr)
                 console.log('theArr 22222222 incomingData', incomingData)
-                if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:incomingData,isItSubmit:true})}
+                if (this.state.currentSelection==='divisionalRound') {this.setState({round2Edit:incomingData,isItSubmit:true})}
                 if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:incomingData,isItSubmit:true})}
                 if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:incomingData,isItSubmit:true});console.log('haapa kwa sssssssssssss')}
                 this.setState({ showProgressBar: false })
@@ -787,14 +901,14 @@ class NCAAModal extends Component {
       })
   }
   itemComponent = (compItems, type) => {
-  console.log('compItems',compItems)
+  console.log('compItems',compItems,type)
     return (
       compItems.map((item, index) => {
         return (
           <div className={styles.listDiv} key={index}>
             <div className={styles.theCont0}>
               <div className={styles.theCont01}>
-                <p>{item.matchType}</p>
+                <p>{item.matchType+' Match '+(index+1)}</p>
                 <p>{item.time.commenceTime}</p>
               </div>
               <div className={styles.theCont}>
@@ -802,9 +916,10 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv1}>
                     {item.p1Photo !== '' ? <img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  <input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter uid from odds api' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' onChange={(event) => this.inputChange(event, index, type)} />
+                  {type==='round1'?<input className={styles.P1} id='team1id' value={item.team1Id} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter team 1 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter odds api match uid' onChange={(event) => this.inputChange(event, index, type)} />}
+                  {type==='round1'?<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event) => this.inputChange(event, index, type)} />}
+                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly/>
+                  <input className={styles.P2} value={'#'+item.team1Seed} placeholder='Seed #' readOnly/>
                   {/*<input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>
                 <BsFillLightningFill className={styles.sepIc} />
@@ -812,9 +927,10 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv2}>
                     {item.p2Photo !== '' ? <img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  <input className={styles.P1} id='time' type='datetime-local' readOnly={type===this.state.currentSelection?true:false} value={item.time} placeholder='Enter match time' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' onChange={(event) => this.inputChange(event, index, type)} />
+                  {type==='round1'?<input className={styles.P1} id='team2id' value={item.team2Id} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter team 2 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' readOnly />}                  
+                  <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly />
+                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly />
+                  <input className={styles.P2} value={'#'+item.team2Seed} placeholder='Seed #' readOnly/>
                   {/*<input className={styles.P2} id='p2Rec' value={item.p2Rec} placeholder='Enter team 2 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>
               </div>
@@ -830,22 +946,23 @@ class NCAAModal extends Component {
     return (
       <><div className={styles.container2} onClick={(event) => this.doNothing(event)}>
 
-        <p className={styles.headP}>Enter NFL Match Details</p>
-        {this.state.currentSelection==='wildCard'?<div className={styles.divCont}>
+        <p className={styles.headP}>Enter NCAAB Match Details</p>
+        {this.state.currentSelection==='round1'?<div className={styles.divCont}>
           <p className={styles.listHeadP}>Round of 64</p>
-          <div className={styles.listCont}>{this.itemComponent(wildCardEdit, 'wildCard')}</div></div>:null}
-          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='divisionalRound'?
+          <div className={styles.listCont}>{this.itemComponent(round1Edit, 'round1')}</div></div>:null}
+          {this.state.currentSelection==='round2'?
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Round of 32</p>
-          <div className={styles.listCont}>{this.itemComponent(divisionalRoundEdit, 'divisionalRound')}</div></div>:null}
-          {this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
+          <div className={styles.listCont}>{this.itemComponent(round2Edit, 'round2')}</div></div>:null}
+         
+          {/*this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Conference Championship</p>
           <div className={styles.listCont}>{this.itemComponent(conferenceChampionshipEdit, 'conferenceChampionship')}</div></div>:null}
           {this.state.currentSelection==='wildCard'||this.state.currentSelection==='superBowl'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Super Bowl</p>
-          <div className={styles.listCont}>{this.itemComponent(superBowlEdit, 'superBowl')}</div></div>:null}
+          <div className={styles.listCont}>{this.itemComponent(superBowlEdit, 'superBowl')}</div></div>:null*/}
         
         {this.state.isItSubmit?<div className={styles.submitDiv}>
         <button className={styles.cancelBtn} onClick={()=>this.cancelEdit()}>Cancel</button>

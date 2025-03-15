@@ -268,6 +268,7 @@ class DetailsModal extends Component {
     var detailsData = {},scoreData={}
     var dataScore=this.props.currentSelection+'Score'
     var thePick=this.props.currentSelection+'Pick'
+    var bps2=this.props.currentSelection+'BPS'
     if(this.props.currentSelection==='round1'){
       detailsData = {
         teamName:this.state.teamName,
@@ -285,13 +286,18 @@ class DetailsModal extends Component {
         currentRank:false, 
         [thePick]:true,
         currentPick:this.props.currentSelection,
-        theMenu:this.props.theMenu
+        theMenu:this.props.theMenu,
+        round1Rank:false,
+        round2Rank:false,
+        finalRoundRank:false,
+        [bps2]:this.state.bestPossibleScore
       }
       scoreData={BPS:this.state.bestPossibleScore,score:0,
         round1Score:'0',round2Score:'0',finalRoundScore:'0',
         sweet16Score:'0',elite8Score:'0',final4Score:'0',
         currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
-        ramName:this.state.teamName,picked:true, [thePick]:true}
+        ramName:this.state.teamName,picked:true, [thePick]:true,
+        [bps2]:this.state.bestPossibleScore}
     }else{
       detailsData = {
         teamName:this.state.teamName,
@@ -300,11 +306,13 @@ class DetailsModal extends Component {
         [dataScore]:'0.00',
         currentPick:this.props.currentSelection,
         theMenu:this.props.theMenu,
-        [thePick]:true
+        [thePick]:true,
+        [bps2]:this.state.bestPossibleScore
       }
       scoreData={BPS:this.state.bestPossibleScore,score:0,
         currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
-        ramName:this.state.teamName,picked:true, [thePick]:true}
+        ramName:this.state.teamName,picked:true, [thePick]:true,
+        [bps2]:this.state.bestPossibleScore}
     }
    // detailsData[dataScore]='0.00'
     var i=0
