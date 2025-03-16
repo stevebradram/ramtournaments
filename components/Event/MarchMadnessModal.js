@@ -36,48 +36,32 @@ var round1Edit=[],round2Edit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
 var round1Edit2=round1Edit3,round2Edit2=round2Edit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
 class NCAAModal extends Component {
   state = { round1Edit: round1Edit, round2Edit: round2Edit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNCAABModal,isItSubmit:false,
-    eventStartTime:0,eventEndTime:'',theNewArr:[]
+    eventStartTime:0,eventEndTime:'',theNewArr:[],loadApiData:false
   }
   
   componentDidMount=()=>{
-    var incomingData=this.props.itemsToNCAABModal
+    var incomingData = JSON.parse(JSON.stringify(this.props.itemsToNCAABModal));
+    //var incomingData=[].concat(this.props.itemsToNCAABModal)//[...this.props.itemsToNCAABModal]
     console.log('incomingData',this.props.eventToNCAABModal,this.state.currentSelection,incomingData)
    
     if(incomingData.length>0){
+      incomingData=incomingData//.slice(0,2)
       round1Edit=[],round2Edit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
       incomingData.map((item,index)=>{
+        if(!item.player1NickName){
+        console.log('item.player1NickName samooooo')
         incomingData[index]['commenceTime']=''
         incomingData[index]['timeInMillis']=''
         incomingData[index]['time']=''
         incomingData[index]['error']=''
-
         if(this.state.currentSelection==='round1'){
           incomingData[index]['team1Id']=''
           incomingData[index]['team2Id']=''
         }else{
           incomingData[index]['apiId']=''
         }
+      }
       })
-     /* if(this.state.currentSelection==='round1'){
-        var i=0
-        incomingData.map((item,index)=>{
-          i++
-      if(item.p1Photo==='N/A'){incomingData[index]['p1Photo']=''}
-      if(item.p2Photo==='N/A'){incomingData[index]['p2Photo']=''}
-      if(item.p1Points==='N/A'){incomingData[index]['p1Points']=''}
-      if(item.p2Points==='N/A'){incomingData[index]['p2Points']=''}
-      if(item.player1==='N/A'){incomingData[index]['player1']=''}
-      if(item.player2==='N/A'){incomingData[index]['player2']=''}
-      if(item.matchType==="Round 1"){round1Edit.push(item)}
-      if(item.matchType==="Round 2"){round2Edit.push(item)}
-    
-      if(incomingData.length===i){
-        this.setState({round1Edit,round2Edit}) 
-        console.log('round1Edittt',round1Edit)
-        //this.setState({round1Edit,round2Edit,conferenceChampionshipEdit,superBowlEdit})   
-        }
-        })
-      }*/
     if(this.state.currentSelection==='round1'){round1Edit=incomingData,this.setState({round1Edit}),this.fillEventDetails('round1Edit')}
     if(this.state.currentSelection==='round2'){round2Edit=incomingData,this.setState({round2Edit}),this.fillEventDetails('round2Edit')}
     return
@@ -100,7 +84,7 @@ class NCAAModal extends Component {
     //console.log('incomingData',this.state.currentSelection,'round2Edit',round2Edit,'the length',incomingData.length)
   }
   fillEventDetails=async(menu)=>{
-   
+    return
     this.showProgressBar()
     var idStart=''
     if(this.state.currentSelection==='wildCard'){idStart='wildCardMatch'}
@@ -218,12 +202,22 @@ class NCAAModal extends Component {
     this.setState({isItSubmit:false})
     var value = e.target.value
     console.log('theId', e.target.id)
-    if (type === 'wildCard') {
+    if (type === 'round1') {
       round1Edit[index][e.target.id] = value
+      if(e.target.id=='team1Id'&&value==='0'){
+        round1Edit[index]['player1'] = 'N/A'
+        round1Edit[index]['player1NickName'] = 'N/A'
+        round1Edit[index]['p1Photo'] = 'N/A'
+      }
+      if(e.target.id=='team2Id'&&value==='0'){
+        round1Edit[index]['player2'] = 'N/A'
+        round1Edit[index]['player2NickName'] = 'N/A'
+        round1Edit[index]['p2Photo'] = 'N/A'
+      }
       await this.setState({ round1Edit })
       console.log("round1Edit", round1Edit)
     }
-    if (type === 'divisionalRound') {
+    if (type === 'round2') {
       round2Edit[index][e.target.id] = value
       await this.setState({ round2Edit })
       console.log("round2Edit", round2Edit)
@@ -260,12 +254,39 @@ class NCAAModal extends Component {
   getRandom(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  goToTeamsDataApi = async(theArr) => {
-    var apiFirebaseRef = firebase.database().ref('/apis/NCAABTeams/')
-      var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
-      // const response = await axios.get(oddsApi)
-      //var theOddsJson=response.data
-      //sortOddsJson(theOddsJson)
+  goToTeamsDataApi = async(theArr,teamsArr) => {
+    teamsArr.map((item, index) => {
+          theArr.map((item2, index) => {
+            if(Number(item2.team1Id)===Number(item.id)){
+              theArr[index]['player1']=item.school
+              theArr[index]['player1NickName']=item.name
+              theArr[index]['p1Photo']=item.logo
+            }
+            if(Number(item2.team2Id)===Number(item.id)){
+              theArr[index]['player2']=item.school
+              theArr[index]['player2NickName']=item.name
+              theArr[index]['p2Photo']=item.logo
+            }
+          }) 
+          if(teamsArr.length===index+1){
+            console.log('finished theArr',theArr)
+            this.setState({round1Edit:theArr})
+            var k=0
+            theArr.map((item, index) => {
+              if ((item.team1Id === '0'&&item.player1 === 'N/A')||(item.team2Id === '0'&&item.player2 === 'N/A')){
+                theArr[index]['error'] = 'Teams id & match time field must be filled'
+              }else{
+                k++
+              }
+             if(theArr.length===k){
+              this.setState({isItSubmit:true})
+              console.log('tumemalizaaaaaaaaaaa')
+             }
+            })
+          }
+        }) 
+     
+      /*var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
       axios.get(oddsApi)
         .then((res) => {
           var resultsArr = res.data,firebaseItem={},theItems=[]
@@ -324,15 +345,22 @@ class NCAAModal extends Component {
             })
           })
   
-        })
+        })*/
   }
   round1Submit = () => {
     var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
     console.log('this.state.round1Edit',this.state.round1Edit)
-    
+    var teamsArr=[]
     var time='2025-03-20T00:00'
-    this.state.round1Edit.map((item, index) => {
+    /*this.state.round1Edit.map((item, index) => {
+      if(item.team1Id==='0'){round1Edit[index]['team1IdReadOnly']=false}else{{round1Edit[index]['team1IdReadOnly']=true}}
+      if(item.team2Id==='0'){round1Edit[index]['team2IdReadOnly']=false}else{round1Edit[index]['team2IdReadOnly']=true}
+      round1Edit[index]['time'] =time
+      console.log('this.state.round1Edit',this.state.round1Edit)
+    })*/
+    //return
+    /*this.state.round1Edit.map((item, index) => {
       
       round1Edit[index]['team1Id'] =this.getRandom(1, 100);
       round1Edit[index]['team2Id'] =this.getRandom(1, 90);
@@ -340,7 +368,7 @@ class NCAAModal extends Component {
       if(this.state.round1Edit.length===index+1){
         console.log('round1Edit iiiiii',round1Edit)
       }
-    })
+    })*/
     this.state.round1Edit.map((item, index) => {
       if (item.team1Id === ''||item.team2Id === ''||item.time === '') {
         round1Edit[index]['error'] = 'Teams id & match time field must be filled'
@@ -356,7 +384,48 @@ class NCAAModal extends Component {
       }
       if(this.state.round1Edit.length===j){
         console.log('round1Edit jjjjjjj',round1Edit)
-        this.goToTeamsDataApi(round1Edit)
+    
+    var currentYear=new Date().getFullYear()
+    var apiFirebaseRef = firebase.database().ref('/apis/NCAABTeams/'+currentYear+'/')
+    apiFirebaseRef.once('value', dataSnapshot => {
+      if(dataSnapshot.exists()){
+        var theCount=dataSnapshot.numChildren(),i=0
+        console.log('the teams data available')
+        dataSnapshot.forEach((data,index) => {
+          i++
+          teamsArr.push(data.val())
+          if(theCount===i){
+            //console.log('final arrr 111111',teamsArr)
+            this.goToTeamsDataApi(round1Edit,teamsArr)
+          }
+        })
+      }else{
+        console.log('the teams data nooot available')
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+       var firebaseItem={}
+        axios.get(oddsApi)
+        .then((res) => {
+          var resultsArr = res.data,j=0
+          resultsArr.map((item, index) => {
+            j++
+            if(item.Active){
+             var theItem={name:item.Name,school:item.School,key:item.Key,id:item.TeamID,
+                SDN:item.ShortDisplayName,logo:item.TeamLogoUrl
+              }
+              firebaseItem[item.TeamID] = theItem
+              teamsArr.push(theItem)}
+              if(j===resultsArr.length){
+                apiFirebaseRef.update(firebaseItem)
+                //console.log('final arrr 222222',teamsArr)
+                this.goToTeamsDataApi(round1Edit,teamsArr)
+              }
+          })
+          
+        })
+      }
+     
+    })
+      
       }
     })
     return
@@ -560,7 +629,12 @@ class NCAAModal extends Component {
     })
   }
   sendToDatabase=()=>{
-    this.notify('Not available at the moment');
+    if(this.state.isItSubmit){
+      if(this.state.currentSelection==='round1'){
+        this.sendToFirebaseSingle()
+      }
+    }
+    this.notify('Uploading....');
     return
     if(this.state.isItSubmit){
     if(this.state.currentSelection==='wildCard'){this.sendToFirebase()}else{
@@ -571,8 +645,57 @@ class NCAAModal extends Component {
   }
   sendToFirebaseSingle=async(editTime,theSelection)=>{
     this.showProgressBar()
-    var theArr='',editTime=''
-    if(this.state.currentSelection==='divisionalRound'){theArr=this.state.round2Edit,editTime='stopround2Edit'}
+    var theArr='',editTime='',returnArrName=''
+    if(this.state.currentSelection==='round1'){theArr=this.state.round1Edit,editTime='stopRound1Edit',returnArrName='allRound1MatchesArr'}
+    if(this.state.currentSelection==='round2'){theArr=this.state.round1Edit,editTime='stopRound2Edit'}
+    var i=0
+    theArr.map((item, index) => {
+      if (item.team2Id === ''||item.team1Id === ''||item.player1 === ''||item.player2 === ''||item.p1Photo === ''||item.p2Photo === '') {
+        theArr[index]['error'] = 'Some field missing data'
+        this.setState({ round2Edit })
+        return
+      } else {
+        i++
+        theArr[index]['error'] = ''
+      }
+      if (i===theArr.length) {    
+       var minTime = Math.min(...theArr.map(item => item.timeInMillis));
+       var toDbArr={},v = 0
+       var eventKey = this.props.theEventKey
+       var generalDb = firebase.database().ref('/theEvents/')
+       var eventIdsLink ='/eventsIds/'+eventKey+'/'
+       var eventIdsLink2 ='/NCAAB/eventsIds/'+eventKey+'/'
+       var dataLink ='/NCAAB/'+eventKey+'/'+this.state.currentSelection//1737147600000
+       console.log('combined items',theArr.length, theArr)//1737235800000
+       var eventIdsEdit = {
+      [editTime]:minTime,currentSelection:this.state.currentSelection,time:minTime}
+       theArr.map((item,index) => {
+         v++
+         theArr[index]['error']=null
+         console.log('matchType',item.matchType)
+         toDbArr[item.id] = item
+         if (theArr.length === v) {
+           generalDb.child(eventIdsLink).update(eventIdsEdit)
+           generalDb.child(eventIdsLink2).update(eventIdsEdit)
+           generalDb.child(dataLink).update(toDbArr,(error) => {
+            if (error) {
+              this.notify('An error occured while uploading data')
+              this.setState({ showProgressBar: false })
+            } else {
+              this.notify('Data uploaded successfully')
+              this.setState({ showProgressBar: false })
+             // var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::'+editTime
+              this.props.onClick(returnArrName,theArr)
+            }
+          })
+         }
+       })
+      }
+    })
+    return
+
+
+
     if(this.state.currentSelection==='conferenceChampionship'){theArr=this.state.conferenceChampionshipEdit,editTime='stopConferenceChampionshipEdit'}
     if(this.state.currentSelection==='superBowl'){theArr=this.state.superBowlEdit,editTime='stopSuperBowlEdit'}
     console.log('at sendToFirebaseSingle',this.state.currentSelection,theArr)
@@ -589,11 +712,11 @@ class NCAAModal extends Component {
       if (i===theArr.length) {    
        var minTime = Math.min(...theArr.map(item => item.timeInMillis));
        var toDbArr={},v = 0
-       var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
+       var eventKey = this.props.theEventKey
        var generalDb = firebase.database().ref('/theEvents/')
        var eventIdsLink ='/eventsIds/'+eventKey+'/'
-       var eventIdsLink2 ='/NFL/eventsIds/'+eventKey+'/'
-       var dataLink ='/NFL/'+eventKey+'/'+this.state.currentSelection//1737147600000
+       var eventIdsLink2 ='/NCAAB/eventsIds/'+eventKey+'/'
+       var dataLink ='/NCAAB/'+eventKey+'/'+this.state.currentSelection//1737147600000
        console.log('combined items',theArr.length, theArr)//1737235800000
        var eventIdsEdit = {
       [editTime]:minTime,currentSelection:this.state.currentSelection}
@@ -697,6 +820,9 @@ class NCAAModal extends Component {
   submitMatches = () => {
    
     if(this.state.currentSelection==='round1'){this.round1Submit()}
+    else{ this.notify('Not available at the moment')}
+   
+    return
     if(this.state.currentSelection==='round2'){this.round2Submit()}
     return
     if(this.state.currentSelection==='conferenceChampionship'){this.conferenceChampionshipSubmit()}
@@ -901,9 +1027,15 @@ class NCAAModal extends Component {
       })
   }
   itemComponent = (compItems, type) => {
-  console.log('compItems',compItems,type)
+  //console.log('compItems',compItems,type)
     return (
       compItems.map((item, index) => {
+        var name1ReadOnly=true
+        var name2ReadOnly=true
+        if(item.team1IdReadOnly!==undefined&&item.team1IdReadOnly===false){name1ReadOnly=false}
+        if(item.team2IdReadOnly!==undefined&&item.team2IdReadOnly===false){name2ReadOnly=false}
+       // console.log('name1ReadOnly',name1ReadOnly)
+       // console.log('name2ReadOnly',name2ReadOnly)
         return (
           <div className={styles.listDiv} key={index}>
             <div className={styles.theCont0}>
@@ -916,9 +1048,9 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv1}>
                     {item.p1Photo !== '' ? <img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  {type==='round1'?<input className={styles.P1} id='team1id' value={item.team1Id} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter team 1 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter odds api match uid' onChange={(event) => this.inputChange(event, index, type)} />}
+                  {type==='round1'?<input className={styles.P1} id='team1Id' value={item.team1Id} placeholder='Enter team 1 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter odds api match uid' onChange={(event) => this.inputChange(event, index, type)} />}
                   {type==='round1'?<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event) => this.inputChange(event, index, type)} />}
-                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly/>
+                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly={name1ReadOnly}  onChange={(event) => this.inputChange(event, index, type)}/>
                   <input className={styles.P2} value={'#'+item.team1Seed} placeholder='Seed #' readOnly/>
                   {/*<input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>
@@ -927,9 +1059,9 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv2}>
                     {item.p2Photo !== '' ? <img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  {type==='round1'?<input className={styles.P1} id='team2id' value={item.team2Id} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter team 2 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' readOnly />}                  
+                  {type==='round1'?<input className={styles.P1} id='team2Id' value={item.team2Id}  placeholder='Enter team 2 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' readOnly />}                  
                   <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly />
-                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly />
+                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly={name2ReadOnly}  onChange={(event) => this.inputChange(event, index, type)}/>
                   <input className={styles.P2} value={'#'+item.team2Seed} placeholder='Seed #' readOnly/>
                   {/*<input className={styles.P2} id='p2Rec' value={item.p2Rec} placeholder='Enter team 2 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>

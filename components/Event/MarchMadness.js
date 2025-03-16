@@ -98,7 +98,7 @@ const nationalChampionship = [
 ]
 class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
-    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',
+    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
   midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
   round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false}
@@ -978,6 +978,10 @@ getNCAABMatchesFinal = () => {
     }
   }
   }
+  handleChildClick = (title,items) => {
+    this.setState({ count: this.state.count + 1, marchMadnessModal: false,[title]:items});
+    console.log('azeeza', items)
+  };
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
@@ -1236,7 +1240,7 @@ getNCAABMatchesFinal = () => {
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu}/></div> : null}
         {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
-        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} onClick={this.handleChildClick} /></div> : null}
+        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
       </>
     )
   }
