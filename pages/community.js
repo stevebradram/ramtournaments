@@ -14,7 +14,7 @@ class leaderboard extends Component {
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
-    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',
+    currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',round1Arr:[],round2Arr:[],
   }
   componentDidMount = () => {
     this.showProgressBar()
@@ -67,7 +67,7 @@ class leaderboard extends Component {
             var isEventStarted = true
             if (new Date().getTime() < allGames[0]['time']) { isEventStarted = false }
               this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted,endTime }, () => {
-              this.getRamsInFlock(theEventKey, isEventStarted)
+              this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
               {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
               console.log('sportType555555555', sportType, theEventKey)
             })
@@ -79,7 +79,7 @@ class leaderboard extends Component {
     })
 
   }
-  getRamsInFlock = (theEventKey, isEventStarted) => {
+  getRamsInFlock = (theEventKey, isEventStarted,currentSelection,sportType) => {
    
     this.setState({ ramsInMyFlockArr: [], theFlocksArr: [] })
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
@@ -87,18 +87,18 @@ class leaderboard extends Component {
       if (dataSnapshot.exists()) {
         var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
         this.setState({ currentFlockName: theFName, flockNameAvailable: true,myFlockName:dataSnapshot.val()})
-        this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted)
+        this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted,currentSelection,sportType)
         
       } else {
         this.setState({ currentFlockName: '', flockNameAvailable: false })
       }
     })
   }
-  getRamMembersData = (theEventKey, flockNameWithNoSpaces, isEventStarted) => {
-    var allArr = []
+  getRamMembersData = (theEventKey, flockNameWithNoSpaces, isEventStarted,currentSelection,sportType) => {
+    var allArr = [],round1Arr=[],round2Arr=[]
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores/' + flockNameWithNoSpaces)
     var flockCreatorRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/unique/' + flockNameWithNoSpaces+'/creatorId')
-    console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey)
+    console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey,currentSelection,sportType)
     flockCreatorRef.once('value', dataSnapshot => {
       var creatorId=dataSnapshot.val()
       this.setState({creatorId})
@@ -109,13 +109,48 @@ class leaderboard extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
+          console.log('the daaaaaaaaata',theData)
           var theUserId = data.key
-          var theArr = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS: Number(theData.BPS), score: theData.score,creatorId:creatorId}
+          var BPS='',theScore='',r1BPS='',r2BPS='',r1S='',r2S=''
+          if(sportType==='NCAAB'){
+            ///CREATE ROUND 1 AND ROUND 2 ARRAYS
+            if(currentSelection==='round1'){  
+              if(theData.round1BPS){BPS=Number(theData.round1BPS),r1BPS=Number(theData.round1BPS)}else{BPS=0,r1BPS=0}
+              if(theData.round1Score){theScore=theData.round1Score,r1S=theData.round1Score}else{theScore='0',r1S='0'}}
+              if(currentSelection==='round2'){
+              if(theData.round2BPS){BPS = Number(theData.round2BPS),r2BPS=Number(theData.round2BPS)}else{BPS=0,r2BPS=0}
+              if(theData.round2Score){theScore =theData.round2Score,r2S=theData.round2Score}else{theScore='0',r2S='0'}}
+            
+            
+              if(theData.round1BPS){r1BPS=Number(theData.round1BPS)}else{r1BPS=0}
+              if(theData.round1Score){r1S=theData.round1Score}else{r1S='0'}
+              if(theData.round2BPS){r2BPS=Number(theData.round1BPS)}else{r2BPS=0}
+              if(theData.round2Score){r2S=theData.round2Score}else{r2S='0'}
+          }else{
+            BPS=Number(theData.BPS)
+            theScore=theData.score
+          }
+          var theArr = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:BPS, score:theScore,creatorId:creatorId}
           allArr.push(theArr)
+          if(sportType==='NCAAB'){
+            var theArr2 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r1BPS, score:r1S,creatorId:creatorId}
+            var theArr3 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r2BPS, score:r2S,creatorId:creatorId}
+            round1Arr.push(theArr2),round2Arr.push(theArr3)
+          }
           if (count === i) {
+            console.log('allArr55555555555',allArr)
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
             else { allArr = allArr.sort(function (a, b) { return b.BPS - a.BPS }); }
             this.setState({ ramsInMyFlockArr: allArr })
+            if(sportType==='NCAAB'){
+              if (isEventStarted) { 
+                round1Arr = round1Arr.sort(function (a, b) { return b.score - a.score });
+                round2Arr = round2Arr.sort(function (a, b) { return b.score - a.score }); }
+              else { 
+                round1Arr = round1Arr.sort(function (a, b) { return b.BPS - a.BPS });
+                round2Arr = round2Arr.sort(function (a, b) { return b.BPS - a.BPS }); }
+              this.setState({round1Arr,round2Arr})
+            }
             console.log('the maliza', allArr)
           }
         })
@@ -196,7 +231,7 @@ class leaderboard extends Component {
       var isEventStarted = true
       if (new Date().getTime() < theTime) { isEventStarted = false }
       this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted,sportType,endTime })
-      this.getRamsInFlock(theEventKey, isEventStarted)
+      this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
       {this.state.isAdmin?this.loadAdminData(theEventKey):null}
     }
   }
@@ -244,6 +279,24 @@ class leaderboard extends Component {
   }
 })
   }
+  }
+  getCurrentRound=(round)=>{
+    console.log('roundddd',round)
+    this.setState({currentSelection:round})
+    if(round==='round1'){
+      this.setState({ramsInMyFlockArr:this.state.round1Arr})
+    }
+    if(round==='round2'){
+      this.setState({ramsInMyFlockArr:this.state.round2Arr})
+    }
+    //this.setState({round1Arr,round2Arr})
+    return
+    if(round==='round1'){
+     this.setState({currentItems:this.state.round1Arr})}
+    if(round==='round2'){
+     this.setState({currentItems:this.state.round2Arr})}
+    if(round==='finalRound'){
+    this.setState({currentItems:this.state.sweet16Arr})}
   }
   render() {
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
@@ -299,6 +352,11 @@ class leaderboard extends Component {
             })}
           </div>
           <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+          {this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
+            <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
+            <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
+            <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round</p>
+           </div>:null}
           <div className={styles.menu2Div0}>
             <div className={styles.menuHeader}>
               {['Rams In Your Flock', 'Flocks Among Flocks', this.state.isAdmin?'Admin':null].map((item, index) => {

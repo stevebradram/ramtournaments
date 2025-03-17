@@ -18,16 +18,15 @@ import { MdInfoOutline } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
       const theEvents=[
+        {id:4,name:'March Madness'},
         {id:1,name:'RAM UFC'},
         {id:2,name:'NCAAF'},
-        {id:3,name:'NFL Playoffs'},
-        {id:4,name:'March Madness'},
-        
+        {id:3,name:'NFL Playoffs'}, 
       ]
 
 class events extends Component {
-  state={theMenu:'maincard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:'',theEvent:'Current Events',currentID:1,
-    theRamUfc:false,theMarchMadness:false,theNfl:false,theNcaaf:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'RAM UFC',eventToShow:false,
+  state={theMenu:'round1',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:'',theEvent:'Current Events',currentID:1,
+    theRamUfc:false,theMarchMadness:false,theNfl:false,theNcaaf:false,theFifa:'',userId:'',userLoggedIn:false,selectedEvent:'March Madness',eventToShow:false,
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME', 
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'marchMadness',pastEventsAvailable:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],

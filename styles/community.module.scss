@@ -312,7 +312,32 @@ $pastEve2:#dc9600;
     margin-right: 10px;
     cursor: pointer;
 }
-
+.eve2Div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: -15px;
+    margin-bottom: 30px;
+}
+.eve2Div p{
+    margin-right: 20px;
+    border: 1px solid $blackish;
+    color: $blackish;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 4px 20px;
+    border-radius: 2px;
+    font-size: 16px;
+}
+#theSubMenuP2{
+    color: white;
+    border-color: $redColor;
+    background-color:$redColor;
+}
  @media all and (max-width: 1000px) {
  .menu2Div0{
     display: flex;

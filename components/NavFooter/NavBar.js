@@ -28,7 +28,7 @@ class NavBar extends Component {
       count:0,
       isAdmin:false,
       countdownStart:1741960288732,
-      countdownStop:1742461200000
+      countdownStop:1742487300000
     }
   }
   onScroll = () => {
