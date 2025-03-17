@@ -136,7 +136,7 @@ class NCAA extends Component {
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
-    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',
+    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',isAdmin:false,
     isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:''
   }
   componentDidMount = () => {
@@ -392,6 +392,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         userId = user.uid
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'){
+          this.setState({isAdmin:true}) 
+         }
         this.setState({ userId, userLoggedIn: true })
         if (userId) { this.checkUpcomingPastGames(userId) }
 
@@ -1067,12 +1070,16 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               repeat={Infinity}
             />}
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?
-          <div>
-            <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
-            <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
-          </div> : null}
-
+          {this.state.isAdmin?<div className={style.resultsCont}>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
+                  </div>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
+                  </div>
+                  </div>:null}
         <div className={style.scoresCont}>
           <div className={style.scoresCont1}>
             <p className={style.currentP}>{this.state.BPSTitle}</p>

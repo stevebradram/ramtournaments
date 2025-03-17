@@ -285,7 +285,7 @@ $theDark:#b2b2b2;
 
     position: absolute;
     top: 0;right: 0;
-    margin-top: 170px;
+    margin-top: 210px;
     margin-right: 100px;
 }
 .imageDiv{
@@ -511,6 +511,9 @@ $theDark:#b2b2b2;
  .resultsCont{
     display: flex;
     flex-wrap: wrap;
+ }
+ .resultsDiv{
+    margin-bottom: 10px;
  }
  .lastUpdateP{
     font-size: 10px;

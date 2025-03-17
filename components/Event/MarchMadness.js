@@ -101,7 +101,7 @@ class MarchMadness extends Component {
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
   midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
-  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false}
+  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:''}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -987,6 +987,26 @@ getNCAABMatchesFinal = () => {
   checkForOutcome= () => {
     this.notify('Not available at the moment');return
   }
+  chooseHomeEvent=(event,id)=>{
+    event.stopPropagation()
+    event.preventDefault()
+    this.setState({selectHomeEvent:true,selectHomeEventId:id})
+    }
+    
+  sendEvent=(event,data,id)=>{
+    event.stopPropagation()
+    event.preventDefault()
+    data['id']=id
+    var theDb=firebase.database().ref("/theEvents/eventToShowHomePage/")
+    theDb.set(data,(error) => {
+      if (error) {
+        this.notify('An error occured while updating')
+      }else{
+        this.setState({selectHomeEvent:false})
+        this.notify('Selected Succesfully')
+      }
+  })
+    }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
@@ -1023,8 +1043,8 @@ getNCAABMatchesFinal = () => {
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
                <p className={style.headListP3}>{timing}</p></div></div>
-               {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event)}/>
-                {this.state.selectHomeEvent?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
+               {this.state.isAdmin?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item.id)}/>
+                {this.state.selectHomeEvent&&this.state.selectHomeEventId==item.id?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
               </div>  
             )
           })}
@@ -1076,11 +1096,16 @@ getNCAABMatchesFinal = () => {
               repeat={Infinity}
             />}
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'? 
-          <div>
-            <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
-            <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
-          </div> : null}
+          {this.state.isAdmin?<div className={style.resultsCont}>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
+                  </div>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
+                  </div>
+                  </div>:null}
           <div className={style.scoresCont}>
         <div className={style.scoresCont1}>
         <p className={style.currentP}>{titleToShow}</p>

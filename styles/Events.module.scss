@@ -4,8 +4,7 @@ $pastEve: #919191;
 $theDark: #b2b2b2;
 
 .container {
-    padding-top: 150px;
-    padding: 200px 90px 100px 90px;
+    padding: 250px 90px 100px 90px;
     min-height: 100vh;
 }
 
@@ -111,35 +110,38 @@ $theDark: #b2b2b2;
     .eventsDiv {
         margin-right: 0px;
     }
+    .container {
+        padding: 190px 40px 100px 40px;
+    }
 }
 
 @media all and (max-width: 800px) {
     .container {
-        padding: 150px 40px 100px 40px;
+        padding: 190px 40px 100px 40px;
     }
 }
 
 @media all and (max-width: 780px) {
     .container {
-        padding: 150px 20px 100px 20px;
+        padding: 190px 20px 100px 20px;
     }
 }
 
 @media all and (max-width: 600px) {
     .container {
-        padding: 150px 40px 100px 40px;
+        padding: 190px 40px 100px 40px;
     }
 }
 
 @media all and (max-width: 430px) {
     .container {
-        padding: 120px 20px 100px 20px;
+        padding: 190px 20px 100px 20px;
     }
 }
 
 @media all and (max-width: 360px) {
     .container {
-        padding: 120px 10px 100px 10px;
+        padding: 190px 10px 100px 10px;
     }
 
 }

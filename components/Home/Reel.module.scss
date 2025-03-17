@@ -90,7 +90,7 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    padding: 100px 20px 70px 20px;
+    padding: 100px 20px 70px 30px;
   }
  .detCont{
   position:relative;
@@ -135,6 +135,9 @@
     }
     .imgCont img{
       height: 220px;
+    }
+    .container{
+      padding: 100px 20px 70px 20px;
     }
 }
 @media all and (max-width: 370px) {

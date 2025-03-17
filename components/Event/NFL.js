@@ -306,7 +306,7 @@ var scoresNfl=[
 class NCAA extends Component {
   state = {
     theMenu: 'mainCard', theItems: [], opendetailsModal: false, getRamDetails: false, dataAvailable: false, theEvent: 'Upcoming Events', currentID: 1,
-    theRamUfc: '', theMarchMadness: false, theNfl: false, theFifa: '', userId: '', userLoggedIn: false, eventToShow: false,
+    theRamUfc: '', theMarchMadness: false, theNfl: false, theFifa: '', userId: '', userLoggedIn: false, eventToShow: false,isAdmin:false,
     teamName: '', flockName: '', openLoginModal: false, clickHere1: 'CLICK HERE TO MAKE YOUR PICKS', clickHere2: 'CLICK HERE TO ENTER THE GAME', theEventTime: 0,
     currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'NFL', pastEventsAvailable: false,
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
@@ -635,6 +635,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         userId = user.uid
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'){
+          this.setState({isAdmin:true}) 
+         }
         this.setState({ userId, userLoggedIn: true })
         if (userId) { this.checkUpcomingPastGames(userId) }
 
@@ -1357,12 +1360,16 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               repeat={Infinity}
             />}
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?
-          <div>
-            <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
-            <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
-          </div> : null}
-
+        {this.state.isAdmin?<div className={style.resultsCont}>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
+                  </div>
+                  <div className={style.resultsDiv}>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
+                  </div>
+                  </div>:null}
         <div className={style.scoresCont}>
           <div className={style.scoresCont1}>
             <p className={style.currentP}>{this.state.currentSelection}</p>

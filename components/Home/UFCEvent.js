@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Countdown from 'react-countdown';
 import Router,{useRouter,withRouter} from 'next/router'
 import firebase from '../FirebaseClient'
+import dayjs from 'dayjs';
 class UFCEvent extends Component {
   state = {
     theAdsArray: [],
@@ -70,7 +71,13 @@ class UFCEvent extends Component {
         console.log('items',theEventTitle,theEventKey,time,endTime,sportType)
         if(sportType==='NCAAF'){
          this.getNCAAFMatches()
-        }else{
+        }else if(sportType==='NCAAB'){
+          this.getNCAABMatches()
+         }
+         else if(sportType==='NFL'){
+          this.getNFLMatches()
+         }
+        else{
           this.getUfcMatches(userId)
         }
         
@@ -120,7 +127,12 @@ class UFCEvent extends Component {
         console.log('items',theEventTitle,theEventKey,theEventTime,endTime,sportType)
         if(sportType==='NCAAF'){
          this.getNCAAFMatches()
-        }else{
+        }else  if(sportType==='NCAAB'){
+          this.getNCAABMatches()
+         }else if(sportType==='NFL'){
+          this.getNFLMatches()
+         }
+        else{
           this.getUfcMatches(userId)
         }
         
@@ -184,68 +196,50 @@ class UFCEvent extends Component {
   }
   getNCAAFMatches=()=>{
     var theItems=[],v=0
-    this.setState({ramUfcMaincardArray:[],ramUfcPrelimsArray:[],ramUfcEarlyPrelimsArray:[],theMenu:'mainCard',dataAvailable:false,currentEventUserInfo:{}})
     var userInfoDb = firebase.database().ref('/theEvents/NCAAF/').child(this.state.theEventKey)
     userInfoDb.child('firstRound').once('value',dataSnapshot=>{
       var firstRoundCount=dataSnapshot.numChildren()
       console.log('firstRoundCount',firstRoundCount)
-      //var theInfo=dataSnapshot.val()
       dataSnapshot.forEach((data) => {
         v++
-        //console.log('daaaaaaaaata',data.val())
         theItems.push(data.val())
         if(firstRoundCount===v){
           console.log('theItems rrrr',theItems)
           this.setState({theItems})
         }
       })
-      return
-      if(theInfo.mainCard){
-        var array1 = []
-        //console.log('iko maincarddddd',theInfo.mainCard)
-        var i=0
-        for (var key in theInfo.mainCard) {
-          i++
-         var theData=theInfo.mainCard[key]
-         var array2={theId:key,...theData}
-         array1.push(array2)
-         if(i===mainCardCount){
-          this.setState({ramUfcMaincardArray:array1,theItems:array1})
-         }}}
-      if(theInfo.prelims){
-        var array1 = []
-        //console.log('iko prelimsssssss')
-        var i=0
-        for (var key in theInfo.prelims) {
-          i++
-         var theData=theInfo.prelims[key]
-         var array2={theId:key,...theData}
-         array1.push(array2)
-         if(i===prelimsCount){
-          //console.log('whole prelimms Array',array1)
-          this.setState({ramUfcPrelimsArray:array1})
-         }
-        } 
-        //prelimsArray
-      }else{
-       
-      }
-      if(theInfo.earlyPrelims){
-        var array1 = []
-        //console.log('iko earlyPrelims')
-        var i=0
-        for (var key in theInfo.earlyPrelims) {
-          i++
-         var theData=theInfo.earlyPrelims[key]
-         var array2={theId:key,...theData}
-         array1.push(array2)
-         if(i===earlyPrelimsCount){
-          //console.log('whole early prelimms Array',array1)
-          this.setState({ramUfcEarlyPrelimsArray:array1})
-         }
+    })
+  }
+  getNFLMatches=()=>{
+    var theItems=[],v=0
+    var userInfoDb = firebase.database().ref('/theEvents/NFL/').child(this.state.theEventKey)
+    userInfoDb.child('wildCard').once('value',dataSnapshot=>{
+      var firstRoundCount=dataSnapshot.numChildren()
+      console.log('firstRoundCount',firstRoundCount)
+      dataSnapshot.forEach((data) => {
+        v++
+        theItems.push(data.val())
+        if(firstRoundCount===v){
+          console.log('theItems rrrr',theItems)
+          this.setState({theItems})
         }
-      }else{
-      }
+      })
+    })
+  }
+  getNCAABMatches=()=>{
+    var theItems=[],v=0
+    var userInfoDb = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey)
+    userInfoDb.child('round1').limitToLast(10).once('value',dataSnapshot=>{
+      var firstRoundCount=dataSnapshot.numChildren()
+      console.log('firstRoundCount NCAAB',firstRoundCount)
+      dataSnapshot.forEach((data) => {
+        v++
+        theItems.push(data.val())
+        if(firstRoundCount===v){
+          console.log('theItems rrrr',theItems)
+          this.setState({theItems})
+        }
+      })
     })
   }
   selectEvent= (theMenu,theItems) => {
@@ -271,7 +265,7 @@ class UFCEvent extends Component {
     return (
       <div className={style.container}>
         <p className={style.eveP}>Events</p>
-        {this.state.sportType==='NCAAF'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.theEventTitle}</span></p>:null}
+        {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.theEventTitle}</span></p>:null}
         {this.state.upcomingGames.length>0?<div className={style.matchesHeadDiv}>
           {this.state.upcomingGames.map((item,index)=>{
             //console.log('atttt upcomingGames')
@@ -306,35 +300,45 @@ class UFCEvent extends Component {
             if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
             if(this.state.sportType==='NCAAF'){
               homeTeam=item.player1,awayTeam=item.player2,theEvent='NCAAF '+item.matchType
-            }else{homeTeam=item.fighter1Name,awayTeam=item.fighter2Name,theEvent='RAM UFC '+item.match}
+            }else if(this.state.sportType==='NCAAB'){
+              homeTeam=item.player1,awayTeam=item.player2,theEvent='NCAAB '+item.matchType
+            }else if(this.state.sportType==='NFL'){
+              homeTeam=item.player1,awayTeam=item.player2,theEvent='NFL '+item.matchType
+            }
+            else{homeTeam=item.fighter1Name,awayTeam=item.fighter2Name,theEvent='RAM UFC '+item.match}
+            var matchTime=''
+          if(item.timeInMillis){
+            matchTime=Number(item.timeInMillis)
+            matchTime = dayjs(item.timeInMillis).format('DD MMM YYYY HH:mm A')
+          }else{matchTime=item.time}
             return (
               <div className={style.titleDivCont} key={item.id} >
                 <div className={style.testDiv}>
                   <div className={style.theCont0}>
                     <div className={style.theCont01}>
                       <p>{theEvent}</p>
-                      <p>{item.time}</p>
+                      <p>{matchTime}</p>
                     </div>
 
                     {item.status1==='notPlayed'?<div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount}/></div>:<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>}
                     {/*<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>*/}
                     <div className={style.theCont}>
                       <div className={style.theContLeft}>
-                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'?null:'white'}}>
+                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?null:'white'}}>
                           <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                         </div>
                         <p className={style.P1}>{homeTeam}</p>
-                        <p className={style.P2}>{item.p1Rec}</p>
+                        {this.state.sportType==='NCAAB'?<p className={style.P2}>{'#'+item.team1Seed}</p>:<p className={style.P2}>{item.p1Rec}</p>}
                       </div>
                       <BsFillLightningFill className={style.sepIc} />
                       <div className={style.theContRight}>
-                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'?null:'white'}}>
+                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?null:'white'}}>
                           <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                         </div>
                         <p className={style.P1}>{awayTeam}</p>
-                        <p className={style.P2}>{item.p2Rec}</p>
+                        {this.state.sportType==='NCAAB'?<p className={style.P2}>{'#'+item.team2Seed}</p>:<p className={style.P2}>{item.p2Rec}</p>}
                       </div>
                     </div>
                     <div className={style.dateDiv}>

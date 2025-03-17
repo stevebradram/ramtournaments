@@ -107,7 +107,7 @@ class events extends Component {
      isPastEvent=false
     }else{ isPastEvent=true}
     return (
-      <><div className={style.container}>
+      <><div className={style.container} style={{position:'relative'}}>
         <div className={style.eventsDiv}>
         {theEvents.map((item,index)=>{
           var colorP='',clickable=true

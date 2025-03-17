@@ -4,8 +4,7 @@ $pastEve:#919191;
 
 $pastEve2:#dc9600;
 .container {
-    padding-top: 1200px;
-    padding: 160px 90px 100px 90px;
+    padding: 200px 90px 100px 90px;
     min-height: 100vh;
     //min-width: 1200px;
 }
@@ -329,7 +328,7 @@ $pastEve2:#dc9600;
  }
 @media all and (max-width: 800px) {
     .container {
-        padding: 150px 40px 100px 40px;
+        padding: 160px 40px 100px 40px;
     }
     .noDataDiv{
         display: flex;
@@ -353,7 +352,7 @@ $pastEve2:#dc9600;
 
 @media all and (max-width: 600px) {
     .container {
-        padding: 150px 40px 100px 40px;
+        padding: 160px 40px 100px 40px;
     }
 }
 
@@ -362,7 +361,7 @@ $pastEve2:#dc9600;
         font-size: 16px;
     }
     .container {
-        padding: 120px 20px 100px 20px;
+        padding: 160px 20px 100px 20px;
     }
     .noDataIc{
         font-size: 100px;
@@ -385,7 +384,7 @@ $pastEve2:#dc9600;
 
 @media all and (max-width: 360px) {
     .container {
-        padding: 120px 10px 100px 10px;
+        padding: 160px 10px 100px 10px;
     }
     .delModal{
         width: 300px;
