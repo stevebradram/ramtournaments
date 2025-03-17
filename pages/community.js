@@ -111,9 +111,11 @@ class leaderboard extends Component {
           var theData = data.val()
           console.log('the daaaaaaaaata',theData)
           var theUserId = data.key
-          var BPS='',theScore='',r1BPS='',r2BPS='',r1S='',r2S=''
+          var BPS='',theScore='',r1BPS='',r2BPS='',r1S='',r2S='',round1Pick=false,round2Pick=false
           if(sportType==='NCAAB'){
             ///CREATE ROUND 1 AND ROUND 2 ARRAYS
+            if(theData.round1Pick){round1Pick=true}
+            if(theData.round2Pick){round2Pick=true}
             if(currentSelection==='round1'){  
               if(theData.round1BPS){BPS=Number(theData.round1BPS),r1BPS=Number(theData.round1BPS)}else{BPS=0,r1BPS=0}
               if(theData.round1Score){theScore=theData.round1Score,r1S=theData.round1Score}else{theScore='0',r1S='0'}}
@@ -133,24 +135,27 @@ class leaderboard extends Component {
           var theArr = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:BPS, score:theScore,creatorId:creatorId}
           allArr.push(theArr)
           if(sportType==='NCAAB'){
-            var theArr2 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r1BPS, score:r1S,creatorId:creatorId}
-            var theArr3 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r2BPS, score:r2S,creatorId:creatorId}
+            var theArr2 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r1BPS, score:r1S,creatorId:creatorId,round1Pick,round2Pick}
+            var theArr3 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r2BPS, score:r2S,creatorId:creatorId,round1Pick,round2Pick}
             round1Arr.push(theArr2),round2Arr.push(theArr3)
           }
           if (count === i) {
             console.log('allArr55555555555',allArr)
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
             else { allArr = allArr.sort(function (a, b) { return b.BPS - a.BPS }); }
-            this.setState({ ramsInMyFlockArr: allArr })
-            if(sportType==='NCAAB'){
+           
+            if(sportType==='NCAAB'&&(currentSelection==='round1'||currentSelection==='round2')){
               if (isEventStarted) { 
                 round1Arr = round1Arr.sort(function (a, b) { return b.score - a.score });
                 round2Arr = round2Arr.sort(function (a, b) { return b.score - a.score }); }
               else { 
                 round1Arr = round1Arr.sort(function (a, b) { return b.BPS - a.BPS });
                 round2Arr = round2Arr.sort(function (a, b) { return b.BPS - a.BPS }); }
-              this.setState({round1Arr,round2Arr})
-            }
+              this.setState({round1Arr,round2Arr,ramsInMyFlockArr:round1Arr})
+
+              console.log('round1Arr', round1Arr)
+              console.log('round2Arr', round2Arr)
+            }else{ this.setState({ ramsInMyFlockArr: allArr })}
             console.log('the maliza', allArr)
           }
         })
@@ -384,7 +389,9 @@ class leaderboard extends Component {
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>
                         <td>{item.theName}</td>
-                        <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
+                        {this.state.sportType==='NCAAB'&&this.state.currentSelection==='round1'?<td style={{ color: item.picked ? 'green' : 'red' }}>{item.round1Pick + ''}</td>:null}
+                        {this.state.sportType==='NCAAB'&&this.state.currentSelection==='round2'?<td style={{ color: item.picked ? 'green' : 'red' }}>{item.round2Pick + ''}</td>:null}
+                        {this.state.sportType!=='NCAAB'?<td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>:null}
                         <td>{item.BPS}</td>
                         <td>{item.score}</td>
                         {this.state.creatorId===this.state.userId?<td>{item.uid===this.state.userId?null:<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>}</td>:null}
