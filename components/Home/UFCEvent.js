@@ -301,7 +301,7 @@ class UFCEvent extends Component {
             if(this.state.sportType==='NCAAF'){
               homeTeam=item.player1,awayTeam=item.player2,theEvent='NCAAF '+item.matchType
             }else if(this.state.sportType==='NCAAB'){
-              homeTeam=item.player1,awayTeam=item.player2,theEvent='NCAAB '+item.matchType
+              homeTeam=item.player1,awayTeam=item.player2,theEvent=this.state.theEventTitle+' '+item.matchType
             }else if(this.state.sportType==='NFL'){
               homeTeam=item.player1,awayTeam=item.player2,theEvent='NFL '+item.matchType
             }

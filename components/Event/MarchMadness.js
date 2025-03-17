@@ -519,7 +519,7 @@ getNCAABMatchesFinal = () => {
 
     console.log('round1 length', round1.length)
     var eventKey = 'marchMadness' + new Date().getFullYear()
-    var eventTitle = 'March Madness' + new Date().getFullYear()
+    var eventTitle = 'March Madness ' + new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
     if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
