@@ -129,8 +129,7 @@ class DetailsModal extends Component {
       
   }
   submitDetails=()=>{
-    this.notify('Not available at the moment')
-    return
+
     this.setState({flockNameErr:''})
     if (!this.state.buttonClick)return
     this.buttonClickStat()

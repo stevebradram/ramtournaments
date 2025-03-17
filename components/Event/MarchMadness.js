@@ -229,7 +229,6 @@ checkLink=async(userId)=>{
   })
 }
 getMatchesInfo = async (userId) => {
-  return
   var userId=this.state.userId
   //console.log('allMatches',userId,this.state.theEventKey)
  // return
@@ -982,6 +981,12 @@ getNCAABMatchesFinal = () => {
     this.setState({ count: this.state.count + 1, marchMadnessModal: false,[title]:items});
     console.log('azeeza', items)
   };
+  checkForOddsUpdate = () => {
+    this.notify('Not available at the moment');return
+  }
+  checkForOutcome= () => {
+    this.notify('Not available at the moment');return
+  }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
@@ -1071,7 +1076,7 @@ getNCAABMatchesFinal = () => {
               repeat={Infinity}
             />}
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?
+        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'? 
           <div>
             <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
             <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
