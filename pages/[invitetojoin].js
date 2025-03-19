@@ -100,22 +100,80 @@ class invite extends Component {
     })
  }
  confirm=()=>{
+  console.log('daaaaata',this.state.userId,this.state.sportType,this.state.eventId,this.state.flockNameWithSpaces)
+  //return
    var generalDb=firebase.database().ref()
+   var generalDb2=firebase.database().ref()
   generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.eventId)
       .once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {
           this.notify('You are already a flock member of this event')
           Router.push('/community')
         }else{
+          generalDb2.child('/users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId)
+        .once('value', dataSnapshot => {
+          if (dataSnapshot.exists()){
+            var detailsRef=generalDb2.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/flockName/')
+            detailsRef.set(this.state.flockNameWithSpaces)
+           }})
+
   var toAdmin='$$$'+this.state.myName+'!!'+this.state.flockNameWithSpaces+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
   var userFlockData={'creator':this.state.creatorId,'name':this.state.flockNameWithoutSpaces,'link':window.location.href}
   var scoreData={BPS:0,score:0,ramName:this.state.myName,picked:false}
+
   var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId)
   var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId+'/admin')
   var generalDb = firebase.database().ref()
+  
+ 
+     //var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
+     generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/')
+     .once('value', dataSnapshot => {
+       if (dataSnapshot.exists()){
+         console.log('existenceeeeeeee')
+       
+         if(this.state.sportType==='NCAAB'){
+         var theData=dataSnapshot.val()
+         var theBPS=theData.bestPossibleScore
+         var theMenu=theData.theMenu
+         var currentSelection=theData.currentPick
+         var teamName=theData.teamName
+         var thePick='',bps2=''
+         if(currentSelection==='round1'){thePick='round1Pick',bps2='round1BPS'}
+         if(currentSelection==='round2'){thePick='round2Pick',bps2='round2BPS'}
+
+         var scoreData2={BPS:theBPS,score:0,
+           round1Score:'0',round2Score:'0',finalRoundScore:'0',
+           sweet16Score:'0',elite8Score:'0',final4Score:'0',
+           currentPick:currentSelection,theMenu:theMenu,[bps2]:theBPS,
+           ramName:teamName,picked:true,[thePick]:true}
+           console.log('existenceeeeeeee',scoreData2)
+           
+         var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/')
+         detailsRef.child('/flockName/').set(this.state.flockName)
+         membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData2)
+         }else{
+          
+           var theData=dataSnapshot.val()
+           var theBPS=theData.bestPossibleScore
+           var teamName=theData.teamName
+           var scoreData2={BPS:theBPS,score:0,picked:true,ramName:teamName}
+        var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/')
+         detailsRef.child('/flockName/').set(this.state.flockName)
+         membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData2)
+         }
+        }
+        else{
+          
+          membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData)
+         }
+      })
+  
   adminRef.child(this.state.userId).set(toAdmin)
   membersFlockNamesRef.child('/members/'+this.state.flockNameWithoutSpaces).child(this.state.userId).set('$$$'+this.state.myName)
-  membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData)
+ 
+  //membersFlockNamesRef.child('/membersScores/'+this.state.flockNameWithoutSpaces).child(this.state.userId).update(scoreData)
+ 
   generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.eventId).set(userFlockData,(error) => {
     if (!error){
       this.setState({sucessSubmiting:true})

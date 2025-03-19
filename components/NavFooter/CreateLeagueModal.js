@@ -137,12 +137,43 @@ class DetailsModal extends Component {
           this.setState({flockName:''})
         }
       }else{
-        generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId)
+        var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
+        generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId+'/details/')
         .once('value', dataSnapshot => {
           if (dataSnapshot.exists()){
-            var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId+'/details/flockName/')
-            detailsRef.set(this.state.flockName)
-           }})
+            if(this.state.sportType==='NCAAB'){
+            var theData=dataSnapshot.val()
+            var theBPS=theData.bestPossibleScore
+            var theMenu=theData.theMenu
+            var currentSelection=theData.currentPick
+            var teamName=theData.teamName
+            var thePick='',bps2=''
+            if(currentSelection==='round1'){thePick='round1Pick',bps2='round1BPS'}
+            if(currentSelection==='round2'){thePick='round2Pick',bps2='round2BPS'}
+
+            var scoreData2={BPS:theBPS,score:0,
+              round1Score:'0',round2Score:'0',finalRoundScore:'0',
+              sweet16Score:'0',elite8Score:'0',final4Score:'0',
+              currentPick:currentSelection,theMenu:theMenu,[bps2]:theBPS,
+              ramName:teamName,picked:true,[thePick]:true}
+
+            var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId+'/details/')
+            detailsRef.child('/flockName/').set(this.state.flockName)
+            membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData2)}
+            else{
+              var theData=dataSnapshot.val()
+              var theBPS=theData.bestPossibleScore
+              var teamName=theData.teamName
+              var scoreData2={BPS:theBPS,score:0,picked:true,ramName:teamName}
+              var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId+'/details/')
+            detailsRef.child('/flockName/').set(this.state.flockName)
+            membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData2)
+            }
+           }
+           else{
+            membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData)
+           }
+          })
         
         var startLink=''
           if(this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'){
@@ -151,7 +182,10 @@ class DetailsModal extends Component {
             startLink='https://ramtournament.com/'
           }
       var toAdmin='$$$'+this.state.creatorName+'!!'+this.state.flockName+'!!'+this.state.creatorEmail+'!!'+this.state.creatorPhoneNo
-      var scoreData={BPS:0,score:0,ramName:this.state.creatorName,picked:false}
+      
+     
+     
+
       var theFlockData={creator:this.state.userId,membersNo:0,score:0,avScore:0}
       var theFlockData2={creator:this.state.userId,membersNo:0,score:0,avScore:0,
         round1MembersNo:0,round1Score:0,round1AvScore:0,round2MembersNo:0,round2Score:0,round2AvScore:0,
@@ -168,7 +202,7 @@ class DetailsModal extends Component {
       }else{
         generalDb.child('/flocksSystem/flockNames/'+this.state.leagueId+'/theFlocks/'+flockNameWithNoSpaces).update(theFlockData)
       }
-      membersFlockNamesRef.child('/membersScores/'+flockNameWithNoSpaces).child(this.state.userId).update(scoreData)
+     
       uniqueFlockNamesRef.child(flockNameWithNoSpaces).set(theArr,(error) => {
         if (!error){
           

@@ -257,7 +257,7 @@ class leaderboard extends Component {
       () => this.setState({ showProgressBar: false }),
       2000)
   }
-  deleteMamber= () => {
+  deleteMember= () => {
     if((new Date().getTime()>this.state.theTime)){
       this.notify("Can't delete a member on an already started event")
      }else{
@@ -268,10 +268,17 @@ class leaderboard extends Component {
   var gamesDataRef = firebase.database().ref('users/').child(this.state.userIdToBeDeleted+'/ramData/').child('events').child(this.state.sportType)
   var ramsBets = firebase.database().ref('userBets/'+this.state.sportType+'/')
 
-  gamesDataRef.child(this.state.theEventKey+'/details/').set(null)
+  //deletes from here
+  /*gamesDataRef.child(this.state.theEventKey+'/details/').set(null)
   gamesDataRef.child(this.state.theEventKey+'/bets/').set(null)
   generalDb.child('users/'+this.state.userIdToBeDeleted+'/ramData/upcomingEvents/'+this.state.sportType+'/').child(this.state.theEventKey).set(null)
-  ramsBets.child(this.state.theEventKey+'/'+this.state.userIdToBeDeleted).set(null)
+  ramsBets.child(this.state.theEventKey+'/'+this.state.userIdToBeDeleted).set(null)*/
+  
+  //added this
+  gamesDataRef.child(this.state.theEventKey+'/details/flockName/').set('Flockless')
+  /////
+  
+
   adminRef.child(this.state.userIdToBeDeleted).set(null)
   membersFlockNamesRef.child('/members/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
   membersFlockNamesRef.child('/membersScores/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
@@ -381,7 +388,7 @@ class leaderboard extends Component {
                     <th>Picked?</th>
                     <th>Best Possible<br />Score</th>
                     <th>Cumulative <br />Score</th>
-                    {this.state.creatorId===this.state.userId?<th>Action</th>:null}
+                    <th>Action</th>
                     </tr>
                   {this.state.ramsInMyFlockArr.map((item, index) => {
                     //console.log('picked', item)
@@ -394,8 +401,11 @@ class leaderboard extends Component {
                         {this.state.sportType!=='NCAAB'?<td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>:null}
                         <td>{item.BPS}</td>
                         <td>{item.score}</td>
-                        {this.state.creatorId===this.state.userId?<td>{item.uid===this.state.userId?null:<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>}</td>:null}
-                    
+                        <td>{this.state.creatorId===this.state.userId?item.uid!==this.state.userId?<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>:null:
+                        item.uid===this.state.userId?<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>:null}</td>
+
+                        {/*this.state.creatorId===this.state.userId?<td>{item.uid===this.state.userId?null:<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>}</td>:null}
+                        <td>{item.uid===this.state.userId?null:<MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName})}/>}</td>*/}
                         </tr>)
                   })}
                 </table>
@@ -470,7 +480,7 @@ class leaderboard extends Component {
           <p className={styles.delModalP2}>Are you sure you want to delete "{this.state.deleteName}" from your flock?</p>
           <p className={styles.delModalP2} style={{color:'red'}}>This cannot be reversed!</p>
           <div>
-            <button className={styles.delModalDelBtn} onClick={()=>this.deleteMamber()}>Delete</button>
+            <button className={styles.delModalDelBtn} onClick={()=>this.deleteMember()}>Delete</button>
             <button className={styles.canModalDelBtn} onClick={()=>this.setState({deleteModal:false})}>Cancel</button>
           </div>
         </div>
