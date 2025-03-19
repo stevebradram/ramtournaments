@@ -122,6 +122,7 @@ class DetailsModal extends Component {
       }
      
      }else{
+      generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId)
       generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.leagueId)
       .once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {
@@ -136,6 +137,13 @@ class DetailsModal extends Component {
           this.setState({flockName:''})
         }
       }else{
+        generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId)
+        .once('value', dataSnapshot => {
+          if (dataSnapshot.exists()){
+            var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.leagueId+'/details/flockName/')
+            detailsRef.set(this.state.flockName)
+           }})
+        
         var startLink=''
           if(this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'){
             startLink='http://localhost:3000/'
@@ -170,6 +178,7 @@ class DetailsModal extends Component {
           //this.props.onClick('closeLeagueModal')
         }
      })
+     
     }
   })
   }

@@ -18,7 +18,6 @@ import dayjs from 'dayjs';
 import { SlOptionsVertical } from "react-icons/sl";
 import copy from 'copy-to-clipboard';
 import ProgressBar from '../Helper/ProgressBar'
-import PastUpcomingEvents from './PastUpcomingEvents'
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 class RamUfc extends Component {
   state={theMenu:'mainCard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:false,theEvent:'Upcoming Events',currentID:1,
@@ -26,8 +25,8 @@ class RamUfc extends Component {
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME',theEventTime:0, 
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,showProgressBar:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
-    ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
-    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:''
+    ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],currentEventsArr:[],pastEventsArr:[],itemsToShowArr:[],
+    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:'',isThereUpcomingGames:false,isTherePastGames:false
   }
   componentDidMount=()=>{
    ////console.log('on raaaaaaaaaaaaam ufc')
@@ -372,7 +371,7 @@ showProgressBar2=()=>{
  checkUpcomingPastGames=async(userId)=>{
   //return
   var userInfoDb=firebase.database().ref('/theEvents/eventsIds')
-  var upcomingGames=[],pastGames=[],allGames=[]
+  var upcomingGames=[],pastGames=[]//,allGames=[]
   var nowDate= await new Date().getTime()
   ////console.log('nowDate',nowDate)
   await  userInfoDb.once('value',dataSnapshot=>{
@@ -400,31 +399,60 @@ showProgressBar2=()=>{
       //allGames.push(theItem)
       ////console.log('key',key,'value',time,dataSnapshot.size)
       if(sportType==='ramUfc'){
-        /*if(nowDate>time){
-          pastG={id:key,time:time,title:title}
-          pastGames.push(pastG)
-        }
-        if(nowDate<time){
-          upcomingG={id:key,time:time,title:title}
-          upcomingGames.push(upcomingG)
-        }*/
+       
           var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,theData:theData,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate}
-          allGames.push(theItem)
+         // allGames.push(theItem)
+        if(nowDate>(endTime+36000000)){
+          pastGames.push(theItem)
+        }
+        if(nowDate<endTime){
+          upcomingGames.push(theItem)
+        }
       }
       if(theCount===i){
-        console.log('data.val() 555555',allGames)
+        console.log('data.val() 555555',upcomingGames,pastGames)
         //return
         var theEventTitle='',theEventKey='',sportType='',theTime='',endTime=0
-        if(allGames.length>0){
+        /*if(allGames.length>0){
           allGames=allGames.sort(function(a, b){return b.time - a.time});
          // //console.log('teeeeeee',allGames)
           theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],endTime=allGames[0]['endTime'],
           getEventsTimeUpdate=allGames[0]['getEventsTimeUpdate'],oddsTimeUpdate=allGames[0]['oddsTimeUpdate'],fetchResultsTimeUpdate=allGames[0]['fetchResultsTimeUpdate']
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,endTime,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate},()=>{
           this.getUfcMatches(userId)
+
+         
             //this.getNullScoreBoardData(sportType,theEventKey)
-          })
-        }
+          })}*/
+          if(upcomingGames.length>0){
+            console.log('rakadaaaa 111')
+            upcomingGames=upcomingGames.sort(function(a, b){return b.time - a.time});
+            theEventTitle=upcomingGames[0]['title'];sportType=upcomingGames[0]['sportType'],theEventKey=upcomingGames[0]['id'],theTime=upcomingGames[0]['time'],endTime=upcomingGames[0]['endTime'],
+            getEventsTimeUpdate=upcomingGames[0]['getEventsTimeUpdate'],oddsTimeUpdate=upcomingGames[0]['oddsTimeUpdate'],fetchResultsTimeUpdate=upcomingGames[0]['fetchResultsTimeUpdate']
+            this.setState({isThereUpcomingGames:true,itemsToShowArr:upcomingGames,currentEventsArr:upcomingGames,theEventTitle,theEventKey,sportType,theTime,endTime,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate,theEvent:'Upcoming Events'},()=>{
+            this.getUfcMatches(userId)})
+            if(pastGames.length>0){
+              pastGames=pastGames.sort(function(a, b){return b.time - a.time});
+              this.setState({isTherePastGames:true,pastEventsArr:pastGames})
+            }else{this.setState({isTherePastGames:false})}
+            //this.setState({isThereUpcomingGames:true,currentEventsArr:upcomingGames}) 
+          }else{
+            
+            this.setState({isThereUpcomingGames:false,theEvent:'Past Events'})
+            if(pastGames.length>0){
+              
+              pastGames=pastGames.sort(function(a, b){return b.time - a.time});
+              theEventTitle=pastGames[0]['title'];sportType=pastGames[0]['sportType'],theEventKey=pastGames[0]['id'],theTime=pastGames[0]['time'],endTime=pastGames[0]['endTime'],
+            getEventsTimeUpdate=pastGames[0]['getEventsTimeUpdate'],oddsTimeUpdate=pastGames[0]['oddsTimeUpdate'],fetchResultsTimeUpdate=pastGames[0]['fetchResultsTimeUpdate']
+              this.setState({isTherePastGames:true,itemsToShowArr:pastGames,pastEventsArr:pastGames,theEventTitle,theEventKey,sportType,theTime,endTime,getEventsTimeUpdate,oddsTimeUpdate,fetchResultsTimeUpdate},()=>{
+                this.getUfcMatches(userId)
+                console.log('rakadaaaa 250',this.state.itemsToShowArr,pastGames)
+              })
+                
+            }else{this.setState({isTherePastGames:false})}
+          }
+          
+        
       }
     });
     })
@@ -926,12 +954,29 @@ chooseHomeEvent=(event,id)=>{
       copy(this.state.theLink);
       this.notify('Link copied successfully')
     }
+    pastCurrentEvent=(event)=>{
+      if(event==='Upcoming Events'){
+        if(this.state.isThereUpcomingGames){
+          this.setState({theEvent:event,itemsToShowArr:this.state.currentEventsArr})
+        }else{
+          this.notify('No current/upcoming events at the moment')
+        }
+      }
+      if(event==='Past Events'){
+        if(this.state.isTherePastGames){
+          this.setState({theEvent:event,itemsToShowArr:this.state.pastEventsArr})
+        }else{
+          this.notify('No past events at the moment')
+        }
+      }
+    }
   render() {
    var flockTeamName=''
    var itemToModals=''
    var theText='samosaaaaaaaaaaaaaaaaaa'
    var isPastEvent=''
    var todayInMillis=new Date().getTime()
+   console.log('this.state.currentEventsArr',this.state.currentEventsArr)
    if(this.state.endTime<todayInMillis&&(this.state.endTime-todayInMillis)<-86400000){
     isPastEvent=false
    }else{ isPastEvent=true}
@@ -940,15 +985,12 @@ chooseHomeEvent=(event,id)=>{
     if(this.state.dataAvailable){itemToModals=this.state.theItems}else{itemToModals=this.state.ramUfcMaincardArray}
     return (
       <><div className={style.container}>
-        {/*<div className={style.eventsCont}>
-        <p className={style.eventsP} id={this.state.theEvent==='Upcoming Events'?style.playerP1:style.playerP} onClick={()=>this.setState({theEvent:'Upcoming Events'})}>UPCOMING EVENTS</p>
-        <p className={style.eventsP} style={{color:this.state.pastEventsAvailable?null:'#b2b2b2',borderColor:this.state.pastEventsAvailable?null:'#b2b2b2'}} id={this.state.theEvent==='Past Events'?style.playerP1:style.playerP} onClick={()=>this.state.pastEventsAvailable?this.setState({theEvent:'Past Events'}):null}>PAST EVENTS</p>
-        </div>*/}
-       <div className={style.matchesHeadDiv}>
-        <PastUpcomingEvents allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId}/>
+        <div className={style.eventsCont}>
+        <p className={style.eventsP} id={this.state.theEvent==='Upcoming Events'?style.playerP1:style.playerP} onClick={()=>this.pastCurrentEvent('Upcoming Events')}>CURRENT EVENTS</p>
+        <p className={style.eventsP} /*style={{color:this.state.pastEventsAvailable?null:'#b2b2b2',borderColor:this.state.pastEventsAvailable?null:'#b2b2b2'}}*/ id={this.state.theEvent==='Past Events'?style.playerP1:style.playerP} onClick={()=>this.pastCurrentEvent('Past Events')}>PAST EVENTS</p>
         </div>
-       {<div className={style.matchesHeadDiv}>
-          {this.state.allGames.map((item,index)=>{
+       <div className={style.matchesHeadDiv}>
+          {this.state.itemsToShowArr.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
            var theColor='#292f51',timing='Active Event'
            if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){
@@ -969,7 +1011,7 @@ chooseHomeEvent=(event,id)=>{
               </div>  
             )
           })}
-        </div>}
+        </div>
           <div className={style.profileDiv}>
           <div className={style.imageDiv}>
           {this.state.profilePhoto.length?<img src={this.state.profilePhoto}/>:
@@ -1144,3 +1186,719 @@ chooseHomeEvent=(event,id)=>{
 }
 
 export default RamUfc
+
+/* 
+$blackish:#292f51;
+$redColor:#CB1E31;
+$pastEve:#919191;
+$theDark:#b2b2b2;
+.container{
+    min-height: 100vh;
+  }
+  .eventsCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: -20px;
+    margin-bottom: 25px;
+}
+.eventsP {
+    margin-right:10px;
+    border: 1px solid #909090;
+    color: #909090;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0px 20px;
+    font-size: 14px;
+}
+  .listCont{
+    display: flex;
+    flex-wrap: wrap;
+    //background-color: red;
+  }
+  .listDiv{
+    box-sizing: border-box;
+    height:auto;
+    width:47%;
+    border: 1px solid #eee;
+    background-color: white;
+    padding:30px;
+    padding-top: 20px;
+    padding-bottom:20px;  
+    display: flex;
+    align-items: center;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2); 
+    margin: 10px;
+    
+}
+.matchesHeadDiv{
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+    flex-wrap: wrap;
+}
+  .theCont0{
+    width: 100%; 
+}
+  .theCont01{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $blackish;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    padding-top: 10px;
+    font-weight: 500;
+}
+.theCont{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+ }
+ .theContLeft{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0px;
+   
+}
+.theContRight{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0px;
+   
+}
+.imgDiv{
+    height:84px;
+    width: 84px;
+    border-radius:80px;
+    background-color: #fff;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2); 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border: 2px solid transparent;
+}
+.theImg1{
+    height:80px;
+    width: 80px;
+    border-radius:80px;
+    object-fit: contain;
+}
+.gameP{
+    position: absolute;
+    bottom:0;
+    background-color: #e24c5e;
+    padding: 2px 10px;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: -3px;
+    font-size: 14px;
+    background-color: #1ecb97;
+}
+.dateDiv{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    //height: 30px;
+   // border-top: 1px solid #eee;
+    margin-top: -10px;
+    color: $blackish;
+    padding-top: 0px;
+}
+#statDiv{
+    //display: flex;
+    width: 100%;
+    //display: flex;
+    align-items: center;
+    height: 30px;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    padding-top: 10px;
+   // justify-content: space-between;
+    padding-right: 0px;
+   
+}
+
+.pickP{
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 10px;
+    color: $blackish;
+    margin-top: 3px;
+   
+}
+.statP{
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    color: $blackish;
+    //background-color: green; 
+    margin-top: -19px;
+}
+.statS1{
+    margin-right: 10px;
+    color: $redColor;
+    
+}
+.statS2{
+  color: $redColor;
+}
+.sepIc{
+    margin-top: 20px;
+    font-size: 40px;
+    color: $redColor;
+    
+}
+.eventStatP{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: $redColor;
+    margin-top: 10px;
+}
+.P1{
+    margin-top: 10px;
+    font-weight: 700;
+    color: $blackish;
+    font-size: 18px;
+    text-align: center;
+}
+.countryP{
+    font-weight: 600;
+    color: #eb9d0c;
+    text-align: center;
+}
+.P2{
+    margin-top: 3px;
+    color: #c1c1c1;
+    font-size: 14px;
+    text-align: center;
+}
+.p1Points{
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    width: 50%;
+    margin-right: -28px;
+}
+.usP{
+    margin: 0px 20px;
+    color: $redColor;
+    font-weight: 600;
+    font-style: italic;
+}
+.p2Points{
+    font-size: 20px;
+    font-weight: 700;
+    width: 50%;
+    text-align: center;
+    margin-left: -28px;
+}
+.eveP{
+    font-weight: 600;
+    color: $blackish; 
+    font-size: 30px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    padding: 0px 0px;
+    margin-top: 20px;
+}
+.eveP span{
+    color: $redColor;
+}
+.eveDiv{
+    width: 100%;
+    display: flex;
+    //justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.eveDiv p{
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid $blackish;
+    color: $blackish;
+    width: 140px;
+    text-align: center;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+#playerP1 {
+    background-color: #1ecb97;
+    color: white;
+    border-color: #1ecb97;
+}
+
+#playerP2 {
+    background-color: $redColor;
+    color: white;
+    border-color: $redColor;
+}
+
+#playerP3 {
+    background-color: $blackish;
+    color: white;
+    border-color: $blackish;
+}
+.profileDiv{
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border: 1px dotted $blackish;
+    width: auto;
+    //justify-content: space-around;
+    padding: 10px 20px;
+    border-radius: 10px;
+    min-width: 300px;
+
+
+    position: absolute;
+    top: 0;right: 0;
+    margin-top: 210px;
+    margin-right: 100px;
+}
+.imageDiv{
+    margin-right: 20px;
+    border-radius: 5px;
+    width: 70px;
+    height:70px;
+    background-color: white;
+   // border: 1px solid #cbcbcb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.imageDiv img{
+    height: 100%;
+    object-fit: cover;
+}
+.detailsDiv p{
+  color: $blackish;
+  margin: 2px 0px;
+  font-weight: 600;
+  font-size: 15px;
+  //margin-top: 50px;
+}
+.personIC{
+    color: #eee;
+    font-size: 50px;
+}
+#editP{
+    border: 1px solid $redColor;
+    color: $redColor;
+    padding: 2px 0px;
+    border-radius: 5px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.scoresCont{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.scoresCont div{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px dotted $blackish;
+    padding: 30px 10px;
+    border-radius: 10px;
+}
+.scoreP1{
+    color: $blackish;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+}
+.scoreP2{
+  color: $redColor;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+.theCountDiv{
+    display: flex;
+    justify-content: center;
+}
+.theCount{
+    font-size: 14px;
+    font-weight: 600;
+    color: $blackish;
+    margin-top: 10px;
+}
+.detailsModal{
+    position: fixed;
+    top:0;bottom:0;left:0;right:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.resultsBtn{
+    margin-right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #e1cb08;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    //background-color: #63ae5f;
+    //color: white;
+   
+}
+.detailsModal{
+    position: fixed;
+    top:0;bottom:0;left:0;right:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.picksDiv{
+    background-color: $blackish;
+    width: 270px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0px;
+    margin-left: 0px;
+    margin-bottom: 30px;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.picksP{
+    background-color: $blackish;
+    color: white;
+    border: 1px solid $blackish;
+    font-size: 16px;
+    font-weight: 600;  
+    //background: linear-gradient(to right, #CB1E31 0%, #fa495e 100%);
+}
+.joinRamDiv{
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+}
+.joinRamBtn{
+    background-color: transparent;
+    //width: 60%;
+    border: none;
+    border: 1px solid $blackish;
+    color: $blackish;
+    padding: 7px 10px;
+    margin-top: 15px;
+    font-size: 16px;
+    align-self: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.thePickDiv{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    padding-top: 10px;
+   
+}
+.thePickP{
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid $redColor;
+    color: $redColor;
+    padding-bottom: 5px;
+}
+.headList{
+    margin-right: 20px;
+    border: 1px solid $blackish;
+    padding: 5px 20px;
+    border-radius: 5px;
+    display: flex;
+   // flex-direction: column;
+    align-items: center;
+    color: $blackish;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
+}
+.selectHomeEventDiv{
+    position: absolute;
+    top:0;right:0;bottom: 0;left: 0;
+    background-color: white;
+    font-size: 12px;
+    color: $blackish;
+    border-radius: 5px;
+    background-color: #00000011;
+    display: flex;
+    justify-content: flex-end;
+}
+.selectHomeEventDiv button{
+   border: 1px solid #eee;
+   padding: 4px 7px;
+   border-radius: 5px;
+   background-color: $redColor;
+   margin-top: 2px;
+   margin-right: 5px;
+   cursor: pointer;
+   height: 30px;
+   font-size: 12px;
+   color: white;
+   margin-right: 35px;
+   
+}
+.headListDiv2{
+    display: flex;
+    margin-top: 0px;
+    align-items: center;
+    margin-right: 10px;
+}
+.headListP1{
+    font-size: 14px; 
+ }
+ .headListP2{
+     font-size: 10px; 
+     
+ }
+ .headListP3{
+     font-size: 10px; 
+ }
+
+ .resultsCont{
+    display: flex;
+    flex-wrap: wrap;
+ }
+ .resultsDiv{
+    margin-bottom: 10px;
+ }
+ .lastUpdateP{
+    font-size: 10px;
+    color: #1ecb97;
+    font-weight: 600;
+    margin-top: 4px;
+    margin-left: 5px;
+    //color: $redColor;
+ }
+ .ufcLinkDiv{
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+ }
+ .ufcLinkInput{
+    width: 300px;
+    margin-right: 5px;
+    padding: 0px 5px;
+    height: 32px;
+    border: none;
+    border: 1px solid #c2c2c2;
+    border-radius: 2px;
+    outline: none;
+
+ }
+ .ufcLinkSend{
+    width:80px;
+    height: 32px;
+    background-color: $redColor;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+ }
+ .shareDiv{
+    border: 1px solid $redColor;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    height: 30px;
+    align-items: center;
+    border-radius: 5px;
+    color: $redColor;
+    margin-top: 10px;
+    cursor: pointer;
+ }
+ .shareDiv p{
+    margin-right: 5px;
+ }
+@media all and (max-width: 900px) {
+    .profileDiv{
+        display: flex;
+        margin-bottom: 30px;
+        padding: 20px 20px;
+        position: relative;
+        margin-top: 20px;
+        margin-right: 0px;
+        max-width: 400px;
+        min-width: auto;
+    }
+}
+@media all and (max-width: 800px) {
+      .listDiv{
+        width:48%;
+        padding:20px;
+        padding-top: 20px;
+        padding-bottom:20px;  
+        margin: 5px;
+      }
+     
+}
+@media all and (max-width: 600px) {
+      .listDiv{
+        width:100%;
+        padding:20px;
+        padding-top: 20px;
+        padding-bottom:20px;  
+        margin: 10px;  
+    }
+    .scoreP1{
+        font-size: 20px;
+    }
+    .scoreP2{
+      font-size: 16px;
+      font-weight: 600;
+    }
+}
+@media all and (max-width: 430px) {
+    
+      .listDiv{
+        padding:20px;  
+        margin: 0px;
+        margin-bottom: 10px;  
+    }
+    .scoresCont div{
+        width: 32%;
+    }
+    .scoreP1{
+        font-size: 18px;
+    }
+    .eveP{
+        font-size: 26px;
+    }
+    
+}
+@media all and (max-width: 360px) {
+      .listDiv{
+        padding: 10px 10px 30px 10px;
+      }
+      .profileDiv{
+        margin-bottom: 30px;
+        width: 90%;
+        padding:15px 10px;
+        position: relative;
+        margin-top: 20px;
+        margin-right: 0px;
+    }
+    .imageDiv{
+        margin-right: 20px;
+        border-radius: 5px;
+        width: 60px;
+        height:60px;
+    }
+    .eveP{
+        margin-top: 0px;
+    }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+*/

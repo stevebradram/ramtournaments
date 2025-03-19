@@ -83,6 +83,7 @@ class NCAAModal extends Component {
    
     //console.log('incomingData',this.state.currentSelection,'round2Edit',round2Edit,'the length',incomingData.length)
   }
+
   fillEventDetails=async(menu)=>{
     return
     this.showProgressBar()

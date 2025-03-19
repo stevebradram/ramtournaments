@@ -15,9 +15,12 @@ import Countdown from 'react-countdown';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
+import { TbCheckbox } from "react-icons/tb";
+import { MdClose } from "react-icons/md";
 import DetailsModal from './MarchMadnessDetailsModal';
 import EditDetails from './DetailsModalFlockSystem'
 import MarchMadnessModal from './MarchMadnessModal'
+import axios from "axios"
 var thePoints=[{seed:1,val:1.01},{seed:2,val:1.08},{seed:3,val:1.17},{seed:4,val:1.27},{seed:5,val:1.54},{seed:6,val:1.61},{seed:7,val:1.63},{seed:8,val:2.02},
   {seed:9,val:1.95},{seed:10,val:2.58},{seed:11,val:2.62},{seed:12,val:2.86},{seed:13,val:4.75},{seed:14,val:6.91},{seed:15,val:13.81},{seed:16,val:76}
 ]
@@ -105,9 +108,17 @@ class MarchMadness extends Component {
   
     componentDidMount = () => {
       this.checkAuth()
+      //this.getMarchMadnessEvents()
       
     }
-
+    getMarchMadnessEvents=()=>{
+      var oddsApi = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
+        axios.get(oddsApi)
+          .then((res) => {
+            var resultsArr = res.data
+            console.log('the resultsssssssss',resultsArr)
+          })
+    }
     /*editTheFlocks=()=>{
       var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
       var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
@@ -228,10 +239,10 @@ checkLink=async(userId)=>{
     }
   })
 }
-getMatchesInfo = async (userId) => {
+getMatchesInfo = async () => {
   var userId=this.state.userId
-  //console.log('allMatches',userId,this.state.theEventKey)
- // return
+  //console.log('userId ddddddd',userId)
+  //return
   var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAB/" + this.state.theEventKey + '/')
   var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
   var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAB/" + this.state.theEventKey + '/details/')
@@ -282,6 +293,7 @@ getMatchesInfo = async (userId) => {
         })
         if(round1Count===i){
           console.log('round 19 item',this.state.allRound1MatchesArr)
+          this.setState({allRound1MatchesArr:this.state.allRound1MatchesArr})
         }
       }}
       var round2Exists=dataSnapshot.child('round2').exists()
@@ -1007,6 +1019,72 @@ getNCAABMatchesFinal = () => {
       }
   })
     }
+    closePickWinner=(index2)=>{
+      var theItems=this.state.currentItems
+      delete theItems[index2]['chosenWinner']
+      delete theItems[index2]['showChooseWinner']
+      this.setState({currentItems:theItems})
+      console.log('this.state.currentItems 001',theItems)
+    }
+    pickWinner=(index2,winner,time)=>{
+      var nowTime=new Date().getTime()
+      /*if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }*/
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+      var theItems=this.state.currentItems
+      theItems[index2]['showChooseWinner']=true
+      this.setState({currentItems:theItems})
+      console.log('this.state.currentItems 002',theItems)
+   
+    }
+    chosenWinner=(index2,winner)=>{
+      var theItems=this.state.currentItems
+      theItems[index2]['chosenWinner']=winner
+      this.setState({currentItems:theItems})
+      console.log('this.state.currentItems 003',theItems)
+    }
+    submitWinner=(index,winner)=>{
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+     
+    }
+    checkForOutcome=async (index,winner) => {
+      try {
+        
+        this.state.currentItems[index]['winner']=winner
+        delete this.state.currentItems[index]['chosenWinner']
+        
+        if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.currentItems.length<1)return
+        var scoreName=''
+        if(!this.state.theEventKey||this.state.theEventKey.length<3)return
+        if(this.state.currentSelection==='round1'){scoreName='round1Score'}
+        if(this.state.currentSelection==='round2'){scoreName='round2Score'}
+        let theItems = JSON.stringify(this.state.currentItems);
+        var theLink='theEvents::NCAAB::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
+        if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+        var theQuery=encodeURIComponent(theLink)
+        console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
+        console.log('theLink',theLink,theItems)
+        delete this.state.currentItems[index]['showChooseWinner']
+        await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
+          .then((res) => {
+            ////console.log('theItems',res)
+            var theOutcome = res.data
+            ////console.log('theItems',theOutcome)
+            if(theOutcome==='sucesss'){}
+          })
+          } catch (error) {
+            ////console.log('error',error)
+          }
+      }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
@@ -1185,6 +1263,10 @@ getNCAABMatchesFinal = () => {
                 <p>March Madness - {item.matchType}</p>}
                 <p>{theTime}</p>
               </div>
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(index,item.winner,item.timeInMillis)}>
+              <p>Pick Winner</p>
+              </div>:null}
+              
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
                 <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
 
@@ -1224,6 +1306,27 @@ getNCAABMatchesFinal = () => {
                 <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
               }
             </div>
+            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(index)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(index,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player1}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(index,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player2}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(index,item.chosenWinner)}>Submit</button>
+            </div></div>:null}
           </div>
           )
         })}

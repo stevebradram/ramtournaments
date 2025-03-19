@@ -9,14 +9,13 @@ $theDark:#b2b2b2;
     width: 100%;
     display: flex;
     align-items: center;
-    margin-top: 0px;
-    margin-bottom: 20px;
+    margin-top: -20px;
+    margin-bottom: 25px;
 }
 .eventsP {
-    margin-left: 5px;
-    margin-right: 5px;
-    border: 1px solid $blackish;
-    color: $blackish;
+    margin-right:10px;
+    border: 1px solid #909090;
+    color: #909090;
     text-align: center;
     height: 35px;
     display: flex;
@@ -255,9 +254,9 @@ $theDark:#b2b2b2;
     font-weight: 600;
 }
 #playerP1 {
-    background-color: $redColor;
+    background-color: #1ecb97;
     color: white;
-    border-color: $redColor;
+    border-color: #1ecb97;
 }
 
 #playerP2 {
