@@ -14,7 +14,7 @@ class DetailsModal extends Component {
   state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
     userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',submitedFlockName:'',
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],flockNameModal:false,openNewFlockModal:true,
-    ramFlockName:'Flockless',flockNameNoSpace:'Flockless',myEmail:'',myPhoneNo:''}
+    ramFlockName:'',flockNameNoSpace:'',myEmail:'',myPhoneNo:''}
   componentDidMount=()=>{
    
     //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
