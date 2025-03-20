@@ -1093,10 +1093,11 @@ getNCAABMatchesFinal = () => {
       // return
         await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
-            ////console.log('theItems',res)
             var theOutcome = res.data
-            ////console.log('theItems',theOutcome)
-            if(theOutcome==='sucesss'){}
+            this.notify(theOutcome)
+            if(theOutcome==='Success Updating Results'){
+              this.checkAuth()
+            }
           })
           } catch (error) {
             ////console.log('error',error)
@@ -1106,6 +1107,7 @@ getNCAABMatchesFinal = () => {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
     var title1=''
+    var currentRank=this.state.currentEventUserInfo[this.state.currentRound+'Rank']
     if(this.state.theMenu==='east'){title1='East'}
     if(this.state.theMenu==='west'){title1='West'}
     if(this.state.theMenu==='south'){title1='South'}
@@ -1205,17 +1207,17 @@ getNCAABMatchesFinal = () => {
         <div className={style.scoresCont1}>
         <p className={style.currentP}>{titleToShow}</p>
           <p className={style.scoreP1}>Best possibe Score:</p>
-          <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo['bestPossibleScore']:'0.00'} points</p>
+          <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo[this.state.currentRound+'BPS']:'0.00'} points</p>
         </div>
         <div className={style.scoresCont2}>
         <p className={style.currentP}>{titleToShow}</p>
         <p className={style.scoreP1}>Current Score</p>
-        <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo['currentScore']:'0.00'} points</p>
+        <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo[this.state.currentRound+'Score']:'0.00'} points</p>
         </div>
         <div className={style.scoresCont3}>
         <p className={style.currentP}>{titleToShow}</p>
         <p className={style.scoreP1}>Current Rank in NCAAB</p>
-        <p className={style.scoreP2}>{this.state.dataAvailable&&this.state.currentRank?this.state.currentRank:'N/A'}</p>
+        <p className={style.scoreP2}>{this.state.dataAvailable&&currentRank!==false?currentRank:'N/A'}</p>
         </div>
         </div>
           <div className={style.eve2Div}>
