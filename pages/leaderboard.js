@@ -419,7 +419,7 @@ class leaderboard extends Component {
           :null}
           {this.state.sportType==='NCAAB'?
            <>
-           <th>Best Score<br/>{' '+BSPTitle}</th>
+           <th>Best Score<br/>{'Round 1'}</th>
            <th>Round 1<br/>Score</th>
            <th>Round 2<br/>Score</th>
            <th>Final<br/>Round</th>
