@@ -903,6 +903,8 @@ getNCAABMatchesFinal = () => {
     this.notify('Link copied successfully')
   }
   openTheModal =async () => {
+    this.notify('Pick time expired');
+    return
     /*if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
