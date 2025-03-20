@@ -243,7 +243,12 @@ class leaderboard extends Component {
     if(!this.state.userLoggedIn)return
     this.setState({eventStartTime:theTime,sportType})
     console.log('curentttttttt 500000',sportType,theEventKey,theTime)
-    var dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
+    var dbLink=''
+    if(sportType==='NCAAB'){
+      dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/' 
+    }else{
+      dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
+    }
     //var dbLink2="/userBets/scoreBoards/ramUfc/ufc-310-December72024/"
     var scoreBoardDb=firebase.database().ref(dbLink)
    var data3=[]
@@ -251,6 +256,7 @@ class leaderboard extends Component {
       console.log('dataSnapshot',dataSnapshot.exists())
       if(!dataSnapshot.val()){
         console.log('hapa hakuna data 22222')
+        
         var nowMillis=new Date().getTime()
         if((theTime-nowMillis)<1200000||this.state.isAdmin){
           console.log('hapa hakuna data 55555555')
@@ -277,10 +283,12 @@ class leaderboard extends Component {
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         if(this.state.isAdmin){
         userInfoDb2.once('value',dataSnapshot=>{
+          
           var theD=dataSnapshot.val()
-          //theDet['phone']=theD.phoneNo
-          console.log('theD.email',theD.email)
-          if(theD.phoneNo!==null){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+          theDet['phone']=theD.phoneNo
+         // console.log('theD.email',theD.email)
+          //if(theD.phoneNo!==null){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+          //if(theD.email!==null){theDet['email']=theD.phoneNo}else{theDet['email']='N/A'}
           theDet['email']=theD.email
         })}
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/"+sportType+"/"+theEventKey+"/details/")
@@ -398,8 +406,8 @@ class leaderboard extends Component {
           <th>Overall <br/>Rank</th>
           <th>RAM Name</th>
           <th>Flock Name</th>
-          <th>{this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?'Cumulative':'Current'}<br/>Score</th>
-          {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<th>Best Possible<br/>Score</th>}
+          {this.state.sportType!=='NCAAB'?<th>{this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?'Cumulative':'Current'}<br/>Score</th>:null}
+          {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'||this.state.sportType==='NCAAB'?null:<th>Best Possible<br/>Score</th>}
           {this.state.sportType==='NCAAF'?
            <>
            {this.state.isEventExpired?<th>Best Possible<br/>Score</th>:<th>Best Score<br/>{' '+BSPTitle}</th>}
@@ -409,7 +417,14 @@ class leaderboard extends Component {
            <th>Finals</th>
            </>
           :null}
-          
+          {this.state.sportType==='NCAAB'?
+           <>
+           <th>Best Score<br/>{' '+BSPTitle}</th>
+           <th>Round 1<br/>Score</th>
+           <th>Round 2<br/>Score</th>
+           <th>Final<br/>Round</th>
+           </>
+          :null}
           {this.state.sportType==='NFL'?
            <>
            {this.state.isEventExpired?<th>Best Possible<br/>Score</th>:<th>Best Score<br/>{' '+BSPTitle}</th>}
@@ -427,7 +442,10 @@ class leaderboard extends Component {
               <td>{index+1}</td>
               <td>{item.teamName}</td>
               <td>{item.flockName}</td>
-              <td>{item.currentScore}</td>
+
+              {this.state.sportType!=='NCAAB'?<td>{item.currentScore}</td>:null}
+
+              
 
 
               {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<td>{this.state.isEventExpired?item.currentScore:item.bestPossibleScore}</td>}
@@ -449,6 +467,12 @@ class leaderboard extends Component {
               <td>{item.conferenceChampionshipScore}</td>
               <td>{item.superBowlScore}</td>
               </>:null}
+              {this.state.sportType==='NCAAB'?
+              <>
+              <td>{item.currentScore}</td>
+              <td>0</td>
+              <td>0</td></>
+              :null}
               {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}
             </tr>
             )
@@ -457,28 +481,17 @@ class leaderboard extends Component {
       </div>)
   }
     render() {
-      //console.log('isThereNullData',this.state.isThereNullData)
       var theItems=[]
       var noData=false 
       var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore    )
       var nullData=this.state.nullData.sort((a, b) => b.bestPossibleScore - a.bestPossibleScore)
       if(this.state.isThereNullData===true){theItems=nullData}
       if(this.state.isTherNormalData===true){theItems=sortData}
-     /* if(this.state.dataAvailable===true){theItems=sortData}
-      if(this.state.isThereNullData===false&&this.state.dataAvailable===false){
-        noData=true
-      }*/
-
-      
-      //console.log('sortData',sortData)
         return (
           <>
             <div className={styles.container}>
               <p className={styles.titleP}>Leaderboard {this.state.isAdmin?<span> | Admin</span>:null}</p>
-              {/*<div className={styles.eventsCont}>
-        <p className={styles.eventsP} id={this.state.theEvent==='Upcoming Events'?styles.playerP1:styles.playerP} onClick={()=>this.setState({theEvent:'Upcoming Events'})}>UPCOMING EVENTS</p>
-        <p className={styles.eventsP} style={{color:'#b2b2b2',borderColor:'#b2b2b2'}} id={this.state.theEvent==='Past Events'?styles.playerP1:styles.playerP} onClick={()=>this.setState({theEvent:'Past Events'})}>PAST EVENTS</p>
-        </div>*/}
+             
         <div className={styles.headCont}>
           {this.state.allGames.map((item,index)=>{
           var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
@@ -524,37 +537,6 @@ class leaderboard extends Component {
      <p>Please LOG IN to view data in this page</p>
    </div>}
       </div>
-                          {/*<div className={styles.menu2Div1}>
-                            <p className={styles.titleP}>Leaderboard</p>
-      <div id={styles.table1Div}>
-      <table className={styles.table1}>
-        <tr id={styles.table1Tr1}>
-          <th>Overall <br/>Rank</th>
-          <th>RAM Name</th>
-          <th>Flock Name</th>
-          <th>Cumulative<br/>Score</th>
-          <th>Round of 64</th>
-          <th>Round of 32</th>
-          <th>Cumulative Final<br/>Round Score</th>
-          <th>Final Round<br/>Sweet 16</th>
-        </tr>
-        {importList.map((item, index) => {
-          return (
-
-            <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===3?'red':null,color:item.id===3?'white':null}}>
-              <td>{item.id}</td>
-              <td>{item.RAMName}</td>
-              <td>{item.flockName}</td>
-              <td>{item.cumScore}</td>
-              <td>{item.round64}</td>
-              <td>{item.round32}</td>
-              <td>{item.finRoundScore}</td>
-              <td>{item.sweet16}</td>
-            </tr>)
-        })}
-      </table>
-      </div>
-      </div>*/}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>

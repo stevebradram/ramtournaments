@@ -43,6 +43,7 @@ class leaderboard extends Component {
     dataSnapshot.forEach((data) => {
       i++
       var theD=data.val().userData
+     
       if(!theD.name)return
       var theItem={name:theD.name,phone:theD.phoneNo,email:theD.email,created:theD.created}
       theUsers.push(theItem)

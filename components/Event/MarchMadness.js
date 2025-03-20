@@ -1118,8 +1118,8 @@ getNCAABMatchesFinal = () => {
         console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
         console.log('theLink',theLink,theItems)
         console.log('this.state.shortArr 006',shortArr)
-        await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
-        //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
+        //await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
+        await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
