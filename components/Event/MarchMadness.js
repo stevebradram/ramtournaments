@@ -1020,10 +1020,10 @@ getNCAABMatchesFinal = () => {
   })
     }
     closePickWinner=(index2)=>{
-      var theItems=this.state.currentItems
+      var theItems=this.state.allRound1MatchesArr
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
-      this.setState({currentItems:theItems})
+      this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 001',theItems)
     }
     pickWinner=(index2,winner,time)=>{
@@ -1036,16 +1036,17 @@ getNCAABMatchesFinal = () => {
        this.notify('Winner already filled')
         return
       }
-      var theItems=this.state.currentItems
+      var theItems=this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner']=true
-      this.setState({currentItems:theItems})
+      this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 002',theItems)
    
     }
     chosenWinner=(index2,winner)=>{
-      var theItems=this.state.currentItems
+      var theItems=this.state.allRound1MatchesArr
       theItems[index2]['chosenWinner']=winner
-      this.setState({currentItems:theItems})
+      theItems[index2]['status1']='played'
+      this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 003',theItems)
     }
     submitWinner=(index,winner)=>{
@@ -1058,22 +1059,38 @@ getNCAABMatchesFinal = () => {
     }
     checkForOutcome=async (index,winner) => {
       try {
-        
-        this.state.currentItems[index]['winner']=winner
-        delete this.state.currentItems[index]['chosenWinner']
-        
-        if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.currentItems.length<1)return
+        var shortArr=[]
+       
+       
+        this.state.allRound1MatchesArr[index]['winner']=winner
+        delete this.state.allRound1MatchesArr[index]['chosenWinner']
+        delete this.state.allRound1MatchesArr[index]['showChooseWinner']
+        this.setState({allRound1MatchesArr:this.state.allRound1MatchesArr})
+        this.state.allRound1MatchesArr.map((item,index)=>{
+          console.log('shortArr',shortArr)
+          shortArr['p1Points']=item.p1Points
+          shortArr['p2Points']=item.p2Points
+          shortArr['winner']=item.winner
+          shortArr['status1']=item.status1
+          shortArr['id']=item.id
+          var theItem={p1Points:item.p1Points,p2Points:item.p2Points,winner:item.winner,
+            status1:item.status1,id:item.id
+          }
+          shortArr.push(theItem)
+        })
+        if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.allRound1MatchesArr.length<1)return
         var scoreName=''
         if(!this.state.theEventKey||this.state.theEventKey.length<3)return
         if(this.state.currentSelection==='round1'){scoreName='round1Score'}
         if(this.state.currentSelection==='round2'){scoreName='round2Score'}
-        let theItems = JSON.stringify(this.state.currentItems);
+        let theItems = JSON.stringify(shortArr);
         var theLink='theEvents::NCAAB::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
         if(!this.state.theEventKey||this.state.theEventKey.length===0)return
         var theQuery=encodeURIComponent(theLink)
         console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
         console.log('theLink',theLink,theItems)
-        delete this.state.currentItems[index]['showChooseWinner']
+        console.log('this.state.shortArr 006',shortArr)
+      // return
         await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
             ////console.log('theItems',res)
