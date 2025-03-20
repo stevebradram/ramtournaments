@@ -18,6 +18,7 @@ $theDark:#b2b2b2;
   overflow: hidden;
   margin-bottom:0px;
   margin-top: -10px;
+  position: relative;
 }
 .titleDivCont{
   box-sizing: border-box;
@@ -88,6 +89,26 @@ $theDark:#b2b2b2;
  color: white;
  margin-right: 35px;
  
+}
+.arrowDiv{
+  width:100%;
+  display: flex;
+  justify-content:center;
+  //background-color: red;
+  color: #9a9a9a;
+  height: 100%;
+ // position: absolute;
+  //top:0;right:0;left:0;
+  align-items: center;
+  margin-top: -5px;
+  //z-index: 5;
+  //margin-left: -10px;
+}
+.arrowIc{
+  font-size: 24px;
+  margin-right:3px;
+  margin-left:3px;
+  cursor: pointer;
 }
 @media all and (max-width: 1200px) {
     .boduTitleMainCont{

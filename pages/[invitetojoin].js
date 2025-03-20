@@ -104,6 +104,13 @@ class invite extends Component {
   //return
    var generalDb=firebase.database().ref()
    var generalDb2=firebase.database().ref()
+
+   var eventRef = firebase.database().ref('/theEvents/eventsIds/'+this.state.sportType+'/'+this.state.eventId)
+   var i = 0, upcomingGames = [], pastGames = [], allGames = []
+   var nowDate =  new Date().getTime()
+   eventRef.once('value', dataSnapshot => {
+   
+  })
   generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.eventId)
       .once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {

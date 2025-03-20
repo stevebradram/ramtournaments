@@ -54,7 +54,7 @@ class NCAAModal extends Component {
         incomingData[index]['timeInMillis']=''
         incomingData[index]['time']=''
         incomingData[index]['error']=''
-        if(this.state.currentSelection==='round1'){
+        if(this.state.currentSelection==='round1'||this.state.currentSelection==='round2'){
           incomingData[index]['team1Id']=''
           incomingData[index]['team2Id']=''
         }else{
@@ -255,7 +255,7 @@ class NCAAModal extends Component {
   getRandom(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  goToTeamsDataApi = async(theArr,teamsArr) => {
+  goToTeamsDataApi = async(theArr,teamsArr,stateEdit) => {
     teamsArr.map((item, index) => {
           theArr.map((item2, index) => {
             if(Number(item2.team1Id)===Number(item.id)){
@@ -271,7 +271,7 @@ class NCAAModal extends Component {
           }) 
           if(teamsArr.length===index+1){
             console.log('finished theArr',theArr)
-            this.setState({round1Edit:theArr})
+            this.setState({[stateEdit]:theArr})
             var k=0
             theArr.map((item, index) => {
               if ((item.team1Id === '0'&&item.player1 === 'N/A')||(item.team2Id === '0'&&item.player2 === 'N/A')){
@@ -397,7 +397,7 @@ class NCAAModal extends Component {
           teamsArr.push(data.val())
           if(theCount===i){
             //console.log('final arrr 111111',teamsArr)
-            this.goToTeamsDataApi(round1Edit,teamsArr)
+            this.goToTeamsDataApi(round1Edit,teamsArr,'round1Edit')
           }
         })
       }else{
@@ -418,7 +418,7 @@ class NCAAModal extends Component {
               if(j===resultsArr.length){
                 apiFirebaseRef.update(firebaseItem)
                 //console.log('final arrr 222222',teamsArr)
-                this.goToTeamsDataApi(round1Edit,teamsArr)
+                this.goToTeamsDataApi(round1Edit,teamsArr,'round1Edit')
               }
           })
           
@@ -429,94 +429,90 @@ class NCAAModal extends Component {
       
       }
     })
-    return
-      this.state.round1Edit.map((item, index) => {
-       
-        if (i === 6) {
-          this.setState({ round1Edit })
-          console.log('round2Edit', this.state.round2Edit)
-          this.state.round2Edit.map((item, index) => {
-            if (item.time === '') {
-              round2Edit[index]['error'] = 'Match time field must be filled'
-              this.setState({ round2Edit })
-              return
-            } else {
-              var theYear = item.time.split('-')[0]
-              if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-                round2Edit[index]['error'] = 'Year field badly formatted'
-                this.setState({ round2Edit })
-                return
-              } else {
-                j++
-                var timeInMillis = new Date(item.time).getTime()
-                var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-                round2Edit[index]['commenceTime'] = theTime
-                round2Edit[index]['timeInMillis'] = timeInMillis
-                round2Edit[index]['error'] = ''
-              }
-            }
-            if (j === 4) {
-              this.setState({ round2Edit })
-              this.state.conferenceChampionshipEdit.map((item, index) => {
-                if (item.time === '') {
-                  conferenceChampionshipEdit[index]['error'] = 'Match time field must be filled'
-                  this.setState({ conferenceChampionshipEdit })
-                  return
-                } else {
-                  var theYear = item.time.split('-')[0]
-                  if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-                    conferenceChampionshipEdit[index]['error'] = 'Year field badly formatted'
-                    this.setState({ conferenceChampionshipEdit })
-                    return
-                  } else {
-                    k++
-                    var timeInMillis = new Date(item.time).getTime()
-                    var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-                    conferenceChampionshipEdit[index]['commenceTime'] = theTime
-                    conferenceChampionshipEdit[index]['timeInMillis'] = timeInMillis
-                    conferenceChampionshipEdit[index]['error'] = ''
-
-                  }
-                }
-                if (k === 2) {
-                  this.setState({ conferenceChampionshipEdit })
-                  this.state.superBowlEdit.map((item, index) => {
-                    if (item.time === '') {
-                      superBowlEdit[index]['error'] = 'Match time field must be filled'
-                      this.setState({ superBowlEdit })
-                      return
-                    } else {
-                      if (Number(theYear) - yearNow > 5 || Number(theYear) < yearNow) {
-                        superBowlEdit[index]['error'] = 'Year field badly formatted'
-                        this.setState({ superBowlEdit })
-                        return
-                      } else {
-                        l++
-                        var timeInMillis = new Date(item.time).getTime()
-                        var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-                        superBowlEdit[index]['commenceTime'] = theTime
-                        superBowlEdit[index]['timeInMillis'] = timeInMillis
-                        superBowlEdit[index]['error'] = ''
-                      }
-                    }
-                    if (l === 1) {
-                      this.setState({superBowlEdit})
-                      //this.getOddsApiData(round1Edit)
-                      console.log('nimemalizaaaaaaaaaaaaaa rankadaaaaaaa')
-                      console.log('round1Edit', this.state.round1Edit)
-                      console.log('round2Edit', this.state.round2Edit)
-                      console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
-                      console.log('superBowlEdit', this.state.superBowlEdit)
-                    }
-                  })
-                }
-              })
-            }
-          })
-        }
-      })
   }
   round2Submit = () => {
+    var yearNow = new Date().getFullYear()
+    var i = 0, j = 0, k = 0, l = 0
+    console.log('this.state.round2Edit',this.state.round2Edit)
+    var teamsArr=[]
+    var time='2025-03-20T00:00'
+    /*this.state.round2Edit.map((item, index) => {
+      if(item.team1Id==='0'){round2Edit[index]['team1IdReadOnly']=false}else{{round2Edit[index]['team1IdReadOnly']=true}}
+      if(item.team2Id==='0'){round2Edit[index]['team2IdReadOnly']=false}else{round2Edit[index]['team2IdReadOnly']=true}
+      round2Edit[index]['time'] =time
+      console.log('this.state.round2Edit',this.state.round2Edit)
+    })*/
+    //return
+    this.state.round2Edit.map((item, index) => {
+      
+      round2Edit[index]['team1Id'] =this.getRandom(1, 100);
+      round2Edit[index]['team2Id'] =this.getRandom(1, 90);
+      round2Edit[index]['time'] =time
+      if(this.state.round2Edit.length===index+1){
+        console.log('round2Edit iiiiii',round2Edit)
+      }
+    })
+    this.state.round2Edit.map((item, index) => {
+      if (item.team1Id === ''||item.team2Id === ''||item.time === '') {
+        round2Edit[index]['error'] = 'Teams id & match time field must be filled'
+        this.setState({ round2Edit })
+        return
+      } else {
+        j++
+        var timeInMillis = new Date(item.time).getTime()
+        var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
+        round2Edit[index]['commenceTime'] = theTime
+        round2Edit[index]['timeInMillis'] = timeInMillis
+        round2Edit[index]['error'] = ''
+      }
+      if(this.state.round2Edit.length===j){
+        console.log('round2Edit jjjjjjj',round2Edit)
+    
+    var currentYear=new Date().getFullYear()
+    var apiFirebaseRef = firebase.database().ref('/apis/NCAABTeams/'+currentYear+'/')
+    apiFirebaseRef.once('value', dataSnapshot => {
+      if(dataSnapshot.exists()){
+        var theCount=dataSnapshot.numChildren(),i=0
+        console.log('the teams data available')
+        dataSnapshot.forEach((data,index) => {
+          i++
+          teamsArr.push(data.val())
+          if(theCount===i){
+            //console.log('final arrr 111111',teamsArr)
+            this.goToTeamsDataApi(round2Edit,teamsArr,'round2Edit')
+          }
+        })
+      }else{
+        console.log('the teams data nooot available')
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+       var firebaseItem={}
+        axios.get(oddsApi)
+        .then((res) => {
+          var resultsArr = res.data,j=0
+          resultsArr.map((item, index) => {
+            j++
+            if(item.Active){
+             var theItem={name:item.Name,school:item.School,key:item.Key,id:item.TeamID,
+                SDN:item.ShortDisplayName,logo:item.TeamLogoUrl
+              }
+              firebaseItem[item.TeamID] = theItem
+              teamsArr.push(theItem)}
+              if(j===resultsArr.length){
+                apiFirebaseRef.update(firebaseItem)
+                //console.log('final arrr 222222',teamsArr)
+                this.goToTeamsDataApi(round2Edit,teamsArr,'round2Edit')
+              }
+          })
+          
+        })
+      }
+     
+    })
+      
+      }
+    })
+  }
+  /*round2Submit = () => {
     var i = 0
     this.state.round2Edit.map((item, index) => {
       if (item.apiId === '') {
@@ -535,7 +531,7 @@ class NCAAModal extends Component {
        this.getOddsApiData(round2Edit)
       }
     })
-  }
+  }*/
   conferenceChampionshipSubmit = () => {
     return
     console.log('submitting conferenceChampionshipSubmit')
@@ -630,6 +626,7 @@ class NCAAModal extends Component {
     })
   }
   sendToDatabase=()=>{
+    return
     if(this.state.isItSubmit){
       if(this.state.currentSelection==='round1'){
         this.sendToFirebaseSingle()
@@ -821,9 +818,9 @@ class NCAAModal extends Component {
   submitMatches = () => {
    
     if(this.state.currentSelection==='round1'){this.round1Submit()}
-    else{ this.notify('Not available at the moment')}
+    //else{ this.notify('Not available at the moment')}
    
-    return
+    //return
     if(this.state.currentSelection==='round2'){this.round2Submit()}
     return
     if(this.state.currentSelection==='conferenceChampionship'){this.conferenceChampionshipSubmit()}
@@ -1049,8 +1046,8 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv1}>
                     {item.p1Photo !== '' ? <img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  {type==='round1'?<input className={styles.P1} id='team1Id' value={item.team1Id} placeholder='Enter team 1 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter odds api match uid' onChange={(event) => this.inputChange(event, index, type)} />}
-                  {type==='round1'?<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event) => this.inputChange(event, index, type)} />}
+                  {type==='round1'||type==='round2'?<input className={styles.P1} id='team1Id' value={item.team1Id} placeholder='Enter team 1 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='apiId' value={item.apiId} readOnly={type===this.state.currentSelection?false:true} placeholder='Enter odds api match uid' onChange={(event) => this.inputChange(event, index, type)} />}
+                  {type==='round1'||type==='round2'?<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event) => this.inputChange(event, index, type)} />}
                   <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly={name1ReadOnly}  onChange={(event) => this.inputChange(event, index, type)}/>
                   <input className={styles.P2} value={'#'+item.team1Seed} placeholder='Seed #' readOnly/>
                   {/*<input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
@@ -1060,7 +1057,7 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv2}>
                     {item.p2Photo !== '' ? <img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  {type==='round1'?<input className={styles.P1} id='team2Id' value={item.team2Id}  placeholder='Enter team 2 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' readOnly />}                  
+                  {type==='round1'||type==='round2'?<input className={styles.P1} id='team2Id' value={item.team2Id}  placeholder='Enter team 2 team id' onChange={(event) => this.inputChange(event, index, type)} />:<input className={styles.P1} id='time' type='datetime-local' value={item.time} placeholder='Enter match time' readOnly />}                  
                   <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly />
                   <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly={name2ReadOnly}  onChange={(event) => this.inputChange(event, index, type)}/>
                   <input className={styles.P2} value={'#'+item.team2Seed} placeholder='Seed #' readOnly/>

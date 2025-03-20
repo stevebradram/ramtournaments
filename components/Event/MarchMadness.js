@@ -103,7 +103,7 @@ class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
   round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:''}
   
     componentDidMount = () => {
@@ -424,7 +424,7 @@ getNCAABMatches = () => {
         //allMatches=[...round1EastArr]
         console.log('allMatches 55555555',allMatches)
         this.setState({round1EastArr:round1EastArr,round1WestArr:round1WestArr,round1SouthArr:round1SouthArr,
-          currentItems:round1EastArr,round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches})
+          currentItems:round1EastArr,round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches,oldRound1Array:allMatches})
       }
     })
   })
@@ -903,14 +903,13 @@ getNCAABMatchesFinal = () => {
     this.notify('Link copied successfully')
   }
   openTheModal =async () => {
-    this.notify('Pick time expired');
-    return
-    /*if(this.state.userLoggedIn===false){
+    if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
       return
-    }*/
-    //this.notify('Not available at the moment');return
+    }
+    this.notify('Not available at the moment');
+    return
     var itemToModals='',modalTitle=''
     var year=new Date().getFullYear()
     if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1'}
@@ -931,7 +930,7 @@ getNCAABMatchesFinal = () => {
     }
     this.setState({itemToModals,opendetailsModal:true,modalTitle})
     console.log('this.state.theItems',this.state.currentRound,itemToModals)
-    return
+    
     var i=0,pointMissing=false
    console.log('this.state.theItems',itemToModals)
    await itemToModals.map((item,index)=>{
@@ -948,6 +947,25 @@ getNCAABMatchesFinal = () => {
      }
      }
     })
+  }
+  openTheModal2= () => {
+    var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+    timeInfoDb.once('value',dataSnapshot=>{
+      var theEventTime=dataSnapshot.val()
+      if((new Date().getTime()>theEventTime)){
+        this.notify('Event pick/edit time expired')
+       }else{
+        if(this.state.userLoggedIn===true){
+          var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
+        this.setState({allMatches:thetrrrr},()=>{
+          this.setState({opendetailsModal:true,openLoginModal:false})
+        })
+        }else{
+          this.setState({openLoginModal:true,opendetailsModal:false})
+        }
+       }
+    })
+   
   }
   openMarchMadnessModal =async () => {
     var itemToModals='',modalTitle=''
@@ -998,7 +1016,7 @@ getNCAABMatchesFinal = () => {
   checkForOddsUpdate = () => {
     this.notify('Not available at the moment');return
   }
-  checkForOutcome= () => {
+  checkForOutcome2= () => {
     this.notify('Not available at the moment');return
   }
   chooseHomeEvent=(event,id)=>{
@@ -1021,19 +1039,22 @@ getNCAABMatchesFinal = () => {
       }
   })
     }
-    closePickWinner=(index2)=>{
+    closePickWinner=(id)=>{
+      var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
+     // delete theItems[index2]['showChooseWinner']
       this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 001',theItems)
     }
-    pickWinner=(index2,winner,time)=>{
+    pickWinner=(id,winner,time)=>{
+      var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var nowTime=new Date().getTime()
-      /*if(nowTime<time){
+      if(nowTime<time){
         this.notify('Match not yet started')
         return
-      }*/
+      }
       if(winner!=='N/A'){
        this.notify('Winner already filled')
         return
@@ -1044,14 +1065,18 @@ getNCAABMatchesFinal = () => {
       console.log('this.state.currentItems 002',theItems)
    
     }
-    chosenWinner=(index2,winner)=>{
+    chosenWinner=(id,winner)=>{
+      var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
       theItems[index2]['chosenWinner']=winner
       theItems[index2]['status1']='played'
+     // theItems[index2]['isItPlayed']='played'
       this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 003',theItems)
     }
-    submitWinner=(index,winner)=>{
+    submitWinner=(id,winner)=>{
+      console.log('haaaaaaaaaaaapa 000000')
+      var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       if(winner!=='player1'&&winner!=='player2'){
         this.notify('Nothing to submit')
       }else{
@@ -1061,13 +1086,14 @@ getNCAABMatchesFinal = () => {
     }
     checkForOutcome=async (index,winner) => {
       try {
+        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
         var shortArr=[]
-       
-        var theRound1Arr=[...this.state.allRound1MatchesArr]
+        console.log('haaaaaaaaaaaapa 2222',index,winner)
+        var theRound1Arr=this.state.allRound1MatchesArr
         theRound1Arr[index]['winner']=winner
         delete theRound1Arr[index]['chosenWinner']
         delete theRound1Arr[index]['showChooseWinner']
-        setState({allRound1MatchesArr:theRound1Arr})
+        this.setState({allRound1MatchesArr:theRound1Arr})
         this.state.allRound1MatchesArr.map((item,index)=>{
           console.log('shortArr',shortArr)
           shortArr['p1Points']=item.p1Points
@@ -1092,7 +1118,6 @@ getNCAABMatchesFinal = () => {
         console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
         console.log('theLink',theLink,theItems)
         console.log('this.state.shortArr 006',shortArr)
-      // return
         await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
@@ -1201,7 +1226,7 @@ getNCAABMatchesFinal = () => {
                   <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
-                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
+                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome2()}>Fetch Results Updates</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
                   </div>
                   </div>:null}
@@ -1284,7 +1309,7 @@ getNCAABMatchesFinal = () => {
                 <p>March Madness - {item.matchType}</p>}
                 <p>{theTime}</p>
               </div>
-              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(index,item.winner,item.timeInMillis)}>
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis)}>
               <p>Pick Winner</p>
               </div>:null}
               
@@ -1328,14 +1353,14 @@ getNCAABMatchesFinal = () => {
               }
             </div>
             {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
-              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(index)}/>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
               <div>
                 <p className={style.chooseP}>Choose Winner</p>
-                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(index,'player1')}>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
                   <TbCheckbox size={20}/>
                   <p>{item.player1}</p>
                 </div>
-                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(index,'player2')}>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
                   <TbCheckbox size={20}/>
                   <p>{item.player2}</p>
                 </div>
@@ -1346,7 +1371,7 @@ getNCAABMatchesFinal = () => {
                   {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
                   
                 </div>
-                <button onClick={()=>this.submitWinner(index,item.chosenWinner)}>Submit</button>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
             </div></div>:null}
           </div>
           )

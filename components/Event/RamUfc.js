@@ -947,7 +947,7 @@ chooseHomeEvent=(event,id)=>{
        <div className={style.matchesHeadDiv}>
         <PastUpcomingEvents allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId}/>
         </div>
-       {<div className={style.matchesHeadDiv}>
+       {/*<div className={style.matchesHeadDiv}>
           {this.state.allGames.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
            var theColor='#292f51',timing='Active Event'
@@ -969,7 +969,7 @@ chooseHomeEvent=(event,id)=>{
               </div>  
             )
           })}
-        </div>}
+        </div>*/}
           <div className={style.profileDiv}>
           <div className={style.imageDiv}>
           {this.state.profilePhoto.length?<img src={this.state.profilePhoto}/>:

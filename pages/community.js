@@ -170,8 +170,10 @@ class leaderboard extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          var theArr = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo}
+          console.log('theFlocksArr theData',data.key, theData)
+         var theArr = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo}
           allArr.push(theArr)
+          console.log('theFlocksArr', allArr)
           if (count === i) {
             allArr = allArr.sort(function (a, b) { return b.avScore - a.avScore })
             this.setState({ theFlocksArr: allArr })

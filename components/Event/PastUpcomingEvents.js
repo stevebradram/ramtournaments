@@ -6,13 +6,14 @@ import "slick-carousel/slick/slick-theme.css";
 import { SlOptionsVertical } from "react-icons/sl";
 import dayjs from 'dayjs';
 import firebase from '../FirebaseClient'
+import { FaArrowAltCircleLeft,FaArrowAltCircleRight  } from "react-icons/fa";
 class Reel extends Component {
   state={
     theAdsArray:[],
     slidesToShow: 5,
     slidesToScroll: 5,
     theEventKey:this.props.theEventKey,
-    isAdmin:false,
+    isAdmin:false,showArrows:true,theItemsNo:'',
     selectHomeEvent:false, selectHomeEventId:''
   }
     constructor(props) {
@@ -24,8 +25,8 @@ class Reel extends Component {
         this.updateWindowDimensions();
         window.addEventListener("resize", this.updateWindowDimensions);
         this.checkAuth()
-        this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId})
-      
+        this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId,theItemsNo:this.props.allGames.length})
+        console.log('this.props.allGames.length',this.props.allGames.length)
       }
       componentWillUnmount() {
         window.removeEventListener("resize", this.updateWindowDimensions);
@@ -33,24 +34,32 @@ class Reel extends Component {
     
       updateWindowDimensions = () => {
         this.setState({ width: window.innerWidth });
+        console.log('this.state.theItemsNo',this.state.theItemsNo)
+        this.setState({showArrows:false})
         /*if (window.innerWidth<800) {this.setState({slidesToShow:1,slidesToScroll:1})
         }else{this.setState({slidesToShow:6,slidesToScroll:6})}*/
         if (window.innerWidth>1300){
+          if(this.state.theItemsNo>6){this.setState({showArrows:true})}
           this.setState({slidesToShow:6,slidesToScroll:6})
         }
         if (window.innerWidth>1100&&window.innerWidth<1300){
+          if(this.state.theItemsNo>5){this.setState({showArrows:true})}
           this.setState({slidesToShow:5,slidesToScroll:5})
         }
         if (window.innerWidth>800&&window.innerWidth<1100){
+          if(this.state.theItemsNo>4){this.setState({showArrows:true})}
           this.setState({slidesToShow:4,slidesToScroll:4})
         }
         if (window.innerWidth>600&&window.innerWidth<800){
+          if(this.state.theItemsNo>3){this.setState({showArrows:true})}
           this.setState({slidesToShow:3,slidesToScroll:3})
         }
         if (window.innerWidth>400&&window.innerWidth<600){
+          if(this.state.theItemsNo>2){this.setState({showArrows:true})}
           this.setState({slidesToShow:2,slidesToScroll:2})
         }
         if (window.innerWidth>350&&window.innerWidth<400){
+          if(this.state.theItemsNo>2){this.setState({showArrows:true})}
           this.setState({slidesToShow:2,slidesToScroll:2})
         }
       };
@@ -82,7 +91,7 @@ class Reel extends Component {
           autoplay: true,
           pauseOnHover: false,
     speed: 700,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 10000,
     cssEase: "linear",
       
           };
@@ -101,7 +110,7 @@ class Reel extends Component {
                 if(this.state.theEventKey===item.id){
                   theColor='#CB1E31'
                 }
-                console.log('this.state.theEventKey',this.state.theEventKey)
+              //  console.log('this.state.theEventKey',this.state.theEventKey)
                  return(
                        <div  className={style.titleDivCont} key={item.id}> 
                          <div className={style.testDiv}>
@@ -114,11 +123,16 @@ class Reel extends Component {
                 {this.state.selectHomeEvent&&this.state.selectHomeEventId==item.id?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
                     </div> 
                         </div>
+                       
+                        
                        </div>
                 )})}
-
+                        
                 </Slider>
-                
+                      {this.state.showArrows?<div className={style.arrowDiv}>
+                        <FaArrowAltCircleLeft className={style.arrowIc}/>
+                        <FaArrowAltCircleRight className={style.arrowIc}/>
+                        </div>:null}
             </div>
         )
     }

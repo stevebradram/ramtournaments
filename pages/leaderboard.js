@@ -198,7 +198,7 @@ class leaderboard extends Component {
       if(this.state.isAdmin){
       userInfoDb2.once('value',dataSnapshot=>{
         var theD=dataSnapshot.val()
-        theDet['phone']=theD.phoneNo
+        if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
         theDet['email']=theD.email
       })}
       userInfoDb.once('value',dataSnapshot=>{
@@ -278,7 +278,9 @@ class leaderboard extends Component {
         if(this.state.isAdmin){
         userInfoDb2.once('value',dataSnapshot=>{
           var theD=dataSnapshot.val()
-          theDet['phone']=theD.phoneNo
+          //theDet['phone']=theD.phoneNo
+          console.log('theD.email',theD.email)
+          if(theD.phoneNo!==null){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
           theDet['email']=theD.email
         })}
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/"+sportType+"/"+theEventKey+"/details/")
