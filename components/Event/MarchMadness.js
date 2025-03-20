@@ -1061,11 +1061,11 @@ getNCAABMatchesFinal = () => {
       try {
         var shortArr=[]
        
-       
-        this.state.allRound1MatchesArr[index]['winner']=winner
-        delete this.state.allRound1MatchesArr[index]['chosenWinner']
-        delete this.state.allRound1MatchesArr[index]['showChooseWinner']
-        this.setState({allRound1MatchesArr:this.state.allRound1MatchesArr})
+        var theRound1Arr=[...this.state.allRound1MatchesArr]
+        theRound1Arr[index]['winner']=winner
+        delete theRound1Arr[index]['chosenWinner']
+        delete theRound1Arr[index]['showChooseWinner']
+        setState({allRound1MatchesArr:theRound1Arr})
         this.state.allRound1MatchesArr.map((item,index)=>{
           console.log('shortArr',shortArr)
           shortArr['p1Points']=item.p1Points
