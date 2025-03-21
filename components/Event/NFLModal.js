@@ -595,6 +595,8 @@ class NCAAModal extends Component {
     // const response = await axios.get(oddsApi)
     //var theOddsJson=response.data
     //sortOddsJson(theOddsJson)
+    
+//https://api.sportsdata.io/v3/cbb/scores/json/GamesByDateFinal/21-MAY-25?key=4a474f7d13314c6098a394987bed453f
     axios.get(oddsApi)
       .then((res) => {
         var resultsArr = res.data

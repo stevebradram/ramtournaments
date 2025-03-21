@@ -104,7 +104,8 @@ class MarchMadness extends Component {
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
   midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
-  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:''}
+  round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:'',
+  stopRound1Edit:'', stopRound2Edit:'',stopFinalEdit:''}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -196,12 +197,20 @@ class MarchMadness extends Component {
       var endTime = data.val().endTime
       var theData = data.val()
       var currentSelection = data.val().currentSelection
-      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
+
+      var stopRound1Edit= data.val().stopRound1Edit
+      var stopRound2Edit = data.val().stopRound2Edit
+      var stopFinalEdit = data.val().stopFinalEdit
+      
+
+      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData,stopRound1Edit:stopRound1Edit,stopRound2Edit:stopRound2Edit,stopFinalEdit:stopFinalEdit}
       allGames.push(theEvents)
 
       if (gamesCount === i) {
-        var theEventTitle = '', theEventKey = '', theEventTime = 0,theTime=''
-        if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],theTime = allGames[0]['time'],endTime= allGames[0]['endTime']}
+        var theEventTitle = '', theEventKey = '', theEventTime = 0,theTime='',
+        stopRound1Edit = '', stopRound2Edit = '',stopFinalEdit=''
+        if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],theTime = allGames[0]['time'],endTime= allGames[0]['endTime']
+        stopRound1Edit= allGames[0]['stopRound1Edit'],stopRound2Edit= allGames[0]['stopRound2Edit'],stopFinalEdit= allGames[0]['stopFinalEdit']}
       }
       var expired = false
       if ((theEventTime - new Date().getTime()) < 86400000) {
@@ -219,10 +228,10 @@ class MarchMadness extends Component {
       if ((currentSelection === 'superBowl')) {
         this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
       }*/
-      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,theTime }, () => {
+      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,theTime,stopRound1Edit, stopRound2Edit,stopFinalEdit}, () => {
         this.getNCAABMatches()
         this.checkLink(userId)
-        //////console.log('currentSelection',this.state.currentSelection)
+       console.log('currentSelection',this.state.stopRound1Edit,this.state.stopRound2Edit,this.state.stopFinalEdit)
       })
     })
   }
@@ -260,7 +269,7 @@ getMatchesInfo = async () => {
     })
     userInfoDb.once('value', dataSnapshot => {
       if (!dataSnapshot.val()) return
-      //console.log('the type user 0000000000000', dataSnapshot.val())
+      console.log('the type user 0000000000000', dataSnapshot.val())
       if (dataSnapshot.val()) {
         var theInfo = dataSnapshot.val()
         currentEventUserInfo = dataSnapshot.val()
@@ -564,9 +573,7 @@ getNCAABMatchesFinal = () => {
         var team2Seed=Number(item.team2Seed)
         thePoints.map((item2) => {
           if(team1Seed===item2.seed){round1[index]['p1Points'] =item2.val}
-          if(team2Seed===item2.seed){round1[index]['p2Points'] =item2.val}
-
-          
+          if(team2Seed===item2.seed){round1[index]['p2Points'] =item2.val} 
         })
         if (round1.length === index + 1) {
           console.log('round1Arr 1111',round1Arr)
@@ -908,29 +915,24 @@ getNCAABMatchesFinal = () => {
       this.setState({openLoginModal:true})
       return
     }
-    this.notify('Not available at the moment');
-    return
-    var itemToModals='',modalTitle=''
+    var itemToModals='',modalTitle='',stopEdit=''
     var year=new Date().getFullYear()
-    if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1'}
-    if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr,modalTitle='March Madness '+year+' > Round 2' }
+    if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1',stopEdit='stopRound1Edit'}
+    if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr,modalTitle='March Madness '+year+' > Round 2',stopEdit='stopRound2Edit'}
     if (this.state.currentRound === 'finalRound') {
       if(this.state.theMenu==='sweet16'){
-        itemToModals = this.state.sweet16Arr,modalTitle='March Madness '+year+' > Sweet 16'
+        itemToModals = this.state.sweet16Arr,modalTitle='March Madness '+year+' > Sweet 16',stopEdit='stopSweet16Edit'
       }
       if(this.state.theMenu==='elite8'){
-        itemToModals = this.state.elite8Arr,modalTitle='March Madness '+year+' > Elite 8'
+        itemToModals = this.state.elite8Arr,modalTitle='March Madness '+year+' > Elite 8',stopEdit='stopElite8Edit'
       }
       if(this.state.theMenu==='final4'){
-        itemToModals = this.state.final4Arr,modalTitle='March Madness '+year+' > Final 4'
+        itemToModals = this.state.final4Arr,modalTitle='March Madness '+year+' > Final 4',stopEdit='stopFinal4Edit'
       }
       if(this.state.theMenu==='finalRound'){
-        itemToModals = this.state.finalArr,modalTitle='March Madness '+year+' > Championship'
+        itemToModals = this.state.finalArr,modalTitle='March Madness '+year+' > Championship',stopEdit='stopFinalEdit'
       }
     }
-    this.setState({itemToModals,opendetailsModal:true,modalTitle})
-    console.log('this.state.theItems',this.state.currentRound,itemToModals)
-    
     var i=0,pointMissing=false
    console.log('this.state.theItems',itemToModals)
    await itemToModals.map((item,index)=>{
@@ -943,33 +945,46 @@ getNCAABMatchesFinal = () => {
      if(pointMissing===true){
       this.notify('Event points not yet populated')
      }else{
-      this.openTheModal2()
+      this.openTheModal2(stopEdit)
      }
      }
     })
   }
-  openTheModal2= () => {
-    var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/time/')
+  openTheModal2= (stopEdit) => {
+    var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+stopEdit)
     timeInfoDb.once('value',dataSnapshot=>{
       var theEventTime=dataSnapshot.val()
+      if(theEventTime==='N/A'){
+        this.notify('Event not yet available for pick')
+        return
+      }else{
       if((new Date().getTime()>theEventTime)){
         this.notify('Event pick/edit time expired')
+        return
        }else{
         if(this.state.userLoggedIn===true){
-          var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
-        this.setState({allMatches:thetrrrr},()=>{
           this.setState({opendetailsModal:true,openLoginModal:false})
-        })
         }else{
           this.setState({openLoginModal:true,opendetailsModal:false})
         }
-       }
+       }}
     })
    
   }
   openMarchMadnessModal =async () => {
     var itemToModals='',modalTitle=''
     var year=new Date().getFullYear()
+    var time=new Date().getTime()
+    if (this.state.currentRound === 'round1'){
+      if(this.state.stopRound1Edit!=='N/A'&&time>this.state.stopRound1Edit){this.notify('Event already started');return}
+    }
+    if (this.state.currentRound === 'round2'){
+      if(this.state.stopRound2Edit!=='N/A'&&time>this.state.stopRound2Edit){this.notify('Event already started');return}
+    }
+    if (this.state.currentRound === 'finalRound'){
+      if(this.state.stopFinalEdit!=='N/A'&&time>this.state.stopFinalEdit){this.notify('Event already started');return}
+    }
+
     if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr,modalTitle='March Madness '+year+' > Round 1'}
     if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr,modalTitle='March Madness '+year+' > Round 2' }
     if (this.state.currentRound === 'finalRound') {
@@ -1136,6 +1151,9 @@ getNCAABMatchesFinal = () => {
     var todayInMillis=new Date().getTime()
     var title1=''
     var currentRank=this.state.currentEventUserInfo[this.state.currentRound+'Rank']
+    var currentBPS=this.state.currentEventUserInfo[this.state.currentRound+'BPS']
+    if(currentBPS==undefined){currentBPS='0'}
+    //
     if(this.state.theMenu==='east'){title1='East'}
     if(this.state.theMenu==='west'){title1='West'}
     if(this.state.theMenu==='south'){title1='South'}
@@ -1235,7 +1253,7 @@ getNCAABMatchesFinal = () => {
         <div className={style.scoresCont1}>
         <p className={style.currentP}>{titleToShow}</p>
           <p className={style.scoreP1}>Best possibe Score:</p>
-          <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo[this.state.currentRound+'BPS']:'0.00'} points</p>
+          <p className={style.scoreP2}>{this.state.dataAvailable?currentBPS:'0.00'} points</p>
         </div>
         <div className={style.scoresCont2}>
         <p className={style.currentP}>{titleToShow}</p>
@@ -1420,7 +1438,7 @@ getNCAABMatchesFinal = () => {
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu}/></div> : null}
         {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
-        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
+        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey}  onClick={this.handleChildClick} /></div> : null}
       </>
     )
   }
