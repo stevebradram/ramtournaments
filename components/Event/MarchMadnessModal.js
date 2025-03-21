@@ -556,7 +556,7 @@ sortOddsJson=async(theArr)=>{
        var minTime = Math.min(...theArr.map(item => item.timeInMillis));
        var toDbArr={},v = 0
        var eventKey = this.props.theEventKey
-       var generalDb = firebase.database().ref('/theEvents57/')
+       var generalDb = firebase.database().ref('/theEvents/')
        var eventIdsLink ='/eventsIds/'+eventKey+'/'
        var eventIdsLink2 ='/NCAAB/eventsIds/'+eventKey+'/'
        var dataLink ='/NCAAB/'+eventKey+'/'+this.state.currentSelection//1737147600000
