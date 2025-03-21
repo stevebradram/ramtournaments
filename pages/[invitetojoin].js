@@ -75,16 +75,25 @@ class invite extends Component {
   
  }
  getDetails=(eventId,flockNameWithoutSpaces,flockNameWithSpaces)=>{
-  //console.log('eventId 0002',eventId,'flockNameWithSpaces',flockNameWithSpaces)
-  //console.log('creatorName 01000',flockNameWithSpaces,flockNameWithoutSpaces)
   var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+eventId+'/unique/'+flockNameWithoutSpaces)
   uniqueFlockNamesRef.once('value', dataSnapshot => {
     var theData=dataSnapshot.val()
-    //console.log('theData000',theData)
     this.setState({creatorName:theData.creatorName,creatorId:theData.creatorId,eventTitle:theData.eventName,flockNameWithSpaces,startTime:theData.startTime,sportType:theData.sportType,eventId,flockNameWithoutSpaces,detailsReady:true})
-   
    })
  }
+ getAuth = () => {
+  firebase.auth().onAuthStateChanged((user) => {
+   if (user) {
+     var userId=user.uid
+     this.setState({userId,userLoggedIn:true})
+     this.confirm()
+    
+   } else {
+    this.setState({userLoggedIn:false})
+    // Router.push('/')
+   }
+ })
+}
  checkTime=()=>{
    var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+this.state.eventId+'/time/')
    timeInfoDb.once('value',dataSnapshot=>{
@@ -95,7 +104,7 @@ class invite extends Component {
         Router.push('/')
       }, 3000);
       }else{
-        this.confirm()
+        this.getAuth()
       }
     })
  }

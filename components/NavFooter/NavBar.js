@@ -246,7 +246,7 @@ class NavBar extends Component {
           <LogIn onClick={()=>this.handleChildClick}/>
         </div> : null}
         {this.state.progress ? <ProgressBar message='Logging Out' /> : null}
-        {this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
+        {this.state.isLogged&&this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
       </>
     )
   }
