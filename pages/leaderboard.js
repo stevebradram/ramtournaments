@@ -301,6 +301,16 @@ class leaderboard extends Component {
           theDet['flockName']=userBetData.flockName
           theDet['teamName']=userBetData.teamName
           theDet['bestPossibleScore']=userBetData.bestPossibleScore
+          if(sportType==="NCAAB"){
+            theDet['round1Score']=userBetData.round1Score
+            theDet['round2Score']=userBetData.round2Score
+            theDet['finalRoundScore']=userBetData.finalRoundScore
+            theDet['currentPick']=userBetData.currentPick
+
+            theDet['round1BPS']=userBetData.round1BPS
+            theDet['round2BPS']=userBetData.round2BPS
+            theDet['finalRoundBPS']=userBetData.finalRoundBPS
+          }
           if(sportType==="NCAAF"){
             var theCurrentScore=Number(userBetData.firstRoundScore)+Number(userBetData.quarterFinalsScore)+Number(userBetData.semiFinalsScore)+Number(userBetData.finalsScore)
             theCurrentScore=theCurrentScore.toFixed(2)
@@ -388,7 +398,22 @@ class leaderboard extends Component {
       () => this.setState({showProgressBar:false}), 
       2000)
   }
+  getCurrentRound=(round)=>{
+    console.log('roundddd',round)
+    this.setState({currentSelection:round})
+    return
+    if(round==='round1'){
+      this.setState({ramsInMyFlockArr:this.state.round1Arr})
+    }
+    if(round==='round2'){
+      this.setState({ramsInMyFlockArr:this.state.round2Arr})
+    }
+    if(round==='finalRound'){
+      this.setState({ramsInMyFlockArr:this.state.round2Arr})
+    }
+  }
   itemComponent=(theItems)=>{
+    console.log('theItems rrrr',theItems)
     var BSPTitle=''
     if(this.state.currentSelection==='firstRound'){BSPTitle='First Round'}
     if(this.state.currentSelection==='quarterFinals'){BSPTitle='Quarter Finals'}
@@ -399,6 +424,10 @@ class leaderboard extends Component {
     if(this.state.currentSelection==='divisionalRound'){BSPTitle='Divisional'}
     if(this.state.currentSelection==='conferenceChampionship'){BSPTitle='Conference'}
     if(this.state.currentSelection==='superBowl'){BSPTitle='Super Bowl'}
+
+    if(this.state.currentSelection==='round1'){BSPTitle='Round 1'}
+    if(this.state.currentSelection==='round2'){BSPTitle='Round 2'}
+    if(this.state.currentSelection==='finalRound'){BSPTitle='Final'}
     return(
     <div id={styles.table1Div}>
       <table className={styles.table1} ref={ this.tableRef}>
@@ -419,10 +448,10 @@ class leaderboard extends Component {
           :null}
           {this.state.sportType==='NCAAB'?
            <>
-           <th>Best Score<br/>{'Round 1'}</th>
-           <th>Round 1<br/>Score</th>
-           <th>Round 2<br/>Score</th>
-           <th>Final<br/>Round</th>
+           <th>Best Possible<br/> Score</th>
+           <th>Current<br/>Score</th>
+           {/*<th>Round 2<br/>Score</th>
+           <th>Final<br/>Round</th>*/}
            </>
           :null}
           {this.state.sportType==='NFL'?
@@ -437,6 +466,11 @@ class leaderboard extends Component {
            {this.state.isAdmin?<><th>Phone</th><th>Email</th></>:null}
         </tr>
         {theItems.map((item, index) => {
+          var theScore='',theBPS=''
+         // console.log('item66556',item)
+          if(this.state.currentSelection==='round1'){theScore=item.round1Score,item.round1BPS?theBPS=item.round1BPS:theBPS=0}
+          if(this.state.currentSelection==='round2'){theScore=item.round2Score,item.round2BPS?theBPS=item.round2BPS:theBPS=0}
+          if(this.state.currentSelection==='finalRound'){theScore=item.finalRoundScore,item.finalRoundBPS?theBPS=item.finalRoundBPS:theBPS=0}
           return (
             <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===this.state.userId?'#292f51':null,color:item.id===this.state.userId?'white':'#292f51'}}>
               <td>{index+1}</td>
@@ -448,7 +482,7 @@ class leaderboard extends Component {
               
 
 
-              {this.state.sportType==='NCAAF'||this.state.sportType==='NFL'?null:<td>{this.state.isEventExpired?item.currentScore:item.bestPossibleScore}</td>}
+              {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?null:<td>{this.state.isEventExpired?item.currentScore:item.bestPossibleScore}</td>}
               {this.state.sportType==='NCAAF'?
               <>
               {this.state.isEventExpired?<td>{item.currentScore}</td>:
@@ -469,9 +503,11 @@ class leaderboard extends Component {
               </>:null}
               {this.state.sportType==='NCAAB'?
               <>
-              <td>{item.currentScore}</td>
-              <td>0</td>
-              <td>0</td></>
+              <td>{theBPS}</td>
+              <td>{theScore}</td>
+              {/*<td>{item.round2Score}</td>
+              <td>{item.finalRoundScore}</td>*/}
+              </>
               :null}
               {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}
             </tr>
@@ -518,6 +554,11 @@ class leaderboard extends Component {
           })}
         </div>
               <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+              {this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
+            <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
+            <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
+            <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round</p>
+           </div>:null}
               <div className={styles.menu2Div1}>    
               {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
                     filename={this.state.theEventKey}

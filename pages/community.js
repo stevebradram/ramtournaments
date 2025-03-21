@@ -428,7 +428,7 @@ class leaderboard extends Component {
                     <th>Average Points<br />Per RAM</th></tr>
                   {this.state.theFlocksArr.map((item, index) => {
                     return (
-                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : null, color: item.flockName === this.state.myFlockName ? 'white' : '#292f51' }}>
+                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : index===0?'#CB1E31':null, color: item.flockName === this.state.myFlockName ? 'white' : index===0?'#fff':'#292f51'}}>
                         <td>{index + 1}</td>
                         <td>{item.flockName.split("|").join(' ')}</td>
                         <td>{item.membersNo}</td>
