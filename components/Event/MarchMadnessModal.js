@@ -48,7 +48,7 @@ class NCAAModal extends Component {
     console.log('incomingData',this.props.eventToNCAABModal,this.state.currentSelection,incomingData)
     var firstMatchTime=[]
     if(incomingData.length>0){
-      incomingData=incomingData.slice(0,2)
+      incomingData=incomingData//.slice(0,2)
       round1Edit=[],round2Edit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
       incomingData.map((item,index)=>{
         firstMatchTime.push(item.timeInMillis)
