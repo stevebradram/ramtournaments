@@ -1077,8 +1077,7 @@ getNCAABMatchesFinal = () => {
       console.log('this.state.currentItems 001',theItems)
     }
     pickWinner=(id,winner,time)=>{
-      this.notify('Match not ended')
-      return
+     
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var nowTime=new Date().getTime()
       if(nowTime<time){
