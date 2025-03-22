@@ -109,8 +109,65 @@ class MarchMadness extends Component {
   
     componentDidMount = () => {
       this.checkAuth()
+      //this.fixFlockSystem()
       //this.getMarchMadnessEvents()
       
+    }
+    fixFlockSystem= () => {
+      var theFlocks=[]
+      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/membersScores/')
+      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
+      flocksInfo.once('value', dataSnapshot => {
+        var theCount = dataSnapshot.numChildren()
+        var i=0
+        dataSnapshot.forEach((data) => {
+          i++
+          var theKey=data.key
+          theFlocks.push(theKey)
+          console.log('the key',data.key)
+          var flockName=theKey.split('|').join(' ')
+          flocksInfo.child(theKey).once('value', dataSnapshot => {
+            var membersNo=0,r2Score=[]
+            dataSnapshot.forEach((data) => {
+              var userId=data.key
+              var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/bets/round2')
+              var detsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/details/')
+             
+              detsRef.once('value', dataSnapshot => {
+                if(dataSnapshot.exists()){
+                  var theData=dataSnapshot.val()
+                  var round2Pick=theData.round2Pick
+                  if(round2Pick&&round2Pick===true){
+                    membersNo++
+                    var round2bps=theData.round2BPS
+                    var round2score=theData.round2Score
+                    var round2scoreB=Number(round2score)
+                    r2Score.push(round2scoreB)
+                    detsRef.child('flockName').set(flockName)
+                    var currentPick='round2'
+                    var theScoreData={BPS:round2bps,currentPick:'round2',round2BPS:round2bps,score:round2score,
+                      round2Score:round2score,round2Pick:true}
+                      const sum =r2Score.reduce((partialSum, a) => partialSum + a, 0);
+                      var av=sum/membersNo
+                      if(av&&av>0){av=av.toFixed(2)}
+                      var flockData={round2MembersNo:membersNo,round2Score:sum,round2AvScore:av}
+                      
+                      flocksInfo.child(theKey+'/'+userId).update(theScoreData)
+                      flocksInfo2.child(theKey).update(flockData)
+                      console.log('all info',theKey,userId,membersNo,theScoreData,flockData)
+                    
+                  }
+                }
+              })
+              console.log('the userId',theKey,userId)
+            })
+          })
+          if(theCount===i){
+            
+            console.log('the theFlocks',theFlocks)
+          }
+        })
+      })
     }
     getMarchMadnessEvents=()=>{
       var oddsApi = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
@@ -1068,16 +1125,25 @@ getNCAABMatchesFinal = () => {
   })
     }
     closePickWinner=(id)=>{
+      if(this.state.currentRound==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
-     // delete theItems[index2]['showChooseWinner']
       this.setState({allRound1MatchesArr:theItems})
-      console.log('this.state.currentItems 001',theItems)
+      console.log('this.state.currentItems 001',theItems)}
+      if(this.state.currentRound==='round2'){
+        var index2 = this.state.allRound2MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.allRound2MatchesArr
+        delete theItems[index2]['chosenWinner']
+        delete theItems[index2]['showChooseWinner']
+        this.setState({allRound2MatchesArr:theItems})
+        console.log('this.state.currentItems 001',theItems)}
     }
     pickWinner=(id,winner,time)=>{
-     
+      var nowTime=new Date().getTime()
+    
+      if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var nowTime=new Date().getTime()
       if(nowTime<time){
@@ -1088,29 +1154,71 @@ getNCAABMatchesFinal = () => {
        this.notify('Winner already filled')
         return
       }
+
       var theItems=this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner']=true
       this.setState({allRound1MatchesArr:theItems})
       console.log('this.state.currentItems 002',theItems)
+    }
+    if(this.state.currentSelection==='round2'){
+      console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+      var index2 = this.state.allRound2MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+      var nowTime=new Date().getTime()
+      var theItems=this.state.allRound2MatchesArr
+      
+      if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+
+      var theItems=this.state.allRound2MatchesArr
+      theItems[index2]['showChooseWinner']=true
+      this.setState({allRound2MatchesArr:theItems})
+    }
    
     }
     chosenWinner=(id,winner)=>{
+      if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
       theItems[index2]['chosenWinner']=winner
       theItems[index2]['status1']='played'
      // theItems[index2]['isItPlayed']='played'
       this.setState({allRound1MatchesArr:theItems})
-      console.log('this.state.currentItems 003',theItems)
+      console.log('this.state.currentItems 008',theItems)
+    }
+      if(this.state.currentSelection==='round2'){
+        var index2 = this.state.allRound2MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.allRound2MatchesArr
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+        console.log('this.state.currentItems 009',theItems)
+      }
+
+      
     }
     submitWinner=(id,winner)=>{
       console.log('haaaaaaaaaaaapa 000000')
+      if(this.state.currentSelection==='round1'){
       var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       if(winner!=='player1'&&winner!=='player2'){
         this.notify('Nothing to submit')
       }else{
       this.checkForOutcome(index,winner)
       }
+    }
+    if(this.state.currentSelection==='round2'){
+      var index = this.state.allRound2MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+    }
      
     }
     checkForOutcome=async (index,winner) => {
@@ -1118,6 +1226,9 @@ getNCAABMatchesFinal = () => {
         //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
         var shortArr=[]
         console.log('haaaaaaaaaaaapa 2222',index,winner)
+       
+        if(this.state.currentSelection==='round1'){
+        
         var theRound1Arr=this.state.allRound1MatchesArr
         theRound1Arr[index]['winner']=winner
         delete theRound1Arr[index]['chosenWinner']
@@ -1155,11 +1266,65 @@ getNCAABMatchesFinal = () => {
             if(theOutcome==='Success Updating Results'){
               this.checkAuth()
             }
-          })
+          })}
+          if((this.state.currentSelection==='round2')){
+            this.checkForOutcome2(index,winner)
+          }
           } catch (error) {
             ////console.log('error',error)
           }
+        
       }
+          
+      
+      checkForOutcome2=async (index,winner) => {
+        try {
+          //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+          var shortArr=[]
+          console.log('haaaaaaaaaaaapa 2222 round 2',index,winner)
+          var theRound2Arr=this.state.allRound2MatchesArr
+          theRound2Arr[index]['winner']=winner
+          delete theRound2Arr[index]['chosenWinner']
+          delete theRound2Arr[index]['showChooseWinner']
+          this.setState({allRound2MatchesArr:theRound2Arr})
+          this.state.allRound2MatchesArr.map((item,index)=>{
+            console.log('shortArr',shortArr)
+            shortArr['p1Points']=item.p1Points
+            shortArr['p2Points']=item.p2Points
+            shortArr['winner']=item.winner
+            shortArr['status1']=item.status1
+            shortArr['id']=item.id
+            var theItem={p1Points:item.p1Points,p2Points:item.p2Points,winner:item.winner,
+              status1:item.status1,id:item.id
+            }
+            shortArr.push(theItem)
+          })
+          if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.allRound1MatchesArr.length<1)return
+          var scoreName=''
+          if(!this.state.theEventKey||this.state.theEventKey.length<3)return
+          if(this.state.currentSelection==='round1'){scoreName='round1Score'}
+          if(this.state.currentSelection==='round2'){scoreName='round2Score'}
+          let theItems = JSON.stringify(shortArr);
+          var theLink='theEvents::NCAAB::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
+          if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+          var theQuery=encodeURIComponent(theLink)
+          console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
+          console.log('theLink',theLink,theItems)
+          console.log('this.state.shortArr 006',shortArr)
+          
+          //await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
+          await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
+            .then((res) => {
+              var theOutcome = res.data
+              this.notify(theOutcome)
+              if(theOutcome==='Success Updating Results'){
+                this.checkAuth()
+              }
+            })
+            } catch (error) {
+              ////console.log('error',error)
+            }
+        }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
