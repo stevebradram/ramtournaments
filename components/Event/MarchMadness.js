@@ -320,6 +320,7 @@ getMatchesInfo = async () => {
             }
           })
           if(round2Count===i){
+            this.setState({allRound2MatchesArr:this.state.allRound2MatchesArr})
             console.log('round 19 item',this.state.allRound2MatchesArr)
           }
         }
@@ -437,6 +438,7 @@ getNCAABMatches = () => {
       }
     })
   })
+
   
   this.getNCAABMatches2()
   this.getNCAABMatchesFinal()
@@ -895,7 +897,7 @@ getNCAABMatchesFinal = () => {
     this.setState({currentRound:round})
     if(round==='round1'){
      this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1',theMenu:'east'})}
-    if(round==='round2'){
+    if(round==='round2'){   currentItems:round2EastArr
      this.setState({currentItems:this.state.round2EastArr,theSubMenu:'round2',theMenu:'east'})}
      if(round==='finalRound'){
       this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound',theMenu:'sweet16'})}

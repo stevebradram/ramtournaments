@@ -230,17 +230,50 @@ class DetailsModal extends Component {
  getFlockNames=(userId)=>{
   var flocks=[],i=0
   var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
-  myFlockNamesRef.once('value',dataSnapshot=>{
-    //this.setState({openNewFlockModal:false})
-    if(dataSnapshot.exists()){
-    var theFlockName=dataSnapshot.val().name
-    theFlockName=theFlockName.split("|").join(" ")
-    this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
-    }else{
-      this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
-    }
-  })
+  var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('events').child(this.props.currentEvent+'/'+this.props.theEventKey+'/bets/'+this.props.currentSelection)
+  if(this.props.currentSelection!=='round1'){
+    betsRef.once('value',dataSnapshot=>{
+      console.log('daaaaaaaaaata',dataSnapshot.val())
+      if (dataSnapshot.exists()) {
+        myFlockNamesRef.once('value',dataSnapshot=>{
+          if(dataSnapshot.exists()){
+          var theFlockName=dataSnapshot.val().name
+          theFlockName=theFlockName.split("|").join(" ")
+          this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
+          }else{
+            this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
+          }
+        })
+      }else{
+        this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
+      }
+    })
+  }else{
+    myFlockNamesRef.once('value',dataSnapshot=>{
+      if(dataSnapshot.exists()){
+      var theFlockName=dataSnapshot.val().name
+      theFlockName=theFlockName.split("|").join(" ")
+      this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
+      }else{
+        this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
+      }
+    })
+  }
+
 }
+getFlockNames2=(userId)=>{
+  var flocks=[],i=0
+  var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
+        myFlockNamesRef.once('value',dataSnapshot=>{
+          if(dataSnapshot.exists()){
+          var theFlockName=dataSnapshot.val().name
+          theFlockName=theFlockName.split("|").join(" ")
+          this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
+          }else{
+            this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
+          }
+        })
+  }
    checkAuth = (from) => {
    firebase.auth().onAuthStateChanged((user) => {
     if (user) {
