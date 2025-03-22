@@ -1141,6 +1141,7 @@ getNCAABMatchesFinal = () => {
         console.log('this.state.currentItems 001',theItems)}
     }
     pickWinner=(id,winner,time)=>{
+  
       var nowTime=new Date().getTime()
     
       if(this.state.currentSelection==='round1'){
@@ -1182,6 +1183,7 @@ getNCAABMatchesFinal = () => {
    
     }
     chosenWinner=(id,winner)=>{
+     
       if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
@@ -1258,6 +1260,7 @@ getNCAABMatchesFinal = () => {
         console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
         console.log('theLink',theLink,theItems)
         console.log('this.state.shortArr 006',shortArr)
+        
         await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
         //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
@@ -1299,7 +1302,7 @@ getNCAABMatchesFinal = () => {
             }
             shortArr.push(theItem)
           })
-          if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.allRound1MatchesArr.length<1)return
+          if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',this.state.allRound2MatchesArr.length<1)return
           var scoreName=''
           if(!this.state.theEventKey||this.state.theEventKey.length<3)return
           if(this.state.currentSelection==='round1'){scoreName='round1Score'}
@@ -1312,8 +1315,8 @@ getNCAABMatchesFinal = () => {
           console.log('theLink',theLink,theItems)
           console.log('this.state.shortArr 006',shortArr)
           
-          //await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
-          await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
+          await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
+          //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
             .then((res) => {
               var theOutcome = res.data
               this.notify(theOutcome)
