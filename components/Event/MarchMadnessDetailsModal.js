@@ -313,7 +313,7 @@ class DetailsModal extends Component {
         ramName:this.state.teamName,picked:true, [thePick]:true,
         [bps2]:this.state.bestPossibleScore}
     }
-   // detailsData[dataScore]='0.00'
+ 
     var i=0
     this.state.theItems.map((item,index)=>{
       //console.log('iteeem',item.id,item.bet)
@@ -363,6 +363,7 @@ class DetailsModal extends Component {
     console.log('detailsData',detailsData)
     console.log('itemsData',itemsData)
     console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,this.props.currentSelection,this.state.userId)
+    //return
     var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents').child(this.state.currentEvent)
     var gamesDataRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('events').child(this.state.currentEvent)
     var ramsBets = firebase.database().ref('userBets/'+this.state.currentEvent+'/')

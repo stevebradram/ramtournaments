@@ -469,6 +469,7 @@ getNCAABMatches2 = () => {
       }
       allMatches.push(data.val())
       if(theCount===i){
+      console.log('allMatches round 2',allMatches)
         this.setState({round2EastArr:round2EastArr,round2WestArr:round2WestArr,round2SouthArr:round2SouthArr,
          round2midWestArr:round2midWestArr,allRound2MatchesArr:allMatches})
       }
@@ -946,6 +947,8 @@ getNCAABMatchesFinal = () => {
       this.notify('Event points not yet populated')
      }else{
       this.openTheModal2(stopEdit)
+      console.log('itemToModals',itemToModals)
+       this.setState({itemToModals,modalTitle})
      }
      }
     })
