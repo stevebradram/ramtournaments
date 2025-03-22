@@ -103,7 +103,7 @@ class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
     finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'east',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round1',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'round2',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
   round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:'',
   stopRound1Edit:'', stopRound2Edit:'',stopFinalEdit:''}
   
@@ -321,7 +321,7 @@ getMatchesInfo = async () => {
           })
           if(round2Count===i){
             this.setState({allRound2MatchesArr:this.state.allRound2MatchesArr})
-            console.log('round 19 item',this.state.allRound2MatchesArr)
+            console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
           }
         }
       }
@@ -434,7 +434,11 @@ getNCAABMatches = () => {
         //allMatches=[...round1EastArr]
         console.log('allMatches 55555555',allMatches)
         this.setState({round1EastArr:round1EastArr,round1WestArr:round1WestArr,round1SouthArr:round1SouthArr,
-          currentItems:round1EastArr,round1midWestArr:round1midWestArr,allRound1MatchesArr:allMatches,oldRound1Array:allMatches})
+          round1midWestArr:round1midWestArr,oldRound1Array:allMatches,
+          allRound1MatchesArr:[...round1EastArr,...round1WestArr,...round1SouthArr,...round1midWestArr]})
+          if(this.state.currentRound==='round1'){
+           this.setState({currentItems:round1EastArr})
+          }
       }
     })
   })
@@ -473,8 +477,12 @@ getNCAABMatches2 = () => {
       if(theCount===i){
       console.log('allMatches round 2',allMatches)
         this.setState({round2EastArr:round2EastArr,round2WestArr:round2WestArr,round2SouthArr:round2SouthArr,
-         round2midWestArr:round2midWestArr,allRound2MatchesArr:allMatches})
-      }
+         round2midWestArr:round2midWestArr,allRound2MatchesArr:[...round2EastArr,...round2WestArr,...round2SouthArr,...round2midWestArr]})
+     
+         if(this.state.currentRound==='round2'){
+          this.setState({currentItems:round2EastArr})
+         }
+        }
     })
   })
 }
@@ -1272,8 +1280,9 @@ getNCAABMatchesFinal = () => {
         </div>
         </div>
           <div className={style.eve2Div}>
+          <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
             <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
-            <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
+            
             <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
            </div>
            
