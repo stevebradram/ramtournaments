@@ -239,12 +239,15 @@ class DetailsModal extends Component {
           if(dataSnapshot.exists()){
           var theFlockName=dataSnapshot.val().name
           theFlockName=theFlockName.split("|").join(" ")
+          console.log('with flock')
           this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
           }else{
+            console.log('flockless 2')
             this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
           }
         })
       }else{
+        console.log('flockless 3')
         this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
       }
     })
