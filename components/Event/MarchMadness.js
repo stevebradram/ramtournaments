@@ -897,7 +897,7 @@ getNCAABMatchesFinal = () => {
     this.setState({currentRound:round})
     if(round==='round1'){
      this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1',theMenu:'east'})}
-    if(round==='round2'){   currentItems:round2EastArr
+    if(round==='round2'){   
      this.setState({currentItems:this.state.round2EastArr,theSubMenu:'round2',theMenu:'east'})}
      if(round==='finalRound'){
       this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound',theMenu:'sweet16'})}
