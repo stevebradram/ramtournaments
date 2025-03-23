@@ -13,7 +13,7 @@ var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 3
 { name: 'Elaine Kiiru', score: 40 }, { name: 'RAM Man', score: 50 }]
 class leaderboard extends Component {
   state = {
-    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',
+    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',showNCAAB:false,
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
     currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',round1Arr:[],round2Arr:[],
     
@@ -142,6 +142,7 @@ class leaderboard extends Component {
             round1Arr.push(theArr2),round2Arr.push(theArr3)
           }
           if (count === i) {
+            this.showNCAAB()
             //console.log('allArr55555555555',allArr)
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
             else { allArr = allArr.sort(function (a, b) { return b.BPS - a.BPS }); }
@@ -263,6 +264,11 @@ class leaderboard extends Component {
     this.timerHandle = setTimeout(
       () => this.setState({ showProgressBar: false }),
       2000)
+  }
+  showNCAAB = () => {
+    this.timerHandle = setTimeout(
+      () => this.setState({ showNCAAB:true }),
+      1000)
   }
   deleteMember= () => {
     if((new Date().getTime()>this.state.theTime)){
@@ -497,7 +503,7 @@ class leaderboard extends Component {
               </div> </div> : <div>
               <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No Admin data available for this event</p>
-            </div>}</> : null}</>:<CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime}/>}
+            </div>}</> : null}</>:this.state.showNCAAB?<CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime}/>:null}
 
           </div></>:null}
           {this.state.communitySelection==='News & Videos'?<News/>:null}
