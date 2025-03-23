@@ -1,0 +1,209 @@
+$blackish:#292f51;
+$redColor:#CB1E31;
+$pastEve:#919191;
+
+$pastEve2:#e8de4c;
+#table1Div {
+    margin: 20px 20px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding-top: 0px;
+    
+    // min-width: 1000px;
+}
+
+.table1 {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid rgb(231, 231, 231);
+    //min-width: 1100px;
+}
+
+.table1 td {
+    border-bottom: 1px solid rgb(231, 231, 231);
+    padding: 15px 8px;
+}
+
+.table1 th {
+    border: 1px solid rgb(231, 231, 231);
+    padding: 15px 8px;
+}
+
+.table1 th {
+    font-size: 14px;
+}
+
+.table1 {
+    box-sizing: border-box;
+}
+
+#table1Tr1 th {
+    min-width: 120px;
+    font-weight: 600;
+    color: $blackish;
+}
+#table1Tr2{
+    color: $blackish;
+}
+#table1Tr2 th {
+   
+    font-weight: 400;
+    color: $redColor;
+}
+
+#table1Tr2 td {
+    font-size: 14px;
+    text-align: center;
+    //color: $blackish;
+    font-weight: 500;
+}
+.menu2Div1 {
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    margin: 10px 0px 50px 0px;
+    //box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 18px;
+    //width: 70%;
+    position: relative;
+}
+.delIC{
+    font-size: 24px;
+    cursor: pointer;
+}
+.modal{
+    position: fixed;
+    top:0;bottom:0;right:0;left:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.delModal{
+    width: 400px;
+    height: 180px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+.delModalP1{
+    font-size: 18px;
+    font-weight: 600;
+}
+.delModalP2{
+    margin: 10px 0px;
+}
+.delModal div{
+    margin-top: 15px;
+}
+.delModal button{
+    padding: 5px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.titleP {
+    display: flex;
+    color: white;
+    padding: 15px 15px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: $blackish;
+    border-bottom: 1px solid #a2a2a2;
+    
+}
+.titleP span{
+    margin-right: 4px;
+    color: $redColor;
+}
+.noDataP0{
+    font-size: 16px;
+    color: $redColor;  
+    text-decoration: underline;
+    margin-top: -10px;
+    margin-bottom: 5px;
+}
+.noDataP1{
+    font-size: 20px;
+    color: $blackish;
+    
+}
+.noDataP2{
+    //background-color: $redColor;
+    width: 150px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $blackish;
+    margin-top: 10px;
+    cursor: pointer;
+    border: 1px solid $blackish;
+}
+.noDataDiv{
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+}
+.noDataIc{
+    font-size: 150px;
+    color: $blackish;
+}
+.noDataDiv p{
+    font-size: 30px;
+    width: 50%;
+    text-align: center;
+    color: $blackish;
+    margin-top: 20px;
+}
+@media all and (max-width: 800px) {
+    .noDataDiv{
+        display: flex;
+        flex-direction: column;
+        min-height: 200px;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 20px;
+    }
+    .noDataIc{
+        font-size: 120px;
+        color: #706f6f;
+    }
+    .noDataDiv p{
+        font-size: 25px;
+        width: 70%;
+        text-align: center;
+        color: #706f6f;
+    }
+}
+@media all and (max-width: 430px) {
+    .delModal{
+        width: 350px;
+        height: 180px;
+        padding: 10px 20px;
+    }
+    .noDataIc{
+        font-size: 100px;
+        
+    }
+    .noDataDiv p{
+        font-size: 22px;
+        width: 90%;
+        margin-top: 20px;
+    }
+}
+@media all and (max-width: 360px) {
+    .delModal{
+        width: 300px;
+        height: 160px;
+        padding: 10px 20px;
+    }
+}

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
 import News from '../components/Community/News'
 import HallOfFame from '../components/Community/HallOfFame'
+import CommMarchMadness from '../components/Community/CommMarchMadness'
 var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 30 },
 { name: 'Elaine Kiiru', score: 40 }, { name: 'RAM Man', score: 50 }]
 class leaderboard extends Component {
@@ -15,6 +16,7 @@ class leaderboard extends Component {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
     currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',round1Arr:[],round2Arr:[],
+    
   }
   componentDidMount = () => {
     this.showProgressBar()
@@ -69,7 +71,7 @@ class leaderboard extends Component {
               this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted,endTime }, () => {
               this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
               {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
-              console.log('sportType555555555', sportType, theEventKey)
+              //console.log('sportType555555555', sportType, theEventKey)
             })
           }
 
@@ -109,7 +111,7 @@ class leaderboard extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          console.log('the daaaaaaaaata',theData)
+          //console.log('the daaaaaaaaata',theData)
           var theUserId = data.key
           var BPS='',theScore='',r1BPS='',r2BPS='',r1S='',r2S='',round1Pick=false,round2Pick=false
           if(sportType==='NCAAB'){
@@ -126,7 +128,7 @@ class leaderboard extends Component {
             
               if(theData.round1BPS){r1BPS=Number(theData.round1BPS)}else{r1BPS=0}
               if(theData.round1Score){r1S=theData.round1Score}else{r1S='0'}
-              if(theData.round2BPS){r2BPS=Number(theData.round1BPS)}else{r2BPS=0}
+              if(theData.round2BPS){r2BPS=Number(theData.round2BPS)}else{r2BPS=0}
               if(theData.round2Score){r2S=theData.round2Score}else{r2S='0'}
           }else{
             BPS=Number(theData.BPS)
@@ -136,11 +138,11 @@ class leaderboard extends Component {
           allArr.push(theArr)
           if(sportType==='NCAAB'){
             var theArr2 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r1BPS, score:r1S,creatorId:creatorId,round1Pick,round2Pick}
-            var theArr3 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r2BPS, score:r2S,creatorId:creatorId,round1Pick,round2Pick}
+            var theArr3 = { uid: theUserId,flockName:flockNameWithNoSpaces, theName: theData.ramName, picked: theData.picked, BPS:r2BPS, score:r2S,creatorId:creatorId,round2Pick,round2Pick}
             round1Arr.push(theArr2),round2Arr.push(theArr3)
           }
           if (count === i) {
-            console.log('allArr55555555555',allArr)
+            //console.log('allArr55555555555',allArr)
             if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
             else { allArr = allArr.sort(function (a, b) { return b.BPS - a.BPS }); }
            
@@ -153,10 +155,10 @@ class leaderboard extends Component {
                 round2Arr = round2Arr.sort(function (a, b) { return b.BPS - a.BPS }); }
               this.setState({round1Arr,round2Arr,ramsInMyFlockArr:round1Arr})
 
-              console.log('round1Arr', round1Arr)
-              console.log('round2Arr', round2Arr)
+              console.log('round1Arr 0001', round1Arr)
+              console.log('round2Arr 0002', round2Arr)
             }else{ this.setState({ ramsInMyFlockArr: allArr })}
-            console.log('the maliza', allArr)
+           // console.log('the maliza', allArr)
           }
         })
       }
@@ -175,14 +177,14 @@ class leaderboard extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          console.log('theFlocksArr 7777 theData',data.key, theData)
+         // console.log('theFlocksArr 7777 theData',data.key, theData)
          var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
          theFlocksArr.push(theArr2)
-          console.log('theFlocksArr 8888', theFlocksArr)
+          //console.log('theFlocksArr 8888', theFlocksArr)
           if (count === i) {
             theFlocksArr = theFlocksArr.sort(function (a, b) { return b.avScore - a.avScore })
             this.setState({ theFlocksArr: theFlocksArr })
-            console.log('theFlocksArr 9999', theFlocksArr)
+           // console.log('theFlocksArr 9999', theFlocksArr)
           }
         })
       }
@@ -207,7 +209,7 @@ class leaderboard extends Component {
           allArr.push(theArr)
           if (count === i) {
             this.setState({ theAdminFlocksArr: allArr })
-            console.log('theFlocksArr', allArr)
+           // console.log('theFlocksArr', allArr)
           }
         })
       } else {
@@ -302,11 +304,11 @@ class leaderboard extends Component {
     this.setState({currentSelection:round})
     if(round==='round1'){
       this.setState({ramsInMyFlockArr:this.state.round1Arr})
-      console.log('round 1111',this.state.round1Arr)
+     // console.log('round 1111',this.state.round1Arr)
     }
     if(round==='round2'){
       this.setState({ramsInMyFlockArr:this.state.round2Arr})
-      console.log('round 2222',this.state.round2Arr)
+     // console.log('round 2222',this.state.round2Arr)
     }
     //this.setState({round1Arr,round2Arr})
     return
@@ -385,7 +387,7 @@ class leaderboard extends Component {
                 )
               })}
             </div>
-            {this.state.menuToShow === 'Rams In Your Flock' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
+            {this.state.sportType!=='NCAAB'?<>{this.state.menuToShow === 'Rams In Your Flock' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}><span>{this.state.currentFlockName}</span> - RAMS IN YOUR FLOCK</p>
               <div id={styles.table1Div}>
                 <table className={styles.table1}>
@@ -495,11 +497,12 @@ class leaderboard extends Component {
               </div> </div> : <div>
               <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No Admin data available for this event</p>
-            </div>}</> : null}
+            </div>}</> : null}</>:<CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime}/>}
 
           </div></>:null}
           {this.state.communitySelection==='News & Videos'?<News/>:null}
           {this.state.communitySelection==='Hall of Fame'?<HallOfFame/>:null}
+          
         </div>
         {this.state.deleteModal?<div className={styles.modal}>
         <div className={styles.delModal}>
@@ -511,7 +514,9 @@ class leaderboard extends Component {
             <button className={styles.canModalDelBtn} onClick={()=>this.setState({deleteModal:false})}>Cancel</button>
           </div>
         </div>
+        
         </div>:null}
+        
         {this.state.showProgressBar ? <ProgressBar /> : null}
         <ToastContainer />
       </>
