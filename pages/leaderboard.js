@@ -6,6 +6,7 @@ import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
+import TheMarchMadness from '../components/LeaderBoards/TheMarchMadness'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 var theItems=[]
 /*const importList = [
@@ -239,7 +240,7 @@ class leaderboard extends Component {
     })
    }
   getScoreBoardData=(sportType,theEventKey,theTime)=>{
-  
+    if(sportType==='NCAAB'){ this.setState({dataAvailable:true});return}
     if(!this.state.userLoggedIn)return
     this.setState({eventStartTime:theTime,sportType})
     console.log('curentttttttt 500000',sportType,theEventKey,theTime)
@@ -254,6 +255,8 @@ class leaderboard extends Component {
     }else{
       dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
     }
+   //ole.log('the db link',dbLink)
+    //return
     //var dbLink2="/userBets/scoreBoards/ramUfc/ufc-310-December72024/"
     var scoreBoardDb=firebase.database().ref(dbLink)
    var data3=[]
@@ -281,13 +284,14 @@ class leaderboard extends Component {
         i++
         var theId=data.key
         var theData=data.val()
-       
+        if(!theId)return
        console.log('the iddddd',theId)
       // console.log('the theData',theData)
         var theDet={}
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         if(this.state.isAdmin){
         userInfoDb2.once('value',dataSnapshot=>{
+          console.log('theD.email',theId)
           
           var theD=dataSnapshot.val()
           theDet['phone']=theD.phoneNo
@@ -343,7 +347,7 @@ class leaderboard extends Component {
           allData.push(theDet)
           this.setState({theItems:allData})
           
-          console.log('all data checked',allData)
+          //console.log('all data checked',allData)
         })
         
         if(i===scoreBoardNo){
@@ -382,7 +386,7 @@ class leaderboard extends Component {
     if(!this.state.userLoggedIn){
       this.notify('Please Log In to continue')
     }else{
-      this.setState({theEventKey,theEventTitle,currentSelection,isEventExpired:isExpired})
+      this.setState({theEventKey,theEventTitle,currentSelection,isEventExpired:isExpired,sportType})
       this.getScoreBoardData(sportType,theEventKey,theTime)
     }
   }
@@ -418,7 +422,7 @@ class leaderboard extends Component {
     }
   }
   itemComponent=(theItems)=>{
-    console.log('theItems rrrr',theItems)
+   // console.log('theItems rrrr',theItems)
     var BSPTitle=''
     if(this.state.sportType==='NCAAB'&&this.state.currentSelection==='round1'){
       theItems=theItems.sort((a, b) => b.round1Score - a.round1Score)
@@ -565,12 +569,13 @@ class leaderboard extends Component {
           })}
         </div>
               <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-              {this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
+              {/*this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
             <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
             <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round</p>
-           </div>:null}
-              <div className={styles.menu2Div1}>    
+           </div>:null*/}
+          
+           {this.state.sportType!=='NCAAB'?<div className={styles.menu2Div1}>    
               {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
                     filename={this.state.theEventKey}
                     sheet="users"
@@ -588,10 +593,11 @@ class leaderboard extends Component {
       <PiFolderDashedThin  className={styles.noDataIc}/>
      <p>Please LOG IN to view data in this page</p>
    </div>}
-      </div>
+      </div>:<TheMarchMadness theEventKey={this.state.theEventKey}/>}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>
+            
             </>
         )
     }

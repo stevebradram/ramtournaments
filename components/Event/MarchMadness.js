@@ -20,6 +20,7 @@ import { MdClose } from "react-icons/md";
 import DetailsModal from './MarchMadnessDetailsModal';
 import EditDetails from './DetailsModalFlockSystem'
 import MarchMadnessModal from './MarchMadnessModal'
+import TheMarchMadness from '../LeaderBoards/TheMarchMadness'
 import axios from "axios"
 var thePoints=[{seed:1,val:1.01},{seed:2,val:1.08},{seed:3,val:1.17},{seed:4,val:1.27},{seed:5,val:1.54},{seed:6,val:1.61},{seed:7,val:1.63},{seed:8,val:2.02},
   {seed:9,val:1.95},{seed:10,val:2.58},{seed:11,val:2.62},{seed:12,val:2.86},{seed:13,val:4.75},{seed:14,val:6.91},{seed:15,val:13.81},{seed:16,val:76}
@@ -110,8 +111,27 @@ class MarchMadness extends Component {
     componentDidMount = () => {
       this.checkAuth()
       //this.fixFlockSystem()
+      //this.fixLeadersBoard()
       //this.getMarchMadnessEvents()
       
+    }
+    fixLeadersBoard=()=>{
+      //"/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/'
+      var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/marchMadness2025/round1/')
+      leadersRef.once('value', dataSnapshot => {
+        dataSnapshot.forEach((data) => {
+          var theId=data.key
+          console.log('the uid',theId)
+          var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
+          userInfoDb2.once('value', dataSnapshot => {
+             if(dataSnapshot.exists()){
+              console.log('ikoooooooooooooooo')
+             }else{
+              console.log('hakunaaaaaaaaaaaaa')
+             }
+          })
+        })
+      })
     }
     fixFlockSystem= () => {
       var theFlocks=[]
@@ -343,7 +363,7 @@ getMatchesInfo = async () => {
      if(round1Exists){
       var i=0
       round1Arr=theData.round1
-      console.log('round 14 item',round1Count,round1Arr)
+      //console.log('round 14 item',round1Count,round1Arr)
       for (var key in round1Arr) {
         i++
         var theId = key
@@ -358,7 +378,7 @@ getMatchesInfo = async () => {
           }
         })
         if(round1Count===i){
-          console.log('round 19 item',this.state.allRound1MatchesArr)
+          //console.log('round 19 item',this.state.allRound1MatchesArr)
           this.setState({allRound1MatchesArr:this.state.allRound1MatchesArr})
         }
       }}
@@ -366,7 +386,7 @@ getMatchesInfo = async () => {
       if(round2Exists){
         var i=0
         round2Arr=theData.round2
-        console.log('round 14 item',round2Count,round2Arr)
+       // console.log('round 14 item',round2Count,round2Arr)
         for (var key in round2Arr) {
           i++
           var theId = key
@@ -378,7 +398,7 @@ getMatchesInfo = async () => {
           })
           if(round2Count===i){
             this.setState({allRound2MatchesArr:this.state.allRound2MatchesArr})
-            console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
+            //console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
           }
         }
       }
@@ -489,7 +509,7 @@ getNCAABMatches = () => {
         var combinedArr=[round1EastArr,round1WestArr,round1SouthArr,round1midWestArr]
         allMatches = Array.prototype.concat(...combinedArr);
         //allMatches=[...round1EastArr]
-        console.log('allMatches 55555555',allMatches)
+       // console.log('allMatches 55555555',allMatches)
         this.setState({round1EastArr:round1EastArr,round1WestArr:round1WestArr,round1SouthArr:round1SouthArr,
           round1midWestArr:round1midWestArr,oldRound1Array:allMatches,
           allRound1MatchesArr:[...round1EastArr,...round1WestArr,...round1SouthArr,...round1midWestArr]})
@@ -1622,6 +1642,7 @@ getNCAABMatchesFinal = () => {
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu}/></div> : null}
         {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
         {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey}  onClick={this.handleChildClick} /></div> : null}
+      <TheMarchMadness/>
       </>
     )
   }
