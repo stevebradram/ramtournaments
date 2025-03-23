@@ -1642,7 +1642,7 @@ getNCAABMatchesFinal = () => {
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu}/></div> : null}
         {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
         {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={roundToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey}  onClick={this.handleChildClick} /></div> : null}
-      <TheMarchMadness/>
+      
       </>
     )
   }
