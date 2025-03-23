@@ -245,7 +245,12 @@ class leaderboard extends Component {
     console.log('curentttttttt 500000',sportType,theEventKey,theTime)
     var dbLink=''
     if(sportType==='NCAAB'){
-      dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/' 
+      if(this.state.currentSelection==='round1'){
+      dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/'
+      } 
+      if(this.state.currentSelection==='round2'){
+        dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round2/'
+        } 
     }else{
       dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
     }
@@ -277,7 +282,7 @@ class leaderboard extends Component {
         var theId=data.key
         var theData=data.val()
        
-       //console.log('the id',theId)
+       console.log('the iddddd',theId)
       // console.log('the theData',theData)
         var theDet={}
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
@@ -338,7 +343,7 @@ class leaderboard extends Component {
           allData.push(theDet)
           this.setState({theItems:allData})
           
-         // console.log('all data checked',allData)
+          console.log('all data checked',allData)
         })
         
         if(i===scoreBoardNo){
@@ -415,6 +420,12 @@ class leaderboard extends Component {
   itemComponent=(theItems)=>{
     console.log('theItems rrrr',theItems)
     var BSPTitle=''
+    if(this.state.sportType==='NCAAB'&&this.state.currentSelection==='round1'){
+      theItems=theItems.sort((a, b) => b.round1Score - a.round1Score)
+    }
+    if(this.state.sportType==='NCAAB'&&this.state.currentSelection==='round2'){
+      theItems=theItems.sort((a, b) => b.round2Score - a.round2Score)
+    }
     if(this.state.currentSelection==='firstRound'){BSPTitle='First Round'}
     if(this.state.currentSelection==='quarterFinals'){BSPTitle='Quarter Finals'}
     if(this.state.currentSelection==='semiFinals'){BSPTitle='Semi Finals'}

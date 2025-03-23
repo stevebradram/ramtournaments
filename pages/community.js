@@ -162,28 +162,31 @@ class leaderboard extends Component {
       }
     })
   })
+  this.theFlocksData(theEventKey)
+    //membersFlockNamesRef.child(flockNameWithNoSpaces).child(this.state.userId).set('$$$'+this.state.creatorName)
+
+  } //this.theFlocksData(theEventKey)
+  theFlocksData=(theEventKey)=>{
     var theFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/theFlocks/')
     theFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
-        var i = 0, allArr = []
+        var i = 0, theFlocksArr = []
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          console.log('theFlocksArr theData',data.key, theData)
-         var theArr = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo}
-          allArr.push(theArr)
-          console.log('theFlocksArr', allArr)
+          console.log('theFlocksArr 7777 theData',data.key, theData)
+         var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
+         theFlocksArr.push(theArr2)
+          console.log('theFlocksArr 8888', theFlocksArr)
           if (count === i) {
-            allArr = allArr.sort(function (a, b) { return b.avScore - a.avScore })
-            this.setState({ theFlocksArr: allArr })
-            console.log('theFlocksArr', allArr)
+            theFlocksArr = theFlocksArr.sort(function (a, b) { return b.avScore - a.avScore })
+            this.setState({ theFlocksArr: theFlocksArr })
+            console.log('theFlocksArr 9999', theFlocksArr)
           }
         })
       }
     })
-    //membersFlockNamesRef.child(flockNameWithNoSpaces).child(this.state.userId).set('$$$'+this.state.creatorName)
-
   }
   loadAdminData = (theEventKey) => {
     var theAdminFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/admin/')
@@ -299,9 +302,11 @@ class leaderboard extends Component {
     this.setState({currentSelection:round})
     if(round==='round1'){
       this.setState({ramsInMyFlockArr:this.state.round1Arr})
+      console.log('round 1111',this.state.round1Arr)
     }
     if(round==='round2'){
       this.setState({ramsInMyFlockArr:this.state.round2Arr})
+      console.log('round 2222',this.state.round2Arr)
     }
     //this.setState({round1Arr,round2Arr})
     return
@@ -427,13 +432,33 @@ class leaderboard extends Component {
                     <th>Total Points</th>
                     <th>Average Points<br />Per RAM</th></tr>
                   {this.state.theFlocksArr.map((item, index) => {
+                    var theMembersNo='',theScore='',theAvScore=''
+                   // console.log('the rrrrrr',this.state.currentSelection,this.state.sportType,item)
+                    if(this.state.sportType==='NCAAB'){
+                      //console.log('haaapa round 1')
+                      if(this.state.currentSelection==='round1'){
+                        theMembersNo=item.theData.round1MembersNo
+                        theScore=item.theData.round1Score
+                        theAvScore=item.theData.round1AvScore
+                      }
+                      if(this.state.currentSelection==='round2'){
+                       // console.log('haaapa round 2')
+                        theMembersNo=item.theData.round2MembersNo
+                        theScore=item.theData.round2Score
+                        theAvScore=item.theData.round2AvScore
+                      }
+                    }else{
+                      theMembersNo=item.membersNo
+                      theScore=item.score
+                      theAvScore=item.avScore
+                    }
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : index===0?'#CB1E31':null, color: item.flockName === this.state.myFlockName ? 'white' : index===0?'#fff':'#292f51'}}>
                         <td>{index + 1}</td>
                         <td>{item.flockName.split("|").join(' ')}</td>
-                        <td>{item.membersNo}</td>
-                        <td>{item.score}</td>
-                        <td>{item.avScore}</td>
+                        <td>{theMembersNo}</td>
+                        <td>{theScore}</td>
+                        <td>{theAvScore}</td>
                         </tr>)
                   })}
                 </table>
