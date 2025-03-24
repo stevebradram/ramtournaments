@@ -86,7 +86,7 @@ class TheMarchMadness extends Component {
   }
   getOverall=()=>{
     var i=0,theDet2=[]
-    var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round1/')
+    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey)
     leadersRef.once('value', dataSnapshot => {
       if(!dataSnapshot.exists()){
       this.setState({finalRoundExists:false})
@@ -115,6 +115,15 @@ class TheMarchMadness extends Component {
               var round1Score=userBetData.round1Score,round2Score=userBetData.round2Score
               var sweet16Score=userBetData.sweet16Score,elite8Score=userBetData.elite8Score
               var final4Score=userBetData.final4Score,finalRoundScore=userBetData.finalRoundScore
+              
+              if(!round1Score||round1Score===undefined||round1Score===null){round1Score=0}
+              if(!round2Score||round2Score===undefined||round2Score===null){round2Score=0}
+              if(!sweet16Score||sweet16Score===undefined||sweet16Score===null){sweet16Score=0}
+              if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
+              if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
+              if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
+              console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
+             
               var score=Number(round1Score)+Number(round2Score)+Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
               score=Number(score).toFixed(2)
               var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
