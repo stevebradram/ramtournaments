@@ -257,7 +257,7 @@ class TheMarchMadness extends Component {
           </tr>
           {sortData.map((item, index) => {
             return(
-            <tr key={index} id={styles.table1Tr2} >
+            <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===this.state.userId?'#292f51': index===0?'#CB1E31':null,color:item.id===this.state.userId?'white': index===0?'#ffffff':'#292f51'}}>
             <td>{index+1}</td>
             <td>{item.teamName}</td>
             <td>{item.flockName}</td>
