@@ -65,7 +65,7 @@ class leaderboard extends Component {
           if (allGames.length > 0) {
             allGames = allGames.sort(function (a, b) { return b.endTime - a.endTime });
             console.log('allGames 9000000',allGames)
-            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'],endTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection']
+            theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'],endTime = allGames[0]['endTime'], currentSelection = 'round1'//allGames[0]['currentSelection']
             var isEventStarted = true
             if (new Date().getTime() < allGames[0]['time']) { isEventStarted = false }
               this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted,endTime }, () => {
@@ -268,7 +268,7 @@ class leaderboard extends Component {
   showNCAAB = () => {
     this.timerHandle = setTimeout(
       () => this.setState({ showNCAAB:true }),
-      1000)
+      2000)
   }
   deleteMember= () => {
     if((new Date().getTime()>this.state.theTime)){
