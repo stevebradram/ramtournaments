@@ -177,6 +177,7 @@ class TheMarchMadness extends Component {
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
             <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
             <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round</p>
+            <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('overall')}>Overall</p>
            </div>
            <div className={styles.menu2Div1}>   
            {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
@@ -192,15 +193,25 @@ class TheMarchMadness extends Component {
           <th>Overall <br/>Rank</th>
           <th>RAM Name</th>
           <th>Flock Name</th>
-          {this.state.currentSelection!=='finalRound'?
+          {this.state.currentSelection==='round1'||this.state.currentSelection==='round2'?
           <><th>Best Possible <br/>Score</th>
-          <th>Current Score</th></>:
+          <th>Current Score</th></>:null}
+          {this.state.currentSelection==='finalRound'?
           <><th>Best Possible <br/>Score</th>
           <th>Cumulative <br/>Score</th>
           <th>Sweet 16</th>
           <th>Elite 8</th>
           <th>Final 4</th>
-          <th>Final</th></>}
+          <th>Final</th></>:null}
+          {this.state.currentSelection==='overall'?
+          <>
+          <th>Cumulative <br/>Score</th>
+          <th>Round 1</th>
+          <th>Elite 8</th>
+          <th>Sweet 16</th>
+          <th>Elite 8</th>
+          <th>Final 4</th>
+          <th>Final</th></>:null}
           {this.state.isAdmin?<><th>Phone</th><th>Email</th></>:null}
           </tr>
           {sortData.map((item, index) => {

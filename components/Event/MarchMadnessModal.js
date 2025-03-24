@@ -49,7 +49,7 @@ class NCAAModal extends Component {
     if(this.state.currentSelection!=='round1'){this.setState({getFromOddsApi:true})}
     var firstMatchTime=[]
     if(incomingData.length>0){
-      incomingData=incomingData.slice(0,2)
+      incomingData=incomingData//.slice(0,2)
       round1Edit=[],round2Edit=[],sweet16Edit=[]
       incomingData.map((item,index)=>{
         firstMatchTime.push(item.timeInMillis)
