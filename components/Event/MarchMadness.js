@@ -111,6 +111,7 @@ class MarchMadness extends Component {
     componentDidMount = () => {
       this.checkAuth()
       //this.fixFlockSystem()
+       //this.fixFlockSystem2()
       //this.fixLeadersBoard()
       //this.getMarchMadnessEvents()
       
@@ -147,12 +148,13 @@ class MarchMadness extends Component {
           console.log('the key',data.key)
           var flockName=theKey.split('|').join(' ')
           flocksInfo.child(theKey).once('value', dataSnapshot => {
-            var membersNo=0,r2Score=[]
+            var membersNo=0,r2Score=[],i=0
+            var count3=dataSnapshot.numChildren()
             dataSnapshot.forEach((data) => {
               var userId=data.key
               var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/bets/round2')
               var detsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/details/')
-             
+              i++
               detsRef.once('value', dataSnapshot => {
                 if(dataSnapshot.exists()){
                   var theData=dataSnapshot.val()
@@ -163,20 +165,91 @@ class MarchMadness extends Component {
                     var round2score=theData.round2Score
                     var round2scoreB=Number(round2score)
                     r2Score.push(round2scoreB)
-                    detsRef.child('flockName').set(flockName)
+                   // detsRef.child('flockName').set(flockName)
                     var currentPick='round2'
                     var theScoreData={BPS:round2bps,currentPick:'round2',round2BPS:round2bps,score:round2score,
                       round2Score:round2score,round2Pick:true}
                       const sum =r2Score.reduce((partialSum, a) => partialSum + a, 0);
                       var av=sum/membersNo
+                      var sum2=''
                       if(av&&av>0){av=av.toFixed(2)}
-                      var flockData={round2MembersNo:membersNo,round2Score:sum,round2AvScore:av}
+                      if(sum&&sum>0){sum2=sum.toFixed(2)}
+                      var flockData={round2MembersNo:membersNo,round2Score:sum2,round2AvScore:av}
                       
                       flocksInfo.child(theKey+'/'+userId).update(theScoreData)
                       flocksInfo2.child(theKey).update(flockData)
-                      console.log('all info',theKey,userId,membersNo,theScoreData,flockData)
-                    
+                      console.log('all info',flockName,theKey,userId,membersNo,theScoreData,flockData)
+                  /*  if(i===count3){
+                      console.log('all info 900000',flockName,theKey,userId,membersNo,theScoreData,flockData)
+                    }*/
                   }
+                }
+              })
+              console.log('the userId',theKey,userId)
+            })
+          })
+          if(theCount===i){
+            
+            console.log('the theFlocks',theFlocks)
+          }
+        })
+      })
+    }
+    fixFlockSystem2= () => {
+      var theFlocks=[]
+      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/membersScores/')
+      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
+      flocksInfo.once('value', dataSnapshot => {
+        var theCount = dataSnapshot.numChildren()
+        var i=0
+        dataSnapshot.forEach((data) => {
+          i++
+          var theKey=data.key
+          
+          theFlocks.push(theKey)
+          console.log('the key',data.key)
+          var flockName=theKey.split('|').join(' ')
+          flocksInfo.child(theKey).once('value', dataSnapshot => {
+            var membersNo=0,r2Score=[],i=0
+            var count3=dataSnapshot.numChildren()
+            dataSnapshot.forEach((data) => {
+              var userId=data.key
+              var thePoints=data.val().round2Score
+              var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/bets/round2')
+              var detsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/details/')
+              i++
+              detsRef.once('value', dataSnapshot => {
+                if(dataSnapshot.exists()){
+                  var theData=dataSnapshot.val()
+                  var round2Pick=theData.round2Pick
+                  var round2bps=0,round2score=0
+                  if(round2Pick&&round2Pick===true){
+                    membersNo++
+                     round2bps=theData.round2BPS
+                     round2score=theData.round2Score
+                  }else{
+                    round2bps=0,round2score=0
+                    }
+                    var round2scoreB=Number(round2score)
+                    r2Score.push(round2scoreB)
+                   // detsRef.child('flockName').set(flockName)
+                    var currentPick='round2'
+                    var theScoreData={BPS:round2bps,round2BPS:round2bps,score:round2score,
+                      round2Score:round2score}
+                      const sum =r2Score.reduce((partialSum, a) => partialSum + a, 0);
+                      var av=sum/membersNo
+                      var sum2=''
+                      if(av&&av>0){av=av.toFixed(2)}else{av=0}
+                      if(sum&&sum>0){sum2=sum.toFixed(2)}else{sum2=0}
+                      var flockData={round2MembersNo:membersNo,round2Score:sum2,round2AvScore:av}
+                      
+                      //flocksInfo.child(theKey+'/'+userId).update(theScoreData)
+                      flocksInfo2.child(theKey).update(flockData)
+                      console.log('all info',flockName,theKey,userId,membersNo,theScoreData,flockData)
+                  /*  if(i===count3){
+                      console.log('all info 900000',flockName,theKey,userId,membersNo,theScoreData,flockData)
+                    }*/
+                  
                 }
               })
               console.log('the userId',theKey,userId)

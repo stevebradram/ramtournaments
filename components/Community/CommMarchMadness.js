@@ -248,8 +248,8 @@ class CommMarchMadness extends Component {
                     <th>RAM Name</th>
                     <th>Flock Name</th>
                     <th>Picked?</th>
-                    <th>Email</th>
-                    <th>Phone No</th>
+                    {this.state.isAdmin?<><th>Email</th>
+                    <th>Phone No</th></>:null}
                   </tr>
                   {this.state.theAdminFlocksArr.map((item, index) => {
                     console.log('itttm',item)
@@ -259,8 +259,8 @@ class CommMarchMadness extends Component {
                         <td>{item.name}</td>
                         <td>{item.flockName}</td>
                         <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
-                        <td>{item.email}</td>
-                        <td>{item.phoneNo}</td>
+                        {this.state.isAdmin?<><td>{item.email}</td>
+                        <td>{item.phoneNo}</td></>:null}
                       </tr>)
                   })}
                 </table>
