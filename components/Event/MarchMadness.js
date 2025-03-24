@@ -1074,8 +1074,11 @@ getNCAABMatchesFinal = () => {
     this.notify('Link copied successfully')
   }
   openTheModal =async () => {
-    this.notify('Event not yet available for pick')
-    return
+   
+    if(!this.state.isAdmin){
+      this.notify('Event not yet available for pick')
+      return
+    }
     if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
