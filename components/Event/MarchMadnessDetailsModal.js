@@ -129,6 +129,7 @@ class DetailsModal extends Component {
       
   }
   submitDetails=()=>{
+  //this.props.currentSelection==='round1'
 
     this.setState({flockNameErr:''})
     if (!this.state.buttonClick)return
@@ -228,10 +229,19 @@ class DetailsModal extends Component {
    })
  }
  getFlockNames=(userId)=>{
+  
   var flocks=[],i=0
+  var theSelection=''
+  if(this.props.currentSelection==='round1'||this.props.currentSelection==='round2'){
+    theSelection=this.props.currentSelection
+  }
+   if(this.props.currentSelection==='finalRound'){
+    theSelection=this.props.theMenu
+   }
+   console.log('daaaaaaaaaata hghghgh',userId,this.props.currentEvent,this.props.theEventKey,theSelection)
   var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
-  var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('events').child(this.props.currentEvent+'/'+this.props.theEventKey+'/bets/'+this.props.currentSelection)
-  if(this.props.currentSelection!=='round1'){
+  var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('events').child(this.props.currentEvent+'/'+this.props.theEventKey+'/bets/round1')
+  if(theSelection!=='round1'){
     betsRef.once('value',dataSnapshot=>{
       console.log('daaaaaaaaaata',dataSnapshot.val())
       if (dataSnapshot.exists()) {
@@ -239,15 +249,13 @@ class DetailsModal extends Component {
           if(dataSnapshot.exists()){
           var theFlockName=dataSnapshot.val().name
           theFlockName=theFlockName.split("|").join(" ")
-          console.log('with flock')
+          console.log('hapa 0044444  kkkk',theFlockName)
           this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
           }else{
-            console.log('flockless 2')
             this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
           }
         })
       }else{
-        console.log('flockless 3')
         this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
       }
     })
@@ -256,27 +264,23 @@ class DetailsModal extends Component {
       if(dataSnapshot.exists()){
       var theFlockName=dataSnapshot.val().name
       theFlockName=theFlockName.split("|").join(" ")
+      console.log('hapa 0044444  kkkk',theFlockName)
       this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
       }else{
         this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
       }
     })
   }
-
+  var myTeamNamesRef=firebase.database().ref('/users/').child(userId+'/ramData/events/'+this.props.currentEvent+'/'+this.props.theEventKey+'/details/teamName/')
+  myTeamNamesRef.once('value',dataSnapshot=>{
+    if(dataSnapshot.exists()){
+      var theName=dataSnapshot.val()
+    this.setState({teamName:theName})
+    console.log('team naaaaaaame',theName)
+    }
+  })
 }
-getFlockNames2=(userId)=>{
-  var flocks=[],i=0
-  var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
-        myFlockNamesRef.once('value',dataSnapshot=>{
-          if(dataSnapshot.exists()){
-          var theFlockName=dataSnapshot.val().name
-          theFlockName=theFlockName.split("|").join(" ")
-          this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
-          }else{
-            this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
-          }
-        })
-  }
+
    checkAuth = (from) => {
    firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -297,14 +301,20 @@ getFlockNames2=(userId)=>{
    toDatabase=()=>{
     if(!this.state.userId)return
     var eventKey=this.props.theEventKey
-    var itemsData={}
-    ////console.log('looooooooobo')
+    var itemsData={},theSelection=''
+   
+    if(this.props.currentSelection==='round1'||this.props.currentSelection==='round2'){
+      theSelection=this.props.currentSelection
+    }
+     if(this.props.currentSelection==='finalRound'){
+      theSelection=this.props.theMenu
+     }
     const theTime = new Date().getTime()
     var detailsData = {},scoreData={}
-    var dataScore=this.props.currentSelection+'Score'
-    var thePick=this.props.currentSelection+'Pick'
-    var bps2=this.props.currentSelection+'BPS'
-    if(this.props.currentSelection==='round1'){
+    var dataScore=theSelection+'Score'
+    var thePick=theSelection+'Pick'
+    var bps2=theSelection+'BPS'
+    if(theSelection==='round1'){
       detailsData = {
         teamName:this.state.teamName,
         flockName:this.state.ramFlockName,
@@ -320,7 +330,7 @@ getFlockNames2=(userId)=>{
         [dataScore]:'0.00',
         currentRank:false, 
         [thePick]:true,
-        currentPick:this.props.currentSelection,
+        currentPick:theSelection,
         theMenu:this.props.theMenu,
         round1Rank:false,
         round2Rank:false,
@@ -330,7 +340,7 @@ getFlockNames2=(userId)=>{
       scoreData={BPS:this.state.bestPossibleScore,score:0,
         round1Score:'0',round2Score:'0',finalRoundScore:'0',
         sweet16Score:'0',elite8Score:'0',final4Score:'0',
-        currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
+        currentPick:theSelection,theMenu:this.props.theMenu,
         ramName:this.state.teamName,picked:true, [thePick]:true,
         [bps2]:this.state.bestPossibleScore}
     }else{
@@ -339,13 +349,13 @@ getFlockNames2=(userId)=>{
         bestPossibleScore:this.state.bestPossibleScore,
         flockName:this.state.ramFlockName,
         [dataScore]:'0.00',
-        currentPick:this.props.currentSelection,
+        currentPick:theSelection,
         theMenu:this.props.theMenu,
         [thePick]:true,
         [bps2]:this.state.bestPossibleScore
       }
       scoreData={BPS:this.state.bestPossibleScore,score:0,
-        currentPick:this.props.currentSelection,theMenu:this.props.theMenu,
+        currentPick:theSelection,theMenu:this.props.theMenu,
         ramName:this.state.teamName,picked:true, [thePick]:true,
         [bps2]:this.state.bestPossibleScore}
     }
@@ -376,7 +386,7 @@ getFlockNames2=(userId)=>{
           uniqueRamNamesRef.child(name1).set(null)
         }
         ////CONTINUE
-        this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)
+        this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)
       }
       else{
         if(theInfo===this.state.userId){
@@ -384,7 +394,7 @@ getFlockNames2=(userId)=>{
             var name1=flockTeamName[0].replace(/ /g,"_")
             uniqueRamNamesRef.child(name1).set(null)
           }
-          this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)
+          this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)
           //console.log('continue 222222')
         }else{
         this.notify('RAM Name already taken')
@@ -395,10 +405,10 @@ getFlockNames2=(userId)=>{
     }
   })
    }
-   toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData)=>{
+   toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)=>{
     console.log('detailsData',detailsData)
     console.log('itemsData',itemsData)
-    console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,this.props.currentSelection,this.state.userId)
+    console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,theSelection,this.state.userId)
     //return
     var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents').child(this.state.currentEvent)
     var gamesDataRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('events').child(this.state.currentEvent)
@@ -417,11 +427,11 @@ getFlockNames2=(userId)=>{
 
     keysDbRef.child(this.props.theEventKey).set(true)
     gamesDataRef.child(this.props.theEventKey+'/details/').update(detailsData)
-    gamesDataRef.child(this.props.theEventKey+'/bets/'+this.props.currentSelection).update(itemsData)
+    gamesDataRef.child(this.props.theEventKey+'/bets/'+theSelection).update(itemsData)
     uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
    // uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
     //adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
-    ramsBets.child(this.props.theEventKey+'/').child(this.state.userId+'/'+this.props.currentSelection+'/').update(itemsData,(error) => {
+    ramsBets.child(this.props.theEventKey+'/').child(this.state.userId+'/'+theSelection+'/').update(itemsData,(error) => {
       if (error) {
         ////console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
       } else {
@@ -430,8 +440,6 @@ getFlockNames2=(userId)=>{
         Router.push('/reload')        
       }
     })
-     localStorage.set('upcomingRamUfcDetails', 'true');
-     this.setState({upcomingRamUfcDetails:true})
    }
    doNothing=(event)=>{
     event.preventDefault()
