@@ -429,10 +429,11 @@ getMatchesInfo = async () => {
     })
     userBetsDb.once('value', dataSnapshot => {
      var theData=dataSnapshot.val()
-     var round1Arr=[],round2Arr=[],finalRoundArr=[]
+     var round1Arr=[],round2Arr=[],finalRoundArr=[],sweet16Arr=[]
      var round1Exists=dataSnapshot.child('round1').exists()
      var round1Count=dataSnapshot.child('round1').numChildren()
      var round2Count=dataSnapshot.child('round2').numChildren()
+     var sweet16Count=dataSnapshot.child('sweet16').numChildren()
      if(round1Exists){
       var i=0
       round1Arr=theData.round1
@@ -472,6 +473,26 @@ getMatchesInfo = async () => {
           if(round2Count===i){
             this.setState({allRound2MatchesArr:this.state.allRound2MatchesArr})
             //console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
+          }
+        }
+      }
+      var sweet16Exists=dataSnapshot.child('sweet16').exists()
+      if(sweet16Exists){
+        var i=0
+        sweet16Arr=theData.sweet16
+       // console.log('round 14 item',round2Count,round2Arr)
+        for (var key in sweet16Arr) {
+          i++
+          var theId = key
+          var betPlayer = sweet16Arr[key]
+          this.state.sweet16Arr.map((item2,index)=>{
+            if (item2.id === theId) {
+              item2['bet'] = betPlayer
+            }
+          })
+          if(sweet16Count===i){
+            this.setState({sweet16Arr:this.state.sweet16Arr})
+            console.log('sweet16Count ',this.state.sweet16Arr)
           }
         }
       }
@@ -1061,6 +1082,7 @@ getNCAABMatchesFinal = () => {
     if(round==='round2'){   
      this.setState({currentItems:this.state.round2EastArr,theSubMenu:'round2',theMenu:'east'})}
      if(round==='finalRound'){
+      
       this.setState({currentItems:this.state.sweet16Arr,theSubMenu:'finalRound',theMenu:'sweet16'})}
        
   }
@@ -1074,11 +1096,6 @@ getNCAABMatchesFinal = () => {
     this.notify('Link copied successfully')
   }
   openTheModal =async () => {
-   
-    if(!this.state.isAdmin){
-      this.notify('Event not yet available for pick')
-      return
-    }
     if(this.state.userLoggedIn===false){
       this.notify("Please Log In to continue")
       this.setState({openLoginModal:true})
@@ -1434,8 +1451,14 @@ getNCAABMatchesFinal = () => {
     var todayInMillis=new Date().getTime()
     var title1=''
     var currentRank=this.state.currentEventUserInfo[this.state.currentRound+'Rank']
-    var currentBPS=this.state.currentEventUserInfo[this.state.currentRound+'BPS']
+    var currentBPS=''
+    if(this.state.currentRound==='finalRound'){
+      currentBPS=this.state.currentEventUserInfo[this.state.theMenu+'BPS']
+    }else{
+      currentBPS=this.state.currentEventUserInfo[this.state.currentRound+'BPS']
+    }
     if(currentBPS==undefined){currentBPS='0'}
+    console.log('this.state.currentEventUserInfo',currentBPS,this.state.currentEventUserInfo)
     //
     if(this.state.theMenu==='east'){title1='East'}
     if(this.state.theMenu==='west'){title1='West'}
@@ -1444,7 +1467,12 @@ getNCAABMatchesFinal = () => {
     var roundToModal='',titleToShow=''
     if(this.state.currentRound==='round1'){roundToModal='round1',titleToShow='Round 1'}
     if(this.state.currentRound==='round2'){roundToModal='round2',titleToShow='Round 2'}
-    if(this.state.currentRound==='finalRound'){roundToModal=this.state.theMenu,titleToShow='Championship'}
+    if(this.state.currentRound==='finalRound'){roundToModal=this.state.theMenu
+      if(this.state.theMenu==='sweet16'){titleToShow='Sweet 16'}
+      if(this.state.theMenu==='elite8'){titleToShow='Elite 8'}
+      if(this.state.theMenu==='final4'){titleToShow='Final 4'}
+      if(this.state.theMenu==='finalRound'){titleToShow='Championship'}
+    }
     if (this.state.dataAvailable) { flockTeamName = this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] }
     else { flockTeamName=false}
     return (
@@ -1607,7 +1635,7 @@ getNCAABMatchesFinal = () => {
           <div className={style.listDiv} key={index}>
             <div className={style.theCont0}>
               <div className={style.theCont01}>
-                {this.state.showUpperBar?<p>March Madness {item.matchType} {this.state.theSubMenu!=='finalRound'? '- '+title1:null}</p>:
+                {this.state.showUpperBar?<p>March Madness {item.matchType} {this.state.currentRound!=='finalRound'? '- '+title1:null}</p>:
                 <p>March Madness - {item.matchType}</p>}
                 <p>{theTime}</p>
               </div>

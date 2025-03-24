@@ -373,7 +373,7 @@ class NCAAModal extends Component {
       sweet16Edit[index]['team1Seed'] =this.getRandom(1, 16);
       sweet16Edit[index]['team2Seed'] =this.getRandom(1, 16);
 
-      sweet16Edit[index]['apiId'] =this.getRandom(1, 100);*/
+      sweet16Edit[index]['apiId'] =this.getRandom(1, 100);
      /* if(index===15){
         sweet16Edit[index]['apiId'] =''
       }

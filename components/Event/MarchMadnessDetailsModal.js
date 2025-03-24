@@ -488,6 +488,7 @@ console.log('theItems 1111111111',theItems)
     if(this.props.currentEvent==='ramUfc'){theEvent='RAM UFC'}
     if(this.props.currentEvent==='NCAAF'){theEvent='NCAAF'}
     if(this.props.currentEvent==='NFL'){theEvent='NFL'}
+    console.log('theItems',this.state.theItems)
     return (
       <><div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
                     <h1>Enter RAM Details</h1>
@@ -537,13 +538,16 @@ console.log('theItems 1111111111',theItems)
           
           
          // console.log('sedddddd',theSeed)
+         var place=''
           var yourPick='N/A',yourPoints=''
           var pickCol='#CB1E31'
+          if(item.place!=='')
           if(item.bet==='player1'){yourPick=item.player1,pickCol='#1ecb97',yourPoints='+'+item.p1Points}
           if(item.bet==='player2'){yourPick=item.player2,pickCol='#1ecb97',yourPoints='+'+item.p2Points}
+          if(this.props.currentSelection=='round1'||this.props.currentSelection==='round2'){place=' - '+item.place}else{place=''}
           return(
            <div className={styles.listDiv} key={index}>
-           <p className={styles.matchP}>Match #{index+1}{' - '+item.place}</p>
+           <p className={styles.matchP}>Match #{index+1}{place}</p>
            <div id={styles.table1Div}>
                         <table className={styles.table1}>
                             <tr id={styles.table1Tr1}>
