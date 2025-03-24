@@ -8,12 +8,13 @@ class TheMarchMadness extends Component {
     super();
     this.tableRef = React.createRef(null);
  }
-  state={round1Arr:[],round2Arr:[],currentSelection:'round1',theItems:[],finalRoundExists:false,isAdmin:true,userId:'',}
+  state={round1Arr:[],round2Arr:[],currentSelection:'round1',theItems:[],finalRoundExists:false,isAdmin:false,userId:'',}
 
   componentDidMount=()=>{
     this.getRound1Matches()
     this.getRound2Matches()
     this.getFinalRound()
+    this.checkAuth()
   }
   checkAuth = () => {
     var userId=''
