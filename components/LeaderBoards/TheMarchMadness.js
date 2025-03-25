@@ -141,7 +141,7 @@ class TheMarchMadness extends Component {
                 sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,final4BPS:final4BPS,
                 finalRoundScore:finalRoundScore,score:score}
                 theDet2.push(theDet)
-                console.log('ikoooooooooooooooo 36366',theDet2)
+                //console.log('ikoooooooooooooooo 36366',theDet2)
               this.setState({finalRoundArr:theDet2})
              }else{
               //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -294,7 +294,7 @@ class TheMarchMadness extends Component {
       });
   }
   render() {
-    console.log('this.state.currentSelection',this.state.currentSelection)
+    //console.log('this.state.currentSelection',this.state.currentSelection)
     var sortData=this.state.theItems.sort((a, b) => b.score - a.score )
     //var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore )
     return (
@@ -381,20 +381,10 @@ class TheMarchMadness extends Component {
           }
         )}
           </table> </div></div>
-         {/*<div id={styles.table1Div}>
-      <table className={styles.table1} ref={ this.tableRef}>
-        <tr id={styles.table1Tr1}>
-          <th>Overall <br/>Rank</th>
-          <th>RAM Name</th>
-          <th>Flock Name</th>
-          <tr/>
-          <table/> 
-          </div>*/}
       </div>
        <ToastContainer/>
        </>
     )
   }
 }
-
 export default TheMarchMadness
