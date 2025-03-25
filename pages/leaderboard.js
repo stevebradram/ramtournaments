@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
 import TheMarchMadness from '../components/LeaderBoards/TheMarchMadness'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
 var theItems=[]
 /*const importList = [
     { id: 1, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
@@ -33,14 +34,20 @@ class leaderboard extends Component {
     super();
     this.tableRef = React.createRef(null);
  }
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',
-    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:''}
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,
+    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true}
   componentDidMount=()=>{
      //this.getScoreBoardData()
      this.showProgressBar()
      this.checkAuth()
+     this.showReel()
      //this.getUsers()
   }
+  showReel = () => {
+    this.timerHandle = setTimeout(
+      () => this.setState({ showReel:true }),
+      2000)
+    }
   checkAuth = () => {
     var userId=''
     firebase.auth().onAuthStateChanged((user) => {
@@ -376,8 +383,7 @@ class leaderboard extends Component {
     var value = e.target.value
   }
 
-  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,item,isExpired)=>{
-    console.log('whole item',item)
+  loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)=>{
     this.showProgressBar()
     if (navigator.onLine === false) {
       this.notify('No internet! please check your internet connection')
@@ -421,6 +427,10 @@ class leaderboard extends Component {
       this.setState({ramsInMyFlockArr:this.state.round2Arr})
     }
   }
+  handleChildClick = (from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime) => {
+    this.loadOtherEvents(sportType,theEventKey,theTime,theEventTitle,currentSelection,isEventExpired)
+    this.setState({ count: this.state.count + 1})
+  };
   itemComponent=(theItems)=>{
    // console.log('theItems rrrr',theItems)
     var BSPTitle=''
@@ -542,9 +552,12 @@ class leaderboard extends Component {
           <>
             <div className={styles.container}>
               <p className={styles.titleP}>Leaderboard {this.state.isAdmin?<span> | Admin</span>:null}</p>
-             
-        <div className={styles.headCont}>
-          {this.state.allGames.map((item,index)=>{
+              {this.state.showReel?<div className={styles.matchesHeadDiv} style={{marginTop:20}}>
+        <PastUpcomingEvents onClick={this.handleChildClick} allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId} from='leadersBoard'/>
+        </div>:null}
+         {/*<div className={styles.headCont}>
+       
+         this.state.allGames.map((item,index)=>{
           var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
           var todayInMillis=new Date().getTime()
           //console.log('todayInMillis',item)
@@ -567,7 +580,7 @@ class leaderboard extends Component {
            
           )
           })}
-        </div>
+        </div>*/}
               <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
               {/*this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
@@ -593,7 +606,7 @@ class leaderboard extends Component {
       <PiFolderDashedThin  className={styles.noDataIc}/>
      <p>Please LOG IN to view data in this page</p>
    </div>}
-      </div>:<TheMarchMadness theEventKey={this.state.theEventKey}/>}
+      </div>:<TheMarchMadness theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection}/>}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>

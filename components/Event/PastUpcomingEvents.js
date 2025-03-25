@@ -7,21 +7,31 @@ import { SlOptionsVertical } from "react-icons/sl";
 import dayjs from 'dayjs';
 import firebase from '../FirebaseClient'
 import { FaArrowAltCircleLeft,FaArrowAltCircleRight  } from "react-icons/fa";
+
 class Reel extends Component {
-  state={
-    theAdsArray:[],
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    theEventKey:this.props.theEventKey,
-    isAdmin:false,showArrows:true,theItemsNo:'',
-    selectHomeEvent:false, selectHomeEventId:''
-  }
     constructor(props) {
         super(props);
         this.next = this.next.bind(this);
         this.previous = this.previous.bind(this);
+
+        this.state = { width:  window.innerWidth, height: 0 };
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+      }
+      state={
+        theAdsArray:[],
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        theEventKey:this.props.theEventKey,
+        isAdmin:false,
+       
+        theItemsNo:'',
+        selectHomeEvent:false, 
+        selectHomeEventId:'',
+        showArrows:true,
+       
       }
       componentDidMount(){
+        this.setState({showArrows:false})
         this.updateWindowDimensions();
         window.addEventListener("resize", this.updateWindowDimensions);
         this.checkAuth()
@@ -33,33 +43,41 @@ class Reel extends Component {
       }
     
       updateWindowDimensions = () => {
-        this.setState({ width: window.innerWidth });
-        console.log('this.state.theItemsNo',this.state.theItemsNo)
-        this.setState({showArrows:false})
+        //console.log('widthhhhh',this.state.width)
+        this.setState({ width: window.innerWidth});
+       // return
+        //console.log('this.state.theItemsNo',this.props.allGames.length)
+       // this.setState({showArrows:false})
+        return
         /*if (window.innerWidth<800) {this.setState({slidesToShow:1,slidesToScroll:1})
         }else{this.setState({slidesToShow:6,slidesToScroll:6})}*/
+        var theGamesNo=this.props.allGames.length
         if (window.innerWidth>1300){
-          if(this.state.theItemsNo>6){this.setState({showArrows:true})}
+          if(this.state.theItemsNo>6){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:6,slidesToScroll:6})
+          console.log('haaapa 1111',this.state.showArrows)
         }
         if (window.innerWidth>1100&&window.innerWidth<1300){
-          if(this.state.theItemsNo>5){this.setState({showArrows:true})}
+          if(theGamesNo>5){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:5,slidesToScroll:5})
+          console.log('haaapa 2222',showArrows)
         }
         if (window.innerWidth>800&&window.innerWidth<1100){
-          if(this.state.theItemsNo>4){this.setState({showArrows:true})}
+          if(theGamesNo>4){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:4,slidesToScroll:4})
+          console.log('haaapa 3333',this.state.showArrows)
         }
         if (window.innerWidth>600&&window.innerWidth<800){
-          if(this.state.theItemsNo>3){this.setState({showArrows:true})}
+          if(theGamesNo>3){this.setState({showArrows:true},showArrows=true)}
           this.setState({slidesToShow:3,slidesToScroll:3})
+          console.log('haaapa 4444',this.state.showArrows)
         }
         if (window.innerWidth>400&&window.innerWidth<600){
-          if(this.state.theItemsNo>2){this.setState({showArrows:true})}
+          if(theGamesNo>2){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:2,slidesToScroll:2})
         }
         if (window.innerWidth>350&&window.innerWidth<400){
-          if(this.state.theItemsNo>2){this.setState({showArrows:true})}
+          if(theGamesNo>2){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:2,slidesToScroll:2})
         }
       };
@@ -77,18 +95,80 @@ class Reel extends Component {
            }
      }})}
     
+     loadOtherFights=(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,endTime)=>{
+     
+      var nowDate=new Date().getTime(),isEventExpired=false
+      if(nowDate>(endTime+86400000)){isEventExpired=true}
+          else{this.setState({isEventExpired:false})}
+      this.props.onClick(this.props.from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime)
+      this.setState({theEventKey})
+     }
+     chooseHomeEvent=(event,id)=>{
+      event.stopPropagation()
+      event.preventDefault()
+      this.setState({selectHomeEvent:true,selectHomeEventId:id})
+      }
+      sendEvent=(event,data,id)=>{
+        event.stopPropagation()
+        event.preventDefault()
+        data['id']=id
+        var theDb=firebase.database().ref("/theEvents/eventToShowHomePage/")
+        theDb.set(data,(error) => {
+          if (error) {
+            this.notify('An error occured while updating')
+          }else{
+            this.setState({selectHomeEvent:false})
+            this.notify('Selected Succesfully')
+          }
+      })
+    }
     render() {
+         console.log('this.props.allGames',this.props.allGames)
          let donateStyle=''
          let reelTextStyle=''
          var todayInMillis=new Date().getTime()
+         var theGamesNo=this.props.allGames.length
+         var showArrows=false,slidesToShow='',slidesToScroll=''
+        if (window.innerWidth>1300){
+          if(theGamesNo>6){showArrows=true}
+          slidesToShow=6,slidesToScroll=6
+          console.log('haaapa 1111',showArrows)
+        }
+        if (window.innerWidth>1100&&window.innerWidth<1300){
+          if(theGamesNo>5){showArrows=true}
+          slidesToShow=5,slidesToScroll=5
+          console.log('haaapa 2222',showArrows)
+        }
+        if (window.innerWidth>800&&window.innerWidth<1100){
+          if(theGamesNo>4){showArrows=true}
+          slidesToShow=4,slidesToScroll=4
+          console.log('haaapa 3333',showArrows)
+        }
+        if (window.innerWidth>600&&window.innerWidth<800){
+          if(theGamesNo>3){showArrows=true}
+          slidesToShow=3,slidesToScroll=3
+          console.log('haaapa 4444',showArrows)
+        }
+        if (window.innerWidth>400&&window.innerWidth<600){
+          if(theGamesNo>2){showArrows=true}
+          slidesToShow=2,slidesToScroll=2
+          console.log('haaapa 5555',showArrows)
+        }
+        if (window.innerWidth>350&&window.innerWidth<400){
+          if(theGamesNo>2){showArrows=true}
+          slidesToShow=2,slidesToScroll=2
+          console.log('haaapa 6666',showArrows)
+        }
         const settings = { 
           infinite: true,
-          slidesToShow:this.state.slidesToShow,
-          slidesToScroll:this.state.slidesToScroll,
+          slidesToShow:slidesToShow,
+          slidesToScroll:slidesToScroll,
           className:"slides",
           dots: false,
+          arrows:false,
           //fade: true,
           autoplay: true,
+          color:'red',
           pauseOnHover: false,
     speed: 700,
     autoplaySpeed: 10000,
@@ -97,10 +177,11 @@ class Reel extends Component {
           };
         return (
             <div className={style.boduTitleMainCont}>
+               <div className={style.boduTitleMainCont2}>
                 {/*<h2 className={style.headP}>CUSTOMERS REVIEWS</h2>*/}
                 <Slider ref={c => (this.slider = c)} {...settings}>
                   
-                {this.props.allGames.map((item,index)=>{
+                {this.props.allGames.slice(0,10).map((item,index)=>{
                 var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
                 var theColor='#292f51',timing='Active Event'
                 if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){
@@ -114,12 +195,12 @@ class Reel extends Component {
                  return(
                        <div  className={style.titleDivCont} key={item.id}> 
                          <div className={style.testDiv}>
-                      <div className={style.bodyLowerCard} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.fetchResultsTimeUpdate,item.getEventsTimeUpdate,item.oddsTimeUpdate,item.time)}>
+                      <div className={style.bodyLowerCard} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.fetchResultsTimeUpdate,item.getEventsTimeUpdate,item.oddsTimeUpdate,item.time,item.sportType,item.currentSelection,item.endTime)}>
                       <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
                <p className={style.headListP3}>{timing}</p></div></div>
-               {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||this.state.userId==='zZTNto5p3XVSLYeovAwWXHjvkN43'||this.state.userId==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item.id)}/>
+               {this.state.isAdmin?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item.id)}/>
                 {this.state.selectHomeEvent&&this.state.selectHomeEventId==item.id?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
                     </div> 
                         </div>
@@ -128,10 +209,10 @@ class Reel extends Component {
                        </div>
                 )})}
                         
-                </Slider>
-                      {this.state.showArrows?<div className={style.arrowDiv}>
-                        <FaArrowAltCircleLeft className={style.arrowIc}/>
-                        <FaArrowAltCircleRight className={style.arrowIc}/>
+                </Slider></div>
+                      {showArrows?<div className={style.arrowDiv}>
+                        <FaArrowAltCircleLeft className={style.arrowIc} onClick={()=>this.previous()}/>
+                        <FaArrowAltCircleRight className={style.arrowIc} onClick={()=>this.next()}/>
                         </div>:null}
             </div>
         )

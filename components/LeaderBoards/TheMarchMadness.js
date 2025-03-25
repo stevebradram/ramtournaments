@@ -8,7 +8,7 @@ class TheMarchMadness extends Component {
     super();
     this.tableRef = React.createRef(null);
  }
-  state={round1Arr:[],round2Arr:[],currentSelection:'round1',theItems:[],finalRoundExists:false,isAdmin:false,userId:'',overallArr:[]}
+  state={round1Arr:[],round2Arr:[],currentSelection:'round1',theItems:[],finalRoundExists:false,isAdmin:false,userId:'',overallArr:[],overallRoundExists:'',finalRoundArr:[],finalRoundMenu:''}
 
   componentDidMount=()=>{
     this.getRound1Matches()
@@ -74,19 +74,17 @@ class TheMarchMadness extends Component {
   }
   
   getFinalRound=()=>{
-    var i=0,theDet2=[]
-    var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/final/')
-    leadersRef.once('value', dataSnapshot => {
+    var eventIdsDb=firebase.database().ref('/theEvents/eventsIds/'+this.props.theEventKey+'/currentSelection')
+    eventIdsDb.once('value', dataSnapshot => {
       if(!dataSnapshot.exists()){
-      this.setState({finalRoundExists:false})
-      }else{
-        this.setState({finalRoundExists:true})
-      }
+        this.setState({finalRoundMenu:false})
+        }else{
+          this.setState({finalRoundMenu:dataSnapshot.val()})
+        }
     })
-  }
-  getOverall=()=>{
-    var i=0,theDet2=[]
-    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey)
+    var i=0,theDet2=[],currentRound=this.props.currentRound
+    console.log('currentRound',currentRound)
+    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
     leadersRef.once('value', dataSnapshot => {
       if(!dataSnapshot.exists()){
       this.setState({finalRoundExists:false})
@@ -97,7 +95,81 @@ class TheMarchMadness extends Component {
           i++
           var theId=data.key
           var theDet={}
-          console.log('the uid',theId)
+         /// console.log('the final uid',theId)
+         
+          var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
+          var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
+          var theEmail='',thePhone=''
+          if(this.state.isAdmin){
+            userInfoDb2.once('value',dataSnapshot=>{
+              var theD=dataSnapshot.val()
+              if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+              theDet['email']=theD.email
+              if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
+              if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
+            })}
+            
+          userInfoDb.once('value', dataSnapshot => {
+             if(dataSnapshot.exists()){
+              var BPS=''
+              var userBetData=dataSnapshot.val()
+              var sweet16BPS=userBetData.sweet16BPS,elite8BPS=userBetData.elite8BPS
+              var final4BPS=userBetData.final4BPS,finalRoundBPS=userBetData.finalRoundBPS
+              var sweet16Score=userBetData.sweet16Score,elite8Score=userBetData.elite8Score
+              var final4Score=userBetData.final4Score,finalRoundScore=userBetData.finalRoundScore
+              var theMenu=userBetData.theMenu
+
+            
+             
+              if(!sweet16BPS||sweet16BPS===undefined||sweet16BPS===null){sweet16BPS=0}
+              if(!elite8BPS||elite8BPS===undefined||elite8BPS===null){elite8BPS=0}
+              if(!final4BPS||final4BPS===undefined||final4BPS===null){final4BPS=0}
+              if(!finalRoundBPS||finalRoundBPS===undefined||finalRoundBPS===null){finalRoundBPS=0}
+              if(!sweet16Score||sweet16Score===undefined||sweet16Score===null){sweet16Score=0}
+              if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
+              if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
+              if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
+              
+             
+              if(currentRound==='sweet16'){BPS=sweet16BPS}if(currentRound==='elite8'){BPS=elite8BPS}
+              if(currentRound==='final4'){BPS=final4BPS}if(currentRound==='finalRound'){BPS=finalRoundBPS}
+
+              var score=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
+              score=Number(score).toFixed(2)
+              var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
+                email:theEmail,phone:thePhone,sweet16BPS:sweet16BPS,elite8BPS:elite8BPS,finalRoundBPS:finalRoundBPS,
+                sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,final4BPS:final4BPS,
+                finalRoundScore:finalRoundScore,score:score}
+                theDet2.push(theDet)
+                console.log('ikoooooooooooooooo 36366',theDet2)
+              this.setState({finalRoundArr:theDet2})
+             }else{
+              //console.log('hakunaaaaaaaaaaaaa 11111')
+             }
+          })
+          if(theCount===i){
+            var sort=this.state.finalRoundArr.sort((a, b) => b.score - a.score )
+            this.setState({finalRoundArr:sort})
+            console.log('hakunaaaaaaaaaaaaa overallll',sort)
+          }
+        })
+      }
+    })
+  }
+  getOverall=()=>{
+    var i=0,theDet2=[]
+    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey)
+    leadersRef.once('value', dataSnapshot => {
+      if(!dataSnapshot.exists()){
+      this.setState({overallRoundExists:false})
+      }else{
+        this.setState({overallRoundExists:true})
+        var theCount=dataSnapshot.numChildren()
+        dataSnapshot.forEach((data) => {
+          i++
+          var theId=data.key
+          var theDet={}
+        //  console.log('the uid',theId)
           var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
           var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
           var theEmail='',thePhone=''
@@ -122,7 +194,7 @@ class TheMarchMadness extends Component {
               if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
               if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
               if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
-              console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
+              //console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
              
               var score=Number(round1Score)+Number(round2Score)+Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
               score=Number(score).toFixed(2)
@@ -131,7 +203,7 @@ class TheMarchMadness extends Component {
                 sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,
                 finalRoundScore:finalRoundScore,score:score}
                 theDet2.push(theDet)
-                console.log('ikoooooooooooooooo 1111',theDet2)
+               // console.log('ikoooooooooooooooo 1111',theDet2)
               this.setState({overallArr:theDet2})
              }else{
               //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -203,6 +275,10 @@ class TheMarchMadness extends Component {
     if(round==='overall'){
       this.setState({theItems:this.state.overallArr})
     }
+    if(round==='finalRound'){
+      this.setState({theItems:this.state.finalRoundArr})
+      console.log('it is final round',this.state.finalRoundArr)
+    }
     
     this.setState({currentSelection:round})
   }
@@ -218,6 +294,7 @@ class TheMarchMadness extends Component {
       });
   }
   render() {
+    console.log('this.state.currentSelection',this.state.currentSelection)
     var sortData=this.state.theItems.sort((a, b) => b.score - a.score )
     //var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore )
     return (
@@ -247,7 +324,7 @@ class TheMarchMadness extends Component {
           <><th>Best Possible <br/>Score</th>
           <th>Current Score</th></>:null}
           {this.state.currentSelection==='finalRound'?
-          <><th>Best Possible <br/>Score</th>
+          <><th>Best Score <br/>{this.state.finalRoundMenu}</th>
           <th>Cumulative <br/>Score</th>
           <th>Sweet 16</th>
           <th>Elite 8</th>
@@ -265,6 +342,11 @@ class TheMarchMadness extends Component {
           {this.state.isAdmin?<><th>Phone</th><th>Email</th></>:null}
           </tr>
           {sortData.map((item, index) => {
+            var BPS=''
+            if(this.state.currentSelection==='finalRound'){
+              console.log('this.state.finalRoundMenu',this.state.finalRoundMenu)
+             if(this.state.finalRoundMenu==='sweet16'){BPS=item.sweet16BPS}if(this.state.finalRoundMenu==='elite8'){BPS=item.elite8BPS}
+             if(this.state.finalRoundMenu==='final4'){BPS=item.final4BPS}if(this.state.finalRoundMenu==='finalRound'){BPS=item.finalRoundBPS}}
             return(
             <tr key={index} id={styles.table1Tr2} style={{backgroundColor:item.id===this.state.userId?'#292f51': index===0?'#CB1E31':null,color:item.id===this.state.userId?'white': index===0?'#ffffff':'#292f51'}}>
             <td>{index+1}</td>
@@ -275,23 +357,23 @@ class TheMarchMadness extends Component {
               <td>{item.score}</td></>:null}
             {this.state.currentSelection==='finalRound'?
               <>
-              <td>{this.state.finalRoundExists?item.bestPossibleScore:'0'}</td>
-              <td>{this.state.finalRoundExists?item.cumulativeScore:'0'}</td>
-              <td>{this.state.finalRoundExists?item.sweet16Score:'0'}</td>
-              <td>{this.state.finalRoundExists?item.elite8Score:'0'}</td>
-              <td>{this.state.finalRoundExists?item.final4Score:'0'}</td>
-              <td>{this.state.finalRoundExists?item.finalScore:'0'}</td>
+              <td>{this.state.finalRoundExists?BPS:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.score:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.sweet16Score:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.elite8Score:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.final4Score:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.finalRoundScore:'0.00'}</td>
               </>:null
            }
            {this.state.currentSelection==='overall'?
               <>
-              <td>{item.score?item.score:'0'}</td>
-              <td>{item.round1Score?item.round1Score:'0'}</td>
-              <td>{item.round2Score?item.round2Score:'0'}</td>
-              <td>{item.sweet16Score?item.sweet16Score:'0'}</td>
-              <td>{item.elite8Score?item.elite8Score:'0'}</td>
-              <td>{item.final4Score?item.final4Score:'0'}</td>
-              <td>{item.finalScore?item.finalScore:'0'}</td>
+              <td>{item.score?item.score:'0.00'}</td>
+              <td>{item.round1Score?item.round1Score:'0.00'}</td>
+              <td>{item.round2Score?item.round2Score:'0.00'}</td>
+              <td>{item.sweet16Score?item.sweet16Score:'0.00'}</td>
+              <td>{item.elite8Score?item.elite8Score:'0.00'}</td>
+              <td>{item.final4Score?item.final4Score:'0.00'}</td>
+              <td>{item.finalScore?item.finalScore:'0.00'}</td>
               </>:null
            }
            {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}

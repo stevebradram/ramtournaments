@@ -17,7 +17,7 @@ class News extends Component {
     fetchMusicVideos=async()=>{
         var theRef=''
         try {
-         theRef = firebase.database().ref('/videos/');
+         theRef = firebase.database().ref('/videos/')//.orderByKey('id');
           var array1=[]
           var array2=[],i=0
          await theRef.once('value', (dataSnapshot) => {
@@ -28,13 +28,15 @@ class News extends Component {
                 const title = data.val().title
                 const video= data.val().video
                 const thumbnail= data.val().thumbnail
-                const id = data.key
+                const id =  data.val().id
                 console.log("thumbnail", thumbnail)
                 array1={
                     name: name, video: video, id:id, title:title, thumbnail:thumbnail
                 }
                 array2.push(array1)
                 if(theCount===i){
+                  array2=array2.sort(function(a, b){return b.id - a.id})
+                  console.log('rrrrra',array2)
                   this.setState({
                     videoArray:array2
                    })
@@ -55,7 +57,7 @@ class News extends Component {
         
       }
     render() {
-        const videoList=this.state.videoArray.slice(0,this.props.vidCount).map((item,index)=>{
+        const videoList=this.state.videoArray.map((item,index)=>{
             let playerToShow=''
             if (item.video===this.state.currentId) {
                 playerToShow=<ReactPlayer ref={(video) => { this.video = video }}

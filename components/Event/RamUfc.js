@@ -26,13 +26,13 @@ class RamUfc extends Component {
     teamName:'',flockName:'',openLoginModal:false,clickHere1:'CLICK HERE TO MAKE YOUR PICKS',clickHere2:'CLICK HERE TO ENTER THE GAME',theEventTime:0, 
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,showProgressBar:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
-    ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],
+    ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],showReel:false,count:0,
     showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:''
   }
   componentDidMount=()=>{
    ////console.log('on raaaaaaaaaaaaam ufc')
    this.checkAuth()
-
+   this.showReel()
   // //console.log('dddddd',new Date('2025-01-19T05:30:00Z').getTime())
 
   //this.getRanking()
@@ -41,6 +41,11 @@ class RamUfc extends Component {
  
    //this.calculateFlocksUsFlocks()
   
+  }
+  showReel = () => {
+    this.timerHandle = setTimeout(
+      () => this.setState({ showReel:true }),
+      2000)
   }
  calculateFlocksUsFlocks=()=>{
   var theAllArr=[]
@@ -926,6 +931,12 @@ chooseHomeEvent=(event,id)=>{
       copy(this.state.theLink);
       this.notify('Link copied successfully')
     }
+    handleChildClick = (from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime) => {
+      this.setState({ count: this.state.count + 1})
+      //if(from==='ramUfc')
+      this.loadOtherFights(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection)
+    
+    };
   render() {
    var flockTeamName=''
    var itemToModals=''
@@ -944,9 +955,9 @@ chooseHomeEvent=(event,id)=>{
         <p className={style.eventsP} id={this.state.theEvent==='Upcoming Events'?style.playerP1:style.playerP} onClick={()=>this.setState({theEvent:'Upcoming Events'})}>UPCOMING EVENTS</p>
         <p className={style.eventsP} style={{color:this.state.pastEventsAvailable?null:'#b2b2b2',borderColor:this.state.pastEventsAvailable?null:'#b2b2b2'}} id={this.state.theEvent==='Past Events'?style.playerP1:style.playerP} onClick={()=>this.state.pastEventsAvailable?this.setState({theEvent:'Past Events'}):null}>PAST EVENTS</p>
         </div>*/}
-       <div className={style.matchesHeadDiv}>
-        <PastUpcomingEvents allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId}/>
-        </div>
+       {this.state.showReel?<div className={style.matchesHeadDiv} >
+        <PastUpcomingEvents onClick={this.handleChildClick} allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId} from='ramUfc'/>
+        </div>:null}
        {/*<div className={style.matchesHeadDiv}>
           {this.state.allGames.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')

@@ -7,7 +7,7 @@ class CommMarchMadness extends Component {
   state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:this.props.isEventStarted,creatorId:'',theFlocksArr:[],
     round1Arr:[],round2Arr:[],theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,
     flockSysRound1:[],flockSysRound2:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
-    flockNameAvailable:false,flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK'
+    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK'
   }
   
   componentDidMount=()=>{
@@ -114,6 +114,10 @@ class CommMarchMadness extends Component {
           if (count === i) {
             flockSysRound1 = flockSysRound1.sort(function (a, b) { return b.avScore - a.avScore })
             flockSysRound2 = flockSysRound2.sort(function (a, b) { return b.avScore - a.avScore })
+            
+            //flockSysRound1 = flockSysRound1.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
+            //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
+
             this.setState({ flockSysRound1,flockSysRound2 })
            console.log('theFlocksArr 9999', flockSysRound1,flockSysRound2)
           }
@@ -151,12 +155,13 @@ class CommMarchMadness extends Component {
 
   }
   render() {
-    console.log('currentRound',this.props.currentRound)
+    var flockNameAvailable=this.props.flockNameAvailable
     var theItems=[],theItems2=[]
     if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1}
     if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2}
     if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr}
-
+    console.log('currentRound',this.props.menuToShow,this.state.flockNameAvailable,this.props.currentRound,theItems2)
+    console.log('flockNameAvailable',flockNameAvailable)
     var statToShow='',statCol=''
     if(this.props.eventStarted&&new Date().getTime()>(this.props.endTime+36000000)){statToShow='Expired Event',statCol='#919191'}
     if(this.props.eventStarted&&new Date().getTime()<(this.props.endTime+36000000)){statToShow='Active Event'}
@@ -211,7 +216,7 @@ class CommMarchMadness extends Component {
               <p className={styles.noDataP1}>No "Rams in your flock" data available for this event</p>
               <p className={styles.noDataP2}>Check Events</p>
             </div>}</> : null}
-                {this.props.menuToShow === 'Flocks Among Flocks' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
+                {this.props.menuToShow === 'Flocks Among Flocks' ? <>{flockNameAvailable ? <div className={styles.menu2Div1}>
                 <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
                 <div id={styles.table1Div}>
                 <table className={styles.table1}>

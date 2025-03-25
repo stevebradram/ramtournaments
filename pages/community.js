@@ -9,11 +9,12 @@ import ProgressBar from '../components/Helper/ProgressBar'
 import News from '../components/Community/News'
 import HallOfFame from '../components/Community/HallOfFame'
 import CommMarchMadness from '../components/Community/CommMarchMadness'
+import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
 var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 30 },
 { name: 'Elaine Kiiru', score: 40 }, { name: 'RAM Man', score: 50 }]
 class leaderboard extends Component {
   state = {
-    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',showNCAAB:false,
+    openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',showNCAAB:false,count:0,showReel:false,
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
     currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',round1Arr:[],round2Arr:[],
     
@@ -21,6 +22,12 @@ class leaderboard extends Component {
   componentDidMount = () => {
     this.showProgressBar()
     this.checkAuth()
+    this.showReel()
+  }
+  showReel = () => {
+    this.timerHandle = setTimeout(
+      () => this.setState({ showReel:true }),
+      2000)
   }
   checkAuth = () => {
     var userId = ''
@@ -230,10 +237,9 @@ class leaderboard extends Component {
     var value = e.target.value
   }
 
-  loadOtherEvents = async (sportType, theEventKey, theTime, theEventTitle, currentSelection, item,endTime) => {
-    console.log('whole item', item)
+  loadOtherEvents = async (sportType, theEventKey, theTime, theEventTitle, currentSelection,endTime) => {
+   
     this.showProgressBar()
-
     if (navigator.onLine === false) {
       this.notify('No internet! please check your internet connection')
       return
@@ -325,6 +331,13 @@ class leaderboard extends Component {
     if(round==='finalRound'){
     this.setState({currentItems:this.state.sweet16Arr})}
   }
+  handleChildClick = (from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime) => {
+    this.loadOtherEvents(sportType, theEventKey, theTime, theEventTitle, currentSelection,endTime)
+    this.setState({ count: this.state.count + 1,sportType})
+    if(sportType==='NCAAB'){
+      this.setState({communitySelection:'My Flocks',currentSelection:'round1'})
+    }
+  };
   render() {
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
     var theItems = []
@@ -354,7 +367,11 @@ class leaderboard extends Component {
                 </div>
               )
             })}</div>
-          {this.state.communitySelection==='My Flocks'?<><div className={styles.headCont}>
+          {this.state.communitySelection==='My Flocks'?<>
+            {this.state.showReel?<div className={styles.matchesHeadDiv} style={{marginTop:20}}>
+        <PastUpcomingEvents onClick={this.handleChildClick} allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId} from='leadersBoard'/>
+        </div>:null}
+          {/*<div className={styles.headCont}>
             {this.state.allGames.map((item, index) => {
               var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
               var todayInMillis = new Date().getTime()
@@ -377,7 +394,7 @@ class leaderboard extends Component {
 
               )
             })}
-          </div>
+          </div>*/}
           <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
           {this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>

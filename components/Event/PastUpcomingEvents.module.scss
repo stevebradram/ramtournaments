@@ -20,6 +20,12 @@ $theDark:#b2b2b2;
   margin-top: -10px;
   position: relative;
 }
+.boduTitleMainCont2{
+  //padding: 0px 20px;
+  //border: 1px solid #e1e1e1;
+  //background-color: whitesmoke;
+  border-radius: 5px;
+}
 .titleDivCont{
   box-sizing: border-box;
   width:100%;
@@ -35,11 +41,12 @@ $theDark:#b2b2b2;
 }
 .bodyLowerCard{
   margin-right: 20px;
-  border: 1px solid $blackish;
-  padding: 5px 20px;
+  //border: 1px solid #9a3333;
+  padding: 5px 10px;
   border-radius: 5px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   color: $blackish;
   font-weight: 600;
   cursor: pointer;
@@ -48,6 +55,9 @@ $theDark:#b2b2b2;
   min-height: 50px;
   max-height: 60px;
   margin-right: 20px;
+  background-color: #f7f7f7;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+ // box-shadow: 5px 2px 5px 1px rgba(0,0,0,0.2);
 }
 .headListDiv2{
   display: flex;
@@ -97,7 +107,7 @@ $theDark:#b2b2b2;
   //background-color: red;
   color: #9a9a9a;
   height: 100%;
- // position: absolute;
+  //position: absolute;
   //top:0;right:0;left:0;
   align-items: center;
   margin-top: -5px;
@@ -105,10 +115,11 @@ $theDark:#b2b2b2;
   //margin-left: -10px;
 }
 .arrowIc{
-  font-size: 24px;
+  font-size: 22px;
   margin-right:3px;
   margin-left:3px;
   cursor: pointer;
+  color: white;
 }
 @media all and (max-width: 1200px) {
     .boduTitleMainCont{
