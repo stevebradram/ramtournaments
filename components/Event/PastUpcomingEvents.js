@@ -129,6 +129,7 @@ class Reel extends Component {
          var todayInMillis=new Date().getTime()
          var theGamesNo=this.props.allGames.length
          var showArrows=false,slidesToShow='',slidesToScroll=''
+         if (typeof window !== "undefined") {
         if (window.innerWidth>1300){
           if(theGamesNo>6){showArrows=true}
           slidesToShow=6,slidesToScroll=6
@@ -158,7 +159,7 @@ class Reel extends Component {
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
           console.log('haaapa 6666',showArrows)
-        }
+        }}
         const settings = { 
           infinite: true,
           slidesToShow:slidesToShow,
