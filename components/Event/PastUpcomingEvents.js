@@ -14,7 +14,7 @@ class Reel extends Component {
         this.next = this.next.bind(this);
         this.previous = this.previous.bind(this);
 
-        this.state = { width:  window.innerWidth, height: 0 };
+        //this.state = { width:  window.innerWidth, height: 0 };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
       }
       state={
@@ -32,8 +32,10 @@ class Reel extends Component {
       }
       componentDidMount(){
         this.setState({showArrows:false})
+        if (typeof window !== "undefined") {
         this.updateWindowDimensions();
         window.addEventListener("resize", this.updateWindowDimensions);
+        }
         this.checkAuth()
         this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId,theItemsNo:this.props.allGames.length})
         console.log('this.props.allGames.length',this.props.allGames.length)
