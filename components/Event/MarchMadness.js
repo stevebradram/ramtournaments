@@ -1075,7 +1075,7 @@ getNCAABMatchesFinal = () => {
       this.setState({theSubMenu:type})
   }
   getCurrentRound=(round)=>{
-    console.log('roundddd',round,this.state.sweet16Arr)
+    console.log('roundddd 5656565',round)
     this.setState({currentRound:round})
     if(round==='round1'){
      this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1',theMenu:'east'})}
@@ -1219,9 +1219,7 @@ getNCAABMatchesFinal = () => {
   checkForOddsUpdate = () => {
     this.notify('Not available at the moment');return
   }
-  checkForOutcome2= () => {
-    this.notify('Not available at the moment');return
-  }
+
   chooseHomeEvent=(event,id)=>{
     event.stopPropagation()
     event.preventDefault()
@@ -1259,6 +1257,8 @@ getNCAABMatchesFinal = () => {
         console.log('this.state.currentItems 001',theItems)}
     }
     pickWinner=(id,winner,time)=>{
+      //console.log('this.state.currentSelection',this.state.currentSelection)
+      //return
   
       var nowTime=new Date().getTime()
     
@@ -1298,7 +1298,26 @@ getNCAABMatchesFinal = () => {
       theItems[index2]['showChooseWinner']=true
       this.setState({allRound2MatchesArr:theItems})
     }
-   
+    if(this.state.currentSelection==='sweet16'){
+      console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+      var index2 = this.state.sweet16Arr.map(function(x) {return x.id; }).indexOf(id);
+      var nowTime=new Date().getTime()
+      var theItems=this.state.sweet16Arr
+      
+      if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+
+      var theItems=this.state.sweet16Arr
+      theItems[index2]['showChooseWinner']=true
+      this.setState({sweet16Arr:theItems})
+      console.log('theItems',theItems)
+    }
     }
     chosenWinner=(id,winner)=>{
      
@@ -1314,6 +1333,13 @@ getNCAABMatchesFinal = () => {
       if(this.state.currentSelection==='round2'){
         var index2 = this.state.allRound2MatchesArr.map(function(x) {return x.id; }).indexOf(id);
         var theItems=this.state.allRound2MatchesArr
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+        console.log('this.state.currentItems 009',theItems)
+      }
+      if(this.state.currentSelection==='sweet16'){
+        var index2 = this.state.sweet16Arr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.sweet16Arr
         theItems[index2]['chosenWinner']=winner
         theItems[index2]['status1']='played'
         console.log('this.state.currentItems 009',theItems)
@@ -1339,7 +1365,14 @@ getNCAABMatchesFinal = () => {
       this.checkForOutcome(index,winner)
       }
     }
-     
+    if(this.state.currentSelection==='sweet16'){
+      var index = this.state.sweet16Arr.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+    }
     }
     checkForOutcome=async (index,winner) => {
       try {
@@ -1378,7 +1411,6 @@ getNCAABMatchesFinal = () => {
         console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
         console.log('theLink',theLink,theItems)
         console.log('this.state.shortArr 006',shortArr)
-        
         await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
         //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
@@ -1391,6 +1423,18 @@ getNCAABMatchesFinal = () => {
           if((this.state.currentSelection==='round2')){
             this.checkForOutcome2(index,winner)
           }
+          if((this.state.currentSelection==='sweet16')){
+            this.checkForFinalRoundOutcome(index,winner,this.state.sweet16Arr,'sweet16Arr')
+          }
+          if((this.state.currentSelection==='elite8')){
+            this.checkForFinalRoundOutcome(index,winner,this.state.elite8Arr,'elite8Arr')
+          }
+          if((this.state.currentSelection==='final4')){
+            this.checkForFinalRoundOutcome(index,winner,this.state.final4Arr,'final4Arr')
+          }
+          /*if((this.state.currentSelection==='finalRound')){
+            this.checkForFinalRoundOutcome(index,winner,this.state.sweet16Arr,'sweet16Arr')
+          }*/
           } catch (error) {
             ////console.log('error',error)
           }
@@ -1446,18 +1490,78 @@ getNCAABMatchesFinal = () => {
               ////console.log('error',error)
             }
         }
+        checkForFinalRoundOutcome=async (index,winner,items,name) => {
+          try {
+            //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+            var shortArr=[]
+            console.log('haaaaaaaaaaaapa',this.state.currentSelection,index,winner)
+            items[index]['winner']=winner
+            delete items[index]['chosenWinner']
+            delete items[index]['showChooseWinner']
+            this.setState({[name]:items})
+            items.map((item,index)=>{
+              console.log('shortArr',shortArr)
+              shortArr['p1Points']=item.p1Points
+              shortArr['p2Points']=item.p2Points
+              shortArr['winner']=item.winner
+              shortArr['status1']=item.status1
+              shortArr['id']=item.id
+              var theItem={p1Points:item.p1Points,p2Points:item.p2Points,winner:item.winner,
+                status1:item.status1,id:item.id
+              }
+              shortArr.push(theItem)
+            })
+            if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',items.length<1)return
+            var scoreName=''
+            if(!this.state.theEventKey||this.state.theEventKey.length<3)return
+            //if(this.state.currentSelection==='sweet16'){scoreName='round1Score'}
+            //if(this.state.currentSelection==='round2'){scoreName='round2Score'}
+            scoreName=this.state.currentSelection+'Score'
+            let theItems = JSON.stringify(shortArr);
+            var theLink='theEvents::NCAAB::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
+            if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+            var theQuery=encodeURIComponent(theLink)
+            console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
+            console.log('theLink',theLink,theItems)
+            console.log('this.state.shortArr 006',shortArr)
+            
+            await axios.get("https://theramtournament.com/getMarchMadnessResults?term="+theQuery)
+            //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
+              .then((res) => {
+                var theOutcome = res.data
+                this.notify(theOutcome)
+                if(theOutcome==='Success Updating Results'){
+                  this.checkAuth()
+                }
+              })
+              } catch (error) {
+                ////console.log('error',error)
+              }
+          }
   render() {
     var flockTeamName=false
     var todayInMillis=new Date().getTime()
     var title1=''
-    var currentRank=this.state.currentEventUserInfo[this.state.currentRound+'Rank']
-    var currentBPS=''
+    var currentRank=''//this.state.currentEventUserInfo[this.state.currentSelection+'Rank']
+    
+    console.log('this.state.currentEventUserInfo 254',this.state.currentSelection,this.state.currentEventUserInfo[this.state.currentSelection+'Rank'],this.state.currentSelection,this.state.currentEventUserInfo)
+    var currentBPS='',theCurrentScore=''
     if(this.state.currentRound==='finalRound'){
       currentBPS=this.state.currentEventUserInfo[this.state.theMenu+'BPS']
+      if(currentBPS==undefined){currentBPS='0'}
+      theCurrentScore=this.state.currentEventUserInfo[this.state.theMenu+'Score']
+      if(theCurrentScore==undefined){theCurrentScore='0'}
+      if(this.state.currentEventUserInfo[this.state.theMenu+'Rank']===undefined){currentRank=false}
+      else{currentRank=this.state.currentEventUserInfo[this.state.theMenu+'Rank']}
     }else{
       currentBPS=this.state.currentEventUserInfo[this.state.currentRound+'BPS']
+      if(currentBPS==undefined){currentBPS='0'}
+      theCurrentScore=this.state.currentEventUserInfo[this.state.currentRound+'Score']
+      if(theCurrentScore==undefined){theCurrentScore='0'}
+      if(this.state.currentEventUserInfo[this.state.currentRound+'Rank']===undefined){currentRank=false}
+      else{currentRank=this.state.currentEventUserInfo[this.state.currentRound+'Rank']}
     }
-    if(currentBPS==undefined){currentBPS='0'}
+   
     console.log('this.state.currentEventUserInfo',currentBPS,this.state.currentEventUserInfo)
     //
     if(this.state.theMenu==='east'){title1='East'}
@@ -1569,7 +1673,7 @@ getNCAABMatchesFinal = () => {
         <div className={style.scoresCont2}>
         <p className={style.currentP}>{titleToShow}</p>
         <p className={style.scoreP1}>Current Score</p>
-        <p className={style.scoreP2}>{this.state.dataAvailable?this.state.currentEventUserInfo[this.state.currentRound+'Score']:'0.00'} points</p>
+        <p className={style.scoreP2}>{this.state.dataAvailable?theCurrentScore:'0.00'} points</p>
         </div>
         <div className={style.scoresCont3}>
         <p className={style.currentP}>{titleToShow}</p>

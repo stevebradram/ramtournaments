@@ -6,7 +6,7 @@ import { MdDeleteOutline } from "react-icons/md";
 class CommMarchMadness extends Component {
   state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:this.props.isEventStarted,creatorId:'',theFlocksArr:[],
     round1Arr:[],round2Arr:[],theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,
-    flockSysRound1:[],flockSysRound2:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
+    flockSysRound1:[],flockSysRound2:[],flockSysFinalRound:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
     flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK'
   }
   
@@ -65,14 +65,20 @@ class CommMarchMadness extends Component {
           //
           var sweet16Score=theData.sweet16Score,elite8Score=theData.elite8Score,
           final4Score=theData.final4Score,finalRoundScore=theData.finalRoundScore,
-          finalRoundPick=theData.finalRoundPick
+          finalRoundPick=theData.finalRoundPick,sweet16Pick=theData.sweet16Pick, elite8Pick=theData.elite8Pick,
+          final4Pick=theData.final4Pick  
           if(sweet16Score===undefined){sweet16Score='0'};
           if(elite8Score===undefined){elite8Score='0'};
           if(final4Score===final4Score){final4Score='0'};
           if(finalRoundScore===undefined){finalRoundScore='0'}
+
           if(finalRoundPick===undefined){finalRoundPick=false}
+          if(sweet16Pick===undefined){sweet16Pick=false}
+          if(elite8Pick===undefined){elite8Pick=false}
+          if(final4Pick===undefined){final4Pick=false}
           var theItem3={name:theData.ramName,score:0,pick:finalRoundPick,uid:theUserId,
-            sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,finalScore:finalRoundScore
+            sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,finalScore:finalRoundScore,
+            sweet16Pick:sweet16Pick,elite8Pick:elite8Pick,final4Pick:final4Pick,currentPick:theData.currentPick
           }
           round1Arr.push(theItem)
           round2Arr.push(theItem2)
@@ -100,7 +106,7 @@ class CommMarchMadness extends Component {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
         var i = 0, theFlocksArr = []
-        var flockSysRound1=[],flockSysRound2=[]
+        var flockSysRound1=[],flockSysRound2=[],flockSysFinalRound=[]
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
@@ -108,18 +114,39 @@ class CommMarchMadness extends Component {
         // var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
          var theItem={flockName: data.key,membersNo:theData.round1MembersNo,score:theData.round1Score,avScore:theData.round1AvScore}
          var theItem2={flockName: data.key,membersNo:theData.round2MembersNo,score:theData.round2Score,avScore:theData.round2AvScore}
+
+         var sweet16MembersNo=theData.sweet16MembersNo
+         var sweet16Score=theData.sweet16Score
+         var elite8Score=theData.elite8Score
+         var final4Score=theData.final4Score
+         var finalRoundScore=theData.finalRoundScore
+         if(sweet16Score===undefined){sweet16Score=0}
+         if(elite8Score===undefined){elite8Score=0}
+         if(final4Score===undefined){final4Score=0}
+         if(finalRoundScore===undefined){finalRoundScore=0}
+         if(sweet16MembersNo===undefined){sweet16MembersNo=0}
+         var theScore=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
+         var avScore=0
+         if(sweet16MembersNo===0||sweet16MembersNo===undefined){avScore=0}
+         else{avScore=theScore/sweet16MembersNo
+         avScore = Number(avScore.toFixed(2))}
+
+         console.log('yyyyyyyy',theScore,sweet16MembersNo)
+         var theItem3={flockName: data.key,membersNo:sweet16MembersNo,score:theScore,avScore:avScore}
+        
          flockSysRound1.push(theItem)
          flockSysRound2.push(theItem2)
+         flockSysFinalRound.push(theItem3)
           //console.log('theFlocksArr 8888', theFlocksArr)
           if (count === i) {
             flockSysRound1 = flockSysRound1.sort(function (a, b) { return b.avScore - a.avScore })
             flockSysRound2 = flockSysRound2.sort(function (a, b) { return b.avScore - a.avScore })
-            
+            flockSysFinalRound = flockSysFinalRound.sort(function (a, b) { return b.avScore - a.avScore })
             //flockSysRound1 = flockSysRound1.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
             //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
 
-            this.setState({ flockSysRound1,flockSysRound2 })
-           console.log('theFlocksArr 9999', flockSysRound1,flockSysRound2)
+            this.setState({ flockSysRound1,flockSysRound2,flockSysFinalRound })
+           console.log('theFlocksArr 9999', flockSysRound1,flockSysRound2,flockSysFinalRound)
           }
         })
       }
@@ -159,7 +186,8 @@ class CommMarchMadness extends Component {
     var theItems=[],theItems2=[]
     if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1}
     if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2}
-    if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr}
+    if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr,theItems2=this.state.flockSysFinalRound}
+    theItems = theItems.sort(function (a, b) { return b.score - a.score })
     console.log('currentRound',this.props.menuToShow,this.state.flockNameAvailable,this.props.currentRound,theItems2)
     console.log('flockNameAvailable',flockNameAvailable)
     var statToShow='',statCol=''
@@ -175,7 +203,8 @@ class CommMarchMadness extends Component {
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
                     <th>RAM Name</th>
-                    <th>Picked?</th>
+                    {this.props.currentRound==='finalRound'?<th>Picked?<br/><span className={styles.subSpan}>{this.props.currentSubSelection}</span></th>:
+                    <th>Picked?</th>}
                     {this.props.currentRound!=='finalRound'?<><th>Best Possible<br />Score</th>
                     <th>Cumulative <br />Score</th></>:
                     <>
@@ -193,6 +222,12 @@ class CommMarchMadness extends Component {
                     var thePick=''
                     if(item.pick===true){thePick='true'}
                     if(item.pick===false){thePick='false'}
+                    if(this.props.currentRound==='finalRound'){
+                      if(item.currentPick==='sweet16'&&item.sweet16Pick===true){thePick='true'}else{thePick==='false'}
+                      if(item.currentPick==='elite8'&&item.elite8Pick===true){thePick='true'}else{thePick==='false'}
+                      if(item.currentPick==='final4'&&item.final4Pick===true){thePick='true'}else{thePick==='false'}
+                      if(item.currentPick==='finalRoundPick'&&item.finalRoundPick===true){thePick='true'}else{thePick==='false'}
+                    }
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                         <td>{index + 1}</td>

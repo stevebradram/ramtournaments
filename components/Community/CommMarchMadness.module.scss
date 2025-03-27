@@ -164,6 +164,13 @@ $pastEve2:#e8de4c;
     color: $blackish;
     margin-top: 20px;
 }
+.subSpan{
+    font-weight: 400;
+    color:$pastEve2;
+    margin-top: 1px;
+    font-size: 12px;
+    //display: none;
+}
 @media all and (max-width: 800px) {
     .noDataDiv{
         display: flex;

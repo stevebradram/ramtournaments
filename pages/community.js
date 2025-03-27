@@ -15,7 +15,7 @@ var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 3
 class leaderboard extends Component {
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',showNCAAB:false,count:0,showReel:false,
-    dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '', menuToShow: 'Rams In Your Flock',
+    dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '',currentSubSelection:'', menuToShow: 'Rams In Your Flock',
     currentFlockName: '', flockNameAvailable: false, eventStarted: true, ramsInMyFlockArr: [], theFlocksArr: [], theAdminFlocksArr: [],deleteModal:false,deleteName:'',userIdToBeDeleted:'',flockToBeDeleted:'',myFlockName:'',round1Arr:[],round2Arr:[],
     
   }
@@ -75,7 +75,7 @@ class leaderboard extends Component {
             theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'],endTime = allGames[0]['endTime'], currentSelection = 'round1'//allGames[0]['currentSelection']
             var isEventStarted = true
             if (new Date().getTime() < allGames[0]['time']) { isEventStarted = false }
-              this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection, eventStarted: isEventStarted,endTime }, () => {
+              this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection,currentSubSelection:allGames[0]['currentSelection'], eventStarted: isEventStarted,endTime }, () => {
               this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
               {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
               //console.log('sportType555555555', sportType, theEventKey)
@@ -238,7 +238,6 @@ class leaderboard extends Component {
   }
 
   loadOtherEvents = async (sportType, theEventKey, theTime, theEventTitle, currentSelection,endTime) => {
-   
     this.showProgressBar()
     if (navigator.onLine === false) {
       this.notify('No internet! please check your internet connection')
@@ -249,7 +248,7 @@ class leaderboard extends Component {
     } else {
       var isEventStarted = true
       if (new Date().getTime() < theTime) { isEventStarted = false }
-      this.setState({ theEventKey, theEventTitle, currentSelection, eventStarted: isEventStarted,sportType,endTime })
+      this.setState({ theEventKey, theEventTitle, currentSelection,currentSubSelection:currentSelection,eventStarted: isEventStarted,sportType,endTime })
       this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
       {this.state.isAdmin?this.loadAdminData(theEventKey):null}
     }
@@ -520,7 +519,7 @@ class leaderboard extends Component {
               </div> </div> : <div>
               <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
               <p className={styles.noDataP1}>No Admin data available for this event</p>
-            </div>}</> : null}</>:this.state.showNCAAB?<CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime}/>:null}
+            </div>}</> : null}</>:this.state.showNCAAB?<CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection}/>:null}
 
           </div></>:null}
           {this.state.communitySelection==='News & Videos'?<News/>:null}
