@@ -7,7 +7,7 @@ class CommMarchMadness extends Component {
   state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:this.props.isEventStarted,creatorId:'',theFlocksArr:[],
     round1Arr:[],round2Arr:[],theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,
     flockSysRound1:[],flockSysRound2:[],flockSysFinalRound:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
-    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK'
+    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK',round1Sep:0,round2Sep:0,finalRoundSep:0
   }
   
   componentDidMount=()=>{
@@ -139,14 +139,68 @@ class CommMarchMadness extends Component {
          flockSysFinalRound.push(theItem3)
           //console.log('theFlocksArr 8888', theFlocksArr)
           if (count === i) {
+            var finalRound1=[],finalRound2=[],n=0,n2=0
+            var round1Final1=[],round1Final2=[],p=0,p2=0
+            var round2Final1=[],round2Final2=[],q=0,q2=0
             flockSysRound1 = flockSysRound1.sort(function (a, b) { return b.avScore - a.avScore })
             flockSysRound2 = flockSysRound2.sort(function (a, b) { return b.avScore - a.avScore })
-            flockSysFinalRound = flockSysFinalRound.sort(function (a, b) { return b.avScore - a.avScore })
+           
+           
+            flockSysFinalRound.map((item,map)=>{
+              n++
+             if(item.membersNo<4){
+              finalRound1.push(item)
+             }else{
+              finalRound2.push(item)
+              n2++
+             }
+             //round1Sep:0,round2Sep:0,finalRoundSep:0
+             if(flockSysFinalRound.length===n){
+              finalRound1 = finalRound1.sort(function (a, b) { return b.avScore - a.avScore })
+              finalRound2 = finalRound2.sort(function (a, b) { return b.avScore - a.avScore })
+              this.setState({finalRoundSep:n2,flockSysFinalRound:[...finalRound2,...finalRound1] })
+              console.log('malizaaaa',finalRound1,finalRound2) 
+             }
+            })
+            flockSysRound1.map((item,map)=>{
+              p++
+             if(item.membersNo<4){
+              round1Final1.push(item)
+             }else{
+              round1Final2.push(item)
+              p2++
+             }
+             //round1Sep:0,round2Sep:0,finalRoundSep:0
+             if(flockSysRound1.length===p){
+              round1Final1 = round1Final1.sort(function (a, b) { return b.avScore - a.avScore })
+              round1Final2 = round1Final2.sort(function (a, b) { return b.avScore - a.avScore })
+              this.setState({round1Sep:p2,flockSysRound1:[...round1Final2,...round1Final1] })
+              console.log('flockSysRound1',round1Final1,round1Final2) 
+             }
+            }) 
+
+            flockSysRound2.map((item,map)=>{
+              q++
+             if(item.membersNo<4){
+              round2Final1.push(item)
+             }else{
+              round2Final2.push(item)
+              q2++
+             }
+             //round1Sep:0,round2Sep:0,finalRoundSep:0
+             if(flockSysRound2.length===q){
+              round2Final1 = round2Final1.sort(function (a, b) { return b.avScore - a.avScore })
+              round2Final2 = round2Final2.sort(function (a, b) { return b.avScore - a.avScore })
+              this.setState({round2Sep:q2,flockSysRound2:[...round2Final2,...round2Final1] })
+              console.log('flockSysRound1',round2Final1,round2Final2) 
+             }
+            })
+            //flockSysFinalRound = flockSysFinalRound.sort(function (a, b) { return b.avScore - a.avScore })
             //flockSysRound1 = flockSysRound1.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
             //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
 
-            this.setState({ flockSysRound1,flockSysRound2,flockSysFinalRound })
-           console.log('theFlocksArr 9999', flockSysRound1,flockSysRound2,flockSysFinalRound)
+           // this.setState({ flockSysRound1 })
+          // console.log('theFlocksArr 9999 22', flockSysRound1)
           }
         })
       }
@@ -183,10 +237,10 @@ class CommMarchMadness extends Component {
   }
   render() {
     var flockNameAvailable=this.props.flockNameAvailable
-    var theItems=[],theItems2=[]
-    if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1}
-    if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2}
-    if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr,theItems2=this.state.flockSysFinalRound}
+    var theItems=[],theItems2=[],theSeparator=0 //round1Sep:0,round2Sep:0,finalRoundSep:0
+    if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1,theSeparator=this.state.round1Sep}
+    if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2,theSeparator=this.state.round2Sep}
+    if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr,theItems2=this.state.flockSysFinalRound,theSeparator=this.state.finalRoundSep}
     theItems = theItems.sort(function (a, b) { return b.score - a.score })
     console.log('currentRound',this.props.menuToShow,this.state.flockNameAvailable,this.props.currentRound,theItems2)
     console.log('flockNameAvailable',flockNameAvailable)
@@ -253,6 +307,7 @@ class CommMarchMadness extends Component {
             </div>}</> : null}
                 {this.props.menuToShow === 'Flocks Among Flocks' ? <>{flockNameAvailable ? <div className={styles.menu2Div1}>
                 <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
+                <p className={styles.titleP2}>N/B A Flock should have atleast 4 members</p>
                 <div id={styles.table1Div}>
                 <table className={styles.table1}>
                   <tr id={styles.table1Tr1}>
@@ -264,7 +319,7 @@ class CommMarchMadness extends Component {
                   {theItems2.map((item, index) => {
                    
                     return (
-                      <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.props.flockNameWithNoSpaces ? '#292f51' : index===0?'#CB1E31':null, color: item.flockName === this.props.flockNameWithNoSpaces ? 'white' : index===0?'#fff':'#292f51'}}>
+                      <tr key={index} id={theSeparator<index+1&&item.flockName !== this.props.flockNameWithNoSpaces?styles.table1Tr2D:styles.table1Tr2} style={{ backgroundColor: item.flockName === this.props.flockNameWithNoSpaces ? '#292f51' : index===0?'#CB1E31':null, color: item.flockName === this.props.flockNameWithNoSpaces ? 'white' : index===0?'#fff':'#292f51'}}>
                         <td>{index + 1}</td>
                         <td>{item.flockName.split("|").join(' ')}</td>
                         <td>{item.membersNo}</td>

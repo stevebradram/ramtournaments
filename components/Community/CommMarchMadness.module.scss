@@ -46,17 +46,32 @@ $pastEve2:#e8de4c;
 #table1Tr2{
     color: $blackish;
 }
-#table1Tr2 th {
-   
+#table1Tr2D{
+    color: $blackish;
+}
+#table1Tr2 th{
+    font-weight: 400;
+    color: $redColor;
+}
+#table1Tr2D th{
     font-weight: 400;
     color: $redColor;
 }
 
-#table1Tr2 td {
+#table1Tr2 td{
     font-size: 14px;
     text-align: center;
     //color: $blackish;
     font-weight: 500;
+    //border-bottom: 3px solid rgb(84, 192, 116);
+}
+#table1Tr2D td {
+    font-size: 14px;
+    text-align: center;
+    //color: $blackish;
+    font-weight: 500;
+    //border-bottom: 5px solid rgb(210, 210, 210);
+    background-color: rgb(240, 240, 240);
 }
 .menu2Div1 {
     box-sizing: border-box;
@@ -108,14 +123,24 @@ $pastEve2:#e8de4c;
 .titleP {
     display: flex;
     color: white;
-    padding: 15px 15px;
+    padding: 15px 15px 0px 15px;
     display: flex;
     align-items: center;
     font-size: 16px;
     font-weight: 500;
     color: $blackish;
+     
+}
+.titleP2{
+    display: flex;
+    color: white;
+    padding: 5px 15px 15px 15px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: $redColor;
     border-bottom: 1px solid #a2a2a2;
-    
 }
 .titleP span{
     margin-right: 4px;

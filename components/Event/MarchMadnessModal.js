@@ -34,12 +34,12 @@ var conferenceChampionshipEdit3 = [
 var superBowlEdit3 = [
   { id: 'superBowlMatch1', apiId: '', time: '', error: '', timeInMillis: 0, commenceTime: '', game: 'NFL', winner:'',status1:'notPlayed', player1: '', p1Points: '', p1Rec: '', p2Rec: '', player2: '', p2Points: '', p1Photo: '', p2Photo: '', matchType: 'NFL Super Bowl' }
 ]
-var round1Edit=[],round2Edit=[],sweet16Edit=[],superBowlEdit=[]
+var round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
 
 var round1Edit2=round1Edit3,round2Edit2=round2Edit3,conferenceChampionshipEdit2=conferenceChampionshipEdit3,superBowlEdit2=superBowlEdit3
 class NCAAModal extends Component {
   state = { round1Edit: round1Edit, round2Edit: round2Edit3, conferenceChampionshipEdit: conferenceChampionshipEdit3, superBowlEdit: superBowlEdit3, submitErr: "", showProgressBar: false, currentSelection:this.props.eventToNCAABModal,isItSubmit:false,
-    eventStartTime:0,eventEndTime:'',theNewArr:[],loadApiData:false,getFromOddsApi:false,firstTime:'',sweet16:[], sweet16Edit:[]
+    eventStartTime:0,eventEndTime:'',theNewArr:[],loadApiData:false,getFromOddsApi:false,firstTime:'',sweet16:[], sweet16Edit:[],elite8Edit:[],final4Edit:[],finalRoundEdit:[]
   }
   
   componentDidMount=()=>{
@@ -50,7 +50,7 @@ class NCAAModal extends Component {
     var firstMatchTime=[]
     if(incomingData.length>0){
       incomingData=incomingData//.slice(0,2)
-      round1Edit=[],round2Edit=[],sweet16Edit=[]
+      round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
       incomingData.map((item,index)=>{
         firstMatchTime.push(item.timeInMillis)
         if(!item.player1NickName){
@@ -82,6 +82,10 @@ class NCAAModal extends Component {
     if(this.state.currentSelection==='round1'){round1Edit=incomingData,this.setState({round1Edit})}
     if(this.state.currentSelection==='round2'){round2Edit=incomingData,this.setState({round2Edit})}
     if(this.state.currentSelection==='sweet16'){sweet16Edit=incomingData,this.setState({sweet16Edit})}
+
+    if(this.state.currentSelection==='elite8'){elite8Edit=incomingData,this.setState({elite8Edit})}
+    if(this.state.currentSelection==='final4'){final4Edit=incomingData,this.setState({final4Edit})}
+    //if(this.state.currentSelection==='finalRound'){finalRoundEdit=incomingData,this.setState({finalRoundEdit})}
 
     }
    
@@ -119,6 +123,21 @@ class NCAAModal extends Component {
       sweet16Edit[index][e.target.id] = value
       await this.setState({ sweet16Edit })
       console.log("sweet16Edit", sweet16Edit)
+    }
+    if (type === 'elite8') {
+      elite8Edit[index][e.target.id] = value
+      await this.setState({ elite8Edit })
+      console.log("elite8Edit", elite8Edit)
+    }
+    if (type === 'final4') {
+      final4Edit[index][e.target.id] = value
+      await this.setState({ final4Edit })
+      console.log("final4Edit", final4Edit)
+    }
+    if (type === 'finalRound') {
+      finalRoundEdit[index][e.target.id] = value
+      await this.setState({ finalRoundEdit })
+      console.log("finalRoundEdit", finalRoundEdit)
     }
   
   }
@@ -457,6 +476,106 @@ class NCAAModal extends Component {
       }
     })
   }
+  elite8Submit = (theItems,theEdit) => {
+    var yearNow = new Date().getFullYear()
+    var i = 0, j = 0, k = 0, l = 0
+    console.log('theItems',theItems)
+    var teamsArr=[]
+    var time='2025-03-20T00:00'
+   
+    //return
+  /* theItems.map((item, index) => {
+      
+      theItems[index]['team1Id'] =this.getRandom(1, 100);
+      theItems[index]['team2Id'] =this.getRandom(1, 90);
+
+      theItems[index]['team1Seed'] =this.getRandom(1, 16);
+      theItems[index]['team2Seed'] =this.getRandom(1, 16);
+
+      theItems[index]['apiId'] =this.getRandom(1, 100);
+     /* if(index===15){
+        theItems[index]['apiId'] =''
+      }
+      //theItems[index]['time'] =time
+      if(theItems.length===index+1){
+        console.log('theItems iiiiii',theItems)
+      }
+    })*/
+      theItems.map((item, index) => {
+      if (item.team1Id === ''||item.team2Id === ''||item.team1Seed === ''||item.team2Seed === '') {
+        theItems[index]['error'] = 'Teams id, seed & match time field must be filled'
+        this.setState({ [theEdit]:theEdit })
+        return
+      } else {
+        if((this.state.getFromOddsApi&&item.apiId==='')||!this.state.getFromOddsApi&&item.time===''){
+          theItems[index]['error'] = 'Teams id, seed & match time field must be filled'
+          this.setState({ [theEdit]:theEdit })
+        }else{
+        j++
+        var matchTime=''
+        if(this.state.getFromOddsApi===true){matchTime=this.state.firstTime}
+        else{matchTime=item.time}
+        
+        var timeInMillis = new Date(matchTime).getTime()
+        var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
+        theItems[index]['commenceTime'] = theTime
+        theItems[index]['timeInMillis'] = timeInMillis
+        theItems[index]['error'] = ''
+        if(this.state.getFromOddsApi===true){theItems[index]['time'] =theTime}
+
+        thePoints.map((item2) => {
+          if(item.team1Seed===item2.seed){theItems[index]['p1Points'] =item2.val}
+          if(item.team2Seed===item2.seed){theItems[index]['p2Points'] =item2.val} 
+        })
+}
+      }
+      if(theItems.length===j){
+        console.log('theItems jjjjjjj',theItems)
+    
+    var currentYear=new Date().getFullYear()
+    var apiFirebaseRef = firebase.database().ref('/apis/NCAABTeams/'+currentYear+'/')
+    apiFirebaseRef.once('value', dataSnapshot => {
+      if(dataSnapshot.exists()){
+        var theCount=dataSnapshot.numChildren(),i=0
+        console.log('the teams data available')
+        dataSnapshot.forEach((data,index) => {
+          i++
+          teamsArr.push(data.val())
+          if(theCount===i){
+            //console.log('final arrr 111111',teamsArr)
+            this.goToTeamsDataApi(theItems,teamsArr,theEdit)
+          }
+        })
+      }else{
+        console.log('the teams data nooot available')
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+       var firebaseItem={}
+        axios.get(oddsApi)
+        .then((res) => {
+          var resultsArr = res.data,j=0
+          resultsArr.map((item, index) => {
+            j++
+            if(item.Active){
+             var theItem={name:item.Name,school:item.School,key:item.Key,id:item.TeamID,
+                SDN:item.ShortDisplayName,logo:item.TeamLogoUrl
+              }
+              firebaseItem[item.TeamID] = theItem
+              teamsArr.push(theItem)}
+              if(j===resultsArr.length){
+                apiFirebaseRef.update(firebaseItem)
+                //console.log('final arrr 222222',teamsArr)
+                this.goToTeamsDataApi(theItems,teamsArr,theEdit)
+              }
+          })
+          
+        })
+      }
+     
+    })
+      
+      }
+    })
+  }
 sortOddsJson=async(theArr,stateEdit)=>{
    //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
   //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
@@ -570,6 +689,13 @@ sortOddsJson=async(theArr,stateEdit)=>{
       if(this.state.currentSelection==='sweet16'){
         this.sendToFirebaseSingle3()
       }
+
+      if(this.state.currentSelection==='elite8'){
+        this.sendToFirebaseSingle4(this.state.elite8Edit,'stopElite8Edit','elite8Arr','elite8Edit')
+      }
+      if(this.state.currentSelection==='final4'){
+        this.sendToFirebaseSingle4(this.state.final4Edit,'stopFinal4Edit','final4Arr','final4Edit')
+      }
     }
     this.notify('Uploading....');
   }
@@ -677,12 +803,60 @@ sortOddsJson=async(theArr,stateEdit)=>{
   sendToFirebaseSingle3=async()=>{
     this.showProgressBar()
     var theArr='',editTime='',returnArrName=''
-    theArr=this.state.sweet16Edit,editTime='stopSweet16Edit',returnArrName='allRound2MatchesArr'
+    theArr=this.state.sweet16Edit,editTime='stopSweet16Edit',returnArrName='sweet16Arr'
     var i=0
     theArr.map((item, index) => {
       if (item.team2Id === ''||item.team1Id === ''||item.player1 === ''||item.player2 === ''||item.p1Photo === ''||item.p2Photo === ''||item.team1Seed === ''||item.team2Seed === '') {
         theArr[index]['error'] = 'Some field missing data'
         this.setState({ sweet16Edit })
+        return
+      } else {
+        i++
+        theArr[index]['error'] = ''
+      }
+      if (i===theArr.length) {    
+       var minTime = Math.min(...theArr.map(item => item.timeInMillis));
+       var toDbArr={},v = 0
+       var eventKey = this.props.theEventKey
+       var generalDb = firebase.database().ref('/theEvents/')
+       var eventIdsLink ='/eventsIds/'+eventKey+'/'
+       var eventIdsLink2 ='/NCAAB/eventsIds/'+eventKey+'/'
+       var dataLink ='/NCAAB/'+eventKey+'/final/'+this.state.currentSelection//1737147600000
+       console.log('combined items',theArr.length, theArr)//1737235800000
+       var eventIdsEdit = {
+      [editTime]:minTime,currentSelection:this.state.currentSelection,time:minTime}
+       theArr.map((item,index) => {
+         v++
+         delete theArr[index]['error']
+         console.log('matchType',item.matchType)
+         toDbArr[item.id] = item
+         if (theArr.length === v) {
+          console.log('toDbArr',eventIdsEdit,toDbArr)
+           generalDb.child(eventIdsLink).update(eventIdsEdit)
+           generalDb.child(eventIdsLink2).update(eventIdsEdit)
+           generalDb.child(dataLink).update(toDbArr,(error) => {
+            if (error) {
+              this.notify('An error occured while uploading data')
+              this.setState({ showProgressBar: false })
+            } else {
+              this.notify('Data uploaded successfully')
+              this.setState({ showProgressBar: false })
+             // var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::'+editTime
+              this.props.onClick(returnArrName,theArr)
+            }
+          })
+         }
+       })
+      }
+    })
+  }
+  sendToFirebaseSingle4=async(theArr,editTime,returnArrName,stateName)=>{
+    this.showProgressBar()
+    var i=0
+    theArr.map((item, index) => {
+      if (item.team2Id === ''||item.team1Id === ''||item.player1 === ''||item.player2 === ''||item.p1Photo === ''||item.p2Photo === ''||item.team1Seed === ''||item.team2Seed === '') {
+        theArr[index]['error'] = 'Some field missing data'
+        this.setState({[stateName]:theArr})
         return
       } else {
         i++
@@ -798,6 +972,9 @@ sortOddsJson=async(theArr,stateEdit)=>{
     if(this.state.currentSelection==='round1'){this.round1Submit()}
     if(this.state.currentSelection==='round2'){this.round2Submit()}
     if(this.state.currentSelection==='sweet16'){this.sweet16Submit()}
+
+    if(this.state.currentSelection==='elite8'){this.elite8Submit(this.state.elite8Edit,'elite8Edit')}
+    if(this.state.currentSelection==='final4'){this.elite8Submit(this.state.final4Edit,'final4Edit')}
   }
 
   getLogos = async (theArr) => {
@@ -1011,6 +1188,14 @@ sortOddsJson=async(theArr,stateEdit)=>{
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Sweet 16</p>
           <div className={styles.listCont}>{this.itemComponent(sweet16Edit, 'sweet16')}</div></div>:null}
+          {this.state.currentSelection==='elite8'?
+          <div className={styles.divCont}>
+          <p className={styles.listHeadP}>Elite 8</p>
+          <div className={styles.listCont}>{this.itemComponent(elite8Edit, 'elite8')}</div></div>:null}
+          {this.state.currentSelection==='final4'?
+          <div className={styles.divCont}>
+          <p className={styles.listHeadP}>Final 4</p>
+          <div className={styles.listCont}>{this.itemComponent(final4Edit, 'final4')}</div></div>:null}
           {/*this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Conference Championship</p>
