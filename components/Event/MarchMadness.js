@@ -405,8 +405,6 @@ checkLink=async(userId)=>{
 }
 getMatchesInfo = async () => {
   var userId=this.state.userId
-  //console.log('userId ddddddd',userId)
-  //return
   var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAB/" + this.state.theEventKey + '/')
   var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
   var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAB/" + this.state.theEventKey + '/details/')
@@ -520,9 +518,11 @@ getMatchesInfo = async () => {
           })
           if(elite8Count===i){
             this.setState({elite8Arr:this.state.elite8Arr})
-            console.log('sweet16Count ',this.state.elite8Arr)
+            console.log('elite8Arr ',this.state.elite8Arr)
           }
         }
+      }else{
+        console.log('elite 8 not existing')
       }
       var final4Exists=dataSnapshot.child('final4').exists()
       if(final4Exists){
@@ -1077,6 +1077,7 @@ getNCAABMatchesFinal = () => {
     });
   }
   selectEvent= (theMenu) => {
+    
     if(this.state.currentRound==='round1'){
     if(theMenu==='east'){this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1'})}
     if(theMenu==='west'){this.setState({currentItems:this.state.round1WestArr,theSubMenu:'round1'})}
@@ -1096,6 +1097,7 @@ getNCAABMatchesFinal = () => {
   }
   selectSubEvent=(type,theMenu)=>{
     //this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
+    
     if(theMenu==='east'){
       if(type==='round1'){this.setState({currentItems:this.state.eastRound1Arr})}
       if(type==='round2'){this.setState({currentItems:this.state.eastRound2Arr})}
@@ -1317,7 +1319,7 @@ getNCAABMatchesFinal = () => {
     pickWinner=(id,winner,time)=>{
       //console.log('this.state.currentSelection',this.state.currentSelection)
       //return
-  
+    //this.setState({currentSelection:'sweet16'})
       var nowTime=new Date().getTime()
     
       if(this.state.currentSelection==='round1'){

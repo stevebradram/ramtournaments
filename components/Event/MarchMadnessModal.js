@@ -52,6 +52,7 @@ class NCAAModal extends Component {
       incomingData=incomingData//.slice(0,2)
       round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
       incomingData.map((item,index)=>{
+        incomingData[index]['bet']=''
         firstMatchTime.push(item.timeInMillis)
         if(!item.player1NickName){
         console.log('item.player1NickName samooooo')
@@ -660,7 +661,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
                   if(theArr.length===index+1){
                     //var firstTime =  Math.min(...firstMatchTime.map(item => item));
                     this.setState({[stateEdit]:theArr})
-                    console.log('malizaaaaa',theArr)
+                    console.log('malizaaaaa 000024',theArr)
                   }
                 })
                 
