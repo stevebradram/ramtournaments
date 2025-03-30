@@ -1378,6 +1378,26 @@ getNCAABMatchesFinal = () => {
       this.setState({sweet16Arr:theItems})
       console.log('theItems',theItems)
     }
+    if(this.state.currentSelection==='elite8'){
+      console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+      var index2 = this.state.elite8Arr.map(function(x) {return x.id; }).indexOf(id);
+      var nowTime=new Date().getTime()
+      var theItems=this.state.elite8Arr
+      
+      if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+
+      var theItems=this.state.elite8Arr
+      theItems[index2]['showChooseWinner']=true
+      this.setState({elite8Arr:theItems})
+      console.log('theItems',theItems)
+    }
     }
     chosenWinner=(id,winner)=>{
      
@@ -1404,7 +1424,13 @@ getNCAABMatchesFinal = () => {
         theItems[index2]['status1']='played'
         console.log('this.state.currentItems 009',theItems)
       }
-
+      if(this.state.currentSelection==='elite8'){
+        var index2 = this.state.elite8Arr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.elite8Arr
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+        console.log('this.state.currentItems 009',theItems)
+      }
       
     }
     submitWinner=(id,winner)=>{
@@ -1427,6 +1453,14 @@ getNCAABMatchesFinal = () => {
     }
     if(this.state.currentSelection==='sweet16'){
       var index = this.state.sweet16Arr.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+    }
+    if(this.state.currentSelection==='elite8'){
+      var index = this.state.elite8Arr.map(function(x) {return x.id; }).indexOf(id);
       if(winner!=='player1'&&winner!=='player2'){
         this.notify('Nothing to submit')
       }else{
