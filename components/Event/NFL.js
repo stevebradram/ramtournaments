@@ -1399,7 +1399,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         </div>
         {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
           <p className={style.eventP} onClick={() => this.openNFLModal()}>Enter Event Details</p>
-          <p className={style.eventP2} onClick={() =>this.setState({eventToNFLModal:'wildCard',nflModal:true})}>Create New NFL Event</p>
+          <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New NFL Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>

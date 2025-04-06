@@ -129,6 +129,7 @@ class Reel extends Component {
          let donateStyle=''
          let reelTextStyle=''
          var todayInMillis=new Date().getTime()
+         
          var theGamesNo=this.props.allGames.length
          var showArrows=false,slidesToShow='',slidesToScroll=''
          if (typeof window !== "undefined") {
@@ -178,13 +179,30 @@ class Reel extends Component {
     cssEase: "linear",
       
           };
+    var userGames=[],adminGames=[],allGames=[]
+          this.props.allGames.map((item,index)=>{
+            
+            if((todayInMillis+(86400000*90)<item.time)&&!this.state.isAdmin){
+              adminGames.push(item)
+              console.log('to the admins')
+            }else{
+              console.log('to the users')
+              adminGames.push(item)
+              userGames.push(item)}
+            if(this.props.allGames.length===index+1){
+              if(this.state.isAdmin){
+                allGames=adminGames
+              }else{ allGames=userGames}
+             
+            }
+          })     
         return (
             <div className={style.boduTitleMainCont}>
                <div className={style.boduTitleMainCont2}>
                 {/*<h2 className={style.headP}>CUSTOMERS REVIEWS</h2>*/}
                 <Slider ref={c => (this.slider = c)} {...settings}>
                   
-                {this.props.allGames.slice(0,10).map((item,index)=>{
+                {allGames.map((item,index)=>{
                 var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
                 var theColor='#292f51',timing='Active Event'
                 if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){

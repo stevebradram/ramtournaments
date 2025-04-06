@@ -134,8 +134,11 @@ class leaderboard extends Component {
       //currentSelection='quarterFinals'
       //console.log('value',time,dataSnapshot.val())
       //console.log('nowDate',nowDate,'time',time,'title',title)
-      
+      //var showToAllUsers=true
+     // if((nowDate+(86400000*90))<time){showToAllUsers=false}
       var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,currentSelection:currentSelection}
+     
+      
       allGames.push(theItem)
 
       //if(nowDate>(endTime+86400000)){this.setState({isEventExpired:true})}
