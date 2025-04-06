@@ -7,7 +7,7 @@ class CommMarchMadness extends Component {
   state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:this.props.isEventStarted,creatorId:'',theFlocksArr:[],
     round1Arr:[],round2Arr:[],theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,
     flockSysRound1:[],flockSysRound2:[],flockSysFinalRound:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
-    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK',round1Sep:0,round2Sep:0,finalRoundSep:0
+    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK',round1Sep:0,round2Sep:0,finalRoundSep:0,floskSysOverall:[],overallRoundSep:0
   }
   
   componentDidMount=()=>{
@@ -109,7 +109,7 @@ class CommMarchMadness extends Component {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
         var i = 0, theFlocksArr = []
-        var flockSysRound1=[],flockSysRound2=[],flockSysFinalRound=[]
+        var flockSysRound1=[],flockSysRound2=[],flockSysFinalRound=[],floskSysOverall=[]
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
@@ -117,6 +117,8 @@ class CommMarchMadness extends Component {
         // var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
          var theItem={flockName: data.key,membersNo:theData.round1MembersNo,score:theData.round1Score,avScore:theData.round1AvScore}
          var theItem2={flockName: data.key,membersNo:theData.round2MembersNo,score:theData.round2Score,avScore:theData.round2AvScore}
+
+        
 
          var sweet16MembersNo=theData.sweet16MembersNo
          var sweet16Score=theData.sweet16Score
@@ -137,19 +139,31 @@ class CommMarchMadness extends Component {
 
          console.log('yyyyyyyy',theScore,sweet16MembersNo)
          var theItem3={flockName: data.key,membersNo:sweet16MembersNo,score:theScore,avScore:avScore}
-        
+         
+         var avMmebersNo=(Number(sweet16MembersNo)+Number(theData.round1MembersNo)+Number(theData.round2MembersNo))/3
+         avMmebersNo =Math.ceil(avMmebersNo) //Number(avMmebersNo.toFixed(2))
+         var averallAvScore=(Number(theData.round1Score)+Number(theScore)+Number(theData.round2Score))/avMmebersNo
+         averallAvScore = Number(averallAvScore.toFixed(2))
+         var overalScore=Number(theData.round1Score)+Number(theScore)+Number(theData.round2Score)
+         overalScore= Number(overalScore.toFixed(2))
+         var theItem4={flockName: data.key,round1Score:theData.round1Score,round2Score:theData.round2Score,finalRoundScore:theScore,avScore:averallAvScore,
+          finalRoundMembNo:sweet16MembersNo,round1MembMo:theData.round1MembersNo,round2MembMo:theData.round2MembersNo,membersNo:avMmebersNo,score:overalScore
+         }
          flockSysRound1.push(theItem)
          flockSysRound2.push(theItem2)
          flockSysFinalRound.push(theItem3)
-          //console.log('theFlocksArr 8888', theFlocksArr)
+         floskSysOverall.push(theItem4)
+         console.log('theFlocksArr floskSysOverall', floskSysOverall)
           if (count === i) {
+            
             var finalRound1=[],finalRound2=[],n=0,n2=0
             var round1Final1=[],round1Final2=[],p=0,p2=0
             var round2Final1=[],round2Final2=[],q=0,q2=0
+            var overallFinal1=[],overallFinal2=[],r=0,r2=0
             flockSysRound1 = flockSysRound1.sort(function (a, b) { return b.avScore - a.avScore })
             flockSysRound2 = flockSysRound2.sort(function (a, b) { return b.avScore - a.avScore })
-           
-           
+            floskSysOverall = floskSysOverall.sort(function (a, b) { return b.avScore - a.avScore })
+            this.setState({floskSysOverall})
             flockSysFinalRound.map((item,map)=>{
               n++
              if(item.membersNo<4){
@@ -199,6 +213,23 @@ class CommMarchMadness extends Component {
               console.log('flockSysRound1',round2Final1,round2Final2) 
              }
             })
+            var overallFinal1=[],overallFinal2=[],r=0,r2=0
+            floskSysOverall.map((item,map)=>{
+              r++
+             if(item.membersNo<4){
+              overallFinal1.push(item)
+             }else{
+              overallFinal2.push(item)
+              r2++
+             }
+             //round1Sep:0,round2Sep:0,finalRoundSep:0
+             if(floskSysOverall.length===q){
+              overallFinal1 = overallFinal1.sort(function (a, b) { return b.avScore - a.avScore })
+              overallFinal2 = overallFinal2.sort(function (a, b) { return b.avScore - a.avScore })
+              this.setState({overallRoundSep:r2,floskSysOverall:[...overallFinal2,...overallFinal1] })
+              console.log('overallFinal1',overallFinal1,overallFinal1) 
+             }
+            })
             //flockSysFinalRound = flockSysFinalRound.sort(function (a, b) { return b.avScore - a.avScore })
             //flockSysRound1 = flockSysRound1.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
             //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
@@ -245,6 +276,7 @@ class CommMarchMadness extends Component {
     if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1,theSeparator=this.state.round1Sep}
     if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2,theSeparator=this.state.round2Sep}
     if(this.props.currentRound==='finalRound'){theItems=this.state.finalRoundArr,theItems2=this.state.flockSysFinalRound,theSeparator=this.state.finalRoundSep}
+    if(this.props.currentRound==='overall'){theItems2=this.state.floskSysOverall,theSeparator=this.state.overallRoundSep}
     theItems = theItems.sort(function (a, b) { return b.score - a.score })
     console.log('currentRound',this.props.menuToShow,this.state.flockNameAvailable,this.props.currentRound,theItems2)
     console.log('flockNameAvailable',flockNameAvailable)
@@ -254,7 +286,7 @@ class CommMarchMadness extends Component {
     if(!this.props.eventStarted){statToShow='Upcoming Event'}
     return (
       <><div>
-          {this.props.menuToShow==='Rams In Your Flock'?<>{this.props.flockNameAvailable ?<div className={styles.menu2Div1}>
+          {this.props.menuToShow==='Rams In Your Flock'&&this.props.currentRound!=='overall'?<>{this.props.flockNameAvailable ?<div className={styles.menu2Div1}>
               <p className={styles.titleP}><span>{this.props.flockNameWithNoSpaces}</span> {'- '+this.props.menuToShow}</p>
               <div id={styles.table1Div}>
               <table className={styles.table1}>
@@ -309,7 +341,7 @@ class CommMarchMadness extends Component {
               <p className={styles.noDataP1}>No "Rams in your flock" data available for this event</p>
               <p className={styles.noDataP2}>Check Events</p>
             </div>}</> : null}
-                {this.props.menuToShow === 'Flocks Among Flocks' ? <>{flockNameAvailable ? <div className={styles.menu2Div1}>
+                {this.props.menuToShow === 'Flocks Among Flocks' ||this.props.currentRound==='overall'? <>{flockNameAvailable ? <div className={styles.menu2Div1}>
                 <p className={styles.titleP}>YOUR FLOCK'S RANK AMONG THE HEARD</p>
                 <p className={styles.titleP2}>N/B A Flock should have atleast 4 members</p>
                 <div id={styles.table1Div}>
@@ -317,7 +349,7 @@ class CommMarchMadness extends Component {
                   <tr id={styles.table1Tr1}>
                     <th>Flock Rank In Herd</th>
                     <th>Flock Names</th>
-                    <th>Members No</th>
+                    {this.props.currentRound!=='overall'?<th>Members No</th>:<th>Average<br/>Members No</th>}
                     <th>Total Points</th>
                     <th>Average Points<br />Per RAM</th></tr>
                   {theItems2.map((item, index) => {
