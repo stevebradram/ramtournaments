@@ -76,7 +76,9 @@ class CommMarchMadness extends Component {
           if(sweet16Pick===undefined){sweet16Pick=false}
           if(elite8Pick===undefined){elite8Pick=false}
           if(final4Pick===undefined){final4Pick=false}
-          var theItem3={name:theData.ramName,score:0,pick:finalRoundPick,uid:theUserId,
+          var finalScore=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
+          finalScore=finalScore.toFixed(2);
+          var theItem3={name:theData.ramName,score:finalScore,pick:finalRoundPick,uid:theUserId,finalRoundPick:finalRoundPick,
             sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,finalScore:finalRoundScore,
             sweet16Pick:sweet16Pick,elite8Pick:elite8Pick,final4Pick:final4Pick,currentPick:theData.currentPick
           }
@@ -127,6 +129,7 @@ class CommMarchMadness extends Component {
          if(finalRoundScore===undefined){finalRoundScore=0}
          if(sweet16MembersNo===undefined){sweet16MembersNo=0}
          var theScore=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
+         theScore=theScore.toFixed(2);
          var avScore=0
          if(sweet16MembersNo===0||sweet16MembersNo===undefined){avScore=0}
          else{avScore=theScore/sweet16MembersNo
