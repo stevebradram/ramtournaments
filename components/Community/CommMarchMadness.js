@@ -163,7 +163,6 @@ class CommMarchMadness extends Component {
             flockSysRound1 = flockSysRound1.sort(function (a, b) { return b.avScore - a.avScore })
             flockSysRound2 = flockSysRound2.sort(function (a, b) { return b.avScore - a.avScore })
             floskSysOverall = floskSysOverall.sort(function (a, b) { return b.avScore - a.avScore })
-            this.setState({floskSysOverall})
             flockSysFinalRound.map((item,map)=>{
               n++
              if(item.membersNo<4){
@@ -223,7 +222,7 @@ class CommMarchMadness extends Component {
               r2++
              }
              //round1Sep:0,round2Sep:0,finalRoundSep:0
-             if(floskSysOverall.length===q){
+             if(floskSysOverall.length===r){
               overallFinal1 = overallFinal1.sort(function (a, b) { return b.avScore - a.avScore })
               overallFinal2 = overallFinal2.sort(function (a, b) { return b.avScore - a.avScore })
               this.setState({overallRoundSep:r2,floskSysOverall:[...overallFinal2,...overallFinal1] })
