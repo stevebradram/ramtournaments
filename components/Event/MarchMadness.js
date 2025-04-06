@@ -430,6 +430,7 @@ getMatchesInfo = async () => {
 
      var elite8Count=dataSnapshot.child('elite8').numChildren()
      var final4Count=dataSnapshot.child('final4').numChildren()
+     var finalRoundCount=dataSnapshot.child('finalRound').numChildren()
      if(round1Exists){
       var i=0
       round1Arr=theData.round1
@@ -531,6 +532,27 @@ getMatchesInfo = async () => {
           if(final4Count===i){
             this.setState({final4Arr:this.state.final4Arr})
             console.log('final4Arr ',this.state.final4Arr)
+          }
+        }
+      }
+
+      var finalRoundExists=dataSnapshot.child('finalRound').exists()
+      if(finalRoundExists){
+        var i=0
+        finalRoundArr=theData.finalRound
+       // console.log('round 14 item',round2Count,round2Arr)
+        for (var key in finalRoundArr) {
+          i++
+          var theId = key
+          var betPlayer = finalRoundArr[key]
+          this.state.finalArr.map((item2,index)=>{
+            if (item2.id === theId) {
+              item2['bet'] = betPlayer
+            }
+          })
+          if(final4Count===i){
+            this.setState({finalArr:this.state.finalArr})
+            console.log('finalRoundArr ',this.state.finalArr)
           }
         }
       }
@@ -708,7 +730,7 @@ getNCAABMatchesFinal = () => {
     var sweet16=theInfo.sweet16
     var elite8=theInfo.elite8
     var final4=theInfo.final4
-    var final=theInfo.nationalChampionship
+    var final=theInfo.finalRound
     var i=0,g=0,h=0,j=0,k=0,l=0,m=0
     for (var key in sweet16) {
       i++

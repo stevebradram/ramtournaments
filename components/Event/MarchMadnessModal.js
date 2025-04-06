@@ -698,7 +698,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
         this.sendToFirebaseSingle4(this.state.final4Edit,'stopFinal4Edit','final4Arr','final4Edit')
       }
       if(this.state.currentSelection==='finalRound'){
-        this.sendToFirebaseSingle4(this.state.finalRoundEdit,'stopFinalRoundEdit','finalArr','finalRoundEdit')
+        this.sendToFirebaseSingle4(this.state.finalRoundEdit,'stopFinalEdit','finalArr','finalRoundEdit')
       }
     }
     this.notify('Uploading....');
@@ -973,6 +973,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
     })
   }
   submitMatches = () => {
+   
     if(this.state.currentSelection==='round1'){this.round1Submit()}
     if(this.state.currentSelection==='round2'){this.round2Submit()}
     if(this.state.currentSelection==='sweet16'){this.sweet16Submit()}
