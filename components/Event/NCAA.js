@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 var allMatches = []
 var selectedRamUfcArray = [], selectedNflArray = [], selectedMarchMadnesArray = []
 //player1: 'West Virginia',player2: 'Memphis'
-const firstRound = [
+/*const firstRound = [
   {id:'c467e0e09ca315ff9d6914fc12a98324',time: 'Dec 20, 2024 - 20:00 PM', timeInMillis: 1734714000000, player1: 'West Virginia', p1Points: 'N/A', p1Rec: '11-1-0', p2Rec: '11-1-0', player2: 'Memphis', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/indiana.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/notre-dame.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
   {id:'b8cc3dac96e558a3ab0b871b36e108cb',time: 'Dec 21, 2024 - 12:00 PM', timeInMillis: 1734771600000, player1: 'James Madison', p1Rec: '11-1-0', p2Rec: '11-1-0', p1Points: 'N/A', p1Rec: '11-2-0', p2Rec: '11-2-0', player2: 'Western Kentucky', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/smu.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/penn-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
   {id:'22',time: 'Dec 21, 2024 - 16:00 PM', timeInMillis: 1734786000000, player1: 'Clemson', p1Rec: '10-3-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Texas', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/clemson.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/texas.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
@@ -39,8 +39,28 @@ const semiFinals = [
 ]
 const finals = [
   { time: 'Jan 20 2025, 19:00PM', timeInMillis: 1737388800000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Finals', },
-]
+]*/
 
+
+const round1 = [
+  { id: 'firstRoundMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'firstRoundMatch2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'firstRoundMatch3', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'firstRoundMatch4', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+]
+const quarterFinals = [
+  { id: 'quarterFinalsMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'quarterFinalsMatch2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'quarterFinalsMatch3', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'quarterFinalsMatch4', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+]
+const semiFinals = [
+  { id: 'semiFinalsMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Semi Finals' },
+  { id: 'semiFinalsMatch2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Semi Finals' },
+]
+const finals = [
+  { id: 'finalsMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Finals' },
+]
 var ncaafItems=[
   {
     "id": "c467e0e09ca315ff9d6914fc12a98324",
@@ -136,8 +156,9 @@ class NCAA extends Component {
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
-    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',isAdmin:false,
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:''
+    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',isAdmin:false,showCreateEventModal:false,
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:'',round1:'',final:'',
+    round1:'',round1Time:'',quarterFinals:'',semiFinals:'',finals:'',finalTime:'',round1Err:'',quarterFinalsErr:'',semiFinalsErr:'',finalsErr:'',hasUserPicked:false
   }
   componentDidMount = () => {
     //this.sendMatchesToFirebase()
@@ -571,7 +592,12 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NCAAF/" + this.state.theEventKey + '/bets/')
     var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NCAAF/')
     var currentEventUserInfo = '',totalScore=0
-    await selectedMatchesKeyDb.once('value', dataSnapshot => {
+   
+    userInfoDb.once('value', dataSnapshot => {
+      if (!dataSnapshot.val()){this.setState({hasUserPicked:false})}
+    else{
+      this.setState({hasUserPicked:true})
+     selectedMatchesKeyDb.once('value', dataSnapshot => {
       ////console.log('the key',dataSnapshot.val())
       if (!dataSnapshot.val()) return
       photoRefDb.once('value', dataSnapshot => {
@@ -707,6 +733,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       })
 
     })
+  }
+  })
   }
   loadOtherFights = async (theEventKey, theEventTitle) => {
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
@@ -978,6 +1006,146 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       }
     })
     }
+    createEvent = () => {
+      var round1Arr = {}, quarterFinalsArr = {}, semiFinalsArr = {}, finalsArr = {}, final4Arr = {}, finalArr = {}
+  
+      console.log('round1 length', round1.length)
+      var year =new Date().getFullYear()
+      var nextYear=year+1
+      var eventKey = 'NCAAF' + year+'-'+nextYear
+      var eventTitle = 'NCAAF ' + year+'-'+nextYear
+      var generalDb = firebase.database().ref('/theEvents/NCAAF/' + eventKey)
+  
+      if (this.state.round1Time.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
+      if (this.state.quarterFinals.length >= 3) { this.setState({ quarterFinalsErr: '' }) } else { this.setState({ quarterFinalsErr: 'Date must be filled' }) }
+      if (this.state.semiFinals.length >= 3) { this.setState({ semiFinalsErr: '' }) } else { this.setState({ semiFinalsErr: 'Date must be filled' }) }
+      if (this.state.finalTime.length >= 3) { this.setState({ finalsErr: '' }) } else { this.setState({ finalsErr: 'Date must be filled' }) }
+      
+      if (this.state.round1Time.length < 1 || this.state.quarterFinals.length < 1 || this.state.semiFinals.length < 1 ||
+        this.state.finalTime.length < 1 
+      ) {
+        this.notify('All fields must be filled')
+      } else {
+        
+        round1.map((item, index) => {
+          round1[index]['timeInMillis'] = new Date(this.state.round1Time).getTime()
+          round1[index]['commenceTime'] = this.state.round1Time
+  
+          ///adding
+          /*round1[index]['player1'] = item.id+'team 1'
+          round1[index]['player2'] = item.id+'team 2'
+          
+          var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+          ////
+          round1[index]['time'] = this.state.round1Time
+          round1Arr[item.id] = item
+       
+          if (round1.length === index + 1) {
+            console.log('round1Arr 1111',round1Arr)
+            generalDb.child('/firstRound/').update(round1Arr)
+          }
+        })
+        quarterFinals.map((item, index) => {
+          quarterFinals[index]['timeInMillis'] = new Date(this.state.quarterFinals).getTime()
+          quarterFinals[index]['commenceTime'] = this.state.quarterFinals
+          quarterFinals[index]['time'] = this.state.quarterFinals
+  
+           ///adding
+           /*quarterFinals[index]['player1'] = item.id+'team 1'
+           quarterFinals[index]['player2'] = item.id+'team 2'
+  
+           quarterFinals[index]['p1Points'] = 4
+           quarterFinals[index]['p2Points'] = 3
+  
+           var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+           ////
+  
+          quarterFinalsArr[item.id] = item
+          if (quarterFinals.length === index + 1) {
+            console.log('quarterFinalsArr 1111',quarterFinalsArr)
+            generalDb.child('/quarterFinals/').update(quarterFinalsArr)
+          }
+        })
+        semiFinals.map((item, index) => {
+          semiFinals[index]['timeInMillis'] = new Date(this.state.semiFinals).getTime()
+          semiFinals[index]['commenceTime'] = this.state.semiFinals
+          semiFinals[index]['time'] = this.state.semiFinals
+          ///adding
+         /* semiFinals[index]['player1'] = item.id+'team 1'
+          semiFinals[index]['player2'] = item.id+'team 2'
+  
+          semiFinals[index]['p1Points'] = 4
+          semiFinals[index]['p2Points'] = 3
+  
+          var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+          ////
+          semiFinalsArr[item.id] = item
+          if (semiFinals.length === index + 1) {
+            console.log('semiFinalsArr 1111',semiFinalsArr)
+            generalDb.child('/semiFinals/').update(semiFinalsArr)
+          }
+        })
+    
+        finals.map((item, index) => {
+          finals[index]['timeInMillis'] = new Date(this.state.finalTime).getTime()
+          finals[index]['commenceTime'] = this.state.finalTime
+          finals[index]['time'] = this.state.finalTime
+           ///adding
+           /*finals[index]['player1'] = item.id+'team 1'
+           finals[index]['player2'] = item.id+'team 2'
+   
+           finals[index]['p1Points'] = 4
+           finals[index]['p2Points'] = 3
+  
+           var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+           ////
+          finalsArr[item.id] = item
+          if (finals.length === index + 1) {
+            console.log('finalsArr 1111',finalsArr)
+            generalDb.child('/finals/').update(finalsArr,(error) => {
+              if (error) {
+                this.notify('An error occured while creating event, try again')
+              } else {
+                var firstMatchTime = [] //await Math.min(...theFightsJson.map(item =>  item.timeInMillis));
+                var lasttMatchTime = [] //await Math.min(...theFightsJson.map(item =>  item.timeInMillis));
+                var toTheEventsIds = { time:new Date(this.state.round1Time).getTime(), title:eventTitle, sportType:'NCAAF', endTime:new Date(this.state.finalTime).getTime(), getEventsTimeUpdate: new Date().getTime(),
+                  stopFirstRoundEdit:'N/A',stopQuarterEdit:'N/A',stopSemiEdit:'N/A',stopFinalEdit:'N/A',currentSelection:'firstRound'
+                 }
+                var editDbRef=firebase.database().ref('/theEvents/eventsIds/'+eventKey+'/')
+                var editDbRef2=firebase.database().ref('/theEvents/NCAAF/eventIds/'+eventKey+'/')
+                editDbRef.set(toTheEventsIds)
+                editDbRef2.set(toTheEventsIds)
+                this.notify('Event created successfully')
+                this.setState({showCreateEventModal:false})
+              }
+            })
+          }
+        })
+  
+      }
+    }
+    inputChange = async (e) => {
+      var value = e.target.value
+      console.log('valueee',value)
+      
+      await this.setState({ [e.target.id]: value })
+      if (this.state.round1Time.length >= 3) { this.setState({ round1Err: '' }) }
+      if (this.state.quarterFinals.length >= 3) { this.setState({quarterFinalsErr: '' }) }
+      if (this.state.semiFinals.length >= 3) { this.setState({ semiFinalsErr: '' }) }
+      if (this.state.finalTime.length >= 3) { this.setState({ finalsErr: '' }) }
+    }
+    doNothing=(e)=>{
+      e.preventDefault()
+      e.stopPropagation()
+      }
   render() {
    // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
@@ -1039,8 +1207,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
             {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal(itemToModals)}>Make Picks</p>}
           </div>
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div>
+        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
           <p className={style.eventP} onClick={() => this.setState({ ncaaModal: true })}>Enter Event Details</p>
+          <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New NCAAF Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal(itemToModals)}>
@@ -1159,7 +1328,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isFirstRoundPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isFirstRoundPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1234,7 +1403,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isQuarterFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isQuarterFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1309,7 +1478,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isSemiFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isSemiFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1382,7 +1551,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1399,6 +1568,26 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
         {this.state.ncaaModal ? <div className={style.detailsModal} onClick={() => this.setState({ ncaaModal: false })}><NCAAModal onClick={this.handleChildClick} /></div> : null}
+       
+        {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={()=>this.setState({showCreateEventModal:false})}>
+            <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
+              <p className={style.eventHeadP}>Create NCAAF Event</p>
+              <p className={style.eventTitleP}>Enter Round 1 Start Date/Time</p>
+              {/*<DateTimePicker id='round1'onChange={(event)=>this.onChange(event)} value={this.state.round1} />*/}
+              <input className={style.eventInput} id='round1Time' placeholder='Enter your RAM name' type='datetime-local' value={this.state.round1Time} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.round1Err}</p>
+              <p className={style.eventTitleP}>Enter Quarter Finals Start Date/Time</p>
+              <input className={style.eventInput} id='quarterFinals' placeholder='Enter your RAM name' type='datetime-local' value={this.state.quarterFinals} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.quarterFinalsErr}</p>
+              <p className={style.eventTitleP}>Enter Semi Finals Start Date/Time</p>
+              <input className={style.eventInput} id='semiFinals' placeholder='Enter your RAM name' type='datetime-local' value={this.state.semiFinals} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.semiFinalsErr}</p>
+              <p className={style.eventTitleP}>Enter Finals Start Date/Time</p>
+              <input className={style.eventInput} id='finalTime' placeholder='Enter your RAM name' type='datetime-local' value={this.state.finalTime} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.finalsErr}</p>
+              <button className={style.submitBtn} onClick={() => this.createEvent()}>Create Event</button>
+            </div>
+          </div> : null}
         <ToastContainer />
       </>
     )

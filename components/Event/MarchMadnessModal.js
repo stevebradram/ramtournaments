@@ -86,7 +86,7 @@ class NCAAModal extends Component {
 
     if(this.state.currentSelection==='elite8'){elite8Edit=incomingData,this.setState({elite8Edit})}
     if(this.state.currentSelection==='final4'){final4Edit=incomingData,this.setState({final4Edit})}
-    //if(this.state.currentSelection==='finalRound'){finalRoundEdit=incomingData,this.setState({finalRoundEdit})}
+    if(this.state.currentSelection==='finalRound'){finalRoundEdit=incomingData,this.setState({finalRoundEdit});console.log('nzukiiiini',finalRoundEdit)}
 
     }
    
@@ -697,6 +697,9 @@ sortOddsJson=async(theArr,stateEdit)=>{
       if(this.state.currentSelection==='final4'){
         this.sendToFirebaseSingle4(this.state.final4Edit,'stopFinal4Edit','final4Arr','final4Edit')
       }
+      if(this.state.currentSelection==='finalRound'){
+        this.sendToFirebaseSingle4(this.state.finalRoundEdit,'stopFinalRoundEdit','finalArr','finalRoundEdit')
+      }
     }
     this.notify('Uploading....');
   }
@@ -775,7 +778,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
        var dataLink ='/NCAAB/'+eventKey+'/'+this.state.currentSelection//1737147600000
        console.log('combined items',theArr.length, theArr)//1737235800000
        var eventIdsEdit = {
-      [editTime]:minTime,currentSelection:this.state.currentSelection,time:minTime}
+      [editTime]:minTime,currentSelection:this.state.currentSelection}
        theArr.map((item,index) => {
          v++
          delete theArr[index]['error']
@@ -825,7 +828,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
        var dataLink ='/NCAAB/'+eventKey+'/final/'+this.state.currentSelection//1737147600000
        console.log('combined items',theArr.length, theArr)//1737235800000
        var eventIdsEdit = {
-      [editTime]:minTime,currentSelection:this.state.currentSelection,time:minTime}
+      [editTime]:minTime,currentSelection:this.state.currentSelection}
        theArr.map((item,index) => {
          v++
          delete theArr[index]['error']
@@ -873,7 +876,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
        var dataLink ='/NCAAB/'+eventKey+'/final/'+this.state.currentSelection//1737147600000
        console.log('combined items',theArr.length, theArr)//1737235800000
        var eventIdsEdit = {
-      [editTime]:minTime,currentSelection:this.state.currentSelection,time:minTime}
+      [editTime]:minTime,currentSelection:this.state.currentSelection}
        theArr.map((item,index) => {
          v++
          delete theArr[index]['error']
@@ -976,6 +979,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
 
     if(this.state.currentSelection==='elite8'){this.elite8Submit(this.state.elite8Edit,'elite8Edit')}
     if(this.state.currentSelection==='final4'){this.elite8Submit(this.state.final4Edit,'final4Edit')}
+    if(this.state.currentSelection==='finalRound'){this.elite8Submit(this.state.finalRoundEdit,'finalRoundEdit')}
   }
 
   getLogos = async (theArr) => {
@@ -1133,8 +1137,10 @@ sortOddsJson=async(theArr,stateEdit)=>{
           <div className={styles.listDiv} key={index}>
             <div className={styles.theCont0}>
               <div className={styles.theCont01}>
-                <p>{item.matchType+' Match '+(index+1)}</p>
-                <p>{'id '+item.id}</p>
+                {type!=='finalRound'?
+                <p>{item.matchType+' Match '+(index+1)}</p>:
+                <p>{item.matchType}</p>}
+                 {type!=='finalRound'?<p>{'id '+item.id}</p>:null}
               </div>
               <div className={styles.theCont}>
                 <div className={styles.theContLeft}>
@@ -1197,6 +1203,10 @@ sortOddsJson=async(theArr,stateEdit)=>{
           <div className={styles.divCont}>
           <p className={styles.listHeadP}>Final 4</p>
           <div className={styles.listCont}>{this.itemComponent(final4Edit, 'final4')}</div></div>:null}
+          {this.state.currentSelection==='finalRound'?
+          <div className={styles.divCont}>
+          <p className={styles.listHeadP}>Championship</p>
+          <div className={styles.listCont}>{this.itemComponent(finalRoundEdit, 'finalRound')}</div></div>:null}
           {/*this.state.currentSelection==='wildCard'||this.state.currentSelection==='conferenceChampionship'? 
         <div className={styles.divCont}>
           <p className={styles.listHeadP}>Conference Championship</p>

@@ -69,7 +69,7 @@ class CommMarchMadness extends Component {
           final4Pick=theData.final4Pick  
           if(sweet16Score===undefined){sweet16Score='0'};
           if(elite8Score===undefined){elite8Score='0'};
-          if(final4Score===final4Score){final4Score='0'};
+          if(final4Score===undefined){final4Score='0'};
           if(finalRoundScore===undefined){finalRoundScore='0'}
 
           if(finalRoundPick===undefined){finalRoundPick=false}
@@ -89,6 +89,7 @@ class CommMarchMadness extends Component {
             this.setState({round1Arr:round1Arr,round2Arr:round2Arr,finalRoundArr:finalRoundArr,theItems:round1Arr})
             console.log('round1Arr 6000',round1Arr)
             console.log('round2Arr 7000',round2Arr)
+            console.log('finalRoundArr 7000',finalRoundArr)
             this.theFlocksData(theEventKey)
           }
         })

@@ -1,0 +1,33 @@
+[
+    {
+        "id": "03dd880f071a65053e37000d3d826e14",
+        "sport_key": "americanfootball_nfl",
+        "sport_title": "NFL",
+        "commence_time": "2024-12-18T02:13:00Z",
+        "home_team": "West Virginia Mountaineers",
+        "away_team": "Memphis Tigers",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Indiana",
+                        "price": -135
+                      },
+                      {
+                        "name": "Notre Dame",
+                        "price": 114
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    }
+]

@@ -22,7 +22,13 @@ const quarterFinalsEdit=[
 
 class NCAAModal extends Component {
   state={firstRoundEdit,quarterFinalsEdit,submitErr:"",showProgressBar:false}
-    doNothing=(event)=>{
+   
+  componentDidMount=()=>{
+    var eventKey='NCAAF_'+new Date().getFullYear()+'-'+(new Date().getFullYear()+1)
+    console.log('the event key',eventKey)
+   // return
+  }
+  doNothing=(event)=>{
         event.preventDefault()
         event.stopPropagation()
        }
@@ -60,7 +66,8 @@ class NCAAModal extends Component {
       }
        submitMatches=()=>{
   this.showProgressBar()
-  var eventKey='NCAAF_2024-2025'
+  var eventKey='NCAAF_'+new Date().getFullYear()+'-'+(new Date().getFullYear()+1)
+  var theTitle='NCAAF '+new Date().getFullYear()+'-'+(new Date().getFullYear()+1)
   var generalDb=firebase.database().ref('/events1000/ncaaf/'+eventKey+'/')
   var eventsIdDb=firebase.database().ref('/events1000/')
   if (navigator.onLine === false) {
@@ -88,7 +95,7 @@ class NCAAModal extends Component {
         }else{
           toDbQuarterAr[item.id]=item
         }
-        var theArr={time:1734728400000,sportType:'NCAAF',title:'NCAAF 2024-2025'}
+        var theArr={time:1734728400000,sportType:'NCAAF',title:theTitle}
         console.log('toDbFirstArr',toDbFirstArr)
         console.log('toDbQuarterAr',toDbQuarterAr)
         if(theItems.length===v){

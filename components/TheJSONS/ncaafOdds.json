@@ -1,0 +1,251 @@
+[
+    {
+        "id": "52e17c20a1baf0d93de4edbcbe20ec79",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-08T00:50:00Z",
+        "home_team": "Indiana",
+        "away_team": "Notre Dame",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Indiana",
+                        "price": -135
+                      },
+                      {
+                        "name": "Notre Dame",
+                        "price": 114
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "119e614495fedf8e25d6e5f7acf57ad3",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-08T01:50:00Z",
+        "home_team": "SMU",
+        "away_team": "Penn St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T01:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T01:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "SMU",
+                        "price": -215
+                      },
+                      {
+                        "name": "Penn St.",
+                        "price": 251
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "6be36c6d2e14397896e6cbdf0065e9e1",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-08T02:50:00Z",
+        "home_team": "Clemson",
+        "away_team": "Texas",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T02:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T02:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Clemson",
+                        "price": -363
+                      },
+                      {
+                        "name": "Texas",
+                        "price": 169
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "59dcceca28d91f849ffc29b2d6c319a9",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-08T05:50:00Z",
+        "home_team": "Tennessee",
+        "away_team": "Ohio St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T05:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T05:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Tennessee",
+                        "price": -216
+                      },
+                      {
+                        "name": "Ohio St.",
+                        "price": 290
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "ba40383813a23839b90e224fbe509ae7",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-09T00:50:00Z",
+        "home_team": "Boise St.",
+        "away_team": "Penn St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-09T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-09T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Boise St.",
+                        "price": -154
+                      },
+                      {
+                        "name": "Penn St.",
+                        "price": 310
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "2548fff91c65fb160337ab4f0d139e98",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-09T01:50:00Z",
+        "home_team": "Texas",
+        "away_team": "Arizona St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Texas",
+                        "price": -120
+                      },
+                      {
+                        "name": "Arizona St.",
+                        "price": 150
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "6c2d5cd6f963641a5b731750b1adc926",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-09T02:50:00Z",
+        "home_team": "Oregon",
+        "away_team": "Ohio St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Oregon",
+                        "price": -175
+                      },
+                      {
+                        "name": "Ohio St.",
+                        "price": 166
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "9ad94a26a6a4064b2de660fccb95a333",
+        "sport_key": "americanfootball_cfl",
+        "sport_title": "NCAAF",
+        "commence_time": "2025-04-09T03:50:00Z",
+        "home_team": "Notre Dame",
+        "away_team": "Georgia",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Notre Dame",
+                        "price": -325
+                      },
+                      {
+                        "name": "Georgia",
+                        "price": 198
+                        
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    }
+]

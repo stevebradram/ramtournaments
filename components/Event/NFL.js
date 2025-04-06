@@ -21,26 +21,46 @@ var allMatches = []
 var selectedRamUfcArray = [], selectedNflArray = [], selectedMarchMadnesArray = []
 //player1: 'West Virginia',player2: 'Memphis'
 const firstRound = [
-  {id:'c467e0e09ca315ff9d6914fc12a98324',time: 'Dec 20, 2024 - 20:00 PM', timeInMillis: 1734714000000, player1: 'West Virginia', p1Points: 'N/A', p1Rec: '11-1-0', p2Rec: '11-1-0', player2: 'Memphis', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/indiana.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/notre-dame.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'b8cc3dac96e558a3ab0b871b36e108cb',time: 'Dec 21, 2024 - 12:00 PM', timeInMillis: 1734771600000, player1: 'James Madison', p1Rec: '11-1-0', p2Rec: '11-1-0', p1Points: 'N/A', p1Rec: '11-2-0', p2Rec: '11-2-0', player2: 'Western Kentucky', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/smu.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/penn-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'22',time: 'Dec 21, 2024 - 16:00 PM', timeInMillis: 1734786000000, player1: 'Clemson', p1Rec: '10-3-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Texas', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/clemson.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/texas.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'55',time: 'Dec 21, 2024 - 20:00 PM', timeInMillis: 1734800400000, player1: 'Tennessee', p1Rec: '10-2-0', p2Rec: '10-2-0', p1Points: 'N/A', player2: 'Ohio St.', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/tennessee.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/ohio-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
+  {id:'c467e0e09ca315ff9d6914fc12a98324',time: 'Dec 20, 2024 - 20:00 PM', timeInMillis: 1734714000000, player1: 'West Virginia', p1Points: 'N/A', p1Rec: '11-1-0', p2Rec: '11-1-0', player2: 'Memphis', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/indiana.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/notre-dame.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
+  {id:'b8cc3dac96e558a3ab0b871b36e108cb',time: 'Dec 21, 2024 - 12:00 PM', timeInMillis: 1734771600000, player1: 'James Madison', p1Rec: '11-1-0', p2Rec: '11-1-0', p1Points: 'N/A', p1Rec: '11-2-0', p2Rec: '11-2-0', player2: 'Western Kentucky', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/smu.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/penn-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
+  {id:'22',time: 'Dec 21, 2024 - 16:00 PM', timeInMillis: 1734786000000, player1: 'Clemson', p1Rec: '10-3-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Texas', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/clemson.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/texas.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
+  {id:'55',time: 'Dec 21, 2024 - 20:00 PM', timeInMillis: 1734800400000, player1: 'Tennessee', p1Rec: '10-2-0', p2Rec: '10-2-0', p1Points: 'N/A', player2: 'Ohio St.', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/tennessee.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/ohio-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
 ]
 //
 const quarterFinals = [
-  { time: 'Dec 31 2024, 19:30 PM', timeInMillis: 1735662600000, player1: 'Boise St.', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Penn State/SMU', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/boise-st.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 13:00PM', timeInMillis: 1735725600000, player1: 'Clemson/Texas', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Arizona St.', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/arizona-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 17:00PM', timeInMillis: 1735740000000, player1: 'Oregon', p1Rec: '13-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Ohio State/Tennessee', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/oregon.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 20:45PM', timeInMillis: 1735753500000, player1: 'Notre Dame/Indiana', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Georgia', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/georgia.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
+  { time: 'Dec 31 2024, 19:30 PM', timeInMillis: 1735662600000, player1: 'Boise St.', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Penn State/SMU', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/boise-st.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
+  { time: 'Jan 1 2025, 13:00PM', timeInMillis: 1735725600000, player1: 'Clemson/Texas', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Arizona St.', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/arizona-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
+  { time: 'Jan 1 2025, 17:00PM', timeInMillis: 1735740000000, player1: 'Oregon', p1Rec: '13-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Ohio State/Tennessee', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/oregon.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
+  { time: 'Jan 1 2025, 20:45PM', timeInMillis: 1735753500000, player1: 'Notre Dame/Indiana', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Georgia', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/georgia.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
 ]
 const semiFinals = [
-  { time: 'Jan 9 2025, 19:30PM', timeInMillis: 1736440200000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
-  { time: 'Jan 10 2025, 19:30PM', timeInMillis: 1736526600000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
+  { time: 'Jan 9 2025, 19:30PM', timeInMillis: 1736440200000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
+  { time: 'Jan 10 2025, 19:30PM', timeInMillis: 1736526600000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
 ]
 const finals = [
-  { time: 'Jan 20 2025, 19:00PM', timeInMillis: 1737388800000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Finals', },
+  { time: 'Jan 20 2025, 19:00PM', timeInMillis: 1737388800000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Finals', },
 ]
-
+const wildCardRound = [
+  { id: 'wildCardRound1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'wildCardRound2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'wildCardRound3', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'wildCardRound4', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'wildCardRound5', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
+  { id: 'wildCardRound6', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' }
+]
+const divisionalRound = [
+  { id: 'divisionalRound1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'divisionalRound2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'divisionalRound3', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+  { id: 'divisionalRound4', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Quarter Finals' },
+]
+const conChampRound = [
+  { id: 'conChampRound1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Semi Finals' },
+  { id: 'conChampRound2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Semi Finals' },
+]
+const superBowlRound = [
+  { id: 'superBowlRound1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A',player2NickName:'N/A',player1NickName:'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Finals' },
+]
 var ncaafItems=[
   {
     "id": "c467e0e09ca315ff9d6914fc12a98324",
@@ -312,8 +332,9 @@ class NCAA extends Component {
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [], pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0,
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, nflModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
-    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',eventToNFLModal:'',
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,itemsToNFLModal:[]
+    isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',eventToNFLModal:'',showCreateEventModal:false,
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,itemsToNFLModal:[],wildCardTime:'',wildCardErr:'',divisionalsTime:'',
+    divisionalsTime:'',divisionalsErr:'',conChampTime:'',conChampErr:'',superBowlTime:'',superBowlErr:'',hasUserPicked:false
   }
   componentDidMount = () => {
     //this.sendMatchesToFirebase()
@@ -811,7 +832,11 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NFL/" + this.state.theEventKey + '/bets/')
     var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NFL/')
     var currentEventUserInfo = '',totalScore=0
-    await selectedMatchesKeyDb.once('value', dataSnapshot => {
+    userInfoDb.once('value', dataSnapshot => {
+      if (!dataSnapshot.val()){this.setState({hasUserPicked:false})}
+    else{
+      this.setState({hasUserPicked:true})
+     selectedMatchesKeyDb.once('value', dataSnapshot => {
       //////console.log('the key',dataSnapshot.val())
       if (!dataSnapshot.val()) return
       photoRefDb.once('value', dataSnapshot => {
@@ -948,6 +973,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
     })
   }
+})
+  }
   loadOtherFights = async (theEventKey, theEventTitle) => {
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
@@ -966,130 +993,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       })
     })
   }
-  getGamesInfo = async () => {
-    var userInfoDb = firebase.database().ref('/events/')
 
-    await userInfoDb.once('value', dataSnapshot => {
-      var theInfo = dataSnapshot.val()
-      if (theInfo.ramUfc !== false) { this.setState({ eventRamUfc: true, ufcSubHeadings: theInfo.ramUfc.split(':') }); this.getUfcItems('ramUfc'); }
-      if (theInfo.marchMadness === true) { this.setState({ eventMarchMadness: true }), this.getNflMarchMadnessItems('marchMadness', 'marchMadnessArray') }
-      if (theInfo.nfl === true) { this.setState({ eventNfl: true }), this.getNflMarchMadnessItems('nfl', 'nflArray') }
-
-    })
-  }
-  getUfcItems = async (name) => {
-    var userInfoDb = firebase.database().ref('/activeEvents/').child(name)
-
-    userInfoDb.once('value', dataSnapshot => {
-      //////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      //////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
-      var mainCardCount = dataSnapshot.child('mainCard').numChildren()
-      var prelimsCount = dataSnapshot.child('prelims').numChildren()
-      var theInfo = dataSnapshot.val()
-      //////console.log('the event eventSelection',theInfo) 
-      if (theInfo.mainCard) {
-        var array1 = []
-        //////console.log('iko maincarddddd',theInfo.mainCard)
-        var i = 0
-        for (var key in theInfo.mainCard) {
-          i++
-          var theData = theInfo.mainCard[key]
-          var array2 = { theId: key, ...theData }
-          array1.push(array2)
-          if (i === mainCardCount) {
-            //////console.log('whole maincard Array',array1)
-            this.setState({ ramUfcMaincardArray: array1 })
-            this.setState({ theItems: array1 })
-          }
-        }
-      }
-      if (theInfo.prelims) {
-        var array1 = []
-        //////console.log('iko prelimsssssss')
-        var i = 0
-        for (var key in theInfo.prelims) {
-          i++
-          var theData = theInfo.prelims[key]
-          var array2 = { theId: key, ...theData }
-          array1.push(array2)
-          if (i === prelimsCount) {
-            //////console.log('whole prelimms Array',array1)
-            this.setState({ ramUfcPrelimsArray: array1 })
-          }
-        }
-        //prelimsArray
-      } else {
-        //////console.log('hakuna prelimsssssss')
-      }
-    })
-  }
-  getNflMarchMadnessItems = async (name, theArr) => {
-    var userInfoDb = firebase.database().ref('/activeEvents/').child(name)
-    userInfoDb.once('value', dataSnapshot => {
-      var count = dataSnapshot.numChildren()
-      var theInfo = dataSnapshot.val()
-      //////console.log('the event eventSelection',theInfo) 
-      if (theInfo) {
-        var array1 = []
-        //////console.log('iko maincarddddd',theInfo)
-        var i = 0
-        for (var key in theInfo) {
-          i++
-          var theData = theInfo[key]
-          var array2 = { theId: key, ...theData }
-          array1.push(array2)
-          if (i === count) {
-            //////console.log('whole maincard Array',array1)
-            this.setState({ [theArr]: array1 })
-          }
-        }
-      }
-    })
-  }
-
-  getRamInfo = async (userId, event) => {
-    var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents').child(event)
-    userInfoDb.once('value', dataSnapshot => {
-      var theInfo = dataSnapshot.val()
-      if (event === 'ramUfc') { selectedRamUfcArray = theInfo }
-      if (event === 'marchMadness') { selectedMarchMadnesArray = theInfo }
-      if (event === 'nfl') { selectedNflArray = theInfo }
-      //hapa ndo nimefika
-      ////////console.log('the event eventSelection',theInfo.eventSelection) 
-      var currentRank = ''
-      if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
-      this.setState({
-        flockName: theInfo.flockName, teamName: theInfo.teamName, currentScore: theInfo.currentScore,
-        bestPossibleScore: theInfo.bestPossibleScore, currentRank: currentRank, theItems: theInfo.eventSelection
-      })
-      this.getCurrentScore(theInfo.eventSelection)
-      //localStorage.set('userDetails', userDetails);
-    })
-    return
-
-    this.setState({ theRamUfc: theRamUfc, theMarchMadness, theNfl, theFifa })
-    this.setState({ theRamUfc: theRamUfc }, () => {
-      ////////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
-    });
-    ////////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
-    var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents')
-    if (theRamUfc === 'selected') {
-      this.setState({ dataAvailable: true, clickHere1: 'CLICK HERE TO EDIT YOUR PICKS', clickHere2: 'CLICK HERE TO EDIT THE GAME' })
-      userInfoDb.child('ramUfc').once('value', dataSnapshot => {
-        var theInfo = dataSnapshot.val()
-        ////////console.log('the event eventSelection',theInfo.eventSelection) 
-        var currentRank = ''
-        if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
-        this.setState({
-          flockName: theInfo.flockName, teamName: theInfo.teamName, currentScore: theInfo.currentScore,
-          bestPossibleScore: theInfo.bestPossibleScore, currentRank: currentRank, theItems: theInfo.eventSelection
-        })
-        this.getCurrentScore(theInfo.eventSelection)
-        //localStorage.set('userDetails', userDetails);
-      })
-    }
-    //else{this.setState({theItems:mainCard})}
-  }
   getCurrentScore = async (theItems) => {
     var i = 0, theAmount = []
     theItems.map((item, index) => {
@@ -1218,6 +1122,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       sortOddsJson(theOddsJson)
     }
     openNFLModal=()=>{
+      console.log('detailsssssss',this.state.theEventKey)
       this.setState({itemsToNFLModal:[]})
       var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey)
       editDbRef.once('value', dataSnapshot => {
@@ -1230,9 +1135,10 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         if(selection==='wildCard'&&new Date().getTime()>wildCartEditExpiry){
           console.log('wild card expired')
           this.setState({eventToNFLModal:'divisionalRound',itemsToNFLModal:this.state.quarterFinalsArray,nflModal:true})
-        }else if(selection==='wildCard'&&new Date().getTime()<wildCartEditExpiry){
+        }else if(selection==='wildCard'&&(new Date().getTime()<wildCartEditExpiry)||wildCartEditExpiry==='N/A'){
           var allArray=[...this.state.firstRoundArray,...this.state.quarterFinalsArray,...this.state.semiFinalsArray,...this.state.finalArray]
-          this.setState({eventToNFLModal:'wildCard',itemsToNFLModal:allArray,nflModal:true})
+          this.setState({eventToNFLModal:'wildCard',itemsToNFLModal:this.state.firstRoundArray,nflModal:true})
+          console.log('hapa kwa all finalArray',this.state.firstRoundArray)
         }
         if(selection==='divisionalRound'&&new Date().getTime()>divisionalRoundEditExpiry){
           console.log('divisional Round expired')
@@ -1262,6 +1168,169 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       })
       //this.setState({nflModal:true,eventToNFLModal:''})
     }
+    inputChange = async (e) => {
+      var value = e.target.value
+      console.log('valueee',value)
+      
+      await this.setState({ [e.target.id]: value })
+      if (this.state.wildCardTime.length >= 3) { this.setState({wildCardErr: '' }) }
+      if (this.state.divisionalsTime.length >= 3) { this.setState({divisionalsErr: '' }) }
+      if (this.state.conChampTime.length >= 3) { this.setState({ conChampErr: '' }) }
+      if (this.state.superBowlTime.length >= 3) { this.setState({ superBowlErr: '' }) }
+    }
+    checkEvent = () => {
+      var checkEventDb = firebase.database().ref('/theEvents/NFL/eventsIds/')
+      var currentYear =new Date().getFullYear()
+      var nextYear=currentYear+1
+   
+  
+      if (this.state.wildCardTime.length >= 3) { this.setState({wildCardErr: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
+      if (this.state.divisionalsTime.length >= 3) { this.setState({divisionalsErr: '' }) } else { this.setState({ quarterFinalsErr: 'Date must be filled' }) }
+      if (this.state.conChampTime.length >= 3) { this.setState({conChampErr: '' }) } else { this.setState({ semiFinalsErr: 'Date must be filled' }) }
+      if (this.state.superBowlTime.length >= 3) { this.setState({superBowlErr: '' }) } else { this.setState({ finalsErr: 'Date must be filled' }) }
+      
+      if (this.state.wildCardTime.length < 1 || this.state.divisionalsTime.length < 1 || this.state.conChampTime.length < 1 ||
+        this.state.superBowlTime.length < 1 
+      ) {
+        this.notify('All fields must be filled')
+      } else {
+        var wildCardYear=new Date(this.state.wildCardTime).getFullYear()
+        var divisionalsYear=new Date(this.state.divisionalsTime).getFullYear()
+        var conChampYear=new Date(this.state.conChampTime).getFullYear()
+        var superBowlYear=new Date(this.state.superBowlTime).getFullYear()
+        if(wildCardYear<currentYear){this.setState({wildCardErr:'Year must be current or future'});return}
+        if(divisionalsYear<currentYear){this.setState({divisionalsErr:'Year must be current or future'});return}
+        if(conChampYear<currentYear){this.setState({conChampErr:'Year must be current or future'});return}
+        if(superBowlYear<currentYear){this.setState({superBowlErr:'Year must be current or future'});return}
+       
+
+      var eventKey = 'NFLPlayoffs-' + wildCardYear
+      var eventTitle = 'NFL PLAYOFFS  ' + wildCardYear
+      console.log('wildCardYear',wildCardYear,divisionalsYear,conChampYear,superBowlYear,eventKey,eventTitle)
+
+      //return
+      checkEventDb.child(eventKey).once('value', dataSnapshot => {
+        if (dataSnapshot.exists()) {
+          var isFilled=dataSnapshot.val().stopWildCardEdit
+          if(isFilled==='N/A'){
+            this.createEvent(eventKey,eventTitle)
+          }else{
+            this.notify(wildCardYear+' Event Already Filled')
+          }
+        }else{
+          this.createEvent(eventKey,eventTitle)
+        }
+      })
+    }
+    }
+    createEvent = (eventKey,eventTitle) => {
+      var wildCardRoundArr = {}, divisionalRoundArr = {}, conChampRoundArr = {}, superBowlRoundArr = {}
+      var generalDb = firebase.database().ref('/theEvents/NFL/' + eventKey)
+        wildCardRound.map((item, index) => {
+          wildCardRound[index]['timeInMillis'] = new Date(this.state.wildCardTime).getTime()
+          wildCardRound[index]['commenceTime'] = this.state.wildCardTime
+  
+          ///adding
+          /*round1[index]['player1'] = item.id+'team 1'
+          round1[index]['player2'] = item.id+'team 2'
+          
+          var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+          ////
+          wildCardRound[index]['time'] = this.state.wildCardTime
+          wildCardRoundArr[item.id] = item
+       
+          if (wildCardRound.length === index + 1) {
+            console.log('wildCardRound 1111',wildCardRoundArr)
+            generalDb.child('/wildCard/').update(wildCardRoundArr)
+          }
+        })
+        divisionalRound.map((item, index) => {
+          divisionalRound[index]['timeInMillis'] = new Date(this.state.divisionalsTime).getTime()
+          divisionalRound[index]['commenceTime'] = this.state.divisionalsTime
+          divisionalRound[index]['time'] = this.state.divisionalsTime
+  
+           ///adding
+           /*quarterFinals[index]['player1'] = item.id+'team 1'
+           quarterFinals[index]['player2'] = item.id+'team 2'
+  
+           quarterFinals[index]['p1Points'] = 4
+           quarterFinals[index]['p2Points'] = 3
+  
+           var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+           ////
+  
+           divisionalRoundArr[item.id] = item
+          if (divisionalRound.length === index + 1) {
+            console.log('divisionalRoundArr 1111',divisionalRoundArr)
+            generalDb.child('/divisionalRound/').update(divisionalRoundArr)
+          }
+        })
+        conChampRound.map((item, index) => {
+          conChampRound[index]['timeInMillis'] = new Date(this.state.conChampTime).getTime()
+          conChampRound[index]['commenceTime'] = this.state.conChampTime
+          conChampRound[index]['time'] = this.state.conChampTime
+          ///adding
+         /* semiFinals[index]['player1'] = item.id+'team 1'
+          semiFinals[index]['player2'] = item.id+'team 2'
+  
+          semiFinals[index]['p1Points'] = 4
+          semiFinals[index]['p2Points'] = 3
+  
+          var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+          ////
+          conChampRoundArr[item.id] = item
+          if (semiFinals.length === index + 1) {
+            console.log('conChampRoundArr 1111',conChampRoundArr)
+            generalDb.child('/conferenceChampionship/').update(conChampRoundArr)
+          }
+        })
+    
+        superBowlRound.map((item, index) => {
+          superBowlRound[index]['timeInMillis'] = new Date(this.state.superBowlTime).getTime()
+          superBowlRound[index]['commenceTime'] = this.state.superBowlTime
+          superBowlRound[index]['time'] = this.state.superBowlTime
+           ///adding
+           /*finals[index]['player1'] = item.id+'team 1'
+           finals[index]['player2'] = item.id+'team 2'
+   
+           finals[index]['p1Points'] = 4
+           finals[index]['p2Points'] = 3
+  
+           var isOdd=this.isOdd(index+1)
+          if(isOdd){round1[index]['winner'] = item.id+'team 1'}
+          else{round1[index]['winner'] = item.id+'team 2'}*/
+           ////
+          superBowlRoundArr[item.id] = item
+          if (finals.length === index + 1) {
+            console.log('superBowlRoundArr 1111',superBowlRoundArr)
+            generalDb.child('/superBowl/').update(superBowlRoundArr,(error) => {
+              if (error) {
+                this.notify('An error occured while creating event, try again')
+              } else {
+                var toTheEventsIds = { time:new Date(this.state.wildCardTime).getTime(), title:eventTitle, sportType:'NFL', endTime:new Date(this.state.superBowlTime).getTime(), getEventsTimeUpdate: new Date().getTime(),
+                  stopWildCardEdit:'N/A',stopDivisionalRoundEdit:'N/A',stopConferenceChampionshipEdit:'N/A',stopSuperBowlEdit:'N/A',currentSelection:'wildCard'
+                 }
+                var editDbRef=firebase.database().ref('/theEvents/eventsIds/'+eventKey+'/')
+                var editDbRef2=firebase.database().ref('/theEvents/NFL/eventsIds/'+eventKey+'/')
+                editDbRef.set(toTheEventsIds)
+                editDbRef2.set(toTheEventsIds)
+                this.notify('Event created successfully')
+                this.setState({showCreateEventModal:false})
+              }
+            })
+          }
+        })
+    }
+    doNothing=(e)=>{
+      e.preventDefault()
+      e.stopPropagation()
+      }
   render() {
    // //console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     ////console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
@@ -1428,7 +1497,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1NickName}</p>
+                  {item.player1NickName!=='N/A'?<p className={style.P1}>{item.player1NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1438,7 +1508,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2NickName}</p>
+                  {item.player2NickName!=='N/A'?<p className={style.P1}>{item.player2NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1449,7 +1520,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isFirstRoundPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isFirstRoundPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1503,7 +1574,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1NickName}</p>
+                  {item.player1NickName!=='N/A'?<p className={style.P1}>{item.player1NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1513,7 +1585,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2NickName}</p>
+                  {item.player2NickName!=='N/A'?<p className={style.P1}>{item.player2NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1524,7 +1597,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isQuarterFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isQuarterFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1578,7 +1651,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1NickName}</p>
+                  {item.player1NickName!=='N/A'?<p className={style.P1}>{item.player1NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1588,7 +1662,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2NickName}</p>
+                  {item.player2NickName!=='N/A'?<p className={style.P1}>{item.player2NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1599,7 +1674,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isSemiFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isSemiFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1651,7 +1726,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1NickName}</p>
+                  {item.player1NickName!=='N/A'?<p className={style.P1}>{item.player1NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1661,7 +1737,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2NickName}</p>
+                  {item.player2NickName!=='N/A'?<p className={style.P1}>{item.player2NickName}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1672,7 +1749,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p className={style.usP}>POINTS</p>
                 <p className={style.p2Points}>{item.p2Points}</p>
               </div>
-              {this.state.isFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
+              {this.state.hasUserPicked&&this.state.isFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
                 <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
                 <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
                 <p></p>
@@ -1689,6 +1766,26 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
         {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} onClick={this.handleChildClick} /></div> : null}
+        {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={()=>this.setState({showCreateEventModal:false})}>
+            <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
+              <p className={style.eventHeadP}>Create NFL Event </p>
+              <p className={style.eventTitleP}>Enter Wild Card Start Date/Time</p>
+              
+              {/*<DateTimePicker id='round1'onChange={(event)=>this.onChange(event)} value={this.state.round1} />*/}
+              <input className={style.eventInput} id='wildCardTime' placeholder='Enter your RAM name' type='datetime-local' value={this.state.wildCardTime} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.wildCardErr}</p>
+              <p className={style.eventTitleP}>Enter Divisionals Start Date/Time</p>
+              <input className={style.eventInput} id='divisionalsTime' placeholder='Enter your RAM name' type='datetime-local' value={this.state.divisionalsTime} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.divisionalsErr}</p>
+              <p className={style.eventTitleP}>Enter Conference Championship Start Date/Time</p>
+              <input className={style.eventInput} id='conChampTime' placeholder='Enter your RAM name' type='datetime-local' value={this.state.conChampTime} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.conChampErr}</p>
+              <p className={style.eventTitleP}>Enter Super Bowl Start Date/Time</p>
+              <input className={style.eventInput} id='superBowlTime' placeholder='Enter your RAM name' type='datetime-local' value={this.state.superBowlTime} onChange={(event) => this.inputChange(event)}></input>
+              <p className={style.eventErrorP}>{this.state.superBowlErr}</p>
+              <button className={style.submitBtn} onClick={() => this.checkEvent()}>Create Event</button>
+            </div>
+          </div> : null}
         <ToastContainer />
       </>
     )

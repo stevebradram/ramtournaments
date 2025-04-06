@@ -102,11 +102,11 @@ const nationalChampionship = [
 ]
 class MarchMadness extends Component {
   state = { firstFourDate: '', showCreateEventModal:false, round1: '', round1Err: 'Date must be filled', round2: '', round2Err: 'Date must be filled', sweet16: '', sweet16Err: 'Date must be filled', elite8: '', elite8Err: 'Date must be filled', final4: '', final4Err: 'Date must be filled', final: '', 
-    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'sweet16',theItems:[],theSubMenu:'round1',count:0,
+    finalErr: 'Date must be filled',userId:'',userLoggedIn:false,isAdmin:false,allEvents:[],profilePhoto: '',noEventToShow:true,theRound1Arr:[],theRound2Arr:[],theSweet16Arr:[],theElite8Arr:[],theFinal4Arr:[],theChampionshipArr:[],theMenu:'',theItems:[],theSubMenu:'round1',count:0,
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
-  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'finalRound',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
+  midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
   round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:'',
-  stopRound1Edit:'', stopRound2Edit:'',stopSweet16Edit:'',stopElite8Edit:'',stopFinal4Edit:'',stopFinalEdit:''}
+  stopRound1Edit:'', stopRound2Edit:'',stopSweet16Edit:'',stopElite8Edit:'',stopFinal4Edit:'',stopFinalEdit:'',currentSelection:''}
   
     componentDidMount = () => {
       this.checkAuth()
@@ -357,7 +357,7 @@ class MarchMadness extends Component {
       var stopFinalEdit = data.val().stopFinalEdit
       
 
-      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData,stopRound1Edit:stopRound1Edit,stopRound2Edit:stopRound2Edit,stopFinalEdit:stopFinalEdit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit}
+      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection:currentSelection,theData:theData,stopRound1Edit:stopRound1Edit,stopRound2Edit:stopRound2Edit,stopFinalEdit:stopFinalEdit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit}
       allGames.push(theEvents)
 
       if (gamesCount === i) {
@@ -371,19 +371,9 @@ class MarchMadness extends Component {
       if ((theEventTime - new Date().getTime()) < 86400000) {
         expired = true
       }
-     /* if ((currentSelection === 'wildCard')) {
-        this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopWildCardEdit'})
-      }
-      if ((currentSelection === 'divisionalRound')) {
-        this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopDivisionalRoundEdit' })
-      }
-      if ((currentSelection === 'conferenceChampionship')) {
-        this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: false,editType:'stopConferenceChampionshipEdit'})
-      }
-      if ((currentSelection === 'superBowl')) {
-        this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
-      }*/
-      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,theTime,stopRound1Edit, stopRound2Edit,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit}, () => {
+      var theMenu='',currentRound=''
+      if(currentSelection==='round1'||currentSelection==='round2'){theMenu='east',currentRound=currentSelection}else{theMenu='sweet16',currentRound='finalRound'}
+      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection,currentRound,theMenu,expired,endTime,theTime,stopRound1Edit, stopRound2Edit,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit}, () => {
         this.getNCAABMatches()
         this.checkLink(userId)
        console.log('currentSelection',this.state.stopRound1Edit,this.state.stopRound2Edit,this.state.stopFinalEdit)
@@ -758,7 +748,7 @@ getNCAABMatchesFinal = () => {
       if(finalCount===j){
         this.setState({finalArr:finalArr,allRoundFinalArr:allMatches})
         console.log('finalArr 001000',finalArr)
-        if(this.state.currentRound==='finalRound'&&this.state.theMenu==='sweet16'){
+        if(this.state.currentRound==='finalRound'){
           this.setState({currentItems:sweet16Arr})
          }
         this.getMatchesInfo()
@@ -1077,7 +1067,9 @@ getNCAABMatchesFinal = () => {
     });
   }
   selectEvent= (theMenu) => {
-    
+    this.setState({theMenu}) 
+    //console.log('this.state.currentRound',this.state.currentRound,theMenu)
+    //return
     if(this.state.currentRound==='round1'){
     if(theMenu==='east'){this.setState({currentItems:this.state.round1EastArr,theSubMenu:'round1'})}
     if(theMenu==='west'){this.setState({currentItems:this.state.round1WestArr,theSubMenu:'round1'})}
@@ -1093,7 +1085,7 @@ getNCAABMatchesFinal = () => {
         if(theMenu==='elite8'){this.setState({currentItems:this.state.elite8Arr,theSubMenu:'finalRound'})}
         if(theMenu==='final4'){this.setState({currentItems:this.state.final4Arr,theSubMenu:'finalRound'})}
         if(theMenu==='finalRound'){this.setState({currentItems:this.state.finalArr,theSubMenu:'finalRound'})}}
-    this.setState({theMenu}) 
+    
   }
   selectSubEvent=(type,theMenu)=>{
     //this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
@@ -1245,7 +1237,10 @@ getNCAABMatchesFinal = () => {
       if(this.state.theMenu==='finalRound'){
         itemToModals = this.state.finalArr,modalTitle='March Madness '+year+' > Championship'
       }
+      //console.log('itemToModals rrrrrr',itemToModals)
+      //return
       this.setState({itemToModals,marchMadnessModal:true,modalTitle})
+      
     }else{
       this.setState({itemToModals,marchMadnessModal:true,modalTitle})
     }
@@ -1315,13 +1310,24 @@ getNCAABMatchesFinal = () => {
         delete theItems[index2]['showChooseWinner']
         this.setState({allRound2MatchesArr:theItems})
         console.log('this.state.currentItems 001',theItems)}
+        if(this.state.currentRound==='finalRound'){
+          var theItems=[],stateName=''
+          if(this.state.currentSelection==='sweet16'){theItems=this.state.sweet16Arr,stateName='sweet16Arr'}
+          if(this.state.currentSelection==='elite8'){theItems=this.state.elite8Arr,stateName='elite8Arr'}
+          if(this.state.currentSelection==='final4'){theItems=this.state.final4Arr,stateName='final4Arr'}
+          if(this.state.currentSelection==='finalRound'){theItems=this.state.finalArr,stateName='finalArr'}
+          var index2 = theItems.map(function(x) {return x.id; }).indexOf(id);
+          //var theItems=this.state.allRound2MatchesArr
+          delete theItems[index2]['chosenWinner']
+          delete theItems[index2]['showChooseWinner']
+          this.setState({[stateName]:theItems})
+          console.log('this.state.currentItems 001',theItems)}
     }
     pickWinner=(id,winner,time)=>{
-      //console.log('this.state.currentSelection',this.state.currentSelection)
-      //return
-    //this.setState({currentSelection:'sweet16'})
-      var nowTime=new Date().getTime()
-    
+     //console.log('this.state.currentSelection',this.state.currentSelection)
+     //return
+     //this.setState({currentSelection:'sweet16'})
+      var nowTime=new Date().getTime()  
       if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var nowTime=new Date().getTime()
@@ -1333,7 +1339,6 @@ getNCAABMatchesFinal = () => {
        this.notify('Winner already filled')
         return
       }
-
       var theItems=this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner']=true
       this.setState({allRound1MatchesArr:theItems})
@@ -1398,9 +1403,47 @@ getNCAABMatchesFinal = () => {
       this.setState({elite8Arr:theItems})
       console.log('theItems',theItems)
     }
+        if(this.state.currentSelection==='final4'){
+      console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+      var index2 = this.state.final4Arr.map(function(x) {return x.id; }).indexOf(id);
+      var nowTime=new Date().getTime()
+      var theItems=this.state.final4Arr
+      
+      if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+
+      var theItems=this.state.final4Arr
+      theItems[index2]['showChooseWinner']=true
+      this.setState({final4Arr:theItems})
+      console.log('iteeeems final4Arr',theItems)
+    }
+    if(this.state.currentSelection==='finalRound'){
+      console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+      var index2 = this.state.finalArr.map(function(x) {return x.id; }).indexOf(id);
+      var nowTime=new Date().getTime()
+      var theItems=this.state.finalArr
+      
+      if(nowTime<time){
+        this.notify('Match not yet started')
+        return
+      }
+      if(winner!=='N/A'){
+       this.notify('Winner already filled')
+        return
+      }
+      var theItems=this.state.finalArr
+      theItems[index2]['showChooseWinner']=true
+      this.setState({finalArr:theItems})
+      console.log('iteeeems finalArr',theItems)
+      }
     }
     chosenWinner=(id,winner)=>{
-     
       if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var theItems=this.state.allRound1MatchesArr
@@ -1430,6 +1473,20 @@ getNCAABMatchesFinal = () => {
         theItems[index2]['chosenWinner']=winner
         theItems[index2]['status1']='played'
         console.log('this.state.currentItems 009',theItems)
+      }
+      if(this.state.currentSelection==='final4'){
+        var index2 = this.state.final4Arr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.final4Arr
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+        console.log('this.state.currentItems 010',theItems)
+      }
+      if(this.state.currentSelection==='finalRound'){
+        var index2 = this.state.finalArr.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.finalArr
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+        console.log('this.state.currentItems 010',theItems)
       }
       
     }
@@ -1461,6 +1518,22 @@ getNCAABMatchesFinal = () => {
     }
     if(this.state.currentSelection==='elite8'){
       var index = this.state.elite8Arr.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+    }
+    if(this.state.currentSelection==='final4'){
+      var index = this.state.final4Arr.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      this.checkForOutcome(index,winner)
+      }
+    }
+    if(this.state.currentSelection==='finalRound'){
+      var index = this.state.finalArr.map(function(x) {return x.id; }).indexOf(id);
       if(winner!=='player1'&&winner!=='player2'){
         this.notify('Nothing to submit')
       }else{
@@ -1526,9 +1599,9 @@ getNCAABMatchesFinal = () => {
           if((this.state.currentSelection==='final4')){
             this.checkForFinalRoundOutcome(index,winner,this.state.final4Arr,'final4Arr')
           }
-          /*if((this.state.currentSelection==='finalRound')){
-            this.checkForFinalRoundOutcome(index,winner,this.state.sweet16Arr,'sweet16Arr')
-          }*/
+          if((this.state.currentSelection==='finalRound')){
+            this.checkForFinalRoundOutcome(index,winner,this.state.finalArr,'finalArr')
+          }
           } catch (error) {
             ////console.log('error',error)
           }
@@ -1776,9 +1849,19 @@ getNCAABMatchesFinal = () => {
         </div>
         </div>
           <div className={style.eve2Div}>
+          {this.state.currentSelection!=='round1'&&this.state.currentSelection!=='round2'?<>
           <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p>
           <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
-          <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
+          <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p></>:null}
+          {this.state.currentSelection==='round1'?<>
+            <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
+            <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
+          <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p></>:null}
+          {this.state.currentSelection==='round2'?<>
+            <p id={this.state.currentRound==='round2'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2: Round of 32</p>
+            <p id={this.state.currentRound==='round1'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1: Round of 64</p>
+            <p id={this.state.currentRound==='finalRound'?style.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round: Sweet 16 to Championship</p></>:null}
+          
            </div>
            
           {this.state.currentRound==='round1'?<div className={style.eveDiv}>
