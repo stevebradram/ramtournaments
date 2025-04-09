@@ -105,9 +105,11 @@ class Reel extends Component {
       this.props.onClick(this.props.from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime)
       this.setState({theEventKey})
      }
-     chooseHomeEvent=(event,id)=>{
+     chooseHomeEvent=(event,item,id)=>{
       event.stopPropagation()
       event.preventDefault()
+      var todayInMillis=new Date().getTime()
+      //if(todayInMillis+(86400000*90)<event.time)
       this.setState({selectHomeEvent:true,selectHomeEventId:id})
       }
       sendEvent=(event,data,id)=>{
@@ -221,7 +223,7 @@ class Reel extends Component {
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
                <p className={style.headListP3}>{timing}</p></div></div>
-               {this.state.isAdmin?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item.id)}/>
+               {this.state.isAdmin?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event,item,item.id)}/>
                 {this.state.selectHomeEvent&&this.state.selectHomeEventId==item.id?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
                     </div> 
                         </div>

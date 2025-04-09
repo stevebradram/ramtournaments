@@ -3,9 +3,9 @@
         "id": "03dd880f071a65053e37000d3d826e14",
         "sport_key": "americanfootball_nfl",
         "sport_title": "NFL",
-        "commence_time": "2024-12-18T02:13:00Z",
-        "home_team": "West Virginia Mountaineers",
-        "away_team": "Memphis Tigers",
+        "commence_time": "2025-12-18T02:13:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Los Angeles Chargers",
         "bookmakers": [
             {
                 "key": "draftkings",
@@ -17,11 +17,11 @@
                     "last_update": "2025-04-08T00:50:00Z",
                     "outcomes": [
                       {
-                        "name": "Indiana",
+                        "name": "Houston Texans",
                         "price": -135
                       },
                       {
-                        "name": "Notre Dame",
+                        "name": "Los Angeles Chargers",
                         "price": 114
                       }
                     ]
@@ -29,5 +29,161 @@
                 ]
               }
         ]
-    }
+    },
+    {
+      "id": "08e2147df0b21744fdef99cbcdf3edb7",
+      "sport_key": "americanfootball_nfl",
+      "sport_title": "NFL",
+      "commence_time": "2025-12-20T02:13:00Z",
+      "home_team": "Baltimore Ravens",
+      "away_team": "Pittsburgh Steelers",
+      "bookmakers": [
+          {
+              "key": "draftkings",
+              "title": "DraftKings",
+              "last_update": "2025-04-08T00:50:00Z",
+              "markets": [
+                {
+                  "key": "h2h",
+                  "last_update": "2025-04-08T00:50:00Z",
+                  "outcomes": [
+                    {
+                      "name": "Baltimore Ravens",
+                      "price": -215
+                    },
+                    {
+                      "name": "Pittsburgh Steelers",
+                      "price": 310
+                    }
+                  ]
+                }
+              ]
+            }
+      ]
+  },
+  {
+    "id": "4290cfcaa959dc5b452481cfff521b45",
+    "sport_key": "americanfootball_nfl",
+    "sport_title": "NFL",
+    "commence_time": "2025-12-18T02:13:00Z",
+    "home_team": "Buffalo Bills",
+    "away_team": "Denver Broncos",
+    "bookmakers": [
+        {
+            "key": "draftkings",
+            "title": "DraftKings",
+            "last_update": "2025-04-08T00:50:00Z",
+            "markets": [
+              {
+                "key": "h2h",
+                "last_update": "2025-04-08T00:50:00Z",
+                "outcomes": [
+                  {
+                    "name": "Buffalo Bills",
+                    "price": -245
+                  },
+                  {
+                    "name": "Denver Broncos",
+                    "price": 196
+                  }
+                ]
+              }
+            ]
+          }
+    ]
+},
+{
+  "id": "edbc8c5b53a7705b9caa5e1908109e19",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2025-12-22T02:13:00Z",
+  "home_team": "Philadelphia Eagles",
+  "away_team": "Green Bay Packers",
+  "bookmakers": [
+      {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-08T00:50:00Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2025-04-08T00:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Philadelphia Eagles",
+                  "price": -235
+                },
+                {
+                  "name": "Green Bay Packers",
+                  "price": 185
+                }
+              ]
+            }
+          ]
+        }
+  ]
+},
+{
+  "id": "afde2a86c73e9809e147d457d4d40f62",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2025-12-21T02:13:00Z",
+  "home_team": "Tampa Bay Buccaneers",
+  "away_team": "Washington Commanders",
+  "bookmakers": [
+      {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-08T00:50:00Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2025-04-08T00:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Tampa Bay Buccaneers",
+                  "price": -456
+                },
+                {
+                  "name": "Washington Commanders",
+                  "price": 321
+                }
+              ]
+            }
+          ]
+        }
+  ]
+},
+{
+  "id": "a190a79160476a82ba6004f69be5729d",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2025-12-24T02:13:00Z",
+  "home_team": "Los Angeles Rams",
+  "away_team": "Minnesota Vikings",
+  "bookmakers": [
+      {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-08T00:50:00Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2025-04-08T00:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Rams",
+                  "price": -175
+                },
+                {
+                  "name": "Minnesota Vikings",
+                  "price": 175
+                }
+              ]
+            }
+          ]
+        }
+  ]
+}
+
 ]

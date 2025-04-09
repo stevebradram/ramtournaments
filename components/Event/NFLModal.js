@@ -37,8 +37,8 @@ class NCAAModal extends Component {
         incomingData[index]['time']=''
         incomingData[index]['error']=''
         incomingData[index]['apiId']=''
-        incomingData[index]['team1Id']=''
-        incomingData[index]['team2Id']=''
+        //incomingData[index]['team1Id']=''
+        //incomingData[index]['team2Id']=''
         //incomingData[index]['player1']=''
         //incomingData[index]['player2']=''
         //incomingData[index]['player1NickName']=''
@@ -257,7 +257,7 @@ class NCAAModal extends Component {
           i++
           wildCardEdit[index]['error'] = ''
         }
-        if (i === 6) {
+        if (i === this.state.wildCardEdit.length) {
           this.setState({ wildCardEdit })
           this.getOddsApiData(wildCardEdit,'wildCardEdit')
         }
@@ -378,15 +378,18 @@ class NCAAModal extends Component {
   }
   sendToDatabase=()=>{
     if(this.state.isItSubmit){
-    if(this.state.currentSelection==='wildCard'){this.sendToFirebase()}else{
       this.sendToFirebaseSingle()
-    }}else{
+    //if(this.state.currentSelection==='wildCard'){this.sendToFirebase()}else{
+      //this.sendToFirebaseSingle()
+    //}
+  }else{
       this.setState({isItSubmit:false})
     }
   }
   sendToFirebaseSingle=async(editTime,theSelection)=>{
     this.showProgressBar()
     var theArr='',editTime=''
+    if(this.state.currentSelection==='wildCard'){theArr=this.state.wildCardEdit,editTime='stopWildCardEdit'}
     if(this.state.currentSelection==='divisionalRound'){theArr=this.state.divisionalRoundEdit,editTime='stopDivisionalRoundEdit'}
     if(this.state.currentSelection==='conferenceChampionship'){theArr=this.state.conferenceChampionshipEdit,editTime='stopConferenceChampionshipEdit'}
     if(this.state.currentSelection==='superBowl'){theArr=this.state.superBowlEdit,editTime='stopSuperBowlEdit'}
@@ -404,7 +407,7 @@ class NCAAModal extends Component {
       if (i===theArr.length) {    
        var minTime = Math.min(...theArr.map(item => item.timeInMillis));
        var toDbArr={},v = 0
-       var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
+       var eventKey = this.props.theEventKey
        var generalDb = firebase.database().ref('/theEvents/')
        var eventIdsLink ='/eventsIds/'+eventKey+'/'
        var eventIdsLink2 ='/NFL/eventsIds/'+eventKey+'/'
@@ -590,6 +593,9 @@ class NCAAModal extends Component {
  
                    if(item.apiId===item2.apiId){
                     // firstMatchTime.push(item2.timeInMillis)
+                    theArr[index]['player1'] = item2.player1
+                    theArr[index]['player2'] = item2.player2
+
                      theArr[index]['p1Points']=item2.p1Points
                      theArr[index]['p2Points']=item2.p2Points
                      var theTime = dayjs(item2.timeInMillis).format('MMM D, YYYY h:mm A')
@@ -600,6 +606,7 @@ class NCAAModal extends Component {
                    })
                    if(theArr.length===index+1){
                      //var firstTime =  Math.min(...firstMatchTime.map(item => item));
+                     this.getLogos(theArr)
                      this.setState({[stateEdit]:theArr})
                      console.log('malizaaaaa 000024',theArr)
                    }
@@ -618,6 +625,7 @@ class NCAAModal extends Component {
     //return
     //var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
     var oddsApi=theNFLOdds
+    var resultsArr=theNFLOdds
     theArr.map((item, index) => {
       resultsArr.map((item2) => {
         if (item.apiId === item2.id) {
@@ -630,7 +638,7 @@ class NCAAModal extends Component {
           console.log('at getOddsApiData sawaaaaaaaa 222222')
           theArr[index]['time'] = time
           theArr[index]['timeInMillis'] = timeInMillis
-          /* item2.bookmakers.map((item2)=>{
+           /* item2.bookmakers.map((item2)=>{
              if(item2.key==='draftkings'){
                var draftkingsMarket=item2.markets
                var i=0
@@ -876,9 +884,9 @@ class NCAAModal extends Component {
                     {item.p1Photo !== '' ? <img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
                   
-                  <input className={styles.P2} id='team1Id' value={item.team1Id} placeholder='Enter team 1 id' onChange={(event) => this.inputChange(event, index, type)} />
                   <input className={styles.P1} id='apiId' value={item.apiId}  placeholder='Enter uid from odds api' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly onChange={(event) => this.inputChange(event, index, type)} />
+                  <input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 Logo' readOnly/>
+                  <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly/>
                   {/*<input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>
                 <BsFillLightningFill className={styles.sepIc} />
@@ -886,9 +894,9 @@ class NCAAModal extends Component {
                   <div className={styles.imgDiv2}>
                     {item.p2Photo !== '' ? <img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
                   </div>
-                  <input className={styles.P1} id='team2Id'  value={item.team2Id} placeholder='Enter team 2 id' onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly onChange={(event) => this.inputChange(event, index, type)} />
-                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly onChange={(event) => this.inputChange(event, index, type)} />
+                  <input className={styles.P1} id='team2Id'  value={item.commenceTime} placeholder='Enter team 2 id' readOnly/>
+                  <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly />
+                  <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly />
                   {/*<input className={styles.P2} id='p2Rec' value={item.p2Rec} placeholder='Enter team 2 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                 </div>
               </div>

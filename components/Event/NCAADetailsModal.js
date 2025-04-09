@@ -59,6 +59,7 @@ class DetailsModal extends Component {
       () => this.setState({buttonClick:true}), 
       5000)
   }
+
   getFlockNames=(userId)=>{
     var flocks=[],i=0
     var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/userData/').child('flockNames')
@@ -223,6 +224,8 @@ class DetailsModal extends Component {
     }
   })
 }
+
+
    toDatabase=()=>{
     if(!this.state.userId)return
     var eventKey=this.props.theEventKey
@@ -231,7 +234,7 @@ class DetailsModal extends Component {
     const theTime = new Date().getTime()
     var detailsData = {}
     var dataScore=this.props.currentSelection+'Score'
-    if(this.props.currentSelection==='firstRound'){
+  /*  if(this.props.currentSelection==='firstRound'){
       
       detailsData = {
         teamName:this.state.teamName,
@@ -246,7 +249,7 @@ class DetailsModal extends Component {
         currentRank:false, 
         currentPick:this.props.currentSelection
       }
-    }else{
+    }else{*/
       detailsData = {
         teamName:this.state.teamName,
         bestPossibleScore:this.state.bestPossibleScore,
@@ -254,8 +257,10 @@ class DetailsModal extends Component {
         [dataScore]:'0.00',
         currentPick:this.props.currentSelection
       }
-    }
+    //}
    // detailsData[dataScore]='0.00'
+   console.log('detailsData5555',detailsData)
+   return
     var i=0
     this.state.theItems.map((item,index)=>{
       console.log('iteeem',item.id,item.bet)

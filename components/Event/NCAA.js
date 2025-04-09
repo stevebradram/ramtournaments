@@ -157,7 +157,7 @@ class NCAA extends Component {
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',isAdmin:false,showCreateEventModal:false,
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:'',round1:'',final:'',
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:'',round1:'',final:'',itemsToModal:[],
     round1:'',round1Time:'',quarterFinals:'',semiFinals:'',finals:'',finalTime:'',round1Err:'',quarterFinalsErr:'',semiFinalsErr:'',finalsErr:'',hasUserPicked:false
   }
   componentDidMount = () => {
@@ -287,6 +287,7 @@ class NCAA extends Component {
       if(!this.state.theEventKey||this.state.theEventKey.length<3)return
       
       //var theLink2='theEvents::ramUfc::'+theK
+      //firstRound quarterFinals semiFinals finals
       if(this.state.currentSelection==='firstRound'){scoreName='firstRoundScore'}
       if(this.state.currentSelection==='quarterFinals'){scoreName='quarterFinalsScore'}
       if(this.state.currentSelection==='semiFinals'){scoreName='semiFinalsScore'}
@@ -1146,6 +1147,57 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
       e.preventDefault()
       e.stopPropagation()
       }
+      openNCAAFModal=()=>{
+        //firstRound quarterFinals semiFinals finals
+        console.log('detailsssssss',this.state.theEventKey)
+        this.setState({itemsToModal:[]})
+        var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey)
+        editDbRef.once('value', dataSnapshot => {
+          var data=dataSnapshot.val()
+         
+          var selection=data.currentSelection
+          var firstRoundEditExpiry=data.stopFirstRoundEdit
+          var quarterEditExpiry=data.stopQuarterEdit
+          var semiEditExpiry=data.stopSemiEdit
+          var finalEditExpiry=data.stopFinalEdit
+          //if(firstRoundEditExpiry==='N/A'){firstRoundEditExpiry=0}
+         // if(quarterEditExpiry==='N/A'){quarterEditExpiry=0}
+          //if(semiEditExpiry==='N/A'){semiEditExpiry=0}
+          //if(finalEditExpiry==='N/A'){finalEditExpiry=0}
+         // if(selection==='firstRound'&&firstRoundEditExpiry===0)
+          if(selection==='firstRound'&&firstRoundEditExpiry!=='N/A'&&new Date().getTime()>firstRoundEditExpiry){
+            console.log('wild card expired')
+            this.setState({eventToModal:'quarterFinals',itemsToModal:this.state.quarterFinalsArray,ncaaModal:true})
+          }else if(selection==='firstRound'&&(new Date().getTime()<firstRoundEditExpiry)||firstRoundEditExpiry==='N/A'){
+            this.setState({eventToModal:'firstRound',itemsToModal:this.state.firstRoundArray,ncaaModal:true})
+            console.log('hapa kwa all finalArray',this.state.firstRoundArray)
+          }//else{}
+          if(selection==='quarterFinals'&&quarterEditExpiry!=='N/A'&&new Date().getTime()>quarterEditExpiry){
+            console.log('divisional Round expired')
+            this.setState({eventToModal:'semiFinals',itemsToModal:this.state.semiFinalsArray,ncaaModal:true})
+          }else if(selection==='quarterFinals'&&new Date().getTime()<quarterEditExpiry){
+            this.setState({eventToModal:'quarterFinals',itemsToModal:this.state.quarterFinalsArray,ncaaModal:true})
+          }
+          if(selection==='semiFinals'&&semiEditExpiry!=='N/A'&&new Date().getTime()>semiEditExpiry){
+            console.log('hapa kwa finals 111',this.state.finalArray)
+            //return
+            this.setState({eventToModal:'finals',itemsToModal:this.state.finalArray,ncaaModal:true})
+          }else if(selection==='semiFinals'&&new Date().getTime()<semiEditExpiry){
+            this.setState({eventToModal:'semiFinals',itemsToModal:this.state.semiFinalsArray,ncaaModal:true})
+          }
+          if(selection==='finals'&&finalEditExpiry!=='N/A'&&new Date().getTime()>finalEditExpiry){
+            console.log('wild card expired')
+            this.notify("Can't enter event details to an expired event")
+          }else if(selection==='finals'&&new Date().getTime()<finalEditExpiry){
+            console.log('hapa kwa finals')
+          }
+          /*console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+         if((new Date().getTime()>dataSnapshot.val())){
+          this.notify('Event pick/edit time expired')
+         }*/
+        })
+        //this.setState({nflModal:true,eventToModal:''})
+      }
   render() {
    // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
@@ -1208,7 +1260,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
           </div>
         </div>
         {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
-          <p className={style.eventP} onClick={() => this.setState({ ncaaModal: true })}>Enter Event Details</p>
+          <p className={style.eventP} onClick={() =>this.openNCAAFModal()}>Enter Event Details</p>
           <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New NCAAF Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
@@ -1307,7 +1359,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  
+                  {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1317,7 +1371,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1382,7 +1437,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1392,7 +1448,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1457,7 +1514,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1467,7 +1525,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1530,7 +1589,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player1}</p>
+                  {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter1Country}</p>
                   <p className={style.P2}>{item.p1Rec}</p>
                 </div>
@@ -1540,7 +1600,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                     {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                     {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                   </div>
-                  <p className={style.P1}>{item.player2}</p>
+                  {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
+                  <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
                   <p>{item.country}</p>
                   <p className={style.P2}>{item.p2Rec}</p>
@@ -1567,7 +1628,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.openLoginModal ? <div className={style.detailsModal} onClick={() => this.setState({ openLoginModal: false })}><LogIn /></div> : null}
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
-        {this.state.ncaaModal ? <div className={style.detailsModal} onClick={() => this.setState({ ncaaModal: false })}><NCAAModal onClick={this.handleChildClick} /></div> : null}
+        {this.state.ncaaModal ? <div className={style.detailsModal} onClick={() => this.setState({ ncaaModal: false })}><NCAAModal eventToModal={this.state.eventToModal} itemsToModal={this.state.itemsToModal} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
        
         {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={()=>this.setState({showCreateEventModal:false})}>
             <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>

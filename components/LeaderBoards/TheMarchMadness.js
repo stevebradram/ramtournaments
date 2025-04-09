@@ -373,7 +373,7 @@ class TheMarchMadness extends Component {
               <td>{item.sweet16Score?item.sweet16Score:'0.00'}</td>
               <td>{item.elite8Score?item.elite8Score:'0.00'}</td>
               <td>{item.final4Score?item.final4Score:'0.00'}</td>
-              <td>{item.finalScore?item.finalScore:'0.00'}</td>
+              <td>{item.finalRoundScore?item.finalRoundScore:'0.00'}</td>
               </>:null
            }
            {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}

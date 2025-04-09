@@ -21,11 +21,12 @@ const quarterFinalsEdit=[
     ]
 
 class NCAAModal extends Component {
-  state={firstRoundEdit,quarterFinalsEdit,submitErr:"",showProgressBar:false}
+  state={firstRoundEdit,quarterFinalsEdit,submitErr:"",showProgressBar:false,isItSubmit:false}
    
   componentDidMount=()=>{
     var eventKey='NCAAF_'+new Date().getFullYear()+'-'+(new Date().getFullYear()+1)
     console.log('the event key',eventKey)
+    console.log('the info',this.props.itemsToModal,this.props.eventToModal,this.props.theEventKey)
    // return
   }
   doNothing=(event)=>{
@@ -123,35 +124,42 @@ class NCAAModal extends Component {
         return(
           compItems.map((item,index)=>{
             return(
-           <div className={styles.listDiv} key={index}>
-                  <div className={styles.theCont0}>
-                        <div className={styles.theCont01}>
-                          <p>{eventType}</p>
-                          <p>{item.time}</p>
-                        </div>
-                        <div className={styles.theCont}>
+              compItems.map((item, index) => {
+                return (
+                  <div className={styles.listDiv} key={index}>
+                    <div className={styles.theCont0}>
+                      <div className={styles.theCont01}>
+                        <p>{item.matchType+' Match '+(index+1)}</p>
+                        <p>{item.time.commenceTime}</p>
+                      </div>
+                      <div className={styles.theCont}>
                         <div className={styles.theContLeft}>
                           <div className={styles.imgDiv1}>
-                        {item.p1Photo!==''?<img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img>:<RiTeamFill className={styles.teamIC}/>}
+                            {item.p1Photo !== '' ? <img className={styles.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
+                          </div>
+                          
+                          <input className={styles.P1} id='apiId' value={item.apiId}  placeholder='Enter uid from odds api' onChange={(event) => this.inputChange(event, index, type)} />
+                          <input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 Logo' readOnly/>
+                          <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' readOnly/>
+                          {/*<input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                         </div>
-                        <input className={styles.P1} id='id' value={item.id} placeholder='Enter match id' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='p1Photo' value={item.p1Photo} placeholder='Enter team 1 logo' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='player1' value={item.player1} placeholder='Enter team 1 name' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='p1Rec' value={item.p1Rec} placeholder='Enter team 1 record' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        </div>
-                        <BsFillLightningFill className={styles.sepIc}/>
+                        <BsFillLightningFill className={styles.sepIc} />
                         <div className={styles.theContRight}>
-                        <div className={styles.imgDiv2}>
-                        {item.p2Photo!==''?<img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img>:<RiTeamFill className={styles.teamIC}/>}    
+                          <div className={styles.imgDiv2}>
+                            {item.p2Photo !== '' ? <img className={styles.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={styles.teamIC} />}
+                          </div>
+                          <input className={styles.P1} id='team2Id'  value={item.commenceTime} placeholder='Enter team 2 id' readOnly/>
+                          <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' readOnly />
+                          <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' readOnly />
+                          {/*<input className={styles.P2} id='p2Rec' value={item.p2Rec} placeholder='Enter team 2 record' onChange={(event)=>this.inputChange(event,index,type)}/>*/}
                         </div>
-                        <input className={styles.P1} id='time' value={item.time} placeholder='Enter match time' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='p2Photo' value={item.p2Photo} placeholder='Enter team 2 logo' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='player2' value={item.player2} placeholder='Enter team 2 name' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        <input className={styles.P2} id='p2Rec' value={item.p2Rec} placeholder='Enter team 2 record' onChange={(event)=>this.inputChange(event,index,type)}/>
-                        </div>
-                        </div>
-                        </div>       
-           </div>
+                      </div>
+                      <p className={styles.errorP}>{item.error}</p>
+                    </div>
+        
+                  </div>
+                )
+              })
             )})
       )
       }
@@ -160,13 +168,22 @@ class NCAAModal extends Component {
       <><div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
         
           <p className={styles.headP}>Enter NCAAF Match Details</p>
-        <div className={styles.divCont}>
+        {this.state.currentSelection==='firstRound'?<div className={styles.divCont}>
         <p className={styles.listHeadP}>First Round</p>
-       <div className={styles.listCont}>{this.itemComponent(firstRoundEdit,'NCAAF First Round','first round')}</div></div>
-        <div className={styles.divCont}>
+       <div className={styles.listCont}>{this.itemComponent(firstRoundEdit,'NCAAF First Round','first round')}</div></div>:null}
+       {this.state.currentSelection==='quarterFinals'?<div className={styles.divCont}>
         <p className={styles.listHeadP}>Quarter Finals</p>
-        <div className={styles.listCont}>{this.itemComponent(quarterFinalsEdit,'NCAAF Quarter Finals','quarter finals')}</div></div>
-        <button className={styles.submitBtn} onClick={()=>this.submitMatches()}>Submit</button>
+        <div className={styles.listCont}>{this.itemComponent(quarterFinalsEdit,'NCAAF Quarter Finals','quarter finals')}</div></div>:null}
+        {this.state.currentSelection==='semiFinals'?<div className={styles.divCont}>
+        <p className={styles.listHeadP}>Semi Finals</p>
+        <div className={styles.listCont}>{this.itemComponent(quarterFinalsEdit,'NCAAF Semi Finals','semi finals')}</div></div>:null}
+        {this.state.currentSelection==='finals'?<div className={styles.divCont}>
+        <p className={styles.listHeadP}>Finals</p>
+        <div className={styles.listCont}>{this.itemComponent(quarterFinalsEdit,'NCAAF Finals','Finals')}</div></div>:null}
+        {this.state.isItSubmit?<div className={styles.submitDiv}>
+        <button className={styles.cancelBtn} onClick={()=>this.cancelEdit()}>Cancel</button>
+        <button className={styles.submitBtn2} onClick={() => this.sendToDatabase()}>Submit</button>
+        </div>:<button className={styles.submitBtn} onClick={()=>this.submitMatches()}>Preview</button>}
       </div>
       {this.state.showProgressBar?<ProgressBar/>:null}
        <ToastContainer/>

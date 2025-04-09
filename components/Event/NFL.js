@@ -468,10 +468,10 @@ class NCAA extends Component {
 
   handleChildClick = (title,item) => {
     this.setState({ count: this.state.count + 1, nflModal: false });
-    if(title==='getOdds'&&item.length>10){
+    /*if(title==='getOdds'&&item.length>10){
     this.checkForOddsUpdate2(item)
     }
-    console.log('azeeza', item)
+    console.log('azeeza', item)*/
   };
   checkForOddsUpdate2 = async (theLink) => {
     try {
@@ -975,7 +975,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   }
 })
   }
-  loadOtherFights = async (theEventKey, theEventTitle) => {
+  loadOtherFights = async (theEventKey, theEventTitle,currentSelection) => {
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
       var theInfo = dataSnapshot.val()
@@ -988,7 +988,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         this.notify('No internet! please check your internet connection')
         return
       }
-      this.setState({ theEventKey, theEventTitle, expired }, () => {
+      this.setState({ theEventKey, theEventTitle, expired,currentSelection}, () => {
         this.getNFLMatches()
       })
     })
@@ -1040,7 +1040,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     if (this.state.currentSelection === 'conferenceChampionship') { itemToModals = this.state.semiFinalsArray }
     if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray }
    var i=0,pointMissing=false
-   console.log('this.state.theItems',itemToModals)
+   console.log('this.state.theItems rr',this.state.currentSelection,itemToModals)
    await itemToModals.map((item,index)=>{
     i++
       //console.log('item.p1Points',item.p1Points)
@@ -1375,7 +1375,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.currentSelection)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -1765,7 +1765,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         {this.state.openLoginModal ? <div className={style.detailsModal} onClick={() => this.setState({ openLoginModal: false })}><LogIn /></div> : null}
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
-        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} onClick={this.handleChildClick} /></div> : null}
+        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
         {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={()=>this.setState({showCreateEventModal:false})}>
             <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
               <p className={style.eventHeadP}>Create NFL Event </p>
