@@ -733,7 +733,7 @@ class NCAA extends Component {
           else{round1[index]['winner'] = item.id+'team 2'}*/
           ////
           conChampRoundArr[item.id] = item
-          if (semiFinals.length === index + 1) {
+          if (conChampRound.length === index + 1) {
             console.log('conChampRoundArr 1111',conChampRoundArr)
             generalDb.child('/conferenceChampionship/').update(conChampRoundArr)
           }
@@ -755,7 +755,7 @@ class NCAA extends Component {
           else{round1[index]['winner'] = item.id+'team 2'}*/
            ////
           superBowlRoundArr[item.id] = item
-          if (finals.length === index + 1) {
+          if (superBowlRound.length === index + 1) {
             console.log('superBowlRoundArr 1111',superBowlRoundArr)
             generalDb.child('/superBowl/').update(superBowlRoundArr,(error) => {
               if (error) {
