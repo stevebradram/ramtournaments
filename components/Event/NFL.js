@@ -1086,7 +1086,7 @@ class NCAA extends Component {
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
                <p className={style.headListP3}>{timing}</p></div></div>
-               {this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||this.state.userId==='zZTNto5p3XVSLYeovAwWXHjvkN43'||this.state.userId==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event)}/>
+               {this.state.isAdmin?<><SlOptionsVertical onClick={(event)=>this.chooseHomeEvent(event)}/>
                 {this.state.selectHomeEvent?<div className={style.selectHomeEventDiv} onClick={()=>this.setState({selectHomeEvent:false})}><button onClick={(event)=>this.sendEvent(event,item.theData,item.id)}>Make home event</button></div>:null}</>:null}  
               </div>  
             )
@@ -1103,7 +1103,7 @@ class NCAA extends Component {
             {this.state.dataAvailable ? <p id={style.editP} onClick={() => this.opeModal2()}>Edit Profile</p> : <p id={style.editP} onClick={() => this.openTheModal()}>Make Picks</p>}
           </div>
         </div>
-        {this.state.userId === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'?<div className={style.eventCreationDiv}>
+        {this.state.isAdmin?<div className={style.eventCreationDiv}>
           <p className={style.eventP} onClick={() => this.openNFLModal()}>Enter Event Details</p>
           <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New NFL Event</p>
         </div>:null}
