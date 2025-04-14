@@ -15,32 +15,12 @@ import { TypeAnimation } from 'react-type-animation';
 import { ToastContainer, toast } from 'react-toastify';
 import { RiTeamFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
+import { TbCheckbox } from "react-icons/tb";
+import { MdClose } from "react-icons/md";
 import axios from "axios"
 import dayjs from 'dayjs';
 var allMatches = []
 var selectedRamUfcArray = [], selectedNflArray = [], selectedMarchMadnesArray = []
-//player1: 'West Virginia',player2: 'Memphis'
-/*const firstRound = [
-  {id:'c467e0e09ca315ff9d6914fc12a98324',time: 'Dec 20, 2024 - 20:00 PM', timeInMillis: 1734714000000, player1: 'West Virginia', p1Points: 'N/A', p1Rec: '11-1-0', p2Rec: '11-1-0', player2: 'Memphis', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/indiana.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/notre-dame.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'b8cc3dac96e558a3ab0b871b36e108cb',time: 'Dec 21, 2024 - 12:00 PM', timeInMillis: 1734771600000, player1: 'James Madison', p1Rec: '11-1-0', p2Rec: '11-1-0', p1Points: 'N/A', p1Rec: '11-2-0', p2Rec: '11-2-0', player2: 'Western Kentucky', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/smu.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/penn-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'22',time: 'Dec 21, 2024 - 16:00 PM', timeInMillis: 1734786000000, player1: 'Clemson', p1Rec: '10-3-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Texas', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/clemson.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/texas.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-  {id:'55',time: 'Dec 21, 2024 - 20:00 PM', timeInMillis: 1734800400000, player1: 'Tennessee', p1Rec: '10-2-0', p2Rec: '10-2-0', p1Points: 'N/A', player2: 'Ohio St.', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/tennessee.svg', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/ohio-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: '', matchType: 'First Round' },
-]
-//
-const quarterFinals = [
-  { time: 'Dec 31 2024, 19:30 PM', timeInMillis: 1735662600000, player1: 'Boise St.', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Penn State/SMU', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/boise-st.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 13:00PM', timeInMillis: 1735725600000, player1: 'Clemson/Texas', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Arizona St.', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/arizona-st.svg', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 17:00PM', timeInMillis: 1735740000000, player1: 'Oregon', p1Rec: '13-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'Ohio State/Tennessee', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/oregon.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-  { time: 'Jan 1 2025, 20:45PM', timeInMillis: 1735753500000, player1: 'Notre Dame/Indiana', p1Rec: '0-0-0', p2Rec: '11-2-0', p1Points: 'N/A', player2: 'Georgia', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: '//www.ncaa.com/sites/default/files/images/logos/schools/bgd/georgia.svg', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Quarter Finals' },
-]
-const semiFinals = [
-  { time: 'Jan 9 2025, 19:30PM', timeInMillis: 1736440200000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
-  { time: 'Jan 10 2025, 19:30PM', timeInMillis: 1736526600000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Semi Finals' },
-]
-const finals = [
-  { time: 'Jan 20 2025, 19:00PM', timeInMillis: 1737388800000, player1: 'N/A', p1Rec: '0-0-0', p2Rec: '0-0-0', p1Points: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'player', game: 'UFC', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: 'player1', winner: '', matchType: 'Finals', },
-]*/
-
 
 const round1 = [
   { id: 'firstRoundMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'First Round' },
@@ -61,92 +41,6 @@ const semiFinals = [
 const finals = [
   { id: 'finalsMatch1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'NCAAB', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Finals' },
 ]
-var ncaafItems=[
-  {
-    "id": "c467e0e09ca315ff9d6914fc12a98324",
-    "sport_key": "americanfootball_ncaaf",
-    "sport_title": "NCAAF",
-    "commence_time": "2024-12-18T02:13:00Z",
-    "completed": true,
-    "home_team": "West Virginia Mountaineers",
-    "away_team": "Memphis Tigers",
-    "scores": [
-      {
-        "name": "West Virginia Mountaineers",
-        "score": "37"
-      },
-      {
-        "name": "Memphis Tigers",
-        "score": "42"
-      }
-    ],
-    "last_update": "2024-12-19T09:30:53Z"
-  },
-  {
-    "id": "b8cc3dac96e558a3ab0b871b36e108cb",
-    "sport_key": "americanfootball_ncaaf",
-    "sport_title": "NCAAF",
-    "commence_time": "2024-12-18T22:30:00Z",
-    "completed": true,
-    "home_team": "James Madison Dukes",
-    "away_team": "Western Kentucky Hilltoppers",
-    "scores": [
-      {
-        //James Madison Dukes
-        "name": "James Madison Dukes",
-        "score": "27"
-      },
-      {
-        //Western Kentucky Hilltoppers
-        "name": "Western Kentucky Hilltoppers",
-        "score": "17"
-      }
-    ],
-    "last_update": "2024-12-19T09:30:53Z"
-  },
-  {
-    "id": "c467e0e09ca315ff9d6914fc12a98324",
-    "sport_key": "americanfootball_ncaaf",
-    "sport_title": "NCAAF",
-    "commence_time": "2024-12-19T02:11:33Z",
-    "completed": true,
-    "home_team": "UNLV Rebels",
-    "away_team": "California Golden Bears",
-    "scores": [
-      {
-        "name": "UNLV Rebels",
-        "score": "24"
-      },
-      {
-        "name": "California Golden Bears",
-        "score": "13"
-      }
-    ],
-    "last_update": "2024-12-19T09:30:53Z"
-  },
-  {
-    "id": "c69b00c0f721d19e07d950e056c17c83",
-    "sport_key": "americanfootball_ncaaf",
-    "sport_title": "NCAAF",
-    "commence_time": "2024-12-20T00:00:00Z",
-    "completed": false,
-    "home_team": "Sam Houston State Bearkats",
-    "away_team": "Georgia Southern Eagles",
-    "scores": null,
-    "last_update": null
-  },
-  {
-    "id": "59a2997a9ed7c8f63a224b32355bd09f",
-    "sport_key": "americanfootball_ncaaf",
-    "sport_title": "NCAAF",
-    "commence_time": "2024-12-20T17:00:00Z",
-    "completed": false,
-    "home_team": "Jacksonville State Gamecocks",
-    "away_team": "Ohio Bobcats",
-    "scores": null,
-    "last_update": null
-  }
-]
 class NCAA extends Component {
   state = {
     theMenu: 'mainCard', theItems: [], opendetailsModal: false, getRamDetails: false, dataAvailable: false, theEvent: 'Upcoming Events', currentID: 1,
@@ -157,97 +51,11 @@ class NCAA extends Component {
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, ncaaModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',isAdmin:false,showCreateEventModal:false,
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:'',round1:'',final:'',itemsToModal:[],
-    round1:'',round1Time:'',quarterFinals:'',semiFinals:'',finals:'',finalTime:'',round1Err:'',quarterFinalsErr:'',semiFinalsErr:'',finalsErr:'',hasUserPicked:false
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,BPSTitle:'',round1:'',final:'',itemsToModal:[],showConfirmModal:false,confirmMessage:'',confirmModalType:'',
+    round1:'',round1Time:'',quarterFinals:'',semiFinals:'',finals:'',finalTime:'',round1Err:'',quarterFinalsErr:'',semiFinalsErr:'',finalsErr:'',hasUserPicked:false,oddsUpdate:'',resultsUpdate:''
   }
   componentDidMount = () => {
-    //this.sendMatchesToFirebase()
     this.checkAuth()
-
-    //this.getRanking()
-    //this.checkForOddsUpdate()
-
-    //this.getNCAAFMatches()
-  
-    //this.getNCAAFResults()
-
-  }
-  getNCAAFResults=()=>{
-    firstRound.map((item,index)=>{
-      var gamesId=item.id
-      var theF1Name=item.player1.split(' ')
-      theF1Name=theF1Name[0]
-      var theF2Name=item.player2.split(' ')
-      theF2Name=theF2Name[0]
-      var name1=item.player1
-      var name2=item.player2
-      ncaafItems.map((item2)=>{
-        var oddsId=item2.id  
-        if(gamesId===oddsId){
-          var theScores=item2.scores
-          //console.log('the theScores',theScores)
-          //console.log('yeeeees ids',gamesId,yesIds)
-          if(theScores){
-            var withScores = JSON.stringify(theScores);
-            withScores = withScores.replace(/,/g, "|").replace(/{/g, " ").replace(/}/g, "").replace(/"/g, "").replace(/]/g, "");
-            var homePoints= withScores.split('|')[1].trim().replace('score:','')
-            var awayPoints= withScores.split('|')
-            awayPoints=awayPoints[awayPoints.length - 1].replace('score:','')
-            homePoints=Number(homePoints)
-            awayPoints=Number(awayPoints)
-            var homeName2=withScores.split('|')[0].replace('[ name:','').replace( /\s\s+/g, ' ' )
-            var awayName2=withScores.split('|')
-            awayName2=awayName2[awayName2.length - 2].replace('name:','').replace( /\s\s+/g, ' ' )
-            console.log('awayName2',awayName2)
-            //console.log('homePoints',name1,homePoints,'awayPoints',name2,awayPoints,'theWinner',theWinner)
-            //console.log('home details oddds',item2.home_team,'db',theF1Name)
-            //console.log('away details odds',item2.away_team,'db',theF2Name)
-            if(item2.home_team.includes(theF1Name)){
-              var theWinner=''
-              firstRound[index]['p1Points']=homePoints
-              if(homePoints>awayPoints){theWinner=name1}
-              if(homePoints<awayPoints){theWinner=name2}
-              firstRound[index]['winner']=theWinner;
-            }
-            if(item2.away_team.includes(theF2Name)){
-              var theWinner=''
-              firstRound[index]['p2Points']=awayPoints
-              if(homePoints>awayPoints){theWinner=name1}
-              if(homePoints<awayPoints){theWinner=name2}
-              firstRound[index]['winner']=theWinner;
-            }
-            console.log('firstRoundlllllll',firstRound)
-          }
-        }
-      })
-    })
-  }
-  sendMatchesToFirebase = () => {
-    var generalDb = firebase.database().ref('/theEvents/NCAAF/ncaaf20242025/')
-    firstRound.map((item, index) => {
-      generalDb.child('/firstRound/firstRoundMatch' + index + '/').set(item)
-    })
-    quarterFinals.map((item, index) => {
-      generalDb.child('/quarterFinals/quarterFinalsMatch' + index + '/').set(item)
-    })
-    semiFinals.map((item, index) => {
-      generalDb.child('/semiFinals/semiFinalsMatch' + index + '/').set(item)
-    })
-    finals.map((item, index) => {
-      generalDb.child('/finals/finalsMatch' + index + '/').set(item)
-    })
-  }
-  goToServer = () => {
-    this.checkForOddsUpdate()
-
-    // this.checkForOutcome()
-
-
-
-    //this.calculateRanking()
-    //this.getRanking()  
-    //this.checkForOddsUpdate()
-    //this.checkForOutcome()
   }
   handleChildClick = () => {
     this.setState({ count: this.state.count + 1, ncaaModal: false });
@@ -268,9 +76,11 @@ class NCAA extends Component {
         this.notify('Update odds time expired')
        }
        else{
-         axios.get("http://localhost:4000/updateNCAAFOdds?term=" + theQuery)
+         axios.get("https://theramtournament.com/updateNCAANFLFOdds?term="+theQuery)
+         //axios.get("http://localhost:4000/updateNCAANFLFOdds?term=" + theQuery)
         .then((res) => {
-          var theItems = res.data.result
+          var theItems = res.data
+          this.notify('Success Updating the NCAAF odds')
           //console.log('theItems', theItems)
 
         })
@@ -280,7 +90,7 @@ class NCAA extends Component {
       //console.log('error', error)
     }
   }
-  checkForOutcome=async () => {
+  checkForOutcome2=async () => {
     try {
       //theEvents::NCAAF::ncaaf20242025::firstRound
       var scoreName=''
@@ -297,9 +107,9 @@ class NCAA extends Component {
       
       var theQuery=encodeURIComponent(theLink) 
       console.log('theLink',theLink)
-     // return
-    
-      await axios.get("http://localhost:4000/getNCAAFResults?term="+theQuery)
+      //return
+      await axios.get("https://theramtournament.com/getNCAAFNFLResults?term="+theQuery)
+      //await axios.get("http://localhost:4000/getNCAAFNFLResults?term="+theQuery)
         .then((res) => {
           //console.log('theItems',res)
           var theOutcome = res.data
@@ -310,111 +120,12 @@ class NCAA extends Component {
           //console.log('error',error)
         }
     }
-     /*calculateRanking=(theArr)=>{
-        var dbLink2="/userBets/scoreBoards/ramUfc/ufc-310-December72024/"
-        var dbLink3="/userBets/ramUfc/ufc-310-December72024/"
-        var dbLink4='/ramData/events/ramUfc/ufc-310-December72024/details/currentScore/'
-        var dbLink5='/ramData/events/ramUfc/ufc-310-December72024/details/currentRank/'
-       
-         var scoreBoardDb=firebase.database().ref(dbLink2)
-         var theUserBets=firebase.database().ref(dbLink3)
-         var usersDb=firebase.database().ref('/users/')
-         theUserBets.once('value',dataSnapshot=>{
-         var theNo=dataSnapshot.numChildren()
-         var h=0,theAllItems={},theArrCount=[]
-         dataSnapshot.forEach((data,index) => {
-          h++
-          var betsObj= data.val()
-          var theUid= data.key
-          var userArr=[],i=0
-          for(var key in theArr){
-            i++
-            var matchId=theArr[key]['id']
-            var theWinner=theArr[key]['winner']
-            var theWinnerSelected=betsObj[matchId]
-            var thePoints=0
-            if(theWinner===theWinnerSelected){
-              if(theWinner==='player1'){thePoints=theArr[key]['p1Points']}
-              if(theWinner==='player2'){thePoints=theArr[key]['p2Points']}
-              userArr.push(thePoints)
-            }else{
-              userArr.push(0)
-            }
-            if(theArr.length===i){
-              var pointsSum = userArr.reduce((partialSum, a) => partialSum + a, 0);
-              pointsSum=Number(pointsSum.toFixed(2))
-              var theItem={}
-              theItem[theUid]=pointsSum
-              theAllItems[theUid]=pointsSum
-              var countArr={id:theUid,points:pointsSum}
-              theArrCount.push(countArr)
-              usersDb.child(theUid+dbLink4).set(pointsSum+'')
-            }
-       }
-       if(theNo===h){
-        theArrCount=theArrCount.sort(function(a, b){return b.points - a.points})
-        var countIndex = theArrCount.findIndex(x => x.id ===this.state.userId);
-        theArrCount.map((item,index)=>{
-        var theRank=index+1+'/'+theNo
-        usersDb.child(item.id+dbLink5).set(theRank)
-        })
-        scoreBoardDb.update(theAllItems,(error) => {
-          if (error) {
-            //console.log('Score board noooooot updated successfully')
-          }else{
-            //console.log('Score board updated successfully')
-          }
-      })
-       }
-  })})
-}
-getRanking = async() => {
-var dbLink1='/theEvents/ramUfc/ufc-310-December72024/'
-var theDbEvent=firebase.database().ref(dbLink1)
-var i=0, j=0, k=0,allUsersBetsArr=[]
-await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
-  var mainCardNo=dataSnapshot.numChildren()
-  dataSnapshot.forEach((data,index) => {
-    i++
-      var theValue=data.val()
-      theValue['id']=data.key
-      allUsersBetsArr.push(theValue)
-      if(i===mainCardNo){
-        theDbEvent.child('prelimsShort').once('value',dataSnapshot=>{
-          if(!dataSnapshot.val()){
-            this.calculateRanking(allUsersBetsArr)
-          }else{
-            var prelimNo=dataSnapshot.numChildren()
-            dataSnapshot.forEach((data,index) => {
-              j++
-              var theValue=data.val()
-              theValue['id']=data.key
-               allUsersBetsArr.push(theValue)
-              if(j===prelimNo){
-               theDbEvent.child('earlyPrelimsShort').once('value',dataSnapshot=>{
-                var earlyPrelimNo=dataSnapshot.numChildren()
-                if(!dataSnapshot.val()){
-                  this.calculateRanking(allUsersBetsArr)
-                }else{
-                dataSnapshot.forEach((data,index) => {
-                 k++
-                var theValue=data.val()
-                theValue['id']=data.key
-                allUsersBetsArr.push(theValue)
-                 if(k===earlyPrelimNo){
-                  this.calculateRanking(allUsersBetsArr)
-                 }
-                })}
-                
-              })
-              } }) } }) } }) })
-}*/
   checkAuth = () => {
     var userId = ''
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         userId = user.uid
-        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'){
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
           this.setState({isAdmin:true}) 
          }
         this.setState({ userId, userLoggedIn: true })
@@ -446,22 +157,27 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         var endTime = data.val().endTime
         var theData = data.val()
         var currentSelection = data.val().currentSelection
+
+        var oddsUpdate= data.val().oddsTimeUpdate
+        var resultsUpdate= data.val().fetchResultsTimeUpdate
+        if(!oddsUpdate){oddsUpdate='N/A'}else{oddsUpdate=new Date(oddsUpdate).toLocaleString()}
+        if(!resultsUpdate){resultsUpdate='N/A'}else{resultsUpdate=new Date(resultsUpdate).toLocaleString()}
         //var currentSelection='semiFinals'
 
 
-        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData }
+        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData,oddsUpdate:oddsUpdate,resultsUpdate:resultsUpdate}
         allGames.push(theEvents)
 
         if (gamesCount === i) {
-          var theEventTitle = '', theEventKey = '', theEventTime = 0
-          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime']}
+          var theEventTitle = '', theEventKey = '', theEventTime = 0,oddsUpdate='',resultsUpdate=''
+          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime'],oddsUpdate= allGames[0]['oddsUpdate'],resultsUpdate= allGames[0]['resultsUpdate']}
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {
           expired = true
         }
         if ((currentSelection === 'firstRound')) {
-          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopFirstRounEdit'})
+          this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopFirstRoundEdit'})
         }
         if ((currentSelection === 'quarterFinals')) {
           this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,editType:'stopQuarterEdit' })
@@ -472,7 +188,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         if ((currentSelection === 'finals')) {
           this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopFinalEdit'})
         }
-       this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime }, () => {
+       this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,oddsUpdate,resultsUpdate}, () => {
           this.getNCAAFMatches(userId)
           //console.log('currentSelection',this.state.currentSelection)
         })
@@ -680,55 +396,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               }}
             }
           })
-          /*this.state.theItems.map((item)=>{
-           if(item.id===data.key){
-            ////console.log('thank you sir')
-            item['bet']=data.val()
-            if(item.status1==='played'){
-              if(data.val()==='player1'){currentScore.push(item.p1Points);}
-            if(data.val()==='player2'){currentScore.push(item.p2Points);}
-            }
-            if(data.val()==='player1'){thePoints.push(item.p1Points);////console.log('the points',item.p1Points)
-              }
-            if(data.val()==='player2'){thePoints.push(item.p2Points);////console.log('the points',item.p2Points)
-              }
-          }
-          })*/
           if (itemsCount === i) {
 
             this.setState({ dataAvailable: true })
-            return
-            /* if(this.state.theMenu==='mainCard'){this.setState({ramUfcMaincardArray:this.state.theItems})}
-             if(this.state.theMenu==='prelimms'){this.setState({ramUfcPrelimsArray:this.state.theItems})}
-             if(this.state.theMenu==='earlyPrelims'){this.setState({ramUfcEarlyPrelimsArray:this.state.theItems})}*/
-
-            //if (selection=== 'firstRound') { this.setState({ firstRoundArray: this.state.theItems}) }
-            //if (selection === 'quarterFinals') { this.setState({ quarterFinalsArray: this.state.theItems}) }
-           // if (selection === 'semiFinals') { this.setState({ semiFinalsArray: this.state.theItems}) }
-            //if (selection === 'finals') { this.setState({ finalArray: this.state.theItems}) }
-            ////console.log('this.state.theItems',this.state.theItems)
-            
-          console.log('thePointsssss',thePoints)
-            ////console.log('currentScore',currentScore.length)
-        //to do do current score additions
-            var pointsSum = thePoints.reduce((partialSum, a) => partialSum + a, 0);
-            pointsSum = pointsSum.toFixed(2)
-
-            //gamesDataRef.child(this.state.theEventKey + '/details/bestPossibleScore/').set(pointsSum)
-            currentEventUserInfo['bestPossibleScore'] = pointsSum
-            this.setState({ currentEventUserInfo })
-
-            if (currentScore.length > 0) {
-              var scoreSum = currentScore.reduce((partialSum, a) => partialSum + a, 0);
-              scoreSum = scoreSum.toFixed(2)
-
-              currentEventUserInfo['currentScore'] = scoreSum
-              this.setState({ currentEventUserInfo })
-              //console.log('currentEventUserInfo', currentEventUserInfo).
-
-             // userInfoDb.child('/currentScore/').set(scoreSum)
-              //userInfoDb.child(this.state.currentSelection+'Score').set(scoreSum)
-            }
           }
         })
       })
@@ -737,7 +407,10 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
   }
   })
   }
-  loadOtherFights = async (theEventKey, theEventTitle) => {
+  loadOtherFights = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate) => {
+    console.log('the info',theEventKey,theEventTitle,currentSelection)
+    //return
+    this.setState({oddsUpdate,resultsUpdate})
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
       var theInfo = dataSnapshot.val()
@@ -750,7 +423,11 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
         this.notify('No internet! please check your internet connection')
         return
       }
-      this.setState({ theEventKey, theEventTitle, expired }, () => {
+      this.setState({ theEventKey, theEventTitle, expired,currentSelection,isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false}, () => {
+        if ((currentSelection === 'firstRound')) {this.setState({editType:'stopFirstRoundEdit'})}
+        if ((currentSelection === 'quarterFinals')) {this.setState({editType:'stopQuarterEdit'})}
+        if ((currentSelection === 'semiFinals')) {this.setState({editType:'stopSemiEdit'})}
+        if ((currentSelection === 'finals')) {this.setState({editType:'stopFinalEdit'})}
         this.getNCAAFMatches()
       })
     })
@@ -836,49 +513,6 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
     })
   }
 
-  getRamInfo = async (userId, event) => {
-    var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents').child(event)
-    userInfoDb.once('value', dataSnapshot => {
-      var theInfo = dataSnapshot.val()
-      if (event === 'ramUfc') { selectedRamUfcArray = theInfo }
-      if (event === 'marchMadness') { selectedMarchMadnesArray = theInfo }
-      if (event === 'nfl') { selectedNflArray = theInfo }
-      //hapa ndo nimefika
-      //////console.log('the event eventSelection',theInfo.eventSelection) 
-      var currentRank = ''
-      if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
-      this.setState({
-        flockName: theInfo.flockName, teamName: theInfo.teamName, currentScore: theInfo.currentScore,
-        bestPossibleScore: theInfo.bestPossibleScore, currentRank: currentRank, theItems: theInfo.eventSelection
-      })
-      this.getCurrentScore(theInfo.eventSelection)
-      //localStorage.set('userDetails', userDetails);
-    })
-    return
-
-    this.setState({ theRamUfc: theRamUfc, theMarchMadness, theNfl, theFifa })
-    this.setState({ theRamUfc: theRamUfc }, () => {
-      //////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
-    });
-    //////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
-    var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents')
-    if (theRamUfc === 'selected') {
-      this.setState({ dataAvailable: true, clickHere1: 'CLICK HERE TO EDIT YOUR PICKS', clickHere2: 'CLICK HERE TO EDIT THE GAME' })
-      userInfoDb.child('ramUfc').once('value', dataSnapshot => {
-        var theInfo = dataSnapshot.val()
-        //////console.log('the event eventSelection',theInfo.eventSelection) 
-        var currentRank = ''
-        if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
-        this.setState({
-          flockName: theInfo.flockName, teamName: theInfo.teamName, currentScore: theInfo.currentScore,
-          bestPossibleScore: theInfo.bestPossibleScore, currentRank: currentRank, theItems: theInfo.eventSelection
-        })
-        this.getCurrentScore(theInfo.eventSelection)
-        //localStorage.set('userDetails', userDetails);
-      })
-    }
-    //else{this.setState({theItems:mainCard})}
-  }
   getCurrentScore = async (theItems) => {
     var i = 0, theAmount = []
     theItems.map((item, index) => {
@@ -948,11 +582,25 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
   }
   openTheModal2=()=>{
+    console.log('this.state.theEventKey',this.state.currentSelection,this.state.theEventKey,this.state.editType)
     console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
     //return
      var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
      editDbRef.once('value', dataSnapshot => {
-       console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+      if(dataSnapshot.val()==='N/A'){
+        this.notify('Event pick/edit not available at the moment')
+      }else{
+        if((new Date().getTime()>dataSnapshot.val())){
+          console.log('now 005',new Date().getTime(),dataSnapshot.val())
+          if(this.state.currentSelection==='finals'){
+            this.notify("Event pick expired")
+          }else{this.notify("Can't make a pick when the event has already started")}
+         }
+         else{
+          this.setState({ openLoginModal:false, opendetailsModal:true})
+         }
+      }
+      /* console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
       if((new Date().getTime()>dataSnapshot.val())){
        this.notify('Event pick/edit not available at the moment')
       }
@@ -967,7 +615,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
        }else{
          this.setState({ openLoginModal: true, opendetailsModal: false })
        }
-      }
+      }*/
     })
   }
   opeModal2 = () => {
@@ -1189,15 +837,268 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
             console.log('wild card expired')
             this.notify("Can't enter event details to an expired event")
           }else if(selection==='finals'&&new Date().getTime()<finalEditExpiry){
-            console.log('hapa kwa finals')
+            this.setState({eventToModal:'finals',itemsToModal:this.state.finalArray,ncaaModal:true})
+            console.log('hapa kwa finals 565656')
           }
-          /*console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
-         if((new Date().getTime()>dataSnapshot.val())){
-          this.notify('Event pick/edit time expired')
-         }*/
         })
-        //this.setState({nflModal:true,eventToModal:''})
       }
+
+      pickWinner=(id,winner,time,selection)=>{
+        var nowTime=new Date().getTime()  
+        if(this.state.currentSelection!==selection){
+          this.notify('Not available at the moment')
+          return
+        }
+        if(this.state.currentSelection==='firstRound'){
+        var index2 = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
+        var nowTime=new Date().getTime()
+       /* if(nowTime<time){
+          this.notify('Match not yet started')
+          return
+        }
+        if(winner!=='N/A'){
+         this.notify('Winner already filled')
+          return
+        }*/
+        var theItems=this.state.firstRoundArray
+        theItems[index2]['showChooseWinner']=true
+        this.setState({firstRoundArray:theItems})
+        console.log('this.state.currentItems 002',theItems)
+      }
+      if(this.state.currentSelection==='quarterFinals'){
+        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+        var nowTime=new Date().getTime()
+        var theItems=this.state.quarterFinalsArray
+        
+        if(nowTime<time){
+          this.notify('Match not yet started')
+          return
+        }
+        if(winner!=='N/A'){
+         this.notify('Winner already filled')
+          return
+        }
+        var theItems=this.state.quarterFinalsArray
+        theItems[index2]['showChooseWinner']=true
+        this.setState({quarterFinalsArray:theItems})
+      }
+      if(this.state.currentSelection==='semiFinals'){
+        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        var index2 = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+        var nowTime=new Date().getTime()
+        var theItems=this.state.semiFinalsArray
+        
+        if(nowTime<time){
+          this.notify('Match not yet started')
+          return
+        }
+        if(winner!=='N/A'){
+         this.notify('Winner already filled')
+          return
+        }
+        var theItems=this.state.semiFinalsArray
+        theItems[index2]['showChooseWinner']=true
+        this.setState({semiFinalsArray:theItems})
+        console.log('theItems',theItems)
+      }
+      if(this.state.currentSelection==='finals'){
+        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        var index2 = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
+        var nowTime=new Date().getTime()
+        var theItems=this.state.finalArray
+        if(nowTime<time){
+          this.notify('Match not yet started')
+          return
+        }
+        if(winner!=='N/A'){
+         this.notify('Winner already filled')
+          return
+        }
+        var theItems=this.state.finalArray
+        theItems[index2]['showChooseWinner']=true
+        this.setState({finalArray:theItems})
+        console.log('theItems',theItems)
+      }
+      }
+      chosenWinner=(id,winner)=>{
+        if(this.state.currentSelection==='firstRound'){
+        var index2 = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.firstRoundArray
+        theItems[index2]['chosenWinner']=winner
+        theItems[index2]['status1']='played'
+       // theItems[index2]['isItPlayed']='played'
+        this.setState({firstRoundArray:theItems})
+        console.log('this.state.currentItems 008',theItems)
+      }
+        if(this.state.currentSelection==='quarterFinals'){
+          var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+          var theItems=this.state.quarterFinalsArray
+          theItems[index2]['chosenWinner']=winner
+          theItems[index2]['status1']='played'
+          console.log('this.state.currentItems 009',theItems)
+          this.setState({quarterFinalsArray:theItems})
+        }
+        if(this.state.currentSelection==='semiFinals'){
+          var index2 = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+          var theItems=this.state.semiFinalsArray
+          theItems[index2]['chosenWinner']=winner
+          theItems[index2]['status1']='played'
+          console.log('this.state.currentItems 009',theItems)
+          this.setState({semiFinalsArray:theItems})
+        }
+        if(this.state.currentSelection==='finals'){
+          var index2 = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
+          var theItems=this.state.finalArray
+          theItems[index2]['chosenWinner']=winner
+          theItems[index2]['status1']='played'
+          console.log('this.state.currentItems 009',theItems)
+          this.setState({finalArray:theItems})
+        }
+      }
+      closePickWinner=(id)=>{
+        if(this.state.currentSelection==='firstRound'){
+        var index2 = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
+        var theItems=this.state.firstRoundArray
+        delete theItems[index2]['chosenWinner']
+        delete theItems[index2]['showChooseWinner']
+        this.setState({firstRoundArray:theItems})
+        console.log('this.state.currentItems 001',theItems)}
+        if(this.state.currentSelection==='quarterFinals'){
+          var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+          var theItems=this.state.quarterFinalsArray
+          delete theItems[index2]['chosenWinner']
+          delete theItems[index2]['showChooseWinner']
+          this.setState({quarterFinalsArray:theItems})
+          console.log('this.state.currentItems 001',theItems)}
+          if(this.state.currentSelection==='semiFinals'){
+            var index2 = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+            var theItems=this.state.semiFinalsArray
+            delete theItems[index2]['chosenWinner']
+            delete theItems[index2]['showChooseWinner']
+            this.setState({semiFinalsArray:theItems})
+            console.log('this.state.currentItems 001',theItems)}
+            if(this.state.currentSelection==='finals'){
+              var index2 = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
+              var theItems=this.state.finalArray
+              delete theItems[index2]['chosenWinner']
+              delete theItems[index2]['showChooseWinner']
+              this.setState({finalArray:theItems})
+              console.log('this.state.currentItems 001',theItems)}
+    
+      }
+      submitWinner=(id,winner)=>{
+        console.log('haaaaaaaaaaaapa 000000')
+        if(this.state.currentSelection==='firstRound'){
+        var index = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
+        if(winner!=='player1'&&winner!=='player2'){
+          this.notify('Nothing to submit')
+        }else{
+        this.checkForOutcome(index,winner)
+        }
+      }
+      if(this.state.currentSelection==='quarterFinals'){
+        var index = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+        if(winner!=='player1'&&winner!=='player2'){
+          this.notify('Nothing to submit')
+        }else{
+        this.checkForOutcome(index,winner)
+        }
+      }
+      if(this.state.currentSelection==='semiFinals'){
+        var index = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
+        if(winner!=='player1'&&winner!=='player2'){
+          this.notify('Nothing to submit')
+        }else{
+        this.checkForOutcome(index,winner)
+        }
+      }
+      if(this.state.currentSelection==='finals'){
+        var index = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
+        if(winner!=='player1'&&winner!=='player2'){
+          this.notify('Nothing to submit')
+        }else{
+        this.checkForOutcome(index,winner)
+        }
+      }
+      }
+      checkForOutcome=async (index,winner) => {
+        try {
+          //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+          var shortArr=[]
+          console.log('haaaaaaaaaaaapa 2222',index,winner)
+    
+            if((this.state.currentSelection==='firstRound')){
+              this.checkForRoundOutcome(index,winner,this.state.firstRoundArray,'sweet16Arr')
+            }
+            if((this.state.currentSelection==='quarterFinals')){
+              this.checkForRoundOutcome(index,winner,this.state.quarterFinalsArray,'elite8Arr')
+            }
+            if((this.state.currentSelection==='semiFinals')){
+              this.checkForRoundOutcome(index,winner,this.state.semiFinalsArray,'final4Arr')
+            }
+            if((this.state.currentSelection==='finals')){
+              this.checkForRoundOutcome(index,winner,this.state.finalArray,'finalArr')
+            }
+            } catch (error) {
+              ////console.log('error',error)
+            }
+        }
+        checkForRoundOutcome=async (index,winner,items,name) => {
+          try {
+            //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+            var shortArr=[]
+            console.log('haaaaaaaaaaaapa',this.state.currentSelection,index,winner)
+            items[index]['winner']=winner
+            delete items[index]['chosenWinner']
+            delete items[index]['showChooseWinner']
+            this.setState({[name]:items})
+            items.map((item,index)=>{
+              console.log('shortArr',shortArr)
+              shortArr['p1Points']=item.p1Points
+              shortArr['p2Points']=item.p2Points
+              shortArr['winner']=item.winner
+              shortArr['status1']=item.status1
+              shortArr['id']=item.id
+              var theItem={p1Points:item.p1Points,p2Points:item.p2Points,winner:item.winner,
+                status1:item.status1,id:item.id
+              }
+              shortArr.push(theItem)
+            })
+            if(this.state.theEventKey==='',this.state.currentSelection==='',scoreName==='',items.length<1)return
+            var scoreName=''
+            if(!this.state.theEventKey||this.state.theEventKey.length<3)return
+            //if(this.state.currentSelection==='sweet16'){scoreName='round1Score'}
+            //if(this.state.currentSelection==='round2'){scoreName='round2Score'}
+            scoreName=this.state.currentSelection+'Score'
+            let theItems = JSON.stringify(shortArr);
+            var theLink='theEvents::NCAAF::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
+            if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+            var theQuery=encodeURIComponent(theLink)
+            console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
+            console.log('theLink',theLink,theItems)
+            console.log('this.state.shortArr 006',shortArr)
+           // return
+            await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term="+theQuery)
+            //await axios.get("http://localhost:4000/getSingleNCAAFNFLResults?term="+theQuery)
+              .then((res) => {
+                var theOutcome = res.data
+                this.notify(theOutcome)
+                if(theOutcome==='Success Updating Results'){
+                  this.checkAuth()
+                }
+              })
+              } catch (error) {
+                ////console.log('error',error)
+              }
+          }
+   openConfirmModal=(message,type)=>{
+    this.setState({confirmMessage:message,showConfirmModal:true,confirmModalType:type})
+  }
+  proceed=()=>{
+  if(this.state.confirmModalType==='oddsUpdate'){this.checkForOddsUpdate()}
+  if(this.state.confirmModalType==='resultsUpdate'){this.checkForOutcome2()}
+  }
   render() {
    // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
@@ -1237,7 +1138,7 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.currentSelection,item.oddsUpdate,item.resultsUpdate)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -1291,14 +1192,14 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               repeat={Infinity}
             />}
         </div>
-          {this.state.isAdmin?<div className={style.resultsCont}>
+          {this.state.isAdmin?<div className={style.resultsCont}>  
                   <div className={style.resultsDiv}>
-                  <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
-                  <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
+                  <button className={style.resultsBtn} onClick={() => this.openConfirmModal('Are you sure you want to update the NCAAF Match Odds?','oddsUpdate')}>Update Match Odds</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.oddsUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
-                  <button className={style.resultsBtn} onClick={() => this.checkForOutcome()}>Fetch Results Updates</button>
-                  <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
+                  <button className={style.resultsBtn} onClick={() => this.openConfirmModal('Are you sure you want to get the NCAAF Match Results?','resultsUpdate')}>Fetch Results Updates</button>
+                  <p className={style.lastUpdateP}>Last Update {this.state.resultsUpdate}</p>
                   </div>
                   </div>:null}
         <div className={style.scoresCont}>
@@ -1348,7 +1249,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p>NCAAF First Round</p>
                 <p>{theTime}</p>
               </div>
-
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis,'firstRound')}>
+              <p>Pick Winner</p>
+              </div>:null}
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
                 <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
 
@@ -1362,8 +1265,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   
                   {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
                   <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
+                  {/*<p className={style.countryP}>{item.fighter1Country}</p>
+                  <p className={style.P2}>{item.p1Rec}</p>*/}
                 </div>
                 <BsFillLightningFill className={style.sepIc} />
                 <div className={style.theContRight}>
@@ -1374,8 +1277,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
                   <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
+                  {/*<p>{item.country}</p>
+                  <p className={style.P2}>{item.p2Rec}</p>*/}
                 </div>
               </div>
               <div className={style.dateDiv}>
@@ -1391,6 +1294,27 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
+            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player1}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player2}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
+            </div></div>:null}
           </div>
         )
   })}
@@ -1426,7 +1350,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p>NCAAF Quarter Finals</p>
                 <p>{theTime}</p>
               </div>
-
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis,'quarterFinals')}>
+              <p>Pick Winner</p>
+              </div>:null}
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
                 <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
 
@@ -1439,8 +1365,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   </div>
                   {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
                   <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
+                  {/*<p className={style.countryP}>{item.fighter1Country}</p>
+                  <p className={style.P2}>{item.p1Rec}</p>*/}
                 </div>
                 <BsFillLightningFill className={style.sepIc} />
                 <div className={style.theContRight}>
@@ -1451,8 +1377,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
                   <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
+                  {/*<p>{item.country}</p>
+                  <p className={style.P2}>{item.p2Rec}</p>*/}
                 </div>
               </div>
               <div className={style.dateDiv}>
@@ -1468,6 +1394,27 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
+            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player1}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player2}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
+            </div></div>:null}
           </div>
         )
   })}
@@ -1503,7 +1450,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p>NCAAF Semi Finals</p>
                 <p>{theTime}</p>
               </div>
-
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis,'semiFinals')}>
+              <p>Pick Winner</p>
+              </div>:null}
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
                 <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
 
@@ -1516,8 +1465,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   </div>
                   {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
                   <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
+                  {/*<p className={style.countryP}>{item.fighter1Country}</p>
+                  <p className={style.P2}>{item.p1Rec}</p>*/}
                 </div>
                 <BsFillLightningFill className={style.sepIc} />
                 <div className={style.theContRight}>
@@ -1528,8 +1477,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
                   <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
+                  {/*<p>{item.country}</p>
+                  <p className={style.P2}>{item.p2Rec}</p>*/}
                 </div>
               </div>
               <div className={style.dateDiv}>
@@ -1545,6 +1494,27 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
+            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player1}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player2}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
+            </div></div>:null}
           </div>
         )
   })}</div></div>
@@ -1578,7 +1548,9 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <p>NCAAF Finals</p>
                 <p>{theTime}</p>
               </div>
-
+              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis,'finals')}>
+              <p>Pick Winner</p>
+              </div>:null}
               {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
                 <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
 
@@ -1591,8 +1563,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   </div>
                   {item.player1!=='N/A'?<p className={style.P1}>{item.player1}</p>: 
                   <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
+                  {/*<p className={style.countryP}>{item.fighter1Country}</p>
+                  <p className={style.P2}>{item.p1Rec}</p>*/}
                 </div>
                 <BsFillLightningFill className={style.sepIc} />
                 <div className={style.theContRight}>
@@ -1603,8 +1575,8 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                   {item.player2!=='N/A'?<p className={style.P1}>{item.player2}</p>: 
                   <p className={style.P1}>TBA</p>}
                   <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
+                  {/*<p>{item.country}</p>
+                  <p className={style.P2}>{item.p2Rec}</p>*/}
                 </div>
               </div>
               <div className={style.dateDiv}>
@@ -1620,6 +1592,27 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
                 <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal(itemToModals)}>MAKE YOUR PICK</button></div>
               }
             </div>
+            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player1}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.player2}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
+            </div></div>:null}
           </div>
         )
   })}</div></div>
@@ -1649,6 +1642,15 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
               <button className={style.submitBtn} onClick={() => this.createEvent()}>Create Event</button>
             </div>
           </div> : null}
+
+         {this.state.showConfirmModal?<div className={style.detailsModal} onClick={()=>this.setState({showConfirmModal:false})}>
+         <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
+          <p style={{fontSize:18,fontWeight:'bold',marginBottom:5,color:'#292f51'}}>Confirm</p>
+          <p style={{marginBottom:20}}>{this.state.confirmMessage}</p>
+          <div style={{display:'flex',justifyContent:'end'}}>
+            <button style={{backgroundColor:'#ddd',border:'none',color:'black',padding:'7px 15px',cursor:'pointer'}} onClick={()=>this.setState({showConfirmModal:false})}>Cancel</button>
+            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed}>Proceed</button>
+          </div></div></div>:null}
         <ToastContainer />
       </>
     )
@@ -1657,16 +1659,3 @@ await theDbEvent.child('mainCardShort').once('value',dataSnapshot=>{
 
 export default NCAA
 
-/*
-const firstRoundEdit=[
-    {id:'idilulya1',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'First Round'},
-    {id:'idilulya2',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'First Round'},
-    {id:'idilulya3',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'First Round'},
-    {id:'idilulya4',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'First Round'},
-    ]
-const quarterFinalsEdit=[
-      {id:'idilulya5',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'Quarter Finals'},
-      {id:'idilulya6',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'Quarter Finals'},
-      {id:'idilulya7',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'Quarter Finals'},
-      {id:'idilulya8',time:'',timeInMillis:0,player1:'',p1Points:'',p1Rec:'',p2Rec:'',player2:'',p2Points:'',p1Photo:'',p2Photo:'',match:'Quarter Finals'},
-    ] */

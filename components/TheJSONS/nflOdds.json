@@ -184,6 +184,133 @@
           ]
         }
   ]
+},
+
+
+
+{
+  "id": "8e69ba9c62b475e7c9dda2260f7e5a87",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2025-07-20T02:13:00Z",
+  "home_team": "Kansas City Chiefs",
+  "away_team": "Houston Texans",
+  "bookmakers": [
+      {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-08T00:50:00Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2025-04-08T00:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Kansas City Chiefs",
+                  "price": -315
+                },
+                {
+                  "name": "Houston Texans",
+                  "price": 265
+                }
+              ]
+            }
+          ]
+        }
+  ]
+},
+{
+"id": "f86739438df6c6481fdec0d16c189023",
+"sport_key": "americanfootball_nfl",
+"sport_title": "NFL",
+"commence_time": "2025-07-22T02:13:00Z",
+"home_team": "Detroit Lions",
+"away_team": "Washington Commanders",
+"bookmakers": [
+    {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2025-04-08T00:50:00Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2025-04-08T00:50:00Z",
+            "outcomes": [
+              {
+                "name": "Detroit Lions",
+                "price": -210
+              },
+              {
+                "name": "Washington Commanders",
+                "price": 320
+              }
+            ]
+          }
+        ]
+      }
+]
+},
+{
+"id": "0c95381e5634e6c64aa5ca079e669dea",
+"sport_key": "americanfootball_nfl",
+"sport_title": "NFL",
+"commence_time": "2025-07-21T02:13:00Z",
+"home_team": "Philadelphia Eagles",
+"away_team": "Los Angeles Rams",
+"bookmakers": [
+    {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2025-04-08T00:50:00Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2025-04-08T00:50:00Z",
+            "outcomes": [
+              {
+                "name": "Philadelphia Eagles",
+                "price": -252
+              },
+              {
+                "name": "Los Angeles Rams",
+                "price": 221
+              }
+            ]
+          }
+        ]
+      }
+]
+},
+{
+"id": "e2845c7119bd64fe725e9f9495032d72",
+"sport_key": "americanfootball_nfl",
+"sport_title": "NFL",
+"commence_time": "2025-07-24T02:13:00Z",
+"home_team": "Buffalo Bills",
+"away_team": "Baltimore Ravens",
+"bookmakers": [
+    {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2025-04-08T00:50:00Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2025-04-08T00:50:00Z",
+            "outcomes": [
+              {
+                "name": "Buffalo Bills",
+                "price": -175
+              },
+              {
+                "name": "Baltimore Ravens",
+                "price": 175
+              }
+            ]
+          }
+        ]
+      }
+]
 }
 
 ]

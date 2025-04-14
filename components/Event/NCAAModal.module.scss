@@ -116,13 +116,17 @@ $blackish: #292f51;
 .P1 {
   margin-top: 10px;
   color: $blackish;
-  font-size: 14px;
-  text-align: center;
+  font-size: 13px;
   width: 100%;
   margin-bottom: 0px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  border-width: 1px;
+  padding: 5px 5px;
+  border: none;
+  border-bottom: 1px solid #eee;
+}
+.P1[type="datetime-local"]::-webkit-inner-spin-button,
+.P1[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }
 
 .p1Points {
@@ -183,12 +187,13 @@ $blackish: #292f51;
 
 .P2 {
   margin-top: 10px;
-  color: #c1c1c1;
-  font-size: 14px;
-  text-align: center;
-  padding: 5px 10px;
-  border-radius: 5px;
-  border-width: 1px;
+  color: $blackish;
+  font-size: 13px;
+  width: 100%;
+  margin-bottom: 0px;
+  padding: 5px 5px;
+  border: none;
+  border-bottom: 1px solid #eee;
 }
 
 .p2Points {
@@ -236,6 +241,7 @@ $blackish: #292f51;
   color: $blackish;
 }
 
+
 .submitBtn {
   background-color: $redColor;
   color: white;
@@ -244,10 +250,39 @@ $blackish: #292f51;
   border: none;
   width: 200px;
   align-self: center;
-  margin-top: 30px;
+  margin-top: 50px;
   margin-bottom: 50px;
   font-size: 18px;
   cursor: pointer;
+}
+.submitBtn2{
+  background-color: $redColor;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: none;
+  width: 200px;
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.cancelBtn {
+  color: $blackish;
+  padding: 9px 9px;
+  border-radius: 10px;
+  border: 1px solid $blackish;
+  width: 200px;
+  align-self: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.submitDiv{
+  display: flex;
+  flex-direction: column;
 }
 
 @media all and (max-width: 800px) {

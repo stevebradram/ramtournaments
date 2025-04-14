@@ -27,7 +27,8 @@ class RamUfc extends Component {
     currentScore:'',bestPossibleScore:'',currentRank:'',editDetailsModal:false,profilePhoto:'',theCurrentEvent:'ramUfc',pastEventsAvailable:false,showProgressBar:false,
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],showReel:false,count:0,
-    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:''
+    showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:'',
+    showConfirmModal:false,confirmMessage:'',confirmModalType:'',isAdmin:false,allUFCMatches:[]
   }
   componentDidMount=()=>{
    ////console.log('on raaaaaaaaaaaaam ufc')
@@ -365,6 +366,10 @@ showProgressBar2=()=>{
        userId=user.uid
        this.setState({userId,userLoggedIn:true})
        if(userId){this.checkUpcomingPastGames(userId)}
+       userId = user.uid
+       if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
+         this.setState({isAdmin:true}) 
+        }
        
      }else{
       this.setState({userLoggedIn:false})
@@ -937,6 +942,61 @@ chooseHomeEvent=(event,id)=>{
       this.loadOtherFights(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection)
     
     };
+    openConfirmModal=(message,type)=>{
+      this.setState({confirmMessage:message,showConfirmModal:true,confirmModalType:type})
+    }
+    proceed=()=>{
+    if(this.state.confirmModalType==='oddsUpdate'){this.goToServer()}
+    if(this.state.confirmModalType==='resultsUpdate'){this.checkForOutcome()}
+    }
+    doNothing=(e)=>{
+      e.preventDefault()
+      e.stopPropagation()
+      }
+      
+      pickWinner=(id,winner,time)=>{
+        var nowTime=new Date().getTime()  
+        var allUFCMatches=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
+        var index2 = allUFCMatches.map(function(x) {return x.id; }).indexOf(id);
+        var nowTime=new Date().getTime()
+        if(nowTime<time){
+          this.notify('Match not yet started')
+          return
+        }
+        if(winner!=='N/A'){
+         this.notify('Winner already filled')
+          return
+        }
+        allUFCMatches[index2]['showChooseWinner']=true
+        this.setState({allUFCMatches:theItems})
+        console.log('this.state.currentItems allUFCMatches',allUFCMatches)
+    }
+    chosenWinner=(id,winner)=>{
+      var index2 = this.state.allUFCMatches.map(function(x) {return x.id; }).indexOf(id);
+      var theItems=this.state.allUFCMatches
+      theItems[index2]['chosenWinner']=winner
+      theItems[index2]['status1']='played'
+      this.setState({allUFCMatches:theItems})
+      console.log('this.state.currentItems 008',theItems)
+    }
+    closePickWinner=(id)=>{
+      var index2 = this.state.allUFCMatches.map(function(x) {return x.id; }).indexOf(id);
+      var theItems=this.state.allUFCMatches
+      delete theItems[index2]['chosenWinner']
+      delete theItems[index2]['showChooseWinner']
+      this.setState({allUFCMatches:theItems})
+      console.log('this.state.currentItems 001',theItems)
+    }
+    
+    submitWinner=(id,winner)=>{
+      console.log('haaaaaaaaaaaapa 000000')
+      var index = this.state.allUFCMatches.map(function(x) {return x.id; }).indexOf(id);
+      if(winner!=='player1'&&winner!=='player2'){
+        this.notify('Nothing to submit')
+      }else{
+      //this.checkForOutcome(index,winner)
+      }
+    }
   render() {
    var flockTeamName=''
    var itemToModals=''
@@ -1013,11 +1073,11 @@ chooseHomeEvent=(event,id)=>{
                   <p className={style.lastUpdateP}>Last Update {this.state.getEventsTimeUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
-                  <button className={style.resultsBtn} onClick={()=>this.goToServer()}>Update Match Odds</button>
+                  <button className={style.resultsBtn} onClick={()=>this.openConfirmModal('Are you sure you want to update the UFC Match Odds?','oddsUpdate')}>Update Match Odds</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
                   </div>
                   <div className={style.resultsDiv}>
-                  <button className={style.resultsBtn} onClick={()=>this.checkForOutcome()}>Fetch Results Updates</button>
+                  <button className={style.resultsBtn} onClick={()=>this.openConfirmModal('Are you sure you want to get the UFC Match Results?','resultsUpdate')}>Fetch Results Updates</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
                   </div>
                   </div>
@@ -1099,7 +1159,9 @@ chooseHomeEvent=(event,id)=>{
                         <p>{this.state.selectedEvent} - {item.match}</p>
                         <p>{matchTime}</p>
                       </div>
-                      
+                      {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis)}>
+                      <p>Pick Winner</p>
+                     </div>:null}
                       {status1Item}
                       {/*item.status1==='notPlayed'?<>{timeDiff>300000?<div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount}/></div>:<p className={style.eventStatP} style={{color:'#CB1E31'}}>Ongoing</p>}</>:
                       <p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>*/}
@@ -1149,6 +1211,14 @@ chooseHomeEvent=(event,id)=>{
       {this.state.editDetailsModal?<div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({editDetailsModal:false})} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName']+'::'+this.state.currentEventUserInfo['flockName']+'::'+this.state.profilePhoto+'::'+this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey}/></div>:null}
       <ToastContainer/>
       {this.state.showProgressBar?<ProgressBar/>:null}
+      {this.state.showConfirmModal?<div className={style.detailsModal} onClick={()=>this.setState({showConfirmModal:false})}>
+         <div className={style.createEventDiv} onClick={(e)=>this.doNothing(e)}>
+          <p style={{fontSize:18,fontWeight:'bold',marginBottom:5,color:'#292f51'}}>Confirm</p>
+          <p style={{marginBottom:20}}>{this.state.confirmMessage}</p>
+          <div style={{display:'flex',justifyContent:'end'}}>
+            <button style={{backgroundColor:'#ddd',border:'none',color:'black',padding:'7px 15px',cursor:'pointer'}} onClick={()=>this.setState({showConfirmModal:false})}>Cancel</button>
+            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed}>Proceed</button>
+          </div></div></div>:null}
       </>
     )
   }

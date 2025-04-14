@@ -45,6 +45,7 @@ $theDark:#b2b2b2;
     align-items: center;
     box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2); 
     margin: 10px;
+    position: relative;
     
 }
 .matchesHeadDiv{
@@ -563,6 +564,28 @@ $theDark:#b2b2b2;
  .shareDiv p{
     margin-right: 5px;
  }
+ .createEventDiv{
+    width: 350px;
+    height: auto;
+    background-color: white;
+    padding: 20px 20px 40px 20px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+}
+.pickWinnerDiv{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.pickWinnerDiv p{
+    font-size: 12px;
+    border: 1px solid #70c070;
+    padding: 2px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #70c070;
+}
 @media all and (max-width: 900px) {
     .profileDiv{
         display: flex;

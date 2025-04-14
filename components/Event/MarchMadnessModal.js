@@ -43,7 +43,8 @@ class NCAAModal extends Component {
   }
   
   componentDidMount=()=>{
-    var incomingData = JSON.parse(JSON.stringify(this.props.itemsToNCAABModal));
+   // var incomingData = JSON.parse(JSON.stringify(this.props.itemsToNCAABModal));
+    var incomingData = this.props.itemsToNCAABModal.map(item => JSON.parse(JSON.stringify(item)));
     //var incomingData=[].concat(this.props.itemsToNCAABModal)//[...this.props.itemsToNCAABModal]
     console.log('incomingData',this.props.eventToNCAABModal,this.state.currentSelection,incomingData)
     if(this.state.currentSelection!=='round1'){this.setState({getFromOddsApi:true})}
@@ -674,8 +675,8 @@ sortOddsJson=async(theArr,stateEdit)=>{
 }
 }
   cancelEdit=()=>{
-    round1Edit=[],round2Edit=[],sweet16Edit=[]
-    this.setState({round1Edit:[],round2Edit:[],sweet16Edit:[]},()=>{
+    round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
+    this.setState({round1Edit:[],round2Edit:[],sweet16Edit:[],elite8Edit:[],final4Edit:[],finalRoundEdit:[]},()=>{
       this.props.onClick('false','false')
     })
   }

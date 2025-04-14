@@ -1346,9 +1346,6 @@ getNCAABMatchesFinal = () => {
           console.log('this.state.currentItems 001',theItems)}
     }
     pickWinner=(id,winner,time)=>{
-     //console.log('this.state.currentSelection',this.state.currentSelection)
-     //return
-     //this.setState({currentSelection:'sweet16'})
       var nowTime=new Date().getTime()  
       if(this.state.currentSelection==='round1'){
       var index2 = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
@@ -1843,7 +1840,7 @@ getNCAABMatchesFinal = () => {
               repeat={Infinity}
             />}
         </div>
-          {this.state.isAdmin?<div className={style.resultsCont}>
+          {/*this.state.isAdmin?<div className={style.resultsCont}>
                   <div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={() => this.checkForOddsUpdate()}>Update Match Odds</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
@@ -1852,7 +1849,7 @@ getNCAABMatchesFinal = () => {
                   <button className={style.resultsBtn} onClick={() => this.checkForOutcome2()}>Fetch Results Updates</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
                   </div>
-                  </div>:null}
+                  </div>:null*/}
           <div className={style.scoresCont}>
         <div className={style.scoresCont1}>
         <p className={style.currentP}>{titleToShow}</p>

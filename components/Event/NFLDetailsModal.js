@@ -107,50 +107,8 @@ class DetailsModal extends Component {
     }
     })
   }*/
-  submitFlockName=()=>{
-    this.setState({submitedFlockName:'',flockNameErr:''})
-    if (!this.state.buttonClick)return
-    this.buttonClickStat()
-    if (this.state.flockName<3){
-      this.notify('Flock Name must be selected')
-      this.setState({flockNameErr:'Flock Name must be selected'})}
-    else{this.checkAuth('submitFlockName')}
-  }
-  flockNameToDatabase=(userId)=>{
-    var theFlockName=this.state.flockName.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
-        theFlockName=theFlockName.replace(/ /g,"_")
-       
-      
-    var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/userData/').child('flockNames')
-    var uniqueFlockNameRef = firebase.database().ref('/flockNames/uniques/'+theFlockName)
-    var uniqueFlockMembersRef = firebase.database().ref('/flockNames/members/'+theFlockName).child(userId);
-   
-    
-   
-    uniqueFlockNameRef.once('value',dataSnapshot=>{
-      
-      if(!dataSnapshot.val()){
-       //console.log('there is no data')
-       uniqueFlockNameRef.set(userId)
-    uniqueFlockMembersRef.set('Admin')
-    myFlockNamesRef.child(theFlockName).set(userId,(error) => {
-        if (error) {
-          this.notify('An error occured while updating  flock name')
-        }else{
-          var flocks=this.state.ramFlockNames
-          flocks.push(this.state.flockName)
-          this.setState({flockNameModal:false,openNewFlockModal:true,ramFlockNames:flocks,flockName2:this.state.flockName,submitedFlockName:this.state.flockName})
-          this.notify('Flock name updated successfully')
-        }
-    })
-      }else{
-        this.notify('Flock Name already taken, please enter another name')
-        this.setState({flockNameErr:'Flock Name already taken, please enter another name',flockName:'',flockNameModal:false,submitedFlockName:''});
-        
-      }
-      })
-      
-  }
+
+
   submitDetails=()=>{
     this.setState({flockNameErr:''})
     if (!this.state.buttonClick)return
@@ -240,7 +198,6 @@ class DetailsModal extends Component {
       var emailVerified=user.emailVerified
       this.setState({userId})
       if(from==='submitDetails'){this.toDatabase()}
-      if(from==='submitFlockName'){this.flockNameToDatabase(userId)}
       localStorage.set('loggedIn', 'true');
       localStorage.set('userId', userId);
       if(emailVerified===true){localStorage.set('emailVerified', 'true');}
@@ -256,8 +213,11 @@ class DetailsModal extends Component {
     var itemsData={}
     ////console.log('looooooooobo')
     const theTime = new Date().getTime()
-    var detailsData = {}
+    var detailsData = {},scoreData={}
     var dataScore=this.props.currentSelection+'Score'
+    var theSelection=this.props.currentSelection
+     var thePick=theSelection+'Pick'
+     var bps2=theSelection+'BPS'
     if(this.props.currentSelection==='wildCard'){
       detailsData = {
         teamName:this.state.teamName,
@@ -272,6 +232,11 @@ class DetailsModal extends Component {
         currentRank:false, 
         currentPick:this.props.currentSelection
       }
+      scoreData={BPS:this.state.bestPossibleScore,score:0,
+        divisionalRoundScore:'0',conferenceChampionshipScore:'0',
+        superBowlScore:'0',[dataScore]:'0',currentPick:theSelection,
+        ramName:this.state.teamName,picked:true,[thePick]:true,
+        [bps2]:this.state.bestPossibleScore}
     }else{
       detailsData = {
         teamName:this.state.teamName,
@@ -279,8 +244,12 @@ class DetailsModal extends Component {
         flockName:this.state.flockName,
         [dataScore]:'0.00',
         currentPick:this.props.currentSelection
-      }}
-      var scoreData={BPS:this.state.bestPossibleScore,score:0,ramName:this.state.teamName,picked:true}
+      }
+      scoreData={BPS:this.state.bestPossibleScore,score:0,currentPick:theSelection,
+        ramName:this.state.teamName,picked:true, [thePick]:true,
+        [bps2]:this.state.bestPossibleScore}
+      }
+      //var scoreData={BPS:this.state.bestPossibleScore,score:0,ramName:this.state.teamName,picked:true}
    // }
    // detailsData[dataScore]='0.00'
     var i=0

@@ -61,6 +61,7 @@ $theDark:#b2b2b2;
     align-items: center;
     //box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2); 
     margin: 10px;
+    position: relative;
     
 }
 .finalsDiv{
@@ -221,6 +222,7 @@ $theDark:#b2b2b2;
     color: $blackish;
     font-size: 18px;
     text-align: center;
+    margin-bottom: 5px;
 }
 .countryP{
     font-weight: 600;
@@ -644,6 +646,92 @@ $theDark:#b2b2b2;
     height: 30px;
     padding: 2px 10px 2px 0px;
   }
+  .pickWinnerDiv{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.pickWinnerDiv p{
+    font-size: 12px;
+    border: 1px solid #70c070;
+    padding: 2px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #70c070;
+}
+.listDivB{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;left:0;right:0;bottom:0;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.closeIc{
+    position: absolute;
+    top:0;right:0;
+    margin: 10px 20px 5px 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+.listDivB2 p{
+    font-size: 18px;
+    margin-left: 5px;
+}
+.chooseP{
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: $blackish;
+   
+}
+.listDivB2{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    cursor: pointer;
+    color: $blackish;
+}
+.listDivB2C{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    cursor: pointer;
+    color: $redColor;
+}
+.listDivB2C p{
+    font-size: 18px;
+    margin-left: 5px;
+}
+.listDivB2:hover{
+    color: $redColor;
+}
+.listDivB button{
+    padding: 7px 50px;
+    background-color: $redColor;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.listDivB3{
+    display: flex;
+    align-items: center;
+    color: #4ccc57;
+}
+.listDivB3 p{
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 14px;
+}
 @media all and (max-width: 900px) {
     .profileDiv{
         display: flex;
