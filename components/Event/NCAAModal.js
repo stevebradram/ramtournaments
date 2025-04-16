@@ -397,7 +397,7 @@ class NCAAModal extends Component {
                     <div className={styles.theCont0}>
                       <div className={styles.theCont01}>
                         <p>{item.matchType+' Match '+(index+1)}</p>
-                        <p>{item.time.commenceTime}</p>
+                        <p>{item.commenceTime}</p>
                       </div>
                       <div className={styles.theCont}>
                         <div className={styles.theContLeft}>

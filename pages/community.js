@@ -200,12 +200,14 @@ class leaderboard extends Component {
   }
   loadAdminData = (theEventKey) => {
     var theAdminFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/admin/')
+    var flockCreatorsRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/flockCreators/')
     theAdminFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
         var i = 0, allArr = []
         dataSnapshot.forEach((data) => {
           i++
+          var theUid=data.key
           var theData = data.val()
           theData = theData.split('!!')
           var name = theData[0]
@@ -213,11 +215,21 @@ class leaderboard extends Component {
           if (name.includes('$$$')) { picked = false }
           else { { picked = true } }
           var newName = theData[0].split('$$$').join('')
-          var theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked }
-          allArr.push(theArr)
+          var theArr={}
+          flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
+            if (dataSnapshot.exists()){
+              console.log('ikoooooooooo',theUid)
+              theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'true'}
+            }else{
+              console.log('hakunaaaaaa',theUid)
+              theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'false'}
+            }
+            allArr.push(theArr)
+          })
+          
           if (count === i) {
             this.setState({ theAdminFlocksArr: allArr })
-           // console.log('theFlocksArr', allArr)
+            console.log('theFlocksArr', allArr)
           }
         })
       } else {
@@ -501,6 +513,7 @@ class leaderboard extends Component {
                     <th>RAM Name</th>
                     <th>Flock Name</th>
                     <th>Picked?</th>
+                    <th>Creator?</th>
                     <th>Email</th>
                     <th>Phone No</th>
                   </tr>
@@ -512,6 +525,7 @@ class leaderboard extends Component {
                         <td>{item.name}</td>
                         <td>{item.flockName}</td>
                         <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
+                        <td style={{ color: item.isCreator==='true' ? 'green' : 'red' }}>{item.isCreator}</td>
                         <td>{item.email}</td>
                         <td>{item.phoneNo}</td>
                       </tr>)

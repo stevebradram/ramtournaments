@@ -13,12 +13,16 @@ import { MdInfoOutline } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { ToastContainer, toast } from 'react-toastify';
 import { MdOutlineShare } from "react-icons/md";
+import { TbCheckbox } from "react-icons/tb";
+import { MdClose } from "react-icons/md";
 import axios from "axios"
 import dayjs from 'dayjs';
 import { SlOptionsVertical } from "react-icons/sl";
 import copy from 'copy-to-clipboard';
 import ProgressBar from '../Helper/ProgressBar'
 import PastUpcomingEvents from './PastUpcomingEvents'
+import RamUFCModal from './RamUFCModal'
+import theRamOdds from './ramOdds.json'
 var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
 class RamUfc extends Component {
   state={theMenu:'mainCard',theItems:[],opendetailsModal:false,getRamDetails:false,dataAvailable:false,theEvent:'Upcoming Events',currentID:1,
@@ -28,7 +32,7 @@ class RamUfc extends Component {
     eventRamUfc:'',eventMarchMadness:'',eventNfl:'',ramUfcMaincardArray:[],pastGames:[],theEventTitle:'',theEventKey:'',ramUfcEarlyPrelimsArray:[],endTime:0,
     ramUfcPrelimsArray:[],nflArray:[],marchMadnessArray:[],ufcSubHeadings:'',upcomingGames:[],currentEventUserInfo:{},allMatches:[],expired:false,allGames:[],showReel:false,count:0,
     showGetMatchesModal:false,UFCLinkInput:'',selectHomeEvent:false,selectHomeEventId:'',matchTypesNo:0,theLink:'',getEventsTimeUpdate:'',oddsTimeUpdate:'',fetchResultsTimeUpdate:'',
-    showConfirmModal:false,confirmMessage:'',confirmModalType:'',isAdmin:false,allUFCMatches:[]
+    showConfirmModal:false,confirmMessage:'',confirmModalType:'',isAdmin:false,allUFCMatches:[],sportsApiData:[],showUFCModal:false,theUfcTItleTomodal:'',theEventId:''
   }
   componentDidMount=()=>{
    ////console.log('on raaaaaaaaaaaaam ufc')
@@ -98,6 +102,7 @@ class RamUfc extends Component {
   goToServer=()=>{
  
  //this.checkForOutcome()
+ 
  this.getTimeUfcOdds(this.state.theEventKey,this.state.matchTypesNo)
 
 
@@ -121,6 +126,12 @@ showProgressBar=()=>{
     () => this.setState({showProgressBar:false}), 
     180000)
 }
+showProgressBar3=()=>{
+  this.setState({showProgressBar:true})
+  this.timerHandle = setTimeout(
+    () => this.setState({showProgressBar:false}), 
+    3000)
+}
 showProgressBar2=()=>{
   this.timerHandle = setTimeout(
     () => this.setState({showProgressBar:false}), 
@@ -130,8 +141,8 @@ showProgressBar2=()=>{
       try {
         var theLink='theEvents::ramUfc::'+theEventKey+"::"+matchTypesNo+"::"+firstEventTime+"::"+lastEventTime
         var theQuery=encodeURIComponent(theLink) 
-         //axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
-         axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
+         axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
+         //axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
@@ -143,6 +154,8 @@ showProgressBar2=()=>{
           }
       }
       getTimeUfcOdds=async(theEventKey,matchTypesNo)=>{
+        console.log('haaaapa22222')
+        //return
         var timeInfoDb=firebase.database().ref('/theEvents/eventsIds/'+theEventKey+'/time/')
         timeInfoDb.once('value',dataSnapshot=>{
           var theEventTime=dataSnapshot.val()
@@ -170,18 +183,92 @@ showProgressBar2=()=>{
        } })
   }
       checkForNewEvents=async () => {
-        if(this.state.UFCLinkInput.length<10){
+        console.log('this.state.UFCLinkInput',this.state.UFCLinkInput)
+        if(this.state.UFCLinkInput.length<1){
           this.notify('The Link input must be properly filled')
           return
           }
         try {
-         if(this.state.UFCLinkInput.startsWith('https://www.ufc.com/event/')){
+          //https://api.sportsdata.io/v3/mma/scores/json/Event/851?key=a7bc3fc549e0431885995727ce67d025
+         //if(this.state.UFCLinkInput.startsWith('https://www.ufc.com/event/')){
+      
             //console.log('starts with that shit')
-          var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
-          console.log('theQuery',this.state.UFCLinkInput)
+          //var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
+         // console.log('theQuery',this.state.UFCLinkInput)
           
-          this.showProgressBar()
-          axios.get("https://theramtournament.com/getMatches?term="+theQuery)
+          this.showProgressBar3()
+          var sportsApiData=[]
+          var theLink='https://api.sportsdata.io/v3/mma/scores/json/Event/'+this.state.UFCLinkInput+'?key=a7bc3fc549e0431885995727ce67d025'
+          await axios.get(theLink)
+            .then((res) => {
+              var theOutcome = res.data
+              var i=0
+              console.log('theOutcome rrrr',theOutcome)
+              console.log('the name',theOutcome.ShortName)
+              console.log('the length',theOutcome['Fights'].length)
+              var theTitle=theOutcome.ShortName
+              var theDay=theOutcome.Day
+              var millis=new Date(theDay).getTime()
+              var theTime = dayjs(millis).format('MMM D, YYYY')
+              var theEventId=theTitle+' '+theTime
+              theEventId=theEventId.replace(/ /g,'-').replace(/,/g,'').toLowerCase();
+              this.setState({theUfcTItleTomodal:theTitle,theEventId:theEventId})
+              theOutcome['Fights'].map((item,index)=>{
+                i++
+              
+              var plDet=item.Fighters[0]
+              var p2Det=item.Fighters[1]
+              var player1Name=plDet['FirstName']+' '+plDet['LastName']
+              var player2Name=p2Det['FirstName']+' '+p2Det['LastName']
+              var fighter1Id=plDet['FighterId']
+              var fighter2Id=p2Det['FighterId']
+
+              var p1Record=plDet['PreFightWins']+'-'+plDet['PreFightDraws']+'-'+plDet['PreFightLosses']
+              var p2Record=p2Det['PreFightWins']+'-'+p2Det['PreFightDraws']+'-'+p2Det['PreFightLosses']
+              var theData={fighter1Name:player1Name,fighter2Name:player2Name,p1Rec:p1Record,p2Rec:p2Record,
+                game:'UFC',status1:'notPlayed',winner:'N/A',type:'',fighter1Country:'',fighter2Country:'',apiId:'',
+                fighter1Id:fighter1Id,fighter2Id:fighter2Id,p1Name2:plDet['FirstName'],p2Name2:p2Det['FirstName'],p1Name3:plDet['LastName'],p2Name3:p2Det['LastName'],
+                p1Photo:'',p2Photo:''
+              }
+              sportsApiData.push(theData)
+
+             console.log('player 001',plDet['FirstName'])
+             console.log('player 002',p2Det['FirstName'])
+
+              console.log('player 1',item.Fighters[0]['FirstName'])
+              console.log('player 2',item.Fighters[1]['LastName'])
+              console.log('the sum',theOutcome['Fights'].length,i)
+              if(theOutcome['Fights'].length===i){
+                //showUFCModal:true
+                console.log('sportsApiData 2222',sportsApiData)
+               
+          var theLink=' https://api.sportsdata.io/v3/mma/scores/json/FightersBasic?key=a7bc3fc549e0431885995727ce67d025'
+           var j=0
+          axios.get(theLink)
+            .then((res) => {
+              var theOutcome = res.data
+              theOutcome.map((item)=>{
+                j++
+                sportsApiData.map((item2,index)=>{
+                  if(item.FighterId===item2.fighter1Id||item.FighterId===item2.fighter2Id){
+                    sportsApiData[index]['match']=item.WeightClass
+                    console.log('last arrr',sportsApiData)
+                  }
+                  
+                })
+              })
+              if(theOutcome.length===j){
+                console.log('last arrr kkkkk',sportsApiData)
+                this.sortOddsJson(sportsApiData,theEventId)
+              }
+            })
+                //this.sortOddsJson(sportsApiData)
+              }
+              //sportsApiData
+              })
+             
+            })
+         /* axios.get("https://theramtournament.com/getMatches?term="+theQuery)
           //await axios.get("http://localhost:4000/getMatches?term="+theQuery)
             .then((res) => {
               var theOutcome = res.data
@@ -200,17 +287,206 @@ showProgressBar2=()=>{
                 this.notify(theOutcome)
               }
               this.setState({showGetMatchesModal:false,UFCLinkInput:''})
-            })
-          }else{
-            this.notify('The Link input must be properly filled')
-            this.setState({showProgressBar:false})
-          }
+            })*/
+         
             } catch (error) {
               //console.log('error',error)
               this.setState({showProgressBar:false})
             }
         
       }
+    
+       sortOddsJson = async (sportsApiData,theEventId) => {
+        try {
+        var oddsApi = "https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
+        const response = await axios.get(oddsApi)
+        var theOddsJson = response.data
+        console.log('theOddsJson 63636363',theOddsJson)
+          var jCount = 0
+          theOddsJson.map((item1, index) => {
+            var i = 0, newOddsJson = []
+            jCount++
+            item1.bookmakers.map((item2) => {
+              i++
+              var draftkingsMarket = []
+              if (item2.key === 'draftkings') {
+      
+                draftkingsMarket = item2.markets
+                //console.log('draftkings markets',item2.markets)
+                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+                draftkingsMarket.map((item3) => {
+                  //console.log('draftkingsMarket 006',item3.outcomes)
+                  const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
+                  theOddsJson[index].draftkingsOdds = obj
+                })
+              }
+              if (item1.bookmakers.length === i) {
+                //console.log('new array',theOddsJson.length)
+                var m = 0
+                theOddsJson.map((item12, index) => {
+                  m++
+                  //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                  var awayPoints = 0, homePoints = 0
+                  if (item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0) {
+                    //console.log('shit is undefined')
+                  } else {
+                    var homeFighterName = item12.home_team
+                    var awayFighterName = item12.away_team
+                    awayPoints = item12.draftkingsOdds[awayFighterName]
+                    homePoints = item12.draftkingsOdds[homeFighterName]
+                  }
+                  var matchTime = new Date(item12.commence_time);
+                  var newItem = {
+                    awayTeam: item12.away_team, homeTeam: item12.home_team, oddId: item12.id, commenceTime: item12.commence_time, timeInMillis: matchTime.getTime(),
+                    awayTeamPoints: awayPoints, homeTeamPoints: homePoints, draftkingsOdds: item12.draftkingsOdds, id: item12.id,
+                  }
+                  newOddsJson.push(newItem)
+                })
+      
+              }
+            })
+            if (jCount === theOddsJson.length) {
+              //reorganisedOddsArray = newOddsJson
+              console.log('new array oldd', theOddsJson)
+              console.log('new array laaast', newOddsJson)
+              this.sortBothArrays(sportsApiData,newOddsJson,theEventId)
+            }
+          })
+        } catch (error) {
+          console.log('ERROR OCURRED AT SORTING ODDS', error)
+        }
+      }
+      // sortBothArrays = async (theFightsJson, sportType, fightType, eventsArr, ufcMatchId, matchId2, howManyExist, res) => {
+       sortBothArrays = async (theFightsJson, newOddsJson,theEventId) => {
+        try {
+          var v = 0, theFinalFightsArr = [],k=0,firstMatchArr=[]
+          var theFights=theFightsJson.map(item => JSON.parse(JSON.stringify(item)));
+          theFightsJson.map((item1, index) => {
+            v++
+            var f1Name = item1.fighter1Name, f2Name = item1.fighter2Name, matchMillis = item1.matchMillis
+           
+            newOddsJson.map((item2) => {
+              var allName = item2.homeTeam + ' ' + item2.awayTeam
+              var subDifference = matchMillis + 86400000
+              var p1Name=item2.homeTeam//.split(' ')[0]
+              var p2Name=item2.awayTeam//.split(' ')[0]
+
+
+              var fullName1=item2.homeTeam.split(' ')[0]+item2.homeTeam.split(' ')[1]
+              var fullName2=item2.awayTeam.split(' ')[0]+item2.awayTeam.split(' ')[1]
+              var fullName1B=item2.homeTeam.split(' ')[1]+item2.homeTeam.split(' ')[0]
+              var fullName2B=item2.awayTeam.split(' ')[1]+item2.awayTeam.split(' ')[0]
+              //if ((p1Name===item1.p1Name2||p1Name===item1.p2Name2)||(p2Name===item1.p2Name2||p2Name===item1.p2Name2))
+                if ((p1Name.includes(item1.p1Name2)||p1Name.includes(item1.p1Name3)) && (p2Name.includes(item1.p2Name2)||p2Name.includes(item1.p2Name3))) {
+                console.log('allName', allName)
+                //k++
+                var hTPoints = item2.homeTeamPoints + ''
+                var aTPoints = item2.awayTeamPoints + ''
+                var hTPointsNum = Number(theRamOdds[hTPoints])
+                var aTPointsNum = Number(theRamOdds[aTPoints])
+                if (item2.homeTeamPoints < -10000) { hTPointsNum = 1.01 }
+                if (item2.awayTeamPoints < -10000) { aTPointsNum = 1.01 }
+                if (item2.homeTeamPoints > 12620) { hTPointsNum = 1247.20 }
+                if (item2.awayTeamPoints > 12620) { aTPointsNum = 1247.20 }
+                if (item2.homeTeamPoints < 101 && item2.homeTeamPoints > -101) { hTPointsNum = 2.03 }
+                if (item2.awayTeamPoints < 101 && item2.awayTeamPoints > -101) { aTPointsNum = 2.03 }
+             
+               
+                var theId = item1.fighter1Name.split(' ')[0] + item1.fighter2Name.split(' ')[0]                
+                theFights[index]['p1Points'] = hTPointsNum
+                theFights[index]['p2Points'] = aTPointsNum
+                theFights[index]['commenceTime'] = item2.commenceTime
+                theFights[index]['timeInMillis'] = item2.timeInMillis
+                theFights[index]['matchMillis'] = item2.timeInMillis
+                theFights[index]['apiId'] = item2.id
+                theFights[index]['id'] = theId
+                firstMatchArr.push(item2.timeInMillis)
+              } else if((p2Name.includes(item1.p1Name2)||p2Name.includes(item1.p1Name3)) && (p1Name.includes(item1.p2Name2)||p1Name.includes(item1.p2Name3))){
+               // if (f1Name === item2.awayTeam || f2Name === item2.homeTeam) {
+               
+                  //if (subDifference > item2.timeInMillis) {
+                    var hTPoints = item2.homeTeamPoints + ''
+                    var aTPoints = item2.awayTeamPoints + ''
+                    var hTPointsNum = Number(theRamOdds[hTPoints])
+                    var aTPointsNum = Number(theRamOdds[aTPoints])
+                    if (item2.homeTeamPoints < -10000) { hTPointsNum = 1.01 }
+                    if (item2.awayTeamPoints < -10000) { aTPointsNum = 1.01 }
+                    if (item2.homeTeamPoints > 12620) { hTPointsNum = 1247.20 }
+                    if (item2.awayTeamPoints > 12620) { aTPointsNum = 1247.20 }
+                    if (item2.homeTeamPoints < 101 && item2.homeTeamPoints > -101) { hTPointsNum = 2.03 }
+                    if (item2.awayTeamPoints < 101 && item2.awayTeamPoints > -101) { aTPointsNum = 2.03 }
+                  
+                   var theId = item1.fighter2Name.split(' ')[0] + item1.fighter1Name.split(' ')[0]
+                    theFights[index]['p2Points'] = hTPointsNum
+                    theFights[index]['p1Points'] = aTPointsNum
+                    theFights[index]['fighter1Name'] = item1.fighter2Name
+                    theFights[index]['fighter2Name'] = item1.fighter1Name
+                    theFights[index]['commenceTime'] = item2.commenceTime
+                    theFights[index]['timeInMillis'] = item2.timeInMillis
+                    theFights[index]['matchMillis'] = item2.timeInMillis
+                    theFights[index]['apiId'] = item2.id
+                    theFights[index]['id'] = theId
+                    firstMatchArr.push(item2.timeInMillis)
+                   
+                    // theMissing.push(item2.homeTeam+item2.awayTeam)
+                //  }
+                }
+                else{
+                  k++
+                  //const filteredPeople = people.filter((item) => item.id !== idToRemove);
+                }
+              
+            })
+          })
+          if (theFightsJson.length === v) {
+           // console.log('fights array 004', fightType, theFightsJson)
+            //var firstMatchTime = await Math.min(...theFights.map(item => item.timeInMillis));
+            var firstMatchTime = Math.min(...firstMatchArr.map(item => item));
+            var startTime=firstMatchTime+86400000
+           // console.log('firstMatchTime', firstMatchTime)
+           /* var e = 0, firebaseArr = {}, shortFirebaseArr = {}
+            theFightsJson.map((item22) => {
+              e++
+              firebaseArr[item22.id] = item22
+              var smallArr = { p1Points: item22.p1Points, p2Points: item22.p2Points, winner: item22.winner, status1: item22.status1 }
+              shortFirebaseArr[item22.id] = smallArr
+            })*/
+           /* if (e === theFightsJson.length) {
+              console.log('theFightsJson Arr', theFightsJson)
+              //saveToFirebase(firebaseArr, sportType, fightType, eventsArr, ufcMatchId, firstMatchTime, matchId2, theFightsJson, shortFirebaseArr, howManyExist, res)
+            }*/
+              console.log('theFights Arr', theFights)
+              theFights.map((item,index)=>{
+                console.log('theFights item.timeInMillis', item.timeInMillis,startTime)
+                if(item.timeInMillis<startTime){
+                  console.log('trueeee',item)
+               if(item.apiId!==''){
+                theFinalFightsArr.push(item)
+                console.log('kamalizaaaaaa',theFinalFightsArr)
+               }else{
+                console.log('bado kamalizaaaaaaa',item)
+               }
+              }else{
+                console.log('falseeeee',item)
+              }
+               //console.log('theFightsJson.length',theFightsJson.length,index)
+               if(theFights.length===index+1){
+                var theRef=firebase.database().ref('/triallls/')
+                theRef.set(theFinalFightsArr)
+                //theEventId
+                console.log('kamalizaaaaaa theEventId',theEventId)
+                console.log('kamalizaaaaaa 223232323',theFinalFightsArr)
+                this.setState({sportsApiData:theFinalFightsArr,showUFCModal:true})
+               }
+               
+              })
+              
+          }
+        } catch (error) {
+          console.log('ERROR OCURRED AT SORTING BOTH ARRAYS', error)
+        }
+      }
+      
       checkForOutcome=async () => {
         
         try {
@@ -942,10 +1218,16 @@ chooseHomeEvent=(event,id)=>{
       this.loadOtherFights(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection)
     
     };
+    handleChildClick2 = () => {
+      this.setState({count:this.state.count+1,showUFCModal:false})
+    };
     openConfirmModal=(message,type)=>{
       this.setState({confirmMessage:message,showConfirmModal:true,confirmModalType:type})
     }
     proceed=()=>{
+    this.notify('nothing to update at the moment')
+    this.setState({showConfirmModal:false})
+    return
     if(this.state.confirmModalType==='oddsUpdate'){this.goToServer()}
     if(this.state.confirmModalType==='resultsUpdate'){this.checkForOutcome()}
     }
@@ -959,16 +1241,16 @@ chooseHomeEvent=(event,id)=>{
         var allUFCMatches=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
         var index2 = allUFCMatches.map(function(x) {return x.id; }).indexOf(id);
         var nowTime=new Date().getTime()
-        if(nowTime<time){
+        /*if(nowTime<time){
           this.notify('Match not yet started')
           return
         }
         if(winner!=='N/A'){
          this.notify('Winner already filled')
           return
-        }
+        }*/
         allUFCMatches[index2]['showChooseWinner']=true
-        this.setState({allUFCMatches:theItems})
+        this.setState({allUFCMatches:allUFCMatches})
         console.log('this.state.currentItems allUFCMatches',allUFCMatches)
     }
     chosenWinner=(id,winner)=>{
@@ -994,9 +1276,58 @@ chooseHomeEvent=(event,id)=>{
       if(winner!=='player1'&&winner!=='player2'){
         this.notify('Nothing to submit')
       }else{
-      //this.checkForOutcome(index,winner)
+      this.checkForRoundOutcome(index,winner,this.state.allUFCMatches)
       }
     }
+    checkForRoundOutcome=async (index,winner,items) => {
+      try {
+        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+        var shortArr=[]
+        console.log('haaaaaaaaaaaapa',this.state.currentSelection,index,winner)
+        items[index]['winner']=winner
+        delete items[index]['chosenWinner']
+        delete items[index]['showChooseWinner']
+        this.setState({allUFCMatches:items})
+        items.map((item,index)=>{
+          console.log('shortArr',shortArr)
+          /*shortArr['p1Points']=item.p1Points
+          shortArr['p2Points']=item.p2Points
+          shortArr['winner']=item.winner
+          shortArr['status1']=item.status1
+          shortArr['id']=item.id*/
+          var theItem={p1Points:item.p1Points,p2Points:item.p2Points,winner:item.winner,
+            status1:item.status1,id:item.id,type:item.type
+          }
+          shortArr.push(theItem)
+        })
+       
+        if(this.state.theEventKey==='',items.length<1)return
+        if(!this.state.theEventKey||this.state.theEventKey.length<3)return
+        let theItems = JSON.stringify(shortArr);
+        var theLink='theEvents::ramUfc::'+this.state.theEventKey+'::'+theItems
+        if(!this.state.theEventKey||this.state.theEventKey.length===0)return
+        var theQuery=encodeURIComponent(theLink)
+        console.log('001',this.state.theEventKey,theItems)
+        console.log('theLink',theLink,theItems)
+        console.log('this.state.shortArr 006',shortArr)
+        //return
+        await axios.get("https://theramtournament.com/getSingleUFCResults?term="+theQuery)
+        //await axios.get("http://localhost:4000/getSingleUFCResults?term="+theQuery)
+          .then((res) => {
+            var theOutcome = res.data
+            this.notify(theOutcome)
+            if(theOutcome==='Success Updating Results'){
+              this.checkAuth()
+            }
+          })
+          } catch (error) {
+            ////console.log('error',error)
+          }
+      }
+      openUFCModal=()=>{
+        var allMatches=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
+        this.setState({sportsApiData:allMatches,showUFCModal:true})
+      }
   render() {
    var flockTeamName=''
    var itemToModals=''
@@ -1052,6 +1383,9 @@ chooseHomeEvent=(event,id)=>{
             {this.state.dataAvailable?<p id={style.editP} onClick={()=>this.opeModal2()}>Edit Profile</p>:<p id={style.editP} onClick={()=>this.openTheModal()} >Make Picks</p>}
             </div>
           </div>
+          {/*this.state.isAdmin?<div className={style.eventCreationDiv}>
+          <p className={style.eventP} onClick={() => this.openUFCModal()}>Enter Event Details</p>
+          </div>:null*/}
           <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
           {this.state.theLink.length>1&&new Date().getTime()<this.state.theTime?<div className={style.shareDiv} onClick={()=>this.copyLink()}>
           <p>Flock Invite Link</p>
@@ -1076,13 +1410,13 @@ chooseHomeEvent=(event,id)=>{
                   <button className={style.resultsBtn} onClick={()=>this.openConfirmModal('Are you sure you want to update the UFC Match Odds?','oddsUpdate')}>Update Match Odds</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.oddsTimeUpdate}</p>
                   </div>
-                  <div className={style.resultsDiv}>
+                  {/*<div className={style.resultsDiv}>
                   <button className={style.resultsBtn} onClick={()=>this.openConfirmModal('Are you sure you want to get the UFC Match Results?','resultsUpdate')}>Fetch Results Updates</button>
                   <p className={style.lastUpdateP}>Last Update {this.state.fetchResultsTimeUpdate}</p>
-                  </div>
+                  </div>*/}
                   </div>
                   {this.state.showGetMatchesModal?<div className={style.ufcLinkDiv}>
-                    <input className={style.ufcLinkInput} id='UFCLinkInput' placeholder='Paste UFC Link' value={this.state.UFCLinkInput} onChange={(event)=>this.inputChange(event)}/>
+                    <input className={style.ufcLinkInput} id='UFCLinkInput' placeholder='Enter Event ID' value={this.state.UFCLinkInput} onChange={(event)=>this.inputChange(event)}/>
                     <button className={style.ufcLinkSend} onClick={()=>this.checkForNewEvents()}>Send</button>
                   </div>:null}
                   </>:null}
@@ -1201,7 +1535,28 @@ chooseHomeEvent=(event,id)=>{
                       </div>:
                       <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={()=>this.openTheModal()}>MAKE YOUR PICK</button></div>
                      }
-                      </div>       
+                      </div>   
+                      {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
+              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
+              <div>
+                <p className={style.chooseP}>Choose Winner</p>
+                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.fighter1Name}</p>
+                </div>
+                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
+                  <TbCheckbox size={20}/>
+                  <p>{item.fighter2Name}</p>
+                </div>
+                <div className={style.listDivB3}>
+                  <TbCheckbox size={16}/>
+                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.fighter1Name}</p>:null}
+                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.fighter2Name}</p>:null}
+                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
+                  
+                </div>
+                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
+            </div></div>:null}    
          </div>
           )})}
         </div>
@@ -1209,6 +1564,7 @@ chooseHomeEvent=(event,id)=>{
       {this.state.opendetailsModal?<div className={style.detailsModal} onClick={()=>this.setState({opendetailsModal:false})}><DetailsModal currentEvent={this.state.theCurrentEvent} theItems={this.state.allMatches} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey}/></div>:null}
       {this.state.openLoginModal?<div className={style.detailsModal} onClick={()=>this.setState({openLoginModal:false})}><LogIn/></div>:null}
       {this.state.editDetailsModal?<div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({editDetailsModal:false})} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName']+'::'+this.state.currentEventUserInfo['flockName']+'::'+this.state.profilePhoto+'::'+this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey}/></div>:null}
+      {this.state.showUFCModal?<div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({showUFCModal:false})} ><RamUFCModal onClick={this.handleChildClick2}  theDetails={this.state.sportsApiData} title={this.state.theUfcTItleTomodal} theEventId={this.state.theEventId}/></div>:null}
       <ToastContainer/>
       {this.state.showProgressBar?<ProgressBar/>:null}
       {this.state.showConfirmModal?<div className={style.detailsModal} onClick={()=>this.setState({showConfirmModal:false})}>
@@ -1217,8 +1573,9 @@ chooseHomeEvent=(event,id)=>{
           <p style={{marginBottom:20}}>{this.state.confirmMessage}</p>
           <div style={{display:'flex',justifyContent:'end'}}>
             <button style={{backgroundColor:'#ddd',border:'none',color:'black',padding:'7px 15px',cursor:'pointer'}} onClick={()=>this.setState({showConfirmModal:false})}>Cancel</button>
-            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed}>Proceed</button>
+            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed()}>Proceed</button>
           </div></div></div>:null}
+         
       </>
     )
   }

@@ -1649,7 +1649,7 @@ class NCAA extends Component {
           <p style={{marginBottom:20}}>{this.state.confirmMessage}</p>
           <div style={{display:'flex',justifyContent:'end'}}>
             <button style={{backgroundColor:'#ddd',border:'none',color:'black',padding:'7px 15px',cursor:'pointer'}} onClick={()=>this.setState({showConfirmModal:false})}>Cancel</button>
-            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed}>Proceed</button>
+            <button style={{backgroundColor:'#CB1E31',border:'none',color:'white',padding:'7px 15px',marginLeft:10,cursor:'pointer'}} onClick={() => this.proceed()}>Proceed</button>
           </div></div></div>:null}
         <ToastContainer />
       </>

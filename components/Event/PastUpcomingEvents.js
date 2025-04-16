@@ -38,7 +38,7 @@ class Reel extends Component {
         }
         this.checkAuth()
         this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId,theItemsNo:this.props.allGames.length})
-        console.log('this.props.allGames.length',this.props.allGames.length)
+       // console.log('this.props.allGames.length',this.props.allGames.length)
       }
       componentWillUnmount() {
         window.removeEventListener("resize", this.updateWindowDimensions);
@@ -127,7 +127,7 @@ class Reel extends Component {
       })
     }
     render() {
-         console.log('this.props.allGames',this.props.allGames)
+        // console.log('this.props.allGames',this.props.allGames)
          let donateStyle=''
          let reelTextStyle=''
          var todayInMillis=new Date().getTime()
@@ -143,7 +143,7 @@ class Reel extends Component {
         if (window.innerWidth>1100&&window.innerWidth<1300){
           if(theGamesNo>5){showArrows=true}
           slidesToShow=5,slidesToScroll=5
-          console.log('haaapa 2222',showArrows)
+         // console.log('haaapa 2222',showArrows)
         }
         if (window.innerWidth>800&&window.innerWidth<1100){
           if(theGamesNo>4){showArrows=true}
@@ -186,9 +186,9 @@ class Reel extends Component {
             
             if((todayInMillis+(86400000*90)<item.time)&&!this.state.isAdmin){
               adminGames.push(item)
-              console.log('to the admins')
+             // console.log('to the admins')
             }else{
-              console.log('to the users')
+             // console.log('to the users')
               adminGames.push(item)
               userGames.push(item)}
             if(this.props.allGames.length===index+1){

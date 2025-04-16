@@ -243,12 +243,14 @@ class CommMarchMadness extends Component {
   loadAdminData = () => {
     var theEventKey=this.props.theEventKey
     var theAdminFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/admin/')
+    var flockCreatorsRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/flockCreators/')
     theAdminFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
         var i = 0, allArr = []
         dataSnapshot.forEach((data) => {
           i++
+          var theUid=data.key
           var theData = data.val()
           theData = theData.split('!!')
           var name = theData[0]
@@ -256,8 +258,18 @@ class CommMarchMadness extends Component {
           if (name.includes('$$$')) { picked = false }
           else { { picked = true } }
           var newName = theData[0].split('$$$').join('')
-          var theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked }
-          allArr.push(theArr)
+          var theArr={}
+          flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
+            if (dataSnapshot.exists()){
+              console.log('ikoooooooooo',theUid)
+              theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'true'}
+            }else{
+              console.log('hakunaaaaaa',theUid)
+              theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'false'}
+            }
+            allArr.push(theArr)
+          })
+         // allArr.push(theArr)
           if (count === i) {
             this.setState({ theAdminFlocksArr: allArr })
            // console.log('theFlocksArr', allArr)
@@ -369,7 +381,7 @@ class CommMarchMadness extends Component {
               <p className={styles.noDataP2} >Check Events</p>
             </div>}</> : null}
                
-            {this.props.menuToShow==='Admin'&&this.state.isAdmin? <>{this.state.theAdminFlocksArr.length > 0 ? <div className={styles.menu2Div1}>
+            {this.props.menuToShow==='Admin'&&this.state.isAdmin&&this.props.currentRound!=='overall'? <>{this.state.theAdminFlocksArr.length > 0 ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>ADMIN VIEW</p>
               <div id={styles.table1Div}>
                 <table className={styles.table1}>
@@ -378,6 +390,7 @@ class CommMarchMadness extends Component {
                     <th>RAM Name</th>
                     <th>Flock Name</th>
                     <th>Picked?</th>
+                    {this.state.isAdmin?<th>Creator?</th>:null}
                     {this.state.isAdmin?<><th>Email</th>
                     <th>Phone No</th></>:null}
                   </tr>
@@ -389,6 +402,7 @@ class CommMarchMadness extends Component {
                         <td>{item.name}</td>
                         <td>{item.flockName}</td>
                         <td style={{ color: item.picked ? 'green' : 'red' }}>{item.picked + ''}</td>
+                        {this.state.isAdmin?<td style={{ color: item.isCreator==='true' ? 'green' : 'red' }}>{item.isCreator}</td>:null}
                         {this.state.isAdmin?<><td>{item.email}</td>
                         <td>{item.phoneNo}</td></>:null}
                       </tr>)
