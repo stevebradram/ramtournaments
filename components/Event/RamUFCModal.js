@@ -22,7 +22,7 @@ class NCAAModal extends Component {
   
   componentDidMount=()=>{
     //var incomingData=[...this.props.itemsToNFLModal]
-    var incomingData = this.props.theDetails//theRamUfc
+    var incomingData =this.props.theDetails//theRamUfc
     if(incomingData.length>0){
       incomingData = incomingData.map(item => JSON.parse(JSON.stringify(item)));
       var firstMatchTime =  Math.min(...incomingData.map(item => item.timeInMillis));
@@ -34,7 +34,7 @@ class NCAAModal extends Component {
           i++
          incomingData[index]['bet']=''
         if(incomingData.length===i){
-          this.setState({matchesArr})
+          this.setState({matchesArr,firstMatchTime,lastMatchTime})
           matchesArr=incomingData
           console.log('matchesArr ONCOMING',matchesArr)
         
@@ -109,8 +109,10 @@ class NCAAModal extends Component {
     console.log('this.state.prelimsArr',this.state.prelimsArr,JSON.stringify(this.state.prelimsArr).length)
     console.log('this.state.earlyPrelimsArr',this.state.earlyPrelimsArr,JSON.stringify(this.state.earlyPrelimsArr).length)
     if(this.state.isItSubmit){
-    var ufcMatchId=this.state.theEventId
-    var eventTitle=this.state.eventTitle
+    var ufcMatchId=this.props.theEventId
+     console.log('ufcMatchId',ufcMatchId)
+    //return
+    var eventTitle=this.props.title
     var startTime=dayjs(this.state.firstMatchTime).format('MMM D, YYYY h:mm A')
     var toTheEventsIds = {time:this.state.firstMatchTime, title:eventTitle, sportType:'ramUfc', endTime:this.state.lastMatchTime, getEventsTimeUpdate: new Date().getTime(),oddsTimeUpdate:new Date().getTime() }
     var matchDets = {startMillis:this.state.firstMatchTime,startTime:startTime,matchTitle:eventTitle,matchId:ufcMatchId,mainCard:true}
@@ -118,10 +120,13 @@ class NCAAModal extends Component {
     var eventIds = generalDb.child('/eventsIds/' + ufcMatchId)
     var activeEventsDb = generalDb.child('/ramUfc/'  + ufcMatchId)
    
+    //console.log('infoooo 111',ufcMatchId,eventTitle,this.state.firstMatchTime,startTime,this.state.lastMatchTime)
+    //console.log('infoooo 222',toTheEventsIds,toTheEventsIds,matchDets)
      //mainCardShortArr prelimsShortArr earlyPrelimsShortArr
       if(JSON.stringify(this.state.mainCardArr).length>10){
         this.showProgressBar()
         console.log('main card ikoooooooo',this.state.mainCardArr.length,this.state.mainCardArr)
+        //return
         activeEventsDb.child('mainCard').set(this.state.mainCardArr)
         activeEventsDb.child('mainCardShort').set(this.state.mainCardShortArr)
         activeEventsDb.child('matchDetails').update(matchDets)
@@ -134,6 +139,7 @@ class NCAAModal extends Component {
           },
           2000)
       }
+      //return
       if(JSON.stringify(this.state.prelimsArr).length>10){
         console.log('prelimsArr card ikoooooooo',this.state.prelimsArr.length,this.state.prelimsArr)
         activeEventsDb.child('prelims').set(this.state.prelimsArr)
