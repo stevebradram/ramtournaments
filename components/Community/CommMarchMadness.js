@@ -2,15 +2,23 @@ import React, { Component } from 'react'
 import firebase from '../FirebaseClient'
 import styles from './CommMarchMadness.module.scss'
 import { MdDeleteOutline } from "react-icons/md";
-
+import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { ToastContainer, toast } from 'react-toastify';
 class CommMarchMadness extends Component {
-  state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:this.props.isEventStarted,creatorId:'',theFlocksArr:[],
-    round1Arr:[],round2Arr:[],theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,
+  constructor() {
+    super();
+    this.tableRef = React.createRef(null);
+ }
+  state={sportType:'NCAAB',currentSelection:'round1',isEventStarted:'',creatorId:'',theFlocksArr:[],
+    round1Arr:[],round2Arr:[],theEventKey:'',flockNameWithNoSpaces:'',
     flockSysRound1:[],flockSysRound2:[],flockSysFinalRound:[],theItems:[],finalRoundArr:[],userId:'', userLoggedIn:false,isAdmin:false,theAdminFlocksArr:[],
-    flockNameAvailable:this.props.flockNameAvailable,flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK',round1Sep:0,round2Sep:0,finalRoundSep:0,floskSysOverall:[],overallRoundSep:0
+    flockNameAvailable:'',flocksItems:[],theTitle:'- RAMS IN YOUR FLOCK',round1Sep:0,round2Sep:0,finalRoundSep:0,floskSysOverall:[],overallRoundSep:0
   }
   
   componentDidMount=()=>{
+    //console.log('didmount',this.props.eventStarted,this.props.theEventKey,this.props.flockNameWithNoSpaces)
+    //return
+    this.setState({isEventStarted:this.props.eventStarted,theEventKey:this.props.theEventKey,flockNameWithNoSpaces:this.props.flockNameWithNoSpaces,flockNameAvailable:this.props.flockNameAvailable})
     this.getRamMembersData()
     this.checkAuth()
     this.loadAdminData()
@@ -281,6 +289,17 @@ class CommMarchMadness extends Component {
     })
 
   }
+  notify = (message) => {
+    toast.warn(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
   render() {
     var flockNameAvailable=this.props.flockNameAvailable
     var theItems=[],theItems2=[],theSeparator=0 //round1Sep:0,round2Sep:0,finalRoundSep:0
@@ -300,6 +319,7 @@ class CommMarchMadness extends Component {
           {this.props.menuToShow==='Rams In Your Flock'&&this.props.currentRound!=='overall'?<>{this.props.flockNameAvailable ?<div className={styles.menu2Div1}>
               <p className={styles.titleP}><span>{this.props.flockNameWithNoSpaces}</span> {'- '+this.props.menuToShow}</p>
               <div id={styles.table1Div}>
+              
               <table className={styles.table1}>
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
@@ -384,7 +404,14 @@ class CommMarchMadness extends Component {
             {this.props.menuToShow==='Admin'&&this.state.isAdmin&&this.props.currentRound!=='overall'? <>{this.state.theAdminFlocksArr.length > 0 ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>ADMIN VIEW</p>
               <div id={styles.table1Div}>
-                <table className={styles.table1}>
+              {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
+                    filename={this.state.theEventKey}
+                    sheet="users"
+                    currentTableRef={this.tableRef.current}>        
+                 <p className={styles.exportP}>Export Document</p>
+                  </DownloadTableExcel> </div></div>:null}
+                <table className={styles.table1} ref={ this.tableRef}>
+               
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
                     <th>RAM Name</th>
@@ -428,6 +455,7 @@ class CommMarchMadness extends Component {
        </div>
        
        </div>:null}
+       <ToastContainer />
       </>
     )
   }

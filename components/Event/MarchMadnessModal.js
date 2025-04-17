@@ -197,7 +197,6 @@ class NCAAModal extends Component {
         }) 
   }
   round1Submit = () => {
-    var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
     console.log('this.state.round1Edit',this.state.round1Edit)
     var teamsArr=[]
@@ -279,7 +278,6 @@ class NCAAModal extends Component {
     })
   }
   round2Submit = () => {
-    var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
     console.log('this.state.round2Edit',this.state.round2Edit)
     var teamsArr=[]
@@ -379,7 +377,6 @@ class NCAAModal extends Component {
     })
   }
   sweet16Submit = () => {
-    var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
     console.log('this.state.sweet16Edit',this.state.sweet16Edit)
     var teamsArr=[]
@@ -479,7 +476,6 @@ class NCAAModal extends Component {
     })
   }
   elite8Submit = (theItems,theEdit) => {
-    var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
     console.log('theItems',theItems)
     var teamsArr=[]
@@ -903,76 +899,6 @@ sortOddsJson=async(theArr,stateEdit)=>{
       }
     })
   }
-  sendToFirebase=async()=>{
-    this.showProgressBar()
-    console.log('at sendToFirebase',this.state.currentSelection)
-    //todo finish here and odds update on onclick
-    return
-    if(this.state.currentSelection==='wildCard'){}
-    if(this.state.currentSelection==='divisionalRound'){}
-    if(this.state.currentSelection==='conferenceChampionship'){}
-    if(this.state.currentSelection==='superBowl'){}
-    var wCMin = Math.min(...this.state.round1Edit.map(item => item.timeInMillis));
-    var dRMin = Math.min(...this.state.round2Edit.map(item => item.timeInMillis));
-    var cCMin = Math.min(...this.state.conferenceChampionshipEdit.map(item => item.timeInMillis));
-    var sPMin = Math.min(...this.state.superBowlEdit.map(item => item.timeInMillis));
-    var endTime = Math.max(...this.state.superBowlEdit.map(item => item.timeInMillis));
-    var allItems = [...this.state.round1Edit, ...this.state.round2Edit,...this.state.conferenceChampionshipEdit,...this.state.superBowlEdit]
-    var toDbWildCardArr={},toDbDivisionalRound={},toDbConferenceChampionshipArr={},toDbSuperBowlArr={},v = 0
-    var v=0
-    var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
-    var generalDb = firebase.database().ref('/theEvents/NFL/' + eventKey + '/')
-    var eventsIdDb = firebase.database().ref('/theEvents/')
-    console.log('combined items',allItems.length, allItems)
-    allItems.map((item,index) => {
-      v++
-      if(item.p1Photo===''){allItems[index]['p1Photo']='N/A'}
-      if(item.p2Photo===''){allItems[index]['p2Photo']='N/A'}
-      if(item.p1Points===''){allItems[index]['p1Points']='N/A'}
-      if(item.p2Points===''){allItems[index]['p2Points']='N/A'}
-      if(item.player1===''){allItems[index]['player1']='N/A'}
-      if(item.player2===''){allItems[index]['player2']='N/A'}
-      if(item.player1===''){allItems[index]['player1NickName']='N/A'}
-      if(item.player2===''){allItems[index]['player2NickName']='N/A'}
-      console.log('matchType',item.matchType)
-      if (item.matchType === 'NFL Wild Card Round') {
-        toDbWildCardArr[item.id] = item
-      } 
-      if (item.matchType === 'NFL Divisional Round') {
-        toDbDivisionalRound[item.id] = item
-      } 
-      if (item.matchType === 'NFL Conference Championship') {
-        toDbConferenceChampionshipArr[item.id] = item
-      } 
-      if (item.matchType === 'NFL Super Bowl') {
-        toDbSuperBowlArr[item.id] = item
-      } 
-      if (allItems.length === v) {
-        var theArr = {
-          time:wCMin, sportType: 'NFL',endTime:'', 
-          title: 'NFL PLAYOFFS 2025',currentSelection:this.state.currentSelection,
-          stopround1Edit:wCMin,stopround2Edit:dRMin,endTime:endTime,
-          stopConferenceChampionshipEdit:cCMin,stopSuperBowlEdit:sPMin,startTime:wCMin        
-        }
-        eventsIdDb.child('eventsIds/' + eventKey + '/').update(theArr)
-        eventsIdDb.child('/NFL/eventsIds/' + eventKey + '/').update(theArr)
-        generalDb.child('wildCard').update(toDbWildCardArr)
-        generalDb.child('divisionalRound').update(toDbDivisionalRound)
-        generalDb.child('conferenceChampionship').update(toDbConferenceChampionshipArr)
-        generalDb.child('superBowl').update(toDbSuperBowlArr,(error) => {
-          if (error) {
-            this.notify('An error occured while uploading data')
-            this.setState({ showProgressBar: false })
-          } else {
-            this.notify('Data uploaded successfully')
-            this.setState({ showProgressBar: false })
-            var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::stopround1Edit'
-              this.props.onClick('getOdds',oddsServerLink)
-          }
-        })
-      }
-    })
-  }
   submitMatches = () => {
    
     if(this.state.currentSelection==='round1'){this.round1Submit()}
@@ -983,149 +909,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
     if(this.state.currentSelection==='final4'){this.elite8Submit(this.state.final4Edit,'final4Edit')}
     if(this.state.currentSelection==='finalRound'){this.elite8Submit(this.state.finalRoundEdit,'finalRoundEdit')}
   }
-
-  getLogos = async (theArr) => {
-    var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
-    //const response = await axios.get(logosUrl);
-    //console.log(response.data);
-    var smallResultsArr = []
-    axios.get(logosUrl)
-      .then((res) => {
-        var resultsArr = res.data['sports']
-        console.log('the logos 1111', resultsArr.length)
-        var i = 0
-        resultsArr.map((item, index) => {
-          var theTeams = item['leagues'][index]['teams']
-          theTeams.map((item, index) => {
-            var theItem = item.team
-            //console.log('the teams',theItem)
-            //console.log('the team name',theItem['displayName'])
-            // console.log('the team logos',theItem['logos'][0]['href'])
-            var myItems = {}
-            myItems['name'] = theItem['displayName']
-            myItems['logo'] = theItem['logos'][0]['href']
-            myItems['nickName'] = theItem['nickname']
-            smallResultsArr.push(myItems)
-
-            if (theTeams.length === index + 1) {
-              console.log('smallResultsArr', smallResultsArr)
-              theArr.map((item1, index) => {
-
-                //return
-                smallResultsArr.map((item2) => {
-                  // console.log('item1.player1',item1.player1)
-                  if (item1.player1 === item2.name) {
-                    theArr[index]['p1Photo'] = item2.logo
-                    theArr[index]['player1NickName'] = item2.nickName
-                    console.log('ikooooooooooooooo')
-                  }
-                  if (item1.player2 === item2.name) {
-                    theArr[index]['p2Photo'] = item2.logo
-                    console.log('hakunaaaaaaaaaaaaaaa')
-                    theArr[index]['player2NickName'] = item2.nickName
-                  }
-
-                })
-
-              })
-            }
-            if (theTeams.length === index + 1) {
-              console.log('theArr 22222222 kufinish', theArr)
-              if (this.state.currentSelection==='wildCard') {this.setState({round1Edit:theArr,isItSubmit:true})}
-              if (this.state.currentSelection==='divisionalRound') {this.setState({round2Edit:theArr,isItSubmit:true})}
-              if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr,isItSubmit:true})}
-              if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:theArr,isItSubmit:true})}
-              //this.sendToFirebase()
-            }
-          })
-
-        })
-
-      })
-  }
-  getLogos2 = async (theArr,menu,incomingData) => {
-    var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
-    //const response = await axios.get(logosUrl);
-    //console.log(response.data);
-    var smallResultsArr = []
-    axios.get(logosUrl)
-      .then((res) => {
-        var resultsArr = res.data['sports']
-        console.log('the logos 1111', resultsArr.length)
-        var i = 0
-        resultsArr.map((item, index) => {
-          var theTeams = item['leagues'][index]['teams']
-          theTeams.map((item, index) => {
-            var theItem = item.team
-            //console.log('the teams',theItem)
-            //console.log('the team name',theItem['displayName'])
-            // console.log('the team logos',theItem['logos'][0]['href'])
-            var myItems = {}
-            myItems['name'] = theItem['displayName']
-            myItems['logo'] = theItem['logos'][0]['href']
-            myItems['nickName'] = theItem['nickname']
-            smallResultsArr.push(myItems)
-
-            if (theTeams.length === index + 1) {
-              console.log('smallResultsArr', smallResultsArr)
-              theArr.map((item1, index) => {
-
-                //return
-                smallResultsArr.map((item2) => {
-                  // console.log('item1.player1',item1.player1)
-                  if (item1.player1 === item2.name) {
-                    theArr[index]['p1Photo'] = item2.logo
-                    theArr[index]['player1NickName'] = item2.nickName
-                    console.log('ikooooooooooooooo')
-                  }
-                  if (item1.player2 === item2.name) {
-                    theArr[index]['p2Photo'] = item2.logo
-                    console.log('hakunaaaaaaaaaaaaaaa')
-                    theArr[index]['player2NickName'] = item2.nickName
-                  }
-
-                })
-
-              })
-            }
-            if (theTeams.length === index + 1) {
-              theArr.map((item,index)=>{
-              incomingData[index]['player2']=item.player2
-              incomingData[index]['player1']=item.player1
-              incomingData[index]['apiId']=item.apiId
-              incomingData[index]['p2Points']=item.p2Points
-              incomingData[index]['p1Points']=item.p1Points
-              incomingData[index]['p2Photo']=item.p2Photo
-              incomingData[index]['player2NickName']=item.player2NickName
-              incomingData[index]['p1Photo']=item.p1Photo
-              incomingData[index]['player1NickName']=item.player1NickName
-
-              incomingData[index]['timeInMillis']=item.timeInMillis
-              incomingData[index]['commenceTime']=item.commenceTime
-              incomingData[index]['time']=item.commenceTime.slice(0,16)
-              if(theArr.length===index+1){
-                console.log('this.state.currentSelection',this.state.currentSelection)
-                console.log('theArr 22222222 kufinish', theArr)
-                console.log('theArr 22222222 incomingData', incomingData)
-                if (this.state.currentSelection==='divisionalRound') {this.setState({round2Edit:incomingData,isItSubmit:true})}
-                if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:incomingData,isItSubmit:true})}
-                if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:incomingData,isItSubmit:true});console.log('haapa kwa sssssssssssss')}
-                this.setState({ showProgressBar: false })
-              }
-              }) 
-             
-             
-              return
-             
-              //this.sendToFirebase()
-            }
-          })
-
-        })
-
-      })
-  }
-  itemComponent = (compItems, type) => {
+itemComponent = (compItems, type) => {
   console.log('compItems',sweet16Edit,compItems,type)
     return (
       compItems.map((item, index) => {

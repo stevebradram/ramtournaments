@@ -338,6 +338,33 @@ $pastEve2:#dc9600;
     border-color: $redColor;
     background-color:$redColor;
 }
+#exportDiv{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -20px;
+    position: absolute;
+    top:0;right: 0;
+    margin-top: 5px;
+ }
+ #exportDiv1{
+    font-size: 20px;
+    width: 170px;
+    color: $redColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+   
+ }
+ .exportP{
+    font-size: 16px;
+    border: 1px solid $redColor;
+    margin-top: 10px;
+    padding: 2px 10px;
+    font-weight: 500;
+    cursor: pointer;
+ }
  @media all and (max-width: 1000px) {
  .menu2Div0{
     display: flex;

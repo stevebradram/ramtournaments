@@ -106,189 +106,12 @@ class MarchMadness extends Component {
   eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[],dataAvailable: false, currentEventUserInfo: {},currentItems:[],westRound1Arr:[],westRound2Arr:[],westSweet16Arr:[],westElite8Arr:[],southRound1Arr:[],southRound2Arr:[],southSweet16Arr:[],southElite8Arr:[],
   midWestRound1Arr:[],midWestRound2Arr:[],midWestSweet16Arr:[],midWestElite8Arr:[],final4Arr:[],finalArr:[],showUpperBar:true,currentRound:'',currentFinalsSubRound:'',theLink:'',theTime:'',round1EastArr:[],round1WestArr:[],round1SouthArr:[],round1midWestArr:[],allRound1MatchesArr:[],oldRound1Array:[],
   round2EastArr:[],round2WestArr:[],round2SouthArr:[],round2midWestArr:[],allRound2MatchesArr:[],allRoundFinalArr:[],sweet16Arr:[],elite8Arr:[],opendetailsModal:false,itemToModals:[],modalTitle:'',finalRoundScore:'',editDetailsModal: false,marchMadnessModal:false,selectHomeEvent:false,selectHomeEventId:'',
-  stopRound1Edit:'', stopRound2Edit:'',stopSweet16Edit:'',stopElite8Edit:'',stopFinal4Edit:'',stopFinalEdit:'',currentSelection:''}
+  stopRound1Edit:'', stopRound2Edit:'',stopSweet16Edit:'',stopElite8Edit:'',stopFinal4Edit:'',stopFinalEdit:'',currentSelection:'',eventYear:'',theEventTitle:'', theEventKey:'', theEventTime:''}
   
     componentDidMount = () => {
       this.checkAuth()
-      //this.fixFlockSystem()
-       //this.fixFlockSystem2()
-      //this.fixLeadersBoard()
-      //this.getMarchMadnessEvents()
-      
     }
-    fixLeadersBoard=()=>{
-      //"/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/'
-      var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/marchMadness2025/round1/')
-      leadersRef.once('value', dataSnapshot => {
-        dataSnapshot.forEach((data) => {
-          var theId=data.key
-          console.log('the uid',theId)
-          var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
-          userInfoDb2.once('value', dataSnapshot => {
-             if(dataSnapshot.exists()){
-              console.log('ikoooooooooooooooo')
-             }else{
-              console.log('hakunaaaaaaaaaaaaa')
-             }
-          })
-        })
-      })
-    }
-    fixFlockSystem= () => {
-      var theFlocks=[]
-      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/membersScores/')
-      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
-      flocksInfo.once('value', dataSnapshot => {
-        var theCount = dataSnapshot.numChildren()
-        var i=0
-        dataSnapshot.forEach((data) => {
-          i++
-          var theKey=data.key
-          theFlocks.push(theKey)
-          console.log('the key',data.key)
-          var flockName=theKey.split('|').join(' ')
-          flocksInfo.child(theKey).once('value', dataSnapshot => {
-            var membersNo=0,r2Score=[],i=0
-            var count3=dataSnapshot.numChildren()
-            dataSnapshot.forEach((data) => {
-              var userId=data.key
-              var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/bets/round2')
-              var detsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/details/')
-              i++
-              detsRef.once('value', dataSnapshot => {
-                if(dataSnapshot.exists()){
-                  var theData=dataSnapshot.val()
-                  var round2Pick=theData.round2Pick
-                  if(round2Pick&&round2Pick===true){
-                    membersNo++
-                    var round2bps=theData.round2BPS
-                    var round2score=theData.round2Score
-                    var round2scoreB=Number(round2score)
-                    r2Score.push(round2scoreB)
-                   // detsRef.child('flockName').set(flockName)
-                    var currentPick='round2'
-                    var theScoreData={BPS:round2bps,currentPick:'round2',round2BPS:round2bps,score:round2score,
-                      round2Score:round2score,round2Pick:true}
-                      const sum =r2Score.reduce((partialSum, a) => partialSum + a, 0);
-                      var av=sum/membersNo
-                      var sum2=''
-                      if(av&&av>0){av=av.toFixed(2)}
-                      if(sum&&sum>0){sum2=sum.toFixed(2)}
-                      var flockData={round2MembersNo:membersNo,round2Score:sum2,round2AvScore:av}
-                      
-                      flocksInfo.child(theKey+'/'+userId).update(theScoreData)
-                      flocksInfo2.child(theKey).update(flockData)
-                      console.log('all info',flockName,theKey,userId,membersNo,theScoreData,flockData)
-                  /*  if(i===count3){
-                      console.log('all info 900000',flockName,theKey,userId,membersNo,theScoreData,flockData)
-                    }*/
-                  }
-                }
-              })
-              console.log('the userId',theKey,userId)
-            })
-          })
-          if(theCount===i){
-            
-            console.log('the theFlocks',theFlocks)
-          }
-        })
-      })
-    }
-    fixFlockSystem2= () => {
-      var theFlocks=[]
-      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/membersScores/')
-      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
-      flocksInfo.once('value', dataSnapshot => {
-        var theCount = dataSnapshot.numChildren()
-        var i=0
-        dataSnapshot.forEach((data) => {
-          i++
-          var theKey=data.key
-          
-          theFlocks.push(theKey)
-          console.log('the key',data.key)
-          var flockName=theKey.split('|').join(' ')
-          flocksInfo.child(theKey).once('value', dataSnapshot => {
-            var membersNo=0,r2Score=[],i=0
-            var count3=dataSnapshot.numChildren()
-            dataSnapshot.forEach((data) => {
-              var userId=data.key
-              var thePoints=data.val().round2Score
-              var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/bets/round2')
-              var detsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('/events/NCAAB/marchMadness2025/details/')
-              i++
-              detsRef.once('value', dataSnapshot => {
-                if(dataSnapshot.exists()){
-                  var theData=dataSnapshot.val()
-                  var round2Pick=theData.round2Pick
-                  var round2bps=0,round2score=0
-                  if(round2Pick&&round2Pick===true){
-                    membersNo++
-                     round2bps=theData.round2BPS
-                     round2score=theData.round2Score
-                  }else{
-                    round2bps=0,round2score=0
-                    }
-                    var round2scoreB=Number(round2score)
-                    r2Score.push(round2scoreB)
-                   // detsRef.child('flockName').set(flockName)
-                    var currentPick='round2'
-                    var theScoreData={BPS:round2bps,round2BPS:round2bps,score:round2score,
-                      round2Score:round2score}
-                      const sum =r2Score.reduce((partialSum, a) => partialSum + a, 0);
-                      var av=sum/membersNo
-                      var sum2=''
-                      if(av&&av>0){av=av.toFixed(2)}else{av=0}
-                      if(sum&&sum>0){sum2=sum.toFixed(2)}else{sum2=0}
-                      var flockData={round2MembersNo:membersNo,round2Score:sum2,round2AvScore:av}
-                      
-                      //flocksInfo.child(theKey+'/'+userId).update(theScoreData)
-                      flocksInfo2.child(theKey).update(flockData)
-                      console.log('all info',flockName,theKey,userId,membersNo,theScoreData,flockData)
-                  /*  if(i===count3){
-                      console.log('all info 900000',flockName,theKey,userId,membersNo,theScoreData,flockData)
-                    }*/
-                  
-                }
-              })
-              console.log('the userId',theKey,userId)
-            })
-          })
-          if(theCount===i){
-            
-            console.log('the theFlocks',theFlocks)
-          }
-        })
-      })
-    }
-    getMarchMadnessEvents=()=>{
-      var oddsApi = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
-        axios.get(oddsApi)
-          .then((res) => {
-            var resultsArr = res.data
-            console.log('the resultsssssssss',resultsArr)
-          })
-    }
-    /*editTheFlocks=()=>{
-      var flocksInfo = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
-      var flocksInfo2 = firebase.database().ref('/flocksSystem/flockNames/marchMadness2025/theFlocks/')
-      var theFlockData2={membersNo:0,score:0,avScore:0,
-        round1MembersNo:0,round1Score:0,round1AvScore:0,round2MembersNo:0,round2Score:0,round2AvScore:0,
-        finalRoundMembersNo:0,finalRoundScore:0,finalRoundAvScore:0}
-      flocksInfo.once('value', dataSnapshot => {
-        var theCount = dataSnapshot.numChildren()
-        var i=0
-        dataSnapshot.forEach((data) => {
-          i++
-        console.log('daaaaaata',data.key)
-        flocksInfo2.child(data.key).update(theFlockData2)
-        if(theCount===i){
-         this.notify('is finished')
-        }
-        })
-      })
-    }*/
+    
     inputChange = async (e) => {
 
     var value = e.target.value
@@ -345,6 +168,7 @@ class MarchMadness extends Component {
       var title = data.val().title
       var sportType = data.val().sportType
       var endTime = data.val().endTime
+      var eventYear = data.val().year
       var theData = data.val()
       var currentSelection = data.val().currentSelection
 
@@ -357,23 +181,23 @@ class MarchMadness extends Component {
       var stopFinalEdit = data.val().stopFinalEdit
       
 
-      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection:currentSelection,theData:theData,stopRound1Edit:stopRound1Edit,stopRound2Edit:stopRound2Edit,stopFinalEdit:stopFinalEdit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit}
+      theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection:currentSelection,theData:theData,stopRound1Edit:stopRound1Edit,stopRound2Edit:stopRound2Edit,stopFinalEdit:stopFinalEdit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit,eventYear:eventYear}
       allGames.push(theEvents)
 
       if (gamesCount === i) {
         var theEventTitle = '', theEventKey = '', theEventTime = 0,theTime='',
         stopRound1Edit = '', stopRound2Edit = '',stopFinalEdit='',stopSweet16Edit='',
-        stopElite8Edit='',stopFinal4Edit=''
+        stopElite8Edit='',stopFinal4Edit='',eventYear=''
         if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],theTime = allGames[0]['time'],endTime= allGames[0]['endTime']
-        stopRound1Edit= allGames[0]['stopRound1Edit'],stopRound2Edit= allGames[0]['stopRound2Edit'],stopFinalEdit= allGames[0]['stopFinalEdit'],stopSweet16Edit= allGames[0]['stopSweet16Edit'],stopElite8Edit= allGames[0]['stopElite8Edit'],stopFinal4Edit= allGames[0]['stopFinal4Edit']}
-      }
+        stopRound1Edit= allGames[0]['stopRound1Edit'],stopRound2Edit= allGames[0]['stopRound2Edit'],stopFinalEdit= allGames[0]['stopFinalEdit'],stopSweet16Edit= allGames[0]['stopSweet16Edit'],stopElite8Edit= allGames[0]['stopElite8Edit'],stopFinal4Edit= allGames[0]['stopFinal4Edit'],eventYear= allGames[0]['eventYear']}}
+      
       var expired = false
       if ((theEventTime - new Date().getTime()) < 86400000) {
         expired = true
       }
       var theMenu='',currentRound=''
       if(currentSelection==='round1'||currentSelection==='round2'){theMenu='east',currentRound=currentSelection}else{theMenu='sweet16',currentRound='finalRound'}
-      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection,currentRound,theMenu,expired,endTime,theTime,stopRound1Edit, stopRound2Edit,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit}, () => {
+      this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection,currentRound,theMenu,expired,endTime,theTime,stopRound1Edit, stopRound2Edit,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit,eventYear}, () => {
         this.getNCAABMatches()
         this.checkLink(userId)
        console.log('currentSelection',this.state.stopRound1Edit,this.state.stopRound2Edit,this.state.stopFinalEdit)
@@ -639,6 +463,8 @@ getMatchesInfo = async () => {
 getNCAABMatches = () => {
   var round1EastArr=[],round1WestArr=[],round1SouthArr=[],round1midWestArr=[], allMatches = []
   this.setState({ eastRound1Arr:[],eastRound2Arr:[],eastSweet16Arr:[],eastElite8Arr:[], dataAvailable: false, currentEventUserInfo: {} })
+  console.log('this.state.theEventKey',this.state.theEventKey,this.state.currentRound)
+  //return
   var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey+'/'+'round1')
   matchesRef.once('value', dataSnapshot => {
     var theCount = dataSnapshot.numChildren()
@@ -725,7 +551,7 @@ getNCAABMatchesFinal = () => {
     var sweet16Count = dataSnapshot.child('sweet16').numChildren()
     var elite8Count = dataSnapshot.child('elite8').numChildren()
     var final4Count = dataSnapshot.child('final4').numChildren()
-    var finalCount = dataSnapshot.child('nationalChampionship').numChildren()
+    var finalCount = dataSnapshot.child('finalRound').numChildren()
     var theInfo=dataSnapshot.val()
     var sweet16=theInfo.sweet16
     var elite8=theInfo.elite8
@@ -780,12 +606,28 @@ getNCAABMatchesFinal = () => {
   })
 }
  isOdd=(num)=>{ return num % 2;}
-  createEvent = () => {
+ checkExistence= () => {
+  var theYear=new Date(this.state.round1).getFullYear()
+  if(theYear<new Date().getFullYear()){this.notify("Event can only be created for the future");return}
+  var eventKey = 'marchMadness' + theYear
+  var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + eventKey + '/stopRound1Edit/')
+  timeInfoDb.once('value', dataSnapshot => {
+    if(dataSnapshot.exists()){
+       if(dataSnapshot.val()==='N/A'){
+        this.createEvent(eventKey,theYear)
+       }else{
+        this.notify('That Years Event Already Exists')
+       }
+    }else{
+      this.createEvent(eventKey,theYear)
+    }
+   
+  })
+ }
+  createEvent = (eventKey,theYear) => {
     var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
-
     console.log('round1 length', round1.length)
-    var eventKey = 'marchMadness' + new Date().getFullYear()
-    var eventTitle = 'March Madness ' + new Date().getFullYear()
+    var eventTitle = 'March Madness ' +theYear
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
     if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
@@ -929,12 +771,12 @@ getNCAABMatchesFinal = () => {
         nationalChampionship[index]['time'] = this.state.final
         finalArr[item.id] = item
         if (nationalChampionship.length === index + 1) {
-          generalDb.child('/final/nationalChampionship/').update(finalArr,(error) => {
+          generalDb.child('/final/finalRound/').update(finalArr,(error) => {
             if (error) {
               this.notify('An error occured while creating event, try again')
             } else {
               var toTheEventsIds = { time:new Date(this.state.round1).getTime(), title:eventTitle, sportType:'NCAAB', endTime:new Date(this.state.final).getTime(), getEventsTimeUpdate: new Date().getTime(),
-                stopRound1Edit:'N/A',stopRound2Edit:'N/A',stopSweet16Edit:'N/A',stopElite8Edit:'N/A',stopFinal4Edit:'N/A',stopFinalEdit:'N/A',currentSelection:'round1'
+                stopRound1Edit:'N/A',stopRound2Edit:'N/A',stopSweet16Edit:'N/A',stopElite8Edit:'N/A',stopFinal4Edit:'N/A',stopFinalEdit:'N/A',currentSelection:'round1',year:theYear
                }
               var editDbRef=firebase.database().ref('/theEvents/eventsIds/'+eventKey+'/')
               var editDbRef2=firebase.database().ref('/theEvents/NCAAB/eventsIds/'+eventKey+'/')
@@ -950,7 +792,7 @@ getNCAABMatchesFinal = () => {
     }
   }
 
-  createEvent2 = () => {
+  /*createEvent2 = () => {
     var round1Arr={},round1EastArr = {},round1WestArr = {},round1SouthArr = {},round1MidWestArr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
 
     console.log('round1 length', round1.length)
@@ -958,12 +800,7 @@ getNCAABMatchesFinal = () => {
     var eventTitle = 'March Madness' + new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
-   /* console.log('this.state.round1', this.state.round1)
-    console.log('this.state.round2', this.state.round2)
-    console.log('this.state.sweet16', this.state.sweet16)
-    console.log('this.state.elite8', this.state.elite8)
-    console.log('this.state.final4', this.state.final4)
-    console.log('this.state.final', this.state.final)*/
+   
     if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) } else { this.setState({ round1Err: 'Date must be filled' }) }
     if (this.state.round2.length >= 3) { this.setState({ round2Err: '' }) } else { this.setState({ round2Err: 'Date must be filled' }) }
     if (this.state.sweet16.length >= 3) { this.setState({ sweet16Err: '' }) } else { this.setState({ sweet16Err: 'Date must be filled' }) }
@@ -1075,7 +912,7 @@ getNCAABMatchesFinal = () => {
       })
 
     }
-  }
+  }*/
 
   notify = (message) => {
     toast.warn(message, {
@@ -1152,8 +989,14 @@ getNCAABMatchesFinal = () => {
   }
 
 
-  loadOtherEvent=(id,title,time,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit)=>{
-    this.setState({theTime:time,stopFinalEdit,stopFinal4Edit,stopSweet16Edit,stopElite8Edit})
+  loadOtherEvent=(theEventKey,theEventTitle,time,stopRound1Edit,stopRound2Edit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit,stopFinalEdit,eventYear,currentSelection,oddsUpdate,resultsUpdate)=>{
+    //console.log('eventYear',eventYear);return
+    var theMenu=''
+    if(currentSelection==='round1'||currentSelection==='round2'){theMenu='east'}else{theMenu='sweet16'}
+    this.setState({theEventKey, theEventTitle,theTime:time,stopRound1Edit,stopRound2Edit,stopSweet16Edit,stopElite8Edit,stopFinal4Edit,stopFinalEdit,eventYear,currentSelection,currentRound:currentSelection,theMenu}, () => {
+      this.getNCAABMatches()
+      this.checkLink(this.state.userId)
+    })
   }
   copyLink=()=>{
     copy(this.state.theLink);
@@ -1226,8 +1069,10 @@ getNCAABMatchesFinal = () => {
   openMarchMadnessModal =async () => {
    
     var itemToModals='',modalTitle=''
-    var year=new Date().getFullYear()
+    var year=this.state.eventYear
     var time=new Date().getTime()
+    console.log('this.state.currentRound',this.state.currentRound,this.state.stopRound1Edit)
+    //return
     if (this.state.currentRound === 'round1'){
       if(this.state.stopRound1Edit!=='N/A'&&time>this.state.stopRound1Edit){this.notify('Event already started');return}
     }
@@ -1782,7 +1627,7 @@ getNCAABMatchesFinal = () => {
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.time,item.stopFinalEdit,item.stopFinal4Edit,item.stopSweet16Edit,item.stopElite8Edit)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.time,item.stopRound1Edit,item.stopRound2Edit,item.stopSweet16Edit,item.stopElite8Edit,item.stopFinal4Edit,item.stopFinalEdit,item.eventYear,item.currentSelection,item.oddsUpdate,item.resultsUpdate,item.theMenu)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -2042,7 +1887,7 @@ getNCAABMatchesFinal = () => {
               <p className={style.eventTitleP}>Enter National Championship Start Date/Time</p>
               <input className={style.eventInput} id='final' placeholder='Enter your RAM name' type='datetime-local' value={this.state.final} onChange={(event) => this.inputChange(event)}></input>
               <p className={style.eventErrorP}>{this.state.finalErr}</p>
-              <button className={style.submitBtn} onClick={() => this.createEvent()}>Create Event</button>
+              <button className={style.submitBtn} onClick={() => this.checkExistence()}>Create Event</button>
             </div>
           </div> : null}
         </div>

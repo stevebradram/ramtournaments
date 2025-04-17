@@ -440,7 +440,7 @@ class NCAA extends Component {
   }
 })
   }
-  loadOtherFights = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate) => {
+  loadOtherEvent = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate) => {
     this.setState({oddsUpdate,resultsUpdate})
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
@@ -1081,7 +1081,7 @@ class NCAA extends Component {
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.currentSelection,item.oddsUpdate,item.resultsUpdate)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.currentSelection,item.oddsUpdate,item.resultsUpdate)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>

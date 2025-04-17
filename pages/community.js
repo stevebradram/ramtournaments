@@ -10,9 +10,14 @@ import News from '../components/Community/News'
 import HallOfFame from '../components/Community/HallOfFame'
 import CommMarchMadness from '../components/Community/CommMarchMadness'
 import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 var theFlockArr = [{ name: 'Clement', score: 20 }, { name: 'Billygoat', score: 30 },
 { name: 'Elaine Kiiru', score: 40 }, { name: 'RAM Man', score: 50 }]
 class leaderboard extends Component {
+  constructor() {
+    super();
+    this.tableRef = React.createRef(null);
+ }
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks',creatorId:'',showNCAAB:false,count:0,showReel:false,
     dataAvailable: false, sportType: '', theEventKey: '', theEventTitle: '', userLoggedIn: false, nullData: [], theEvent: '', theTime: '', isTherNormalData: false, eventStartTime: '', currentSelection: '',currentSubSelection:'', menuToShow: 'Rams In Your Flock',
@@ -218,10 +223,10 @@ class leaderboard extends Component {
           var theArr={}
           flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
             if (dataSnapshot.exists()){
-              console.log('ikoooooooooo',theUid)
+             // console.log('ikoooooooooo',theUid)
               theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'true'}
             }else{
-              console.log('hakunaaaaaa',theUid)
+             // console.log('hakunaaaaaa',theUid)
               theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked,isCreator:'false'}
             }
             allArr.push(theArr)
@@ -423,8 +428,10 @@ class leaderboard extends Component {
               })}
             </div>:null}
             {this.state.sportType!=='NCAAB'?<>{this.state.menuToShow === 'Rams In Your Flock' ? <>{this.state.flockNameAvailable ? <div className={styles.menu2Div1}>
+            
               <p className={styles.titleP}><span>{this.state.currentFlockName}</span> - RAMS IN YOUR FLOCK</p>
               <div id={styles.table1Div}>
+             
                 <table className={styles.table1}>
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
@@ -507,7 +514,13 @@ class leaderboard extends Component {
             {this.state.menuToShow==='Admin'&&this.state.isAdmin? <>{this.state.theAdminFlocksArr.length > 0 ? <div className={styles.menu2Div1}>
               <p className={styles.titleP}>ADMIN VIEW</p>
               <div id={styles.table1Div}>
-                <table className={styles.table1}>
+              {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
+                    filename={this.state.theEventKey}
+                    sheet="users"
+                    currentTableRef={this.tableRef.current}>        
+                 <p className={styles.exportP}>Export Document</p>
+                  </DownloadTableExcel> </div></div>:null}
+                <table className={styles.table1} ref={ this.tableRef}>
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
                     <th>RAM Name</th>
