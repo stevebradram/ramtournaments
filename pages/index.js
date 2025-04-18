@@ -6,7 +6,7 @@ import Testimonials from '../components/Home/Testimonials'
 import HowToPlay from '../components/Home/HowToPlay'
 import About from '../components/Home/About'
 import Results from '../components/Home/Results'
-import UFCEvent from '../components/Home/UFCEvent'
+import TheEvents from '../components/Home/UFCEvent'
 import Meta from '../components/Meta'
 class index extends Component {
   render() {
@@ -14,7 +14,7 @@ class index extends Component {
       <><Meta/>
       <div className={styles.container}>
       <Reel/>
-      <UFCEvent/>
+      <TheEvents/>
       <HowToPlay/>
       <About/>
       <Testimonials/>
