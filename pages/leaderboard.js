@@ -387,6 +387,8 @@ class leaderboard extends Component {
   }
 
   loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)=>{
+    console.log('hapaaaa',sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)
+    //return
     this.showProgressBar()
     if (navigator.onLine === false) {
       this.notify('No internet! please check your internet connection')
