@@ -69,6 +69,7 @@ $blackish:#292f51;
     transition: all .3s ease-in-out;
     transform-origin: left top;
     transform: scaleY(1);
+    
    }
    
    .expandable:target {
@@ -161,28 +162,47 @@ $blackish:#292f51;
     border-radius: 20px;
 }
 .flockDiv{
-    height:40px;
     width:100%;
-    background-color: red;
+    
+   
+}
+.flockDiv1{
     display: flex;
     align-items: center;
     justify-content:center;
+    //height:30px;
+    width:100%;
+    background-color: red;
     font-weight: 600;
     color: white;
     font-size: 17px;
-    cursor: pointer;
+    padding: 5px 10px;
+    
 }
 .flockDiv2{
     display: flex;
     align-items: center;
     justify-content: center;  
+    //height:30px;
+    color: $blackish;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    padding: 5px 10px;
+    background-color: white;
+    //box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    border-bottom: 1px solid #00000022;
 }
 .flockDivP1{
  border-bottom: 2px solid white;
  padding-bottom: 2px;
+ cursor: pointer;
 }
 .flockDivP2{
     margin-left: 5px;
+}
+.picksP{
+
 }
 .createLeagueModal{
     position: fixed;

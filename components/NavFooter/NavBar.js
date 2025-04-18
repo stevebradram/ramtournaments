@@ -13,6 +13,7 @@ import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
 import CreateLeagueModal from './CreateLeagueModal'
 import Countdown from 'react-countdown';
+import { TypeAnimation } from 'react-type-animation';
 class NavBar extends Component {
   constructor(props) {
     super(props)
@@ -28,7 +29,8 @@ class NavBar extends Component {
       count:0,
       isAdmin:false,
       countdownStart:1741960288732,
-      countdownStop:1742487300000
+      countdownStop:1742487300000,
+      theNotification:''
     }
   }
   onScroll = () => {
@@ -50,6 +52,14 @@ class NavBar extends Component {
     linkInfo=linkInfo.pop()
     if(linkInfo.length>15){this.setState({showEventCreator:false})}
     console.log('linkInfo naaav',linkInfo)
+    this.getData()
+  }
+  getData=()=>{
+    var messageRef = firebase.database().ref('/notifications/message/')
+    messageRef.once('value', dataSnapshot => {
+    this.setState({theNotification:dataSnapshot.val()})
+    console.log('theNotification',dataSnapshot.val())
+    })
   }
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onScroll, false);
@@ -166,7 +176,24 @@ class NavBar extends Component {
     }
     
   };
+  theTypeAnimation = (text1, text2) => {
+    return (
+      <TypeAnimation
+        sequence={[
+          text1,
+          2000,
+          text2,
+          2000
+        ]}
+        wrapper="span"
+        speed={50}
+        className={styles.picksP}
+        repeat={Infinity}
+      />
+    )
+  }
   render() {
+    var theNotification=this.state.theNotification
     return (
       <>
         <div className={styles.navDiv} id={styles.navDiv}>
@@ -234,9 +261,28 @@ class NavBar extends Component {
           
           </div> : null}
           <ToastContainer />
-           {this.state.isLogged&&this.state.showEventCreator?<div className={styles.flockDiv} onClick={()=>this.setState({createLeagueModal:true})}>
-            <p className={styles.flockDivP1}>Create a Flock...</p>
-            <p className={styles.flockDivP2}>Invite Your Friends</p>
+           {this.state.isLogged&&this.state.showEventCreator?<div className={styles.flockDiv} >
+           <div className={styles.flockDiv1} >
+            <p className={styles.flockDivP1} onClick={()=>this.setState({createLeagueModal:true})}>Create Flock & invite your friends</p>
+            {/*<p className={styles.flockDivP2}>Invite Your Friends</p>*/} 
+            </div>
+            <div className={styles.flockDiv2}>
+              {/*<p>UFC Summer Series…starting on May 10th for 3 events in May and June!</p>*/}
+              {/*<TypeAnimation
+      sequence={[
+        'Events News:',
+        1000,
+        theNotification,
+        1000,
+        
+      ]}
+      wrapper="span"
+      speed={50}
+      className={styles.typeP}
+      repeat={Infinity}
+    />*/}
+    {theNotification.length>1?this.theTypeAnimation('Events News:', theNotification):null}
+            </div>
            </div>:null}
            
            {new Date().getTime()>this.state.countdownStart&&new Date().getTime()<this.state.countdownStop?<div className={styles.flockDiv} style={{backgroundColor:'#fff'}}><div className={styles.theCountDiv}><p>March Madness Countdown</p><Countdown date={this.state.countdownStop} className={styles.theCount} /></div></div>:null}
