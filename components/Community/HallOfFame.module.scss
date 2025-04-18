@@ -1,0 +1,87 @@
+$primaryColor: hsl(203, 68%, 25%);
+$redColor: #CB1E31;
+$blackish:#292f51;
+.container{
+    width: 100%;
+    min-height: 100vh;
+}
+.mainDiv{
+    display: flex;
+}
+.leftDiv{
+    flex:1;
+}
+
+.listDiv span{
+    
+}
+.span2, .span3,.span4{
+    margin-right: 10px;
+}
+.span1{
+    margin-right: 2px;
+}
+.span2{
+    margin-left: 2px;
+}
+.listDiv{
+    margin-bottom: 5px;
+}
+
+.container h2{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: $blackish;
+}   
+.container h3{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: $redColor;
+}
+.container h4{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: $blackish;
+
+}
+.listDiv p{
+    font-size: 18px; 
+    line-height: 25px;
+}
+.rightDiv{
+    flex:1;
+}
+.rightDiv h5{
+    font-size: 24px;
+    //font-weight: 500;
+    margin-bottom: 20px;
+    margin-top: -40px;
+    color: $blackish;
+}
+.rightDiv p{
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 25px;
+}
+
+@media all and (max-width: 800px) {
+    .mainDiv{
+        flex-direction: column;
+    }
+    .rightDiv h5{
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin-top: 30px;
+    }
+}
+
+@media all and (max-width: 430px) {
+    .listDiv p{
+        //font-size: 16px; 
+    }
+}
+
+
