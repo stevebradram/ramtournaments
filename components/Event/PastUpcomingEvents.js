@@ -164,7 +164,25 @@ class Reel extends Component {
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
           console.log('haaapa 6666',showArrows)
-        }}
+        }
+        if (window.innerWidth>300&&window.innerWidth<400){
+          if(theGamesNo>2){showArrows=true}
+          slidesToShow=2,slidesToScroll=2
+          console.log('haaapa 6666',showArrows)
+        }
+        if (window.innerWidth>250&&window.innerWidth<300){
+          if(theGamesNo>2){showArrows=true}
+          slidesToShow=2,slidesToScroll=2
+          console.log('haaapa 6666',showArrows)
+        }
+        if (window.innerWidth<250){
+          if(theGamesNo>2){showArrows=true}
+          slidesToShow=1,slidesToScroll=1
+          console.log('haaapa 6666',showArrows)
+        }
+      }
+      
+        
         const settings = { 
           infinite: true,
           slidesToShow:slidesToShow,

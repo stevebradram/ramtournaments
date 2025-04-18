@@ -301,7 +301,9 @@ class CommMarchMadness extends Component {
     });
   }
   render() {
+    
     var flockNameAvailable=this.props.flockNameAvailable
+    console.log('flockNameAvailable',flockNameAvailable)
     var theItems=[],theItems2=[],theSeparator=0 //round1Sep:0,round2Sep:0,finalRoundSep:0
     if(this.props.currentRound==='round1'){theItems=this.state.round1Arr,theItems2=this.state.flockSysRound1,theSeparator=this.state.round1Sep}
     if(this.props.currentRound==='round2'){theItems=this.state.round2Arr,theItems2=this.state.flockSysRound2,theSeparator=this.state.round2Sep}

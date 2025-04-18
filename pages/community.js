@@ -94,7 +94,7 @@ class leaderboard extends Component {
 
   }
   getRamsInFlock = (theEventKey, isEventStarted,currentSelection,sportType) => {
-   
+   this.setState({flockNameAvailable:false})
     this.setState({ ramsInMyFlockArr: [], theFlocksArr: [] })
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
     userInfoDb.once('value', dataSnapshot => {

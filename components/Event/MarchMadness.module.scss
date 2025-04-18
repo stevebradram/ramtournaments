@@ -416,13 +416,14 @@ $theDark:#b2b2b2;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 .eveDiv p{
     margin-left: 5px;
     margin-right: 5px;
     border: 1px solid $blackish;
     color: $blackish;
-    width: 140px;
+    //width: 140px;
     text-align: center;
     height: 40px;
     display: flex;
@@ -431,6 +432,7 @@ $theDark:#b2b2b2;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
+    padding: 0px 30px;
 }
 .eve2Div{
     width: 100%;
@@ -843,6 +845,13 @@ $theDark:#b2b2b2;
       font-size: 16px;
       font-weight: 600;
     }
+    .eveDiv p{
+        margin-right: 5px;
+        padding: 4px 15px;
+        border-radius: 2px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 }
 @media all and (max-width: 430px) {
     
@@ -882,6 +891,13 @@ $theDark:#b2b2b2;
     }
     .eveP{
         margin-top: 0px;
+    }
+    .eveDiv p{
+        margin-right: 5px;
+        padding: 4px 10px;
+        border-radius: 2px;
+        font-size: 16px;
+        margin-bottom: 10px;
     }
     }
 
