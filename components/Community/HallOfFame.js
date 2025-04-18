@@ -38,34 +38,34 @@ class HallOfFame extends Component {
         <div className={style.leftDiv}>
          <h3>MAJOR TOURNAMENTS</h3>
          <h4>NCAA MARCH MADNESS TOURNAMENT</h4>
-         {this.state.ncaabArr.map((item)=>{
+         {this.state.ncaabArr.map((item,index)=>{
           return(
-            <div className={style.listDiv}>
+            <div className={style.listDiv} key={index}>
               <p><span className={style.span1}>{item.year}</span><span className={style.span2}>{' | '+item.flockName}</span><span className={style.span3}>{item.points+' (pts)'}</span><span className={style.span4}>{' - '+item.win}</span></p>
             </div>
           )
          })}
          <h4>FIFA WORLD CUP</h4>
-         {this.state.fifaArr.map((item)=>{
+         {this.state.fifaArr.map((item,index)=>{
           return(
-            <div className={style.listDiv}>
+            <div className={style.listDiv}  key={index}>
               <p><span className={style.span1}>{item.year}</span><span className={style.span2}>{' | '+item.flockName}</span><span className={style.span3}>{item.points+' (pts)'}</span><span className={style.span4}>{' - '+item.win}</span></p>
             </div>
           )
          })}
          <h3>COMPETITIONS</h3>
          <h4>NHL PLAYOFFS COMPETITION</h4>
-         {this.state.ncaafArr.map((item)=>{
+         {this.state.ncaafArr.map((item,index)=>{
           return(
-            <div className={style.listDiv}>
+            <div className={style.listDiv}  key={index}>
               <p><span className={style.span1}>{item.year}</span><span className={style.span2}>{' | '+item.flockName}</span><span className={style.span3}>{item.points+' (pts)'}</span><span className={style.span4}>{' - '+item.win}</span></p>
             </div>
           )
          })}
          <h4>NFL PLAYOFFS COMPETITION</h4>
-         {this.state.nflArr.map((item)=>{
+         {this.state.nflArr.map((item,index)=>{
           return(
-            <div className={style.listDiv}>
+            <div className={style.listDiv}  key={index}>
               <p><span className={style.span1}>{item.year}</span><span className={style.span2}>{' | '+item.flockName}</span><span className={style.span3}>{item.points+' (pts)'}</span><span className={style.span4}>{' - '+item.win}</span></p>
             </div>
           )
