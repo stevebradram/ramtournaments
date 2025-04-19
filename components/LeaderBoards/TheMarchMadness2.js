@@ -40,19 +40,86 @@ class TheMarchMadness extends Component {
      }
    })
  }
-  getRound1Matches=()=>{
-    console.log('craaaaaaaaaaaaaaaaaaaaaaaazy')
-    var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round1/')
-    var i=0,theDet2=[]
-    leadersRef.once('value', dataSnapshot => {
+ getRound1Matches=()=>{
+  console.log('craaaaaaaaaaaaaaaaaaaaaaaazy',this.props.theEventKey)
+  var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
+ // var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round1/')
+  var i=0,theDet2=[]
+  leadersRef.once('value', dataSnapshot => {
+    var theCount=dataSnapshot.numChildren()
+    dataSnapshot.forEach((data) => {
+      i++
+      var theId=data.key
+      var theDet={}
+      console.log('the uid',theId)
+      var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
+      var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
+      var isTherData=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/bets/round1/")
+      isTherData.once('value', dataSnapshot => {
+        if(dataSnapshot.exists()){
+      var theEmail='',thePhone=''
+      if(this.state.isAdmin){
+        userInfoDb2.once('value',dataSnapshot=>{
+          var theD=dataSnapshot.val()
+          if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+          theDet['email']=theD.email
+          if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
+          if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
+        })}
+      userInfoDb.once('value', dataSnapshot => {
+         if(dataSnapshot.exists()){
+          var userBetData=dataSnapshot.val()
+          var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
+            bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
+            theDet2.push(theDet)
+            console.log('ikoooooooooooooooo 1111',theDet2)
+          this.setState({round1Arr:theDet2,theItems:theDet2})
+         }else{
+          console.log('hakunaaaaaaaaaaaaa 11111')
+         }
+      })
+    }
+    })
+      if(theCount===i){
+        var sort=this.state.round1Arr.sort((a, b) => b.score - a.score )
+        this.setState({round1Arr:sort})
+        //console.log('finaaal',theDet2)
+        //this.setState({round1Arr:theDet2})
+      }
+    })
+  })
+}
+  
+getFinalRound=()=>{
+  //return
+  var eventIdsDb=firebase.database().ref('/theEvents/eventsIds/'+this.props.theEventKey+'/currentSelection')
+  eventIdsDb.once('value', dataSnapshot => {
+    if(!dataSnapshot.exists()){
+      this.setState({finalRoundMenu:false})
+      }else{
+        this.setState({finalRoundMenu:dataSnapshot.val()})
+      }
+  })
+  var i=0,theDet2=[],currentRound=this.props.currentRound
+  console.log('currentRound',this.props.theEventKey,currentRound)
+  var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
+  leadersRef.once('value', dataSnapshot => {
+    if(!dataSnapshot.exists()){
+    this.setState({finalRoundExists:false})
+    }else{
+      this.setState({finalRoundExists:true})
       var theCount=dataSnapshot.numChildren()
       dataSnapshot.forEach((data) => {
         i++
         var theId=data.key
         var theDet={}
-        //console.log('the uid',theId)
+       /// console.log('the final uid',theId)
+       
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
+        var isTherData=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/bets/sweet16/")
+      isTherData.once('value', dataSnapshot => {
+        if(dataSnapshot.exists()){
         var theEmail='',thePhone=''
         if(this.state.isAdmin){
           userInfoDb2.once('value',dataSnapshot=>{
@@ -62,111 +129,56 @@ class TheMarchMadness extends Component {
             if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
             if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
           })}
+          
         userInfoDb.once('value', dataSnapshot => {
            if(dataSnapshot.exists()){
+            var BPS=''
             var userBetData=dataSnapshot.val()
+            var sweet16BPS=userBetData.sweet16BPS,elite8BPS=userBetData.elite8BPS
+            var final4BPS=userBetData.final4BPS,finalRoundBPS=userBetData.finalRoundBPS
+            var sweet16Score=userBetData.sweet16Score,elite8Score=userBetData.elite8Score
+            var final4Score=userBetData.final4Score,finalRoundScore=userBetData.finalRoundScore
+            var theMenu=userBetData.theMenu
+
+          
+           
+            if(!sweet16BPS||sweet16BPS===undefined||sweet16BPS===null){sweet16BPS=0}
+            if(!elite8BPS||elite8BPS===undefined||elite8BPS===null){elite8BPS=0}
+            if(!final4BPS||final4BPS===undefined||final4BPS===null){final4BPS=0}
+            if(!finalRoundBPS||finalRoundBPS===undefined||finalRoundBPS===null){finalRoundBPS=0}
+            if(!sweet16Score||sweet16Score===undefined||sweet16Score===null){sweet16Score=0}
+            if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
+            if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
+            if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
+            
+           
+            if(currentRound==='sweet16'){BPS=sweet16BPS}if(currentRound==='elite8'){BPS=elite8BPS}
+            if(currentRound==='final4'){BPS=final4BPS}if(currentRound==='finalRound'){BPS=finalRoundBPS}
+
+            var score=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
+            score=Number(score).toFixed(2)
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
-              bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
+              email:theEmail,phone:thePhone,sweet16BPS:sweet16BPS,elite8BPS:elite8BPS,finalRoundBPS:finalRoundBPS,
+              sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,final4BPS:final4BPS,
+              finalRoundScore:finalRoundScore,score:score}
               theDet2.push(theDet)
-             // console.log('ikoooooooooooooooo 1111',theDet2)
-            this.setState({round1Arr:theDet2,theItems:theDet2})
+              console.log('final round 36366',theDet2)
+            this.setState({finalRoundArr:theDet2})
            }else{
             //console.log('hakunaaaaaaaaaaaaa 11111')
            }
         })
-        if(theCount===i){
-          var sort=this.state.round1Arr.sort((a, b) => b.score - a.score )
-          this.setState({round1Arr:sort})
-          //console.log('finaaal',theDet2)
-          //this.setState({round1Arr:theDet2})
-        }
-      })
-    })
-  }
-  
-  getFinalRound=()=>{
-    var eventIdsDb=firebase.database().ref('/theEvents/eventsIds/'+this.props.theEventKey+'/currentSelection')
-    eventIdsDb.once('value', dataSnapshot => {
-      if(!dataSnapshot.exists()){
-        this.setState({finalRoundMenu:false})
-        }else{
-          this.setState({finalRoundMenu:dataSnapshot.val()})
-        }
-    })
-    var i=0,theDet2=[],currentRound=this.props.currentRound
-    console.log('currentRound',currentRound)
-    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
-    leadersRef.once('value', dataSnapshot => {
-      if(!dataSnapshot.exists()){
-      this.setState({finalRoundExists:false})
-      }else{
-        this.setState({finalRoundExists:true})
-        var theCount=dataSnapshot.numChildren()
-        dataSnapshot.forEach((data) => {
-          i++
-          var theId=data.key
-          var theDet={}
-         /// console.log('the final uid',theId)
-         
-          var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
-          var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
-          var theEmail='',thePhone=''
-          if(this.state.isAdmin){
-            userInfoDb2.once('value',dataSnapshot=>{
-              var theD=dataSnapshot.val()
-              if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
-              theDet['email']=theD.email
-              if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
-              if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
-            })}
-            
-          userInfoDb.once('value', dataSnapshot => {
-             if(dataSnapshot.exists()){
-              var BPS=''
-              var userBetData=dataSnapshot.val()
-              var sweet16BPS=userBetData.sweet16BPS,elite8BPS=userBetData.elite8BPS
-              var final4BPS=userBetData.final4BPS,finalRoundBPS=userBetData.finalRoundBPS
-              var sweet16Score=userBetData.sweet16Score,elite8Score=userBetData.elite8Score
-              var final4Score=userBetData.final4Score,finalRoundScore=userBetData.finalRoundScore
-              var theMenu=userBetData.theMenu
-
-            
-             
-              if(!sweet16BPS||sweet16BPS===undefined||sweet16BPS===null){sweet16BPS=0}
-              if(!elite8BPS||elite8BPS===undefined||elite8BPS===null){elite8BPS=0}
-              if(!final4BPS||final4BPS===undefined||final4BPS===null){final4BPS=0}
-              if(!finalRoundBPS||finalRoundBPS===undefined||finalRoundBPS===null){finalRoundBPS=0}
-              if(!sweet16Score||sweet16Score===undefined||sweet16Score===null){sweet16Score=0}
-              if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
-              if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
-              if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
-              
-             
-              if(currentRound==='sweet16'){BPS=sweet16BPS}if(currentRound==='elite8'){BPS=elite8BPS}
-              if(currentRound==='final4'){BPS=final4BPS}if(currentRound==='finalRound'){BPS=finalRoundBPS}
-
-              var score=Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
-              score=Number(score).toFixed(2)
-              var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
-                email:theEmail,phone:thePhone,sweet16BPS:sweet16BPS,elite8BPS:elite8BPS,finalRoundBPS:finalRoundBPS,
-                sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,final4BPS:final4BPS,
-                finalRoundScore:finalRoundScore,score:score}
-                theDet2.push(theDet)
-                //console.log('ikoooooooooooooooo 36366',theDet2)
-              this.setState({finalRoundArr:theDet2})
-             }else{
-              //console.log('hakunaaaaaaaaaaaaa 11111')
-             }
-          })
-          if(theCount===i){
-            var sort=this.state.finalRoundArr.sort((a, b) => b.score - a.score )
-            this.setState({finalRoundArr:sort})
-            console.log('hakunaaaaaaaaaaaaa overallll',sort)
-          }
-        })
       }
     })
-  }
+        if(theCount===i){
+          var sort=this.state.finalRoundArr.sort((a, b) => b.score - a.score )
+          this.setState({finalRoundArr:sort})
+          console.log('hakunaaaaaaaaaaaaa overallll',sort)
+        }
+      })
+    }
+  })
+}
   getOverall=()=>{
     var i=0,theDet2=[]
     var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey)
@@ -231,6 +243,55 @@ class TheMarchMadness extends Component {
     })
   }
   getRound2Matches=()=>{
+    console.log('craaaaaaaaaaaaaaaaaaaaaaaazy',this.props.theEventKey)
+    var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
+   // var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round1/')
+    var i=0,theDet2=[]
+    leadersRef.once('value', dataSnapshot => {
+      var theCount=dataSnapshot.numChildren()
+      dataSnapshot.forEach((data) => {
+        i++
+        var theId=data.key
+        var theDet={}
+        console.log('the uid',theId)
+        var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
+        var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
+        var isTherData=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/bets/round2/")
+        isTherData.once('value', dataSnapshot => {
+          if(dataSnapshot.exists()){
+        var theEmail='',thePhone=''
+        if(this.state.isAdmin){
+          userInfoDb2.once('value',dataSnapshot=>{
+            var theD=dataSnapshot.val()
+            if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+            theDet['email']=theD.email
+            if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
+            if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
+          })}
+        userInfoDb.once('value', dataSnapshot => {
+           if(dataSnapshot.exists()){
+            var userBetData=dataSnapshot.val()
+            var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
+              bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
+              theDet2.push(theDet)
+              console.log('ikoooooooooooooooo 1111',theDet2)
+            this.setState({round1Arr:theDet2,theItems:theDet2})
+           }else{
+            console.log('hakunaaaaaaaaaaaaa 11111')
+           }
+        })
+      }
+      })
+        if(theCount===i){
+          var sort=this.state.round1Arr.sort((a, b) => b.score - a.score )
+          this.setState({round1Arr:sort})
+          //console.log('finaaal',theDet2)
+          //this.setState({round1Arr:theDet2})
+        }
+      })
+    })
+  }
+  /*getRound2Matches=()=>{
     var i=0,theDet2=[]
     var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round2/')
     leadersRef.once('value', dataSnapshot => {
@@ -240,13 +301,6 @@ class TheMarchMadness extends Component {
        // console.log('the uid',theId)
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
-        /*if(this.state.isAdmin){
-          userInfoDb2.once('value',dataSnapshot=>{
-            var theD=dataSnapshot.val()
-            console.log('the theD',theId,theD)
-            if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
-            theDet['email']=theD.email
-          })}*/
             var theEmail='',thePhone=''
             if(this.state.isAdmin){
               userInfoDb2.once('value',dataSnapshot=>{
@@ -261,11 +315,6 @@ class TheMarchMadness extends Component {
             var userBetData=dataSnapshot.val()
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
               bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
-            /*theDet['id']=theId
-            theDet['flockName']=userBetData.flockName
-            theDet['teamName']=userBetData.teamName
-            theDet['bestPossibleScore']=userBetData.round1BPS
-            theDet['score']=userBetData.round1Score*/
             theDet2.push(theDet)
            // console.log('ikoooooooooooooooo 22222',theDet2)
             this.setState({round2Arr:theDet2})
@@ -275,8 +324,9 @@ class TheMarchMadness extends Component {
         })
       })
     })
-  }
+  }*/
   getCurrentRound=(round)=>{
+  
     if(round==='round1'){
     this.setState({theItems:this.state.round1Arr})
     }
