@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
 import TheMarchMadness from '../components/LeaderBoards/TheMarchMadness'
+import TheMarchMadness2 from '../components/LeaderBoards/TheMarchMadness2'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
 var theItems=[]
@@ -33,9 +34,10 @@ class leaderboard extends Component {
   constructor() {
     super();
     this.tableRef = React.createRef(null);
+    this.child = React.createRef();
  }
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,
-    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true}
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,
+    dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true,loadMadness1:false,loadMadness2:false}
   componentDidMount=()=>{
      //this.getScoreBoardData()
      this.showProgressBar()
@@ -85,11 +87,11 @@ class leaderboard extends Component {
     })
   })
  }
- checkForSelectedEvent=async(sportType,theEventKey,theTime)=>{
+ checkForSelectedEvent=async(sportType,theEventKey,theTime,currentSelection)=>{
   var userInfoDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
   await  userInfoDb.once('value',dataSnapshot=>{
     if (!dataSnapshot.val()) {
-      this.getScoreBoardData(sportType,theEventKey,theTime)
+      this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
       return
     }
     var theData=dataSnapshot.val()
@@ -103,7 +105,7 @@ class leaderboard extends Component {
     //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
     this.setState({theEventTitle, theEventKey, theTime,endTime,sportType,currentSelection},()=>{
       console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
-      this.getScoreBoardData(sportType,theEventKey,theTime)
+      this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
       
       
     })
@@ -154,7 +156,7 @@ class leaderboard extends Component {
           if(nowDate>(firstEndTime+86400000)){this.setState({isEventExpired:true})}
           else{this.setState({isEventExpired:false})}
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
-          this.checkForSelectedEvent(sportType,theEventKey,theTime)
+          this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
           console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
           })
@@ -249,17 +251,34 @@ class leaderboard extends Component {
       
     })
    }
-  getScoreBoardData=(sportType,theEventKey,theTime)=>{
-    if(sportType==='NCAAB'){ this.setState({dataAvailable:true});return}
+    isEven=(value)=>{
+    if (value%2 == 0)
+        return true;
+    else
+        return false;
+}
+  getScoreBoardData=(sportType,theEventKey,theTime,currentSelection)=>{
+    console.log('dddddata',sportType,theEventKey,currentSelection)
+    if(sportType==='NCAAB'){ 
+      this.setState({dataAvailable:true,eventCount:this.state.eventCount+1});
+      var checkEven=this.isEven(this.state.eventCount)
+      if(checkEven){this.setState({loadMadness1:true,loadMadness2:false})}
+      else{this.setState({loadMadness1:false,loadMadness2:true})}
+      console.log('checkEven',checkEven)
+      return}
+     
+      //return(<TheMarchMadness setClick={click => this.clickChild = click} theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>)
+      
+      
     if(!this.state.userLoggedIn)return
     this.setState({eventStartTime:theTime,sportType})
     console.log('curentttttttt 500000',sportType,theEventKey,theTime)
     var dbLink=''
     if(sportType==='NCAAB'){
-      if(this.state.currentSelection==='round1'){
+      if(currentSelection==='round1'){
       dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round1/'
       } 
-      if(this.state.currentSelection==='round2'){
+      if(currentSelection==='round2'){
         dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round2/'
         } 
     }else{
@@ -295,13 +314,13 @@ class leaderboard extends Component {
         var theId=data.key
         var theData=data.val()
         if(!theId)return
-       console.log('the iddddd',theId)
+       //console.log('the iddddd',theId)
       // console.log('the theData',theData)
         var theDet={}
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         if(this.state.isAdmin){
         userInfoDb2.once('value',dataSnapshot=>{
-          console.log('theD.email',theId)
+          //console.log('theD.email',theId)
           
           var theD=dataSnapshot.val()
           theDet['phone']=theD.phoneNo
@@ -357,7 +376,7 @@ class leaderboard extends Component {
           allData.push(theDet)
           this.setState({theItems:allData})
           
-          //console.log('all data checked',allData)
+          console.log('all data checked',allData)
         })
         
         if(i===scoreBoardNo){
@@ -388,6 +407,7 @@ class leaderboard extends Component {
 
   loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)=>{
     console.log('hapaaaa',sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)
+   // this.setState({sportType})
     //return
     this.showProgressBar()
     if (navigator.onLine === false) {
@@ -398,7 +418,7 @@ class leaderboard extends Component {
       this.notify('Please Log In to continue')
     }else{
       this.setState({theEventKey,theEventTitle,currentSelection,isEventExpired:isExpired,sportType})
-      this.getScoreBoardData(sportType,theEventKey,theTime)
+      this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
     }
   }
   notify=(message)=>{
@@ -433,7 +453,11 @@ class leaderboard extends Component {
     }
   }
   handleChildClick = (from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime) => {
+   
     this.loadOtherEvents(sportType,theEventKey,theTime,theEventTitle,currentSelection,isEventExpired)
+    this.setState({ count: this.state.count + 1})
+  };
+  handleChildClick2 = () => {
     this.setState({ count: this.state.count + 1})
   };
   itemComponent=(theItems)=>{
@@ -546,7 +570,9 @@ class leaderboard extends Component {
       </table>
       </div>)
   }
+
     render() {
+      console.log('this.state.sportType',this.state.sportType)
       var theItems=[]
       var noData=false 
       var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore    )
@@ -611,7 +637,8 @@ class leaderboard extends Component {
       <PiFolderDashedThin  className={styles.noDataIc}/>
      <p>Please LOG IN to view data in this page</p>
    </div>}
-      </div>:<TheMarchMadness theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection}/>}
+      </div>:this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
+        <TheMarchMadness2  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>

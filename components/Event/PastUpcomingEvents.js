@@ -148,37 +148,37 @@ class Reel extends Component {
         if (window.innerWidth>800&&window.innerWidth<1100){
           if(theGamesNo>4){showArrows=true}
           slidesToShow=4,slidesToScroll=4
-          console.log('haaapa 3333',showArrows)
+          //console.log('haaapa 3333',showArrows)
         }
         if (window.innerWidth>600&&window.innerWidth<800){
           if(theGamesNo>3){showArrows=true}
           slidesToShow=3,slidesToScroll=3
-          console.log('haaapa 4444',showArrows)
+          //console.log('haaapa 4444',showArrows)
         }
         if (window.innerWidth>400&&window.innerWidth<600){
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
-          console.log('haaapa 5555',showArrows)
+          //console.log('haaapa 5555',showArrows)
         }
         if (window.innerWidth>350&&window.innerWidth<400){
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
-          console.log('haaapa 6666',showArrows)
+          //console.log('haaapa 6666',showArrows)
         }
         if (window.innerWidth>300&&window.innerWidth<400){
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
-          console.log('haaapa 6666',showArrows)
+          //console.log('haaapa 6666',showArrows)
         }
         if (window.innerWidth>250&&window.innerWidth<300){
           if(theGamesNo>2){showArrows=true}
           slidesToShow=2,slidesToScroll=2
-          console.log('haaapa 6666',showArrows)
+          //console.log('haaapa 6666',showArrows)
         }
         if (window.innerWidth<250){
           if(theGamesNo>2){showArrows=true}
           slidesToShow=1,slidesToScroll=1
-          console.log('haaapa 6666',showArrows)
+          //console.log('haaapa 6666',showArrows)
         }
       }
       
