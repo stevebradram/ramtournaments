@@ -8,6 +8,7 @@ import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
 import theRamOdds from './ramOdds.json'
+import theNCAABOdds from '../TheJSONS/ncaabOdds.json'
 var thePoints=[{seed:1,val:1.01},{seed:2,val:1.08},{seed:3,val:1.17},{seed:4,val:1.27},{seed:5,val:1.54},{seed:6,val:1.61},{seed:7,val:1.63},{seed:8,val:2.02},
   {seed:9,val:1.95},{seed:10,val:2.58},{seed:11,val:2.62},{seed:12,val:2.86},{seed:13,val:4.75},{seed:14,val:6.91},{seed:15,val:13.81},{seed:16,val:76}
 ]
@@ -50,7 +51,7 @@ class NCAAModal extends Component {
     if(this.state.currentSelection!=='round1'){this.setState({getFromOddsApi:true})}
     var firstMatchTime=[]
     if(incomingData.length>0){
-      incomingData=incomingData//.slice(0,2)
+      incomingData=incomingData.slice(0,4)
       round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
       incomingData.map((item,index)=>{
         incomingData[index]['bet']=''
@@ -200,7 +201,7 @@ class NCAAModal extends Component {
     var i = 0, j = 0, k = 0, l = 0
     console.log('this.state.round1Edit',this.state.round1Edit)
     var teamsArr=[]
-    var time='2025-03-20T00:00'
+    var time='2025-12-20T00:00'
     /*this.state.round1Edit.map((item, index) => {
       if(item.team1Id==='0'){round1Edit[index]['team1IdReadOnly']=false}else{{round1Edit[index]['team1IdReadOnly']=true}}
       if(item.team2Id==='0'){round1Edit[index]['team2IdReadOnly']=false}else{round1Edit[index]['team2IdReadOnly']=true}
@@ -208,7 +209,7 @@ class NCAAModal extends Component {
       console.log('this.state.round1Edit',this.state.round1Edit)
     })*/
     //return
-    /*this.state.round1Edit.map((item, index) => {
+   /* this.state.round1Edit.map((item, index) => {
       
       round1Edit[index]['team1Id'] =this.getRandom(1, 100);
       round1Edit[index]['team2Id'] =this.getRandom(1, 90);
@@ -577,9 +578,10 @@ class NCAAModal extends Component {
 sortOddsJson=async(theArr,stateEdit)=>{
    //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
   //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
-  var oddsApi="https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-  const response = await axios.get(oddsApi)
-  var theOddsJson=response.data
+  //var oddsApi="https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
+ // const response = await axios.get(oddsApi)
+ // var theOddsJson=response.data
+  var theOddsJson=theNCAABOdds
   var firstMatchTime=[]
   try {
     console.log('theOddsJson',theOddsJson)

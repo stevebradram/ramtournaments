@@ -1,0 +1,269 @@
+[
+    {
+        "id": "b75750d59ddcfbb4336e94f338845475",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-06-30T00:50:00Z",
+        "home_team": "Duke",
+        "away_team": "Baylor",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Duke",
+                        "price": -135
+                      },
+                      {
+                        "name": "Baylor",
+                        "price": 114
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "cee48e2a2178b941b7812630706a9f78",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-04-08T01:50:00Z",
+        "home_team": "Houston",
+        "away_team": "Gonzaga",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-03T01:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T01:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Houston",
+                        "price": -215
+                      },
+                      {
+                        "name": "Gonzaga",
+                        "price": 251
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "368a2a41d5755a2105d864570b332d20",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-10-15T02:50:00Z",
+        "home_team": "Auburn",
+        "away_team": "Creighton",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T02:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T02:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Auburn",
+                        "price": -363
+                      },
+                      {
+                        "name": "Creighton",
+                        "price": 169
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "69ecfeb6b0888693b159705f293df2ad",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-07-25T05:50:00Z",
+        "home_team": "Florida",
+        "away_team": "Connecticut",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T05:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T05:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Florida",
+                        "price": -216
+                      },
+                      {
+                        "name": "Connecticut",
+                        "price": 290
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "02ca14d5221e805e2a2c451907cb000c",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-04-08T00:50:00Z",
+        "home_team": "Arizona",
+        "away_team": "Oregon",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-09T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-09T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Arizona",
+                        "price": -154
+                      },
+                      {
+                        "name": "Oregon",
+                        "price": 310
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    {
+        "id": "2548fff91c65fb160337ab4f0d139e98",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-05-18T01:50:00Z",
+        "home_team": "Texas",
+        "away_team": "Arizona St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-08T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Texas",
+                        "price": -120
+                      },
+                      {
+                        "name": "Arizona St.",
+                        "price": 150
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "6c2d5cd6f963641a5b731750b1adc926",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-05-20T02:50:00Z",
+        "home_team": "Oregon",
+        "away_team": "Ohio St.",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-04-08T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-04-13T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Oregon",
+                        "price": -175
+                      },
+                      {
+                        "name": "Ohio St.",
+                        "price": 166
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
+        "id": "9ad94a26a6a4064b2de660fccb95a333",
+        "sport_key": "basketball_ncaab",
+        "sport_title": "NCAAB",
+        "commence_time": "2025-05-22T03:50:00Z",
+        "home_team": "Notre Dame",
+        "away_team": "Georgia",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "title": "DraftKings",
+                "last_update": "2025-10-16T00:50:00Z",
+                "markets": [
+                  {
+                    "key": "h2h",
+                    "last_update": "2025-05-22T00:50:00Z",
+                    "outcomes": [
+                      {
+                        "name": "Notre Dame",
+                        "price": -325
+                      },
+                      {
+                        "name": "Georgia",
+                        "price": 198
+                        
+                      }
+                    ]
+                  }
+                ]
+              }
+        ]
+    }
+]
