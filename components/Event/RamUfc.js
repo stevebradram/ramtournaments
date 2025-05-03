@@ -307,12 +307,12 @@ class RamUfc extends Component {
           theEventId = theEventId.replace(/ /g, '-').replace(/,/g, '').toLowerCase();
           this.setState({ theUfcTItleTomodal: theTitle, theEventId: theEventId })
           theOutcome['Fights'].map((item, index) => {
-            console.log('index 001',index,theOutcome['Fights'].length)
+           // console.log('index 001',index,theOutcome['Fights'].length)
             //return
             i++
-            console.log('index rrrrr',item.Fighters[0])
+           // console.log('index rrrrr',item.Fighters[0])
             if(item.Fighters[0]){
-              console.log('has stuff',item.Fighters[0])
+             // console.log('has stuff',item.Fighters[0])
              var FightId = item.FightId
             var plDet = item.Fighters[0]
             var p2Det = item.Fighters[1]
@@ -325,10 +325,12 @@ class RamUfc extends Component {
             var p2Record = p2Det['PreFightWins'] + '-' + p2Det['PreFightDraws'] + '-' + p2Det['PreFightLosses']
            // console.log('index',index,theOutcome['Fights'].length)
            // return
+           player1Name=player1Name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            player2Name=player2Name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             var theData = {
               fighter1Name: player1Name, fighter2Name: player2Name, p1Rec: p1Record, p2Rec: p2Record,
               game: 'UFC', status1: 'notPlayed', winner: 'N/A', type: '', fighter1Country: '', fighter2Country: '', apiId: '',
-              fighter1Id: fighter1Id, fighter2Id: fighter2Id, p1Name2: plDet['FirstName'], p2Name2: p2Det['FirstName'], p1Name3: plDet['LastName'], p2Name3: p2Det['LastName'],
+              fighter1Id: fighter1Id, fighter2Id: fighter2Id, p1Name2: plDet['FirstName'].normalize("NFD").replace(/[\u0300-\u036f]/g, ""), p2Name2: p2Det['FirstName'].normalize("NFD").replace(/[\u0300-\u036f]/g, ""), p1Name3: plDet['LastName'].normalize("NFD").replace(/[\u0300-\u036f]/g, ""), p2Name3: p2Det['LastName'].normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
               p1Photo: '', p2Photo: '', fightId: FightId
             }
             sportsApiData.push(theData)
@@ -387,13 +389,13 @@ class RamUfc extends Component {
                     sportsApiData.map((item2, index) => {
                       if (item.FighterId === item2.fighter1Id || item.FighterId === item2.fighter2Id) {
                         sportsApiData[index]['match'] = item.WeightClass
-                        console.log('last arrr', sportsApiData)
+                       // console.log('last arrr', sportsApiData)
                       }
 
                     })
                   })
                   if (theOutcome.length === j) {
-                    console.log('last arrr kkkkk', sportsApiData)
+                    console.log('last arrr jhjhjh kkkkk', sportsApiData)
                     this.sortOddsJson(sportsApiData, theEventId)
                   }
                 })
@@ -495,12 +497,16 @@ class RamUfc extends Component {
   }
   // sortBothArrays = async (theFightsJson, sportType, fightType, eventsArr, ufcMatchId, matchId2, howManyExist, res) => {
   sortBothArrays = async (theFightsJson, newOddsJson, theEventId) => {
+  //console.log('theFightsJson 56565656',theFightsJson)
+  //return
     try {
       var v = 0, theFinalFightsArr = [], k = 0, firstMatchArr = []
       var theFights = theFightsJson.map(item => JSON.parse(JSON.stringify(item)));
       theFightsJson.map((item1, index) => {
         v++
-        var f1Name = item1.fighter1Name, f2Name = item1.fighter2Name, matchMillis = item1.matchMillis
+        var f1Name = item1.fighter1Name//.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        var f2Name = item1.fighter2Name//.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        var matchMillis = item1.matchMillis
 
         newOddsJson.map((item2) => {
           var allName = item2.homeTeam + ' ' + item2.awayTeam
@@ -599,8 +605,8 @@ class RamUfc extends Component {
             var theRef = firebase.database().ref('/triallls/')
             theRef.set(theFinalFightsArr)
             //theEventId
-            console.log('kamalizaaaaaa theEventId', theEventId)
-            console.log('kamalizaaaaaa 223232323', theFinalFightsArr)
+           // console.log('kamalizaaaaaa theEventId', theEventId)
+          //  console.log('kamalizaaaaaa 223232323', theFinalFightsArr)
             const ids = theFinalFightsArr.map(({ id }) => id);
             const filtered = theFinalFightsArr.filter(({ id }, index) => !ids.includes(id, index + 1));
             this.setState({ sportsApiData: filtered, showUFCModal: true })
