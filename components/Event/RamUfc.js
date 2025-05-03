@@ -426,7 +426,7 @@ class RamUfc extends Component {
          })*/
 
     } catch (error) {
-      //console.log('error',error)
+     
       this.setState({ showProgressBar: false })
     }
 
