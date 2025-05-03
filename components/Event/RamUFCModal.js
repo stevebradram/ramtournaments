@@ -22,7 +22,7 @@ class NCAAModal extends Component {
   
   componentDidMount=()=>{
     //var incomingData=[...this.props.itemsToNFLModal]
-    var incomingData =theRamUfc//this.props.theDetails//theRamUfc
+    var incomingData =this.props.theDetails//theRamUfc
     if(incomingData.length>0){
       incomingData = incomingData.map(item => JSON.parse(JSON.stringify(item)));
       var firstMatchTime =  Math.min(...incomingData.map(item => item.timeInMillis));

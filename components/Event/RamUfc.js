@@ -123,11 +123,11 @@ class RamUfc extends Component {
       var theLink = 'theEvents::ramUfc::' + theEventKey + "::" + matchTypesNo + "::" + firstEventTime + "::" + lastEventTime
       var theQuery = encodeURIComponent(theLink)
       //axios.get("http://localhost:4000/updateUfcOdds?term=" + theQuery)
-        axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
+       axios.get("https://theramtournament.com/updateUfcOdds?term="+theQuery)
         .then((res) => {
           var theOutcome = res.data
           this.notify(theOutcome)
-          this.setState({ showProgressBar: false })
+          this.setState({ showProgressBar: false,showConfirmModal: false })
           //console.log('theItems',theOutcome)
         })
     } catch (error) {
@@ -290,10 +290,15 @@ class RamUfc extends Component {
       await axios.get(theLink)
         .then((res) => {
           var theOutcome = res.data
+         /* theOutcome['Fights'].map((item, index) => {
+            console.log('index',index,theOutcome['Fights'].length)
+          })
+          return*/
           var i = 0
           console.log('theOutcome rrrr', theOutcome)
           console.log('the name', theOutcome.ShortName)
           console.log('the length', theOutcome['Fights'].length)
+          console.log('the items', theOutcome['Fights'])
           var theTitle = theOutcome.ShortName
           var theDay = theOutcome.Day
           var millis = new Date(theDay).getTime()
@@ -302,8 +307,13 @@ class RamUfc extends Component {
           theEventId = theEventId.replace(/ /g, '-').replace(/,/g, '').toLowerCase();
           this.setState({ theUfcTItleTomodal: theTitle, theEventId: theEventId })
           theOutcome['Fights'].map((item, index) => {
+            console.log('index 001',index,theOutcome['Fights'].length)
+            //return
             i++
-            var FightId = item.FightId
+            console.log('index rrrrr',item.Fighters[0])
+            if(item.Fighters[0]){
+              console.log('has stuff',item.Fighters[0])
+             var FightId = item.FightId
             var plDet = item.Fighters[0]
             var p2Det = item.Fighters[1]
             var player1Name = plDet['FirstName'] + ' ' + plDet['LastName']
@@ -313,6 +323,8 @@ class RamUfc extends Component {
 
             var p1Record = plDet['PreFightWins'] + '-' + plDet['PreFightDraws'] + '-' + plDet['PreFightLosses']
             var p2Record = p2Det['PreFightWins'] + '-' + p2Det['PreFightDraws'] + '-' + p2Det['PreFightLosses']
+           // console.log('index',index,theOutcome['Fights'].length)
+           // return
             var theData = {
               fighter1Name: player1Name, fighter2Name: player2Name, p1Rec: p1Record, p2Rec: p2Record,
               game: 'UFC', status1: 'notPlayed', winner: 'N/A', type: '', fighter1Country: '', fighter2Country: '', apiId: '',
@@ -320,16 +332,50 @@ class RamUfc extends Component {
               p1Photo: '', p2Photo: '', fightId: FightId
             }
             sportsApiData.push(theData)
+           // console.log('sportsApiData',sportsApiData)
 
-            console.log('player 001', plDet['FirstName'])
+           /* console.log('player 001', plDet['FirstName'])
             console.log('player 002', p2Det['FirstName'])
 
             console.log('player 1', item.Fighters[0]['FirstName'])
             console.log('player 2', item.Fighters[1]['LastName'])
-            console.log('the sum', theOutcome['Fights'].length, i)
+            console.log('the sum', theOutcome['Fights'].length, i)*/
+           // console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
+            }else{
+              console.log('is undefined',item.Fighters[0])
+            }
+           /* var FightId = item.FightId
+            var plDet = item.Fighters[0]
+            var p2Det = item.Fighters[1]
+            var player1Name = plDet['FirstName'] + ' ' + plDet['LastName']
+            var player2Name = p2Det['FirstName'] + ' ' + p2Det['LastName']
+            var fighter1Id = plDet['FighterId']
+            var fighter2Id = p2Det['FighterId']
+
+            var p1Record = plDet['PreFightWins'] + '-' + plDet['PreFightDraws'] + '-' + plDet['PreFightLosses']
+            var p2Record = p2Det['PreFightWins'] + '-' + p2Det['PreFightDraws'] + '-' + p2Det['PreFightLosses']
+           // console.log('index',index,theOutcome['Fights'].length)
+           // return
+            var theData = {
+              fighter1Name: player1Name, fighter2Name: player2Name, p1Rec: p1Record, p2Rec: p2Record,
+              game: 'UFC', status1: 'notPlayed', winner: 'N/A', type: '', fighter1Country: '', fighter2Country: '', apiId: '',
+              fighter1Id: fighter1Id, fighter2Id: fighter2Id, p1Name2: plDet['FirstName'], p2Name2: p2Det['FirstName'], p1Name3: plDet['LastName'], p2Name3: p2Det['LastName'],
+              p1Photo: '', p2Photo: '', fightId: FightId
+            }
+            sportsApiData.push(theData)*/
+           // console.log('sportsApiData',sportsApiData)
+
+           /* console.log('player 001', plDet['FirstName'])
+            console.log('player 002', p2Det['FirstName'])
+
+            console.log('player 1', item.Fighters[0]['FirstName'])
+            console.log('player 2', item.Fighters[1]['LastName'])
+            console.log('the sum', theOutcome['Fights'].length, i)*/
+           // console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
+           
             if (theOutcome['Fights'].length === i) {
-              //showUFCModal:true
-              console.log('sportsApiData 2222', sportsApiData)
+              console.log('sportsApiData 2222 kumalo', sportsApiData)
+              
 
               var theLink = ' https://api.sportsdata.io/v3/mma/scores/json/FightersBasic?key=a7bc3fc549e0431885995727ce67d025'
               var j = 0
@@ -355,6 +401,7 @@ class RamUfc extends Component {
             }
             //sportsApiData
           })
+         
 
         })
       /* axios.get("https://theramtournament.com/getMatches?term="+theQuery)
@@ -391,6 +438,7 @@ class RamUfc extends Component {
       const response = await axios.get(oddsApi)
       var theOddsJson = response.data
       console.log('theOddsJson 63636363', theOddsJson)
+      //return
       var jCount = 0
       theOddsJson.map((item1, index) => {
         var i = 0, newOddsJson = []
@@ -479,7 +527,7 @@ class RamUfc extends Component {
             if (item2.awayTeamPoints > 12620) { aTPointsNum = 1247.20 }
             if (item2.homeTeamPoints < 101 && item2.homeTeamPoints > -101) { hTPointsNum = 2.03 }
             if (item2.awayTeamPoints < 101 && item2.awayTeamPoints > -101) { aTPointsNum = 2.03 }
-
+            if (!item2.homeTeamPoints||item2.homeTeamPoints===undefined||item2.homeTeamPoints===null){hTPointsNum='N/A',aTPointsNum='N/A'}
 
             var theId = item1.fighter1Name.split(' ')[0] + item1.fighter2Name.split(' ')[0]
             theFights[index]['p1Points'] = hTPointsNum
@@ -553,7 +601,9 @@ class RamUfc extends Component {
             //theEventId
             console.log('kamalizaaaaaa theEventId', theEventId)
             console.log('kamalizaaaaaa 223232323', theFinalFightsArr)
-            this.setState({ sportsApiData: theFinalFightsArr, showUFCModal: true })
+            const ids = theFinalFightsArr.map(({ id }) => id);
+            const filtered = theFinalFightsArr.filter(({ id }, index) => !ids.includes(id, index + 1));
+            this.setState({ sportsApiData: filtered, showUFCModal: true })
           }
 
         })
