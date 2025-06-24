@@ -1479,9 +1479,10 @@ class RamUfc extends Component {
             var status1Item = ''
             if (item.status1 === 'notPlayed' && (new Date().getTime() < item.timeInMillis)) { status1Item = <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> }
             if (item.status1 === 'notPlayed' && (new Date().getTime() > item.timeInMillis)) { status1Item = <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p> }
+            if (item.status1 === 'notPlayed' && (new Date().getTime() > item.timeInMillis) && (new Date().getTime()-item.timeInMillis)>86400000) { status1Item = <p className={style.eventStatP} style={{ color: '#919191' }}>Cancelled</p> }
             if (item.status1 === 'played') { status1Item = <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p> }
             if (item.status1 === 'ongoing') { status1Item = <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p> }
-            if (item.status1 === "cancelled") { status1Item = <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Cancelled</p> }
+            if (item.status1 === "cancelled") { status1Item = <p className={style.eventStatP} style={{ color: '#919191' }}>Cancelled</p> }
             ////console.log('item.status1 rakada',item.id,item.status1,new Date().getTime(),item.timeInMillis)
             return (
               <div className={style.listDiv} key={index}>
