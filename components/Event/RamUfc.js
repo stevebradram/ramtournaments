@@ -1269,6 +1269,10 @@ class RamUfc extends Component {
 
   submitWinner = (id, winner) => {
     console.log('haaaaaaaaaaaapa 000000')
+     /*var sangalewaRef = firebase.database().ref('/sangalewa/kiio/')
+     sangalewaRef.set('kibeeeee')
+       console.log('haaaaaaaaaaaapa 2222222 555555')
+     return*/
     var index = this.state.allUFCMatches.map(function (x) { return x.id; }).indexOf(id);
     if (winner !== 'player1' && winner !== 'player2') {
       this.notify('Nothing to submit')
@@ -1304,8 +1308,8 @@ class RamUfc extends Component {
       console.log('theLink', theLink, theItems)
       console.log('this.state.shortArr 006', shortArr)
       //return
-      await axios.get("https://theramtournament.com/getSingleUFCResults?term=" + theQuery)
-        //await axios.get("http://localhost:4000/getSingleUFCResults?term="+theQuery)
+       await axios.get("https://theramtournament.com/getSingleUFCResults?term=" + theQuery)
+       //await axios.get("http://localhost:4000/getSingleUFCResults?term="+theQuery)
         .then((res) => {
           var theOutcome = res.data
           if (theOutcome === 'Success Updating Results') {
