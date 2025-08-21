@@ -813,7 +813,8 @@ console.log('zzezezezze')
       var part2=lastMatchTime[1]
       var part3=lastMatchTime[2]
       part2=Number(part2)
-      part2=part2+10
+      if(part2.length<=1){part2=part2+10}
+      else{part2=part2+1}
       part2=part2+''
       //if(part2.length<=1){part2='0'+part2}
       var newTime=part1+':'+part2+':'+part3
