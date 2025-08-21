@@ -804,7 +804,24 @@ class NCAA extends Component {
     await this.setState({ [e.target.id]: value })
     if (this.state.week1Time.length >= 3) { this.setState({ week1Err: '' }) }
     if (this.state.week2Time.length >= 3) { this.setState({ week2Err: '' }) }
-    if (this.state.week3Time.length >= 3) { this.setState({ week3Err: '' }) }
+    //this.state.matchEndTime
+     if (this.state.matchEndTime.length >= 3) { 
+console.log('zzezezezze')
+      var lastMatchTime=this.state.matchEndTime.split(':')
+      console.log('lastMatchTime',lastMatchTime)
+      var part1=lastMatchTime[0]
+      var part2=lastMatchTime[1]
+      var part3=lastMatchTime[2]
+      part2=Number(part2)
+      part2=part2+5
+      part2=part2+''
+      var newTime=part1+':'+part2+':'+part3
+      this.setState({matchEndTime:newTime})
+      console.log('newTimerrrrrrr',newTime)
+     }
+    if (this.state.week3Time.length >= 3) { 
+      
+      this.setState({ week3Err: '' }) } 
     if (this.state.superBowlTime.length >= 3) { this.setState({ superBowlErr: '' }) }
   }
   enterEventDetails = () => {
