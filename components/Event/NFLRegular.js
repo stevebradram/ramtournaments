@@ -267,7 +267,7 @@ class NCAA extends Component {
         if ((currentSelection === 'week3Round')) {
           this.setState({ isWeek1DataAvailable: true, isWeek2DataAvailable: true, isWeek3DataAvailable: true, editType: 'stopweek3RoundEdit' })
         }*/
-        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired, endTime, oddsUpdate, resultsUpdate }, () => {
+        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection:'week1Round', expired, endTime, oddsUpdate, resultsUpdate }, () => {
           this.getNFLMatches(userId)
           //////console.log('currentSelection',this.state.currentSelection)
         })
@@ -1367,6 +1367,7 @@ console.log('zzezezezze')
     ////console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
     ////console.log('this.state.isWeek3DataAvailable',this.state.isWeek3DataAvailable)
     ////console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
+    console.log('this.state.currentSelection',this.state.currentSelection)
     var flockTeamName = ''
     var itemToModals = ''
     var isPastEvent = ''
@@ -1474,7 +1475,7 @@ console.log('zzezezezze')
           </div>
         </div> : null}
         <div className={style.eveDiv}>
-          {this.state.week1RoundArray.length > 0 ? <p id={this.state.theMenu === 'week1Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week1Round', this.state.week1RoundArray,'stopweek1RoundEdit')}>WEEK 1</p> : null}
+          {this.state.week1RoundArray.length ? <p id={this.state.theMenu === 'week1Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week1Round', this.state.week1RoundArray,'stopweek1RoundEdit')}>WEEK 1</p> : null}
           {this.state.week2RoundArray.length ? <p id={this.state.theMenu === 'week2Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week2Round', this.state.week2RoundArray,'stopweek2RoundEdit')}>WEEK 2</p> : null}
           {this.state.week3RoundArray.length ? <p id={this.state.theMenu === 'week3Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week3Round', this.state.week3RoundArray,'stopweek3RoundEdit')}>WEEK 3</p> : null}
 
