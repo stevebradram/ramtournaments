@@ -813,8 +813,9 @@ console.log('zzezezezze')
       var part2=lastMatchTime[1]
       var part3=lastMatchTime[2]
       part2=Number(part2)
-      part2=part2+5
+      part2=part2+10
       part2=part2+''
+      //if(part2.length<=1){part2='0'+part2}
       var newTime=part1+':'+part2+':'+part3
       this.setState({matchEndTime:newTime})
       console.log('newTimerrrrrrr',newTime)
@@ -830,6 +831,7 @@ console.log('zzezezezze')
     if (this.state.matchStartTime.length < 1 || this.state.matchEndTime.length < 1) {
       this.notify('All fields must be filled')
     } else {
+       this.showProgressBar2()
       this.fillEventDetails(this.state.matchStartTime, this.state.matchEndTime)
     }
   }
@@ -838,6 +840,12 @@ console.log('zzezezezze')
     this.timerHandle = setTimeout(
       () => this.setState({ showProgressBar: false }),
       5000)
+  }
+    showProgressBar2 = () => {
+    this.setState({ showProgressBar: true })
+    this.timerHandle = setTimeout(
+      () => this.setState({ showProgressBar: false }),
+      10000)
   }
   fillEventDetails = async (firstEventTime, lastEventTime) => {
     this.showProgressBar()
@@ -1513,7 +1521,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>NFL Week 1 Round</p>
+                        <p>Week 1 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week1Round')}>
@@ -1612,7 +1620,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>NFL Week 2 Round</p>
+                        <p>Week 2 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week2Round')}>
@@ -1711,7 +1719,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>NFL Week 3 Round</p>
+                        <p>Week 3 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round')}>
@@ -1950,6 +1958,7 @@ console.log('zzezezezze')
             </div>
           </div></div> : null}
         <ToastContainer />
+         {this.state.showProgressBar ? <ProgressBar /> : null}
       </>
     )
   }
