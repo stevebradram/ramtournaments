@@ -8,6 +8,7 @@ import EditDetails from '../components/Event/DetailsModalCopy'
 import RamUfc from '../components/Event/RamUfc'
 import NCAA from '../components/Event/NCAA'
 import NFL from '../components/Event/NFL'
+import NFLRegular from '../components/Event/NFLRegular'
 import MarchMadness from '../components/Event/MarchMadness'
 import LogIn from '../components/LogInReg/LogIn'
 import localStorage from 'local-storage'
@@ -21,7 +22,8 @@ var selectedRamUfcArray=[],selectedNflArray=[],selectedMarchMadnesArray=[]
         {id:4,name:'March Madness'},
         {id:1,name:'RAM UFC'},
         {id:2,name:'NCAAF'},
-        {id:3,name:'NFL Playoffs'}, 
+        {id:3,name:'NFL Playoffs'},
+        {id:3,name:'NFL Regular'}, 
       ]
 
 class events extends Component {
@@ -91,7 +93,8 @@ class events extends Component {
   }
   chooseEvent=(name)=>{
     if(name==='March Madness'){this.setState({theCurrentEvent:'marchMadness'})}
-    if(name==='NFL Playoffs'){this.setState({theCurrentEvent:'nfl'})}
+    if(name==='NFL Playoffs'){this.setState({theCurrentEvent:'nfl'})}//NFL Regular
+    if(name==='NFL Regular'){this.setState({theCurrentEvent:'nflRegular'})}
     if(name==='RAM UFC'){this.setState({theCurrentEvent:'ramUfc'})}
     if(name==='NCAAF'){this.setState({theCurrentEvent:'NCAAF'})}
   }
@@ -113,6 +116,7 @@ class events extends Component {
           if(item.name==='March Madness'&&this.state.theMarchMadness===true){colorP='#b2b2b2',clickable=false}
           if(item.name==='NCAAF'&&this.state.theNcaaf===true){colorP='#b2b2b2',clickable=false}
           if(item.name==='NFL Playoffs'&&this.state.theNfl===true){colorP='#b2b2b2',clickable=false}
+          if(item.name==='NFL Regular'&&this.state.theNflRegular===true){colorP='#b2b2b2',clickable=false}
           if(item.name==='RAM UFC'&&this.state.theRamUfc===true){colorP='#b2b2b2',clickable=false}
           //if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
           return(
@@ -145,6 +149,7 @@ class events extends Component {
           {this.state.selectedEvent==='RAM UFC'?<RamUfc isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NCAAF'?<NCAA isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          {this.state.selectedEvent==='NFL Regular'?<NFLRegular isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='March Madness'?<MarchMadness isUserLoggedIn={this.state.userLoggedIn}/>:null}
           </div>
       </div>

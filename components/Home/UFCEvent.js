@@ -76,7 +76,8 @@ class UFCEvent extends Component {
          }
          else if(sportType==='NFL'){
           this.getNFLMatches()
-         }
+         }else if(sportType==='NFLRegular'){
+         this.getNFLRegularMatches()}
         else{
           this.getUfcMatches(userId)
         }
@@ -131,7 +132,8 @@ class UFCEvent extends Component {
           this.getNCAABMatches()
          }else if(sportType==='NFL'){
           this.getNFLMatches()
-         }
+         }else if(sportType==='NFLRegular'){
+         this.getNFLRegularMatches()}
         else{
           this.getUfcMatches(userId)
         }
@@ -226,6 +228,22 @@ class UFCEvent extends Component {
       })
     })
   }
+    getNFLRegularMatches=()=>{
+    var theItems=[],v=0
+    var userInfoDb = firebase.database().ref('/theEvents/NFLRegular/').child(this.state.theEventKey)
+    userInfoDb.child('week1Round').once('value',dataSnapshot=>{
+      var firstRoundCount=dataSnapshot.numChildren()
+      console.log('firstRoundCount',firstRoundCount)
+      dataSnapshot.forEach((data) => {
+        v++
+        theItems.push(data.val())
+        if(firstRoundCount===v){
+          console.log('theItems rrrr',theItems)
+          this.setState({theItems})
+        }
+      })
+    })
+  }
   getNCAABMatches=()=>{
     var theItems=[],v=0
     var userInfoDb = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey)
@@ -246,6 +264,7 @@ class UFCEvent extends Component {
     this.setState({theMenu,theItems})
   }
   render() {
+    console.log('this.state.sportType',this.state.sportType)
     let donateStyle = ''
     let reelTextStyle = ''
     const settings = {
@@ -265,7 +284,7 @@ class UFCEvent extends Component {
     return (
       <div className={style.container}>
         <p className={style.eveP}>Events</p>
-        {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.theEventTitle}</span></p>:null}
+        {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'||this.state.sportType==='NFLRegular'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.theEventTitle}</span></p>:null}
         {this.state.upcomingGames.length>0?<div className={style.matchesHeadDiv}>
           {this.state.upcomingGames.map((item,index)=>{
             //console.log('atttt upcomingGames')
@@ -281,7 +300,7 @@ class UFCEvent extends Component {
                   
                 </div>
         <Slider ref={c => (this.slider = c)} {...settings}>
-          {this.state.theItems.map((item) => {
+          {this.state.theItems.map((item,index) => {
            // console.log('iteeeem',item)
             var playStat = ''
             var playStatCol = ''
@@ -304,6 +323,8 @@ class UFCEvent extends Component {
               homeTeam=item.player1,awayTeam=item.player2,theEvent=this.state.theEventTitle+' '+item.matchType
             }else if(this.state.sportType==='NFL'){
               homeTeam=item.player1,awayTeam=item.player2,theEvent='NFL '+item.matchType
+            }else if(this.state.sportType==='NFLRegular'){
+              homeTeam=item.player1,awayTeam=item.player2,theEvent='Week 1 Match '+(index+1)
             }
             else{homeTeam=item.fighter1Name,awayTeam=item.fighter2Name,theEvent='RAM UFC '+item.match}
             var matchTime=''
@@ -324,7 +345,7 @@ class UFCEvent extends Component {
                     {/*<p className={style.eventStatP} style={{color:playStatCol}}>{playStat}</p>*/}
                     <div className={style.theCont}>
                       <div className={style.theContLeft}>
-                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?null:'white'}}>
+                        <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'||this.state.sportType==='NFLRegular'?null:'white'}}>
                           <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
                         </div>
@@ -333,7 +354,7 @@ class UFCEvent extends Component {
                       </div>
                       <BsFillLightningFill className={style.sepIc} />
                       <div className={style.theContRight}>
-                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'?null:'white'}}>
+                        <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent',backgroundColor:this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'||this.state.sportType==='NFLRegular'?null:'white'}}>
                           <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img>
                           {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
                         </div>

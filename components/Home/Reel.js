@@ -21,7 +21,9 @@ class Reel extends Component {
         1000,
         'FIFA MAJORS',
         1000,
-        'NFL PLAYOFFS',
+        'NFL REGULAR',
+        1000,
+         'NFL PLAYOFFS',
         1000
       ]}
       wrapper="span"
