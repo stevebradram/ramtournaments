@@ -22,7 +22,9 @@ import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
 var allMatches = []
-
+//week 2 start=>2025-09-12T00:15:00Z  end=>2025-09-16T02:00:00Z  //1757636100000
+//week 3 start=>2025-09-19T00:15:00Z  end=>2025-09-23T00:15:00Z
+//week 4 start=>2025-09-26T00:15:00Z  end=>2025-09-30T00:15:00Z
 const week1Round = [
   { id: 'week1Game1', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', player2NickName: 'N/A', player1NickName: 'N/A', stat: 'N/A', game: 'NFLRegular', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Week1 Round' },
   { id: 'week1Game2', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', player2NickName: 'N/A', player1NickName: 'N/A', stat: 'N/A', game: 'NFLRegular', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Week1 Round' },
@@ -89,8 +91,8 @@ class NCAA extends Component {
     isWeek2DataAvailable: false, isWeek3DataAvailable: false, isFinalsDataAvailable: false, endTime: '', editType: 'stopweek1RoundEdit', eventToNFLModal: '', showCreateEventModal: false,
     isWeek1RoundPicked: false, isWeek2RoundPicked: false, isWeek3RoundPicked: false, isFinalsPicked: false, selectHomeEvent: false, itemsToNFLModal: [], week1Time: '', week1Err: '', week2Time: '', showChooseWeekModal: false,
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
-    weekSelect: ['WEEK 1', 'WEEK 2', 'WEEK 3'], selectedWeek: '', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
-    matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0
+    weekSelect: [{id:'WEEK 1',text:'WEEK 2'},{id:'WEEK 2',text:'WEEK 3'},{id:'WEEK 3',text:'WEEK 4'}], selectedWeek: '',selectedWeek2:'', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
+    matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0,allowPicks:['Week 2','Week 3','Week 4'],allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false,
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -239,6 +241,8 @@ class NCAA extends Component {
         if (week2RoundPostTime) { this.setState({ week2RoundPostTime: week2RoundPostTime }) }
         if (week3RoundPostTime) { this.setState({ week3RoundPostTime: week3RoundPostTime }) }
 
+        
+
         var oddsUpdate = data.val().oddsTimeUpdate
         var resultsUpdate = data.val().fetchResultsTimeUpdate
         if (!oddsUpdate) { oddsUpdate = 'N/A' } else { oddsUpdate = new Date(oddsUpdate).toLocaleString() }
@@ -278,6 +282,7 @@ class NCAA extends Component {
     allMatches = []
     this.setState({ week1RoundArray: [], week2RoundArray: [], week3RoundArray: [], finalArray: [], theMenu: 'week1Round', dataAvailable: false, currentEventUserInfo: {} })
     var userInfoDb = firebase.database().ref('/theEvents/NFLRegular/').child(this.state.theEventKey)
+    this.checkForPicks(this.state.theEventKey)
     userInfoDb.once('value', dataSnapshot => {
       //////console.log('children count',dataSnapshot.child('mainCard').numChildren());
       //////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
@@ -628,7 +633,20 @@ class NCAA extends Component {
       this.notify("Please Log In to continue")
       this.setState({ openLoginModal: true })
       return
-    } var itemToModals = ''
+    } 
+    if(this.state.currentSelection === 'week1Round'&&this.state.allowWeek2Pick===false){
+      this.notify("Week 2 picking not allowed at the moment. Please try again later")
+      return
+    }
+    if(this.state.currentSelection === 'week2Round'&&this.state.allowWeek3Pick===false){
+      this.notify("Week 3 picking not allowed at the moment. Please try again later")
+      return
+    }
+    if(this.state.currentSelection === 'week3Round'&&this.state.allowWeek4Pick===false){
+      this.notify("Week 4 picking not allowed at the moment. Please try again later")
+      return
+    }
+    var itemToModals = ''
     if (this.state.currentSelection === 'week1Round') { itemToModals = this.state.week1RoundArray }
     if (this.state.currentSelection === 'week2Round') { itemToModals = this.state.week2RoundArray }
     if (this.state.currentSelection === 'week3Round') { itemToModals = this.state.week3RoundArray }
@@ -655,12 +673,15 @@ class NCAA extends Component {
   openTheModal2 = () => {
     console.log('this.state.theEventKey', this.state.currentSelection, this.state.theEventKey, this.state.editType)
     //return
-    var editDbRef = firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
+    // var theDb =firebase.database().ref('/theEvents/eventsIds/'+theEventKey)
+    var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
     editDbRef.once('value', dataSnapshot => {
-      //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+       console.log('zeve mbyu 0001',dataSnapshot.val())
+      console.log('zeve mbyu 002',dataSnapshot.val())
       if (dataSnapshot.val() === 'N/A') {
         this.notify('Event pick/edit not available at the moment')
       } else {
+         console.log('now 005', new Date().getTime(), dataSnapshot.val())
         if ((new Date().getTime() > dataSnapshot.val())) {
           console.log('now 005', new Date().getTime(), dataSnapshot.val())
           if (this.state.currentSelection === 'week3Round') {
@@ -682,7 +703,7 @@ class NCAA extends Component {
        }else{
          this.setState({ openLoginModal:false, opendetailsModal:true})
        }*/
-      // }
+       
     })
   }
   opeModal2 = () => {
@@ -1362,6 +1383,40 @@ console.log('zzezezezze')
   
     
   }
+  pickModal=(title,status,weekToPick)=>{
+     return (
+                <div id={style.selectorDiv2} onClick={()=>this.allowWeekPicks(title,status,weekToPick)}>
+                  <div className={status === true ? style.boxDiv3 : style.boxDiv3b}>
+                    <MdCheck size={15} /></div>
+                  <p style={{ color:status === true ?'#CB1E31':null}}>{title}</p>
+                </div>
+              )
+  }
+  allowWeekPicks=(title,status,weekToPick)=>{
+     console.log('this.state.theEventKey',this.state.theEventKey)
+    //this.setState({[weekToPick]:!status})
+    //return
+     var theDb =firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+weekToPick)
+    theDb.set(!status, error => {
+      if (!error) {
+        this.setState({[weekToPick]:!status})
+        this.notify('Selected Succesfully')
+      }
+    })
+  }
+  checkForPicks=(theEventKey)=>{
+     var theDb =firebase.database().ref('/theEvents/eventsIds/'+theEventKey)
+     theDb.once('value', dataSnapshot => {
+      console.log('yhhhhhhhhhhhh',dataSnapshot.val())
+      var allowWeek2Pick=dataSnapshot.val().allowWeek2Pick
+      var allowWeek3Pick=dataSnapshot.val().allowWeek3Pick
+      var allowWeek4Pick=dataSnapshot.val().allowWeek4Pick
+      if(allowWeek2Pick){this.setState({allowWeek2Pick})}else{this.setState({allowWeek2Pick:false})}
+      if(allowWeek3Pick){this.setState({allowWeek3Pick})}else{this.setState({allowWeek3Pick:false})}
+      if(allowWeek4Pick){this.setState({allowWeek4Pick})}else{this.setState({allowWeek4Pick:false})}
+     })
+    //allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false
+  }
   render() {
     // //console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
     ////console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
@@ -1371,16 +1426,23 @@ console.log('zzezezezze')
     var flockTeamName = ''
     var itemToModals = ''
     var isPastEvent = ''
+    var bpsTitle = 'Week 2 Round'
     var todayInMillis = new Date().getTime()
+    var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
+    var titleToShow='NFL Season'
+    console.log('this.state.theEventTitle',titleToShow1)
+    if(this.state.theEventTitle){
+    titleToShow1=titleToShow1.split(' ')
+    titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
     var showBestPossible = ''
     if (this.state.endTime < todayInMillis && (this.state.endTime - todayInMillis) < -86400000) {
       isPastEvent = false
     } else { isPastEvent = true }
 
 
-    if (this.state.currentSelection === 'week1Round') { itemToModals = this.state.week1RoundArray, showBestPossible = this.state.isWeek1RoundPicked }
-    if (this.state.currentSelection === 'week2Round') { itemToModals = this.state.week2RoundArray, showBestPossible = this.state.isWeek2RoundPicked }
-    if (this.state.currentSelection === 'week3Round') { itemToModals = this.state.week3RoundArray, showBestPossible = this.state.isWeek3RoundPicked }
+    if (this.state.currentSelection === 'week1Round') { itemToModals = this.state.week1RoundArray, showBestPossible = this.state.isWeek1RoundPicked,bpsTitle='Week 2 Round' }
+    if (this.state.currentSelection === 'week2Round') { itemToModals = this.state.week2RoundArray, showBestPossible = this.state.isWeek2RoundPicked,bpsTitle='Week 3 Round' }
+    if (this.state.currentSelection === 'week3Round') { itemToModals = this.state.week3RoundArray, showBestPossible = this.state.isWeek3RoundPicked,bpsTitle='Week 4 Round' }
     //if (this.state.currentSelection === 'superBowl') { itemToModals = this.state.finalArray, showBestPossible = this.state.isFinalsPicked }
     var theBPS=0.00,theWeeklyScore=0.00,theWeeklyRank='N/A'
     if(this.state.currentSelection==='week1Round'){if(this.state.currentEventUserInfo['week1RoundBPS']){theBPS=this.state.currentEventUserInfo['week1RoundBPS'],theWeeklyScore=this.state.currentEventUserInfo['week1RoundScore'],theWeeklyRank=this.state.currentEventUserInfo['week1RoundRank']}}
@@ -1436,7 +1498,7 @@ console.log('zzezezezze')
           <p className={style.eventP} onClick={() => this.setState({ showChooseWeekModal: true })}>Enter Event Details</p>
           <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal: true })}>Create New NFL Event</p>
         </div> : null}
-        <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+        <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
           {this.state.dataAvailable ?
@@ -1464,25 +1526,40 @@ console.log('zzezezezze')
               repeat={Infinity}
             />}
         </div>
+        {this.state.isAdmin?
+        <div>
+          <p id={style.picksP}>Allow Week Picks</p>
+          <div id={style.selectorDiv}>
+            {this.pickModal('Week 2',this.state.allowWeek2Pick,'allowWeek2Pick')}
+            {this.pickModal('Week 3',this.state.allowWeek3Pick,'allowWeek3Pick')}
+            {this.pickModal('Week 4',this.state.allowWeek4Pick,'allowWeek4Pick')}
+              {/*return (
+                <div id={style.selectorDiv2} key={index} onClick={() => this.setState({ selectedWeek:item.id,selectedWeek2:item.text,chooseWeekErr:''})}>
+                  <div className={this.state.allowPicks === item ? style.boxDiv3 : style.boxDiv3b}>
+                    <MdCheck size={15} /></div>
+                  <p style={{ color: this.state.selectedWeek === item ? '#CB1E31' : null }}>{item}</p>
+                </div>
+              )*/}
+            </div></div>:null}
         {this.state.isAdmin ? <div className={style.resultsCont}>
           <div className={style.resultsDiv}>
             <button className={style.resultsBtn} onClick={() => this.openConfirmModal('Are you sure you want to update the NFL Match Odds?', 'oddsUpdate')}>Update Match Odds</button>
             <p className={style.lastUpdateP}>Last Update {this.state.oddsUpdate}</p>
           </div>
-          <div className={style.resultsDiv}>
+          {/*<div className={style.resultsDiv}>
             <button className={style.resultsBtn} onClick={() => this.openConfirmModal('Are you sure you want to get the NFL Match Results?', 'resultsUpdate')}>Fetch Results Updates</button>
             <p className={style.lastUpdateP}>Last Update {this.state.resultsUpdate}</p>
-          </div>
+          </div>*/}
         </div> : null}
         <div className={style.eveDiv}>
-          {this.state.week1RoundArray.length ? <p id={this.state.theMenu === 'week1Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week1Round', this.state.week1RoundArray,'stopweek1RoundEdit')}>WEEK 1</p> : null}
-          {this.state.week2RoundArray.length ? <p id={this.state.theMenu === 'week2Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week2Round', this.state.week2RoundArray,'stopweek2RoundEdit')}>WEEK 2</p> : null}
-          {this.state.week3RoundArray.length ? <p id={this.state.theMenu === 'week3Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week3Round', this.state.week3RoundArray,'stopweek3RoundEdit')}>WEEK 3</p> : null}
+          {this.state.week1RoundArray.length ? <p id={this.state.theMenu === 'week1Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week1Round', this.state.week1RoundArray,'stopweek1RoundEdit')}>WEEK 2</p> : null}
+          {this.state.week2RoundArray.length ? <p id={this.state.theMenu === 'week2Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week2Round', this.state.week2RoundArray,'stopweek2RoundEdit')}>WEEK 3</p> : null}
+          {this.state.week3RoundArray.length ? <p id={this.state.theMenu === 'week3Round' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('week3Round', this.state.week3RoundArray,'stopweek3RoundEdit')}>WEEK 4</p> : null}
 
         </div>
         <div className={style.scoresCont}>
           <div className={style.scoresCont1}>
-            <p className={style.currentP}>{this.state.currentSelection}</p>
+            <p className={style.currentP}>{bpsTitle}</p>
             <p className={style.scoreP1}>Best possibe Score:<br /></p>
             <p className={style.scoreP2}>{this.state.dataAvailable  ? theBPS : '0.00'} points</p>
           </div>
@@ -1523,7 +1600,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>Week 1 Match {index+1}</p>
+                        <p>Week 2 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week1Round')}>
@@ -1622,7 +1699,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>Week 2 Match {index+1}</p>
+                        <p>Week 3 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week2Round')}>
@@ -1721,7 +1798,7 @@ console.log('zzezezezze')
                   <div className={style.listDiv} key={index}>
                     <div className={style.theCont0}>
                       <div className={style.theCont01}>
-                        <p>Week 3 Match {index+1}</p>
+                        <p>Week 4 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
                       {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round')}>
@@ -1900,16 +1977,16 @@ console.log('zzezezezze')
         {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={() => this.setState({ showCreateEventModal: false })}>
           <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
             <p className={style.eventHeadP}>Create NFL Regular Event </p>
-            <p className={style.eventTitleP}>Enter Week 1 Matches Start Date/Time</p>
+            <p className={style.eventTitleP}>Enter Week 2 Matches Start Date/Time</p>
 
             {/*<DateTimePicker id='round1'onChange={(event)=>this.onChange(event)} value={this.state.round1} />*/}
             <input className={style.eventInput} id='week1Time' placeholder='Enter your RAM name' type='datetime-local' value={this.state.week1Time} onChange={(event) => this.inputChange(event)}></input>
             {/*<input id='week1GamesNo' className={style.week1GamesNo} placeholder='Week 1 Games No' value={this.state.week1GamesNo} onChange={(event) => this.inputChange(event)}></input>*/}
             <p className={style.eventErrorP}>{this.state.week1Err}</p>
-            <p className={style.eventTitleP}>Enter Week 2 Matches Start Date/Time</p>
+            <p className={style.eventTitleP}>Enter Week 3 Matches Start Date/Time</p>
             <input className={style.eventInput} id='week2Time' placeholder='Enter your RAM name' type='datetime-local' value={this.state.week2Time} onChange={(event) => this.inputChange(event)}></input>
             <p className={style.eventErrorP}>{this.state.week2Err}</p>
-            <p className={style.eventTitleP}>Enter Week 3 Matches Start Date/Time</p>
+            <p className={style.eventTitleP}>Enter Week 4 Matches Start Date/Time</p>
             <input className={style.eventInput} id='week3Time' placeholder='Enter your RAM name' type='datetime-local' value={this.state.week3Time} onChange={(event) => this.inputChange(event)}></input>
             <p className={style.eventErrorP}>{this.state.week3Err}</p>
 
@@ -1918,14 +1995,14 @@ console.log('zzezezezze')
         </div> : null}
         {this.state.daysRangeModal ? <div className={style.detailsModal} onClick={() => this.setState({ daysRangeModal: false })}>
           <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
-            <p className={style.eventHeadP}>Enter {this.state.selectedWeek} Matches Start and End  Time </p>
-            <p className={style.eventTitleP}>Enter {this.state.selectedWeek} Matches Start Date/Time(From odds API)</p>
+            <p className={style.eventHeadP}>Enter {this.state.selectedWeek2} Matches Start and End  Time </p>
+            <p className={style.eventTitleP}>Enter {this.state.selectedWeek2} Matches Start Date/Time(From odds API)</p>
 
             {/*<DateTimePicker id='round1'onChange={(event)=>this.onChange(event)} value={this.state.round1} />*/}
             <input className={style.eventInput} id='matchStartTime' placeholder='e.g 2025-09-05T00:20:00Z' value={this.state.matchStartTime} onChange={(event) => this.inputChange(event)}></input>
             {/*<input id='week1GamesNo' className={style.week1GamesNo} placeholder='Week 1 Games No' value={this.state.week1GamesNo} onChange={(event) => this.inputChange(event)}></input>*/}
             <p className={style.eventErrorP}>{this.state.matchStartTimeErr}</p>
-            <p className={style.eventTitleP}>Enter {this.state.selectedWeek} Matches End Date/Time(From odds API)</p>
+            <p className={style.eventTitleP}>Enter {this.state.selectedWeek2} Matches End Date/Time(From odds API)</p>
             <input className={style.eventInput} id='matchEndTime' placeholder='e.g 2025-09-09T00:15:00Z' value={this.state.matchEndTime} onChange={(event) => this.inputChange(event)}></input>
             <p className={style.eventErrorP}>{this.state.matchEndTimeErr}</p>
             <button className={style.submitBtn} onClick={() => this.enterEventDetails()}>Create Event</button>
@@ -1945,10 +2022,10 @@ console.log('zzezezezze')
             <p className={style.weekP}>Choose Event Week</p>
             {this.state.weekSelect.map((item, index) => {
               return (
-                <div className={style.selectorDiv} key={index} onClick={() => this.setState({ selectedWeek: item,chooseWeekErr:''})}>
-                  <div className={this.state.selectedWeek === item ? style.boxDiv3 : style.boxDiv3b}>
+                <div className={style.selectorDiv} key={index} onClick={() => this.setState({ selectedWeek:item.id,selectedWeek2:item.text,chooseWeekErr:''})}>
+                  <div className={this.state.selectedWeek === item.id ? style.boxDiv3 : style.boxDiv3b}>
                     <MdCheck size={15} /></div>
-                  <p style={{ color: this.state.selectedWeek === item ? '#CB1E31' : null }}>{item}</p>
+                  <p style={{ color: this.state.selectedWeek === item.id ? '#CB1E31' : null }}>{item.text}</p>
                 </div>
               )
             })}

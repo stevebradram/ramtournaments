@@ -329,6 +329,29 @@ $theDark:#b2b2b2;
     color: white;
     
 }
+#selectorDiv{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-bottom:20px;
+}
+#selectorDiv2{
+    display: flex;
+    align-items: center;
+    margin-right:10px;
+    cursor: pointer;
+    color:$blackish;
+}
+#picksP{
+    font-size:18px;
+    font-weight:700;
+    color:$blackish;
+}
+    #selectorDiv2 p{
+   margin-left:5px;
+   font-weight:500;
+    }
 .selectorDiv{
     display: flex;
     align-items: center;

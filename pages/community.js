@@ -217,6 +217,9 @@ class leaderboard extends Component {
               console.log('round1Arr 0001', round1Arr)
               console.log('round2Arr 0002', round2Arr)
             }else if(sportType==='NFLRegular'){
+              round1Arr = round1Arr.sort(function (a, b) { return b.score - a.score });
+              round2Arr = round2Arr.sort(function (a, b) { return b.score - a.score });
+              round3Arr = round3Arr.sort(function (a, b) { return b.score - a.score });
               this.setState({round1Arr,round2Arr,round3Arr,ramsInMyFlockArr:round1Arr})
               console.log('the NFLRegular', round1Arr,round2Arr,round3Arr)
             }
@@ -447,7 +450,8 @@ class leaderboard extends Component {
      // console.log('round 2222',this.state.round2Arr)
     }
     if(round==='overall'){
-      this.setState({ramsInMyFlockArr:this.state.theFlocksArr,menuToShow:'Rams In Your Flock'})
+      var overallArr = this.state.theFlocksArr.sort(function (a, b) { return b.score - a.score });
+      this.setState({ramsInMyFlockArr:overallArr,menuToShow:'Rams In Your Flock'})
       console.log('round 2222',this.state.theFlocksArr)
     }
   }
@@ -469,6 +473,12 @@ class leaderboard extends Component {
     }
   };
   render() {
+      var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
+    var titleToShow='NFL Season'
+    console.log('this.state.theEventTitle',titleToShow1)
+    if(this.state.theEventTitle){
+    titleToShow1=titleToShow1.split(' ')
+    titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
     var NFLRegOverallStatus=false
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
     console.log('yoooooh',this.state.sportType,this.state.currentSelection,this.state.flockNameAvailable,this.state.menuToShow,this.state.ramsInMyFlockArr)
@@ -529,7 +539,7 @@ class leaderboard extends Component {
               )
             })}
           </div>*/}
-          <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+          <p className={styles.eveP}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:this.state.theEventTitle}</span></p>
           {this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
             <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
@@ -537,9 +547,9 @@ class leaderboard extends Component {
             <p id={this.state.currentSelection==='overall'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('overall')}>Overall</p>
            </div>:null}
            {this.state.sportType==='NFLRegular'?<div className={styles.eve2Div}>
-            <p id={this.state.currentSelection==='week1Round'||this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>WEEK 1</p>
-            <p id={this.state.currentSelection==='week2Round'||this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>WEEK 2</p>
-            <p id={this.state.currentSelection==='week3Round'||this.state.currentSelection==='round3'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round3')}>WEEK 3</p>
+            <p id={this.state.currentSelection==='week1Round'||this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>WEEK 2</p>
+            <p id={this.state.currentSelection==='week2Round'||this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>WEEK 3</p>
+            <p id={this.state.currentSelection==='week3Round'||this.state.currentSelection==='round3'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round3')}>WEEK 4</p>
             <p id={this.state.currentSelection==='overall'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('overall')}>Overall</p>
            </div>:null}
           <div className={styles.menu2Div0}>
@@ -614,7 +624,7 @@ class leaderboard extends Component {
                   {NFLRegOverallStatus?
                   <tr id={styles.table1Tr1}>
                     <th>Overall <br />Rank</th>
-                    <th>RAM Name</th>
+                    <th>Flock Name</th>
                     <th>Cumulative Score</th>
                     <th>Week 1</th>
                     <th>Week 2</th>

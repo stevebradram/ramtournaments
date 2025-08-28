@@ -281,9 +281,9 @@ class TheMarchMadness extends Component {
       <>
       <div>
         <div className={styles.eve2Div}>
-            <p id={this.state.currentSelection==='week1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week1')}>WEEK 1</p>
-            <p id={this.state.currentSelection==='week2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week2')}>WEEK 2</p>
-            <p id={this.state.currentSelection==='week3'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week3')}>WEEK 3</p>
+            <p id={this.state.currentSelection==='week1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week1')}>WEEK 2</p>
+            <p id={this.state.currentSelection==='week2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week2')}>WEEK 3</p>
+            <p id={this.state.currentSelection==='week3'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('week3')}>WEEK 4</p>
             <p id={this.state.currentSelection==='overall'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('overall')}>Overall</p>
            </div>
            <div className={styles.menu2Div1}>   

@@ -575,6 +575,12 @@ class leaderboard extends Component {
 
     render() {
       //console.log('this.state.sportType',this.state.sportType)
+    var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
+    var titleToShow='NFL Season'
+    console.log('this.state.theEventTitle',titleToShow1)
+    if(this.state.theEventTitle){
+    titleToShow1=titleToShow1.split(' ')
+    titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
       var theItems=[]
       var noData=false 
       var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore    )
@@ -614,7 +620,7 @@ class leaderboard extends Component {
           )
           })}
         </div>*/}
-              <p className={styles.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+              <p className={styles.eveP}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:this.state.theEventTitle}</span></p>
               {/*this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
             <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>

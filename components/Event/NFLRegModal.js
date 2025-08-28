@@ -894,7 +894,7 @@ class NCAAModal extends Component {
           <div className={styles.listDiv} key={index}>
             <div className={styles.theCont0}>
               <div className={styles.theCont01}>
-                <p>{title+' Match '+(index+1)}</p>
+                <p>{'Match '+(index+1)}</p>
                 <p>{item.commenceTime}</p>
               </div>
               <div className={styles.theCont}>
@@ -934,15 +934,15 @@ class NCAAModal extends Component {
 
         <p className={styles.headP}>Enter NFL Regular Match Details</p>
         {this.state.currentSelection==='week1Round'?<div className={styles.divCont}>
-          <p className={styles.listHeadP}>Week 1</p>
+          <p className={styles.listHeadP}>Week 2</p>
           <div className={styles.listCont}>{this.itemComponent(week1RoundEdit, 'week1Round','Week 1')}</div></div>:null}
           {this.state.currentSelection==='week2Round'?
         <div className={styles.divCont}>
-          <p className={styles.listHeadP}>Week 2</p>
+          <p className={styles.listHeadP}>Week 3</p>
           <div className={styles.listCont}>{this.itemComponent(week2RoundEdit, 'week2Round','Week 2')}</div></div>:null}
           {this.state.currentSelection==='week3Round'? 
         <div className={styles.divCont}>
-          <p className={styles.listHeadP}>Week 3</p>
+          <p className={styles.listHeadP}>Week 4</p>
           <div className={styles.listCont}>{this.itemComponent(week3RoundEdit, 'week3Round','Week 3')}</div></div>:null}
     
         {this.state.isItSubmit?<div className={styles.submitDiv}>
