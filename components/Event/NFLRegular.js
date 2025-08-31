@@ -22,7 +22,7 @@ import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
 var allMatches = []
-//week 2 start=>2025-09-12T00:15:00Z  end=>2025-09-16T02:00:00Z  //1757636100000
+//week 2 start=>2025-09-12T00:15:00Z  end=>2025-09-16T02:00:00Z 
 //week 3 start=>2025-09-19T00:15:00Z  end=>2025-09-23T00:15:00Z
 //week 4 start=>2025-09-26T00:15:00Z  end=>2025-09-30T00:15:00Z
 const week1Round = [
@@ -93,6 +93,7 @@ class NCAA extends Component {
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
     weekSelect: [{id:'WEEK 1',text:'WEEK 2'},{id:'WEEK 2',text:'WEEK 3'},{id:'WEEK 3',text:'WEEK 4'}], selectedWeek: '',selectedWeek2:'', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
     matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0,allowPicks:['Week 2','Week 3','Week 4'],allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false,
+    eventAlreadyFilled:false
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -136,7 +137,7 @@ class NCAA extends Component {
     try {
 
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
       console.log('the theLink 11111', theLink)
       //return
@@ -149,9 +150,10 @@ class NCAA extends Component {
         }
         else {
           console.log('the theLink RRRRRAAAAAAA', theLink)
-          //axios.get("http://localhost:4000/updateNCAANFLFOdds?term=" + theQuery)
-          axios.get("https://theramtournament.com/updateNCAANFLFOdds?term=" + theQuery)
+          //axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
+          axios.get("https://theramtournament.com/updateNFLRegularOdds?term=" + theQuery)
             .then((res) => {
+              this.setState({showConfirmModal:false})
               var theItems = res.data
               this.notify('Success Updating the NFL odds')
 
@@ -162,6 +164,36 @@ class NCAA extends Component {
     } catch (error) {
       ////console.log('error', error)
     }
+  }
+  checkForOddsUpdateTime=()=>{
+    if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
+    var stopEditTime=''
+    if (this.state.currentSelection === 'week1Round') { stopEditTime = 'stopweek1RoundEdit'}
+    if (this.state.currentSelection === 'week2Round') { stopEditTime = 'stopweek2RoundEdit' }
+    if (this.state.currentSelection === 'week3Round') { stopEditTime = 'stopweek3RoundEdit'}
+     var theDb =firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+stopEditTime)
+     theDb.once('value', dataSnapshot => {
+      if(dataSnapshot.exists()){
+        console.log('dataSnapshot.val()',dataSnapshot.val())
+         if(dataSnapshot.val()==='N/A'){
+          console.log('yeeeeees 111111')
+            //this.checkForOddsUpdate()
+             this.setState({showConfirmModal:false})
+            this.notify('Can not update odds. Event not yet populated')
+         }else{
+         if(new Date().getTime()>=dataSnapshot.val()){
+           this.setState({showConfirmModal:false})
+           this.notify('Can not update odds. Event already started')
+         }else{
+           console.log('yeeeeees 2222222')
+            this.checkForOddsUpdate()
+         }
+         }
+      }else{
+         this.setState({showConfirmModal:false})
+         this.notify('Can not update odds. Event not yet populated')
+      }
+     })
   }
   checkForOutcome = async () => {
     try {
@@ -867,7 +899,7 @@ console.log('zzezezezze')
     this.setState({ showProgressBar: true })
     this.timerHandle = setTimeout(
       () => this.setState({ showProgressBar: false }),
-      10000)
+      30000)
   }
   fillEventDetails = async (firstEventTime, lastEventTime) => {
     this.showProgressBar()
@@ -1009,9 +1041,7 @@ console.log('zzezezezze')
             }
             if (theTeams.length === index + 1) {
               console.log('theArr 22222222 kufinish', theArr)
-
-              this.setState({ itemsToNFLModal: [], showChooseWeekModal: false,daysRangeModal:false})
-
+              this.setState({ itemsToNFLModal: [], showChooseWeekModal: false,daysRangeModal:false,showProgressBar: false,eventAlreadyFilled:true})
               var theSelection = ''
               if (this.state.selectedWeek === 'WEEK 1') { theSelection = 'week1Round', this.setState({ eventToNFLModal: 'week1Round', itemsToNFLModal: theArr, nflModal: true, lastPostTime: new Date().getTime() }) }
               if (this.state.selectedWeek === 'WEEK 2') { theSelection = 'week2Round', this.setState({ eventToNFLModal: 'week2Round', itemsToNFLModal: theArr, nflModal: true, lastPostTime: new Date().getTime() }) }
@@ -1154,9 +1184,10 @@ console.log('zzezezezze')
     e.stopPropagation()
   }
 
-  pickWinner = (id, winner, time, selection) => {
+  pickWinner = (id, winner, time, selection,p1Points) => {
     //console.log('trtrt',this.state.currentSelection,selection)
     //return
+    if (p1Points === 'N/A') {this.notify('Points not yet populated at the moment');return}
     if (this.state.currentSelection !== selection) {
       this.notify('Not available at the moment')
       return
@@ -1168,11 +1199,11 @@ console.log('zzezezezze')
       /* if(nowTime<time){
          this.notify('Match not yet started')
          return
-       }
+       }*/
        if(winner!=='N/A'){
         this.notify('Winner already filled')
          return
-       }*/
+       }
       var theItems = this.state.week1RoundArray
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week1RoundArray: theItems })
@@ -1187,11 +1218,11 @@ console.log('zzezezezze')
      /* if (nowTime < time) {
         this.notify('Match not yet started')
         return
-      }
+      }*/
       if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }*/
+      }
       var theItems = this.state.week2RoundArray
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week2RoundArray: theItems })
@@ -1370,10 +1401,11 @@ console.log('zzezezezze')
     }
   }
   openConfirmModal = (message, type) => {
+    //console.log('kang',this.state.currentSelection)
     this.setState({ confirmMessage: message, showConfirmModal: true, confirmModalType: type })
   }
   proceed = () => {
-    if (this.state.confirmModalType === 'oddsUpdate') { this.checkForOddsUpdate() }
+    if (this.state.confirmModalType === 'oddsUpdate') { this.checkForOddsUpdateTime() }
     if (this.state.confirmModalType === 'resultsUpdate') { this.checkForOutcome() }
   }
   selectEvent = async(theMenu, theItems,editType) => {
@@ -1396,14 +1428,17 @@ console.log('zzezezezze')
      console.log('this.state.theEventKey',this.state.theEventKey)
     //this.setState({[weekToPick]:!status})
     //return
+    var theDb2 = firebase.database().ref('theEvents/NFLRegular/eventsIds/'+this.state.theEventKey+'/'+weekToPick)
      var theDb =firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+weekToPick)
     theDb.set(!status, error => {
       if (!error) {
+        theDb2.set(!status)
         this.setState({[weekToPick]:!status})
         this.notify('Selected Succesfully')
       }
     })
   }
+  
   checkForPicks=(theEventKey)=>{
      var theDb =firebase.database().ref('/theEvents/eventsIds/'+theEventKey)
      theDb.once('value', dataSnapshot => {
@@ -1495,7 +1530,7 @@ console.log('zzezezezze')
           </div>
         </div>
         {this.state.isAdmin ? <div className={style.eventCreationDiv}>
-          <p className={style.eventP} onClick={() => this.setState({ showChooseWeekModal: true })}>Enter Event Details</p>
+          <p className={style.eventP} onClick={() => this.setState({ showChooseWeekModal: true,eventAlreadyFilled:false })}>Enter Event Details</p>
           <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal: true })}>Create New NFL Event</p>
         </div> : null}
         <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
@@ -1564,10 +1599,12 @@ console.log('zzezezezze')
             <p className={style.scoreP2}>{this.state.dataAvailable  ? theBPS : '0.00'} points</p>
           </div>
           <div className={style.scoresCont2}>
-            <p className={style.scoreP1}>Cumulative Score</p>
+             <p className={style.currentP}>{bpsTitle}</p>
+            <p className={style.scoreP1}>Current Score</p>
             <p className={style.scoreP2}>{this.state.dataAvailable ? theWeeklyScore : '0.00'} points</p>
           </div>
           <div className={style.scoresCont3}>
+             <p className={style.currentP}>{bpsTitle}</p>
             <p className={style.scoreP1}>Current Rank in NFL</p>
             <p className={style.scoreP2}>{this.state.dataAvailable && this.state.currentRank ? theWeeklyRank : 'N/A'}</p>
           </div>
@@ -1603,7 +1640,7 @@ console.log('zzezezezze')
                         <p>Week 2 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
-                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week1Round')}>
+                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week1Round',item.p1Points)}>
                         <p>Pick Winner</p>
                       </div> : null}
                       {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
@@ -1702,7 +1739,7 @@ console.log('zzezezezze')
                         <p>Week 3 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
-                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week2Round')}>
+                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week2Round',item.p1Points)}>
                         <p>Pick Winner</p>
                       </div> : null}
                       {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
@@ -1801,7 +1838,7 @@ console.log('zzezezezze')
                         <p>Week 4 Match {index+1}</p>
                         <p>{theTime}</p>
                       </div>
-                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round')}>
+                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round',item.p1Points)}>
                         <p>Pick Winner</p>
                       </div> : null}
                       {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
@@ -1973,7 +2010,7 @@ console.log('zzezezezze')
         {this.state.openLoginModal ? <div className={style.detailsModal} onClick={() => this.setState({ openLoginModal: false })}><LogIn /></div> : null}
         {this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null}
 
-        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} theEventKey={this.state.theEventKey} lastPostTime={this.state.lastPostTime} onClick={this.handleChildClick} /></div> : null}
+        {this.state.nflModal ? <div className={style.detailsModal} onClick={() => this.setState({ nflModal: false })}><NFLModal eventToNFLModal={this.state.eventToNFLModal} itemsToNFLModal={this.state.itemsToNFLModal} theEventKey={this.state.theEventKey} lastPostTime={this.state.lastPostTime} eventAlreadyFilled={this.state.eventAlreadyFilled} onClick={this.handleChildClick} /></div> : null}
         {this.state.showCreateEventModal ? <div className={style.detailsModal} onClick={() => this.setState({ showCreateEventModal: false })}>
           <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
             <p className={style.eventHeadP}>Create NFL Regular Event </p>

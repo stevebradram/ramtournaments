@@ -281,10 +281,16 @@ class UFCEvent extends Component {
       cssEase: "linear",
 
     };
+    var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
+    var titleToShow='NFL Season'
+    console.log('this.state.theEventTitle',titleToShow1)
+    if(this.state.theEventTitle){
+    titleToShow1=titleToShow1.split(' ')
+    titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
     return (
       <div className={style.container}>
         <p className={style.eveP}>Events</p>
-        {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'||this.state.sportType==='NFLRegular'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.theEventTitle}</span></p>:null}
+        {this.state.sportType==='NCAAF'||this.state.sportType==='NCAAB'||this.state.sportType==='NFL'||this.state.sportType==='NFLRegular'?<p className={style.eveP} style={{marginTop:10,marginBottom:-30}}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:this.state.theEventTitle}</span></p>:null}
         {this.state.upcomingGames.length>0?<div className={style.matchesHeadDiv}>
           {this.state.upcomingGames.map((item,index)=>{
             //console.log('atttt upcomingGames')

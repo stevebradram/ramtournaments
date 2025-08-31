@@ -89,6 +89,8 @@ class leaderboard extends Component {
   })
  }
  checkForSelectedEvent=async(sportType,theEventKey,theTime,currentSelection)=>{
+  // this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
+//  return
   var userInfoDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
   await  userInfoDb.once('value',dataSnapshot=>{
     if (!dataSnapshot.val()) {
@@ -194,10 +196,10 @@ class leaderboard extends Component {
     var dbLink="/userBets/"+sportType+'/'+theEventKey+'/' 
     var scoreBoardDb=firebase.database().ref(dbLink)
     scoreBoardDb.once('value',dataSnapshot=>{
-      if(!dataSnapshot.val()){
+      if(!dataSnapshot.exists()){
       this.setState({dataAvailable:false,isTherNormalData:false,isThereNullData:false})
       this.notify('No data to show at the moment');return}
-      if(!dataSnapshot.val())return
+      if(!dataSnapshot.exists())return
       this.setState({isThereNullData:true,dataAvailable:true,isTherNormalData:false})
       var scoreBoardNo=dataSnapshot.numChildren()
       dataSnapshot.forEach((data,index) => {
@@ -217,7 +219,7 @@ class leaderboard extends Component {
       })}
       userInfoDb.once('value',dataSnapshot=>{
         ////console.log('here at nulll',scoreBoardNo,i,dataSnapshot.val())
-       if(!dataSnapshot.val())return
+       if(!dataSnapshot.exists())return
           var data=dataSnapshot.val()
            //theUserData={id:theId,flockName:data.flockName,teamName:data.teamName,bestPossibleScore:data.bestPossibleScore,currentScore:0.00}
           
@@ -334,8 +336,8 @@ class leaderboard extends Component {
         userInfoDb.once('value',dataSnapshot=>{
          
             var userBetData=dataSnapshot.val()
-           // ////console.log('dataSnapshot.val()',dataSnapshot.val())
-           
+         //  console.log('dataSnapshot.val()',dataSnapshot.val())
+         //  return
           theDet['id']=theId
           theDet['flockName']=userBetData.flockName
           theDet['teamName']=userBetData.teamName
