@@ -1441,6 +1441,11 @@ console.log('zzezezezze')
      console.log('this.state.theEventKey',this.state.theEventKey)
     //this.setState({[weekToPick]:!status})
     //return
+     if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3){
+      this.notify('Event not yet populated')
+     
+    }
+     if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
     var theDb2 = firebase.database().ref('theEvents/NFLRegular/eventsIds/'+this.state.theEventKey+'/'+weekToPick)
      var theDb =firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+weekToPick)
     theDb.set(!status, error => {
