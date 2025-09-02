@@ -1470,6 +1470,15 @@ console.log('zzezezezze')
      })
     //allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false
   }
+  enterEventDetails2=()=>{
+     if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3){
+      this.notify("Can't enter event details before event is created")
+      this.setState({showConfirmModal:false,showProgressBar:false})
+    }
+    if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
+    this.setState({ showChooseWeekModal: true,eventAlreadyFilled:false })
+    
+  }
   render() {
     // //console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
     ////console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
@@ -1481,7 +1490,8 @@ console.log('zzezezezze')
     var isPastEvent = ''
     var bpsTitle = 'Week 2 Round'
     var todayInMillis = new Date().getTime()
-    var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
+    var titleToShow1=''
+    if(this.state.theEventTitle!==undefined){titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')}
     var titleToShow='NFL Season'
     console.log('this.state.theEventTitle',titleToShow1)
     if(this.state.theEventTitle){
@@ -1548,8 +1558,8 @@ console.log('zzezezezze')
           </div>
         </div>
         {this.state.isAdmin ? <div className={style.eventCreationDiv}>
-          <p className={style.eventP} onClick={() => this.setState({ showChooseWeekModal: true,eventAlreadyFilled:false })}>Enter Event Details</p>
-          <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal: true })}>Create New NFL Event</p>
+          <p className={style.eventP} onClick={() => this.enterEventDetails2()}>Enter Event Details</p>
+          <p className={style.eventP2} onClick={() =>this.setState({ showCreateEventModal: true })}>Create New NFL Event</p>
         </div> : null}
         <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
