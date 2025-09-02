@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import styles from './NavBar.module.scss'
 import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose } from "react-icons/md";
 import { FaSearch, FaHome, FaCarAlt, FaFacebook, FaInstagram, FaTwitterSquare, FaYoutubeSquare, FaBars } from "react-icons/fa";
+import { AiFillMessage } from "react-icons/ai";
 import Router, { withRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import localStorage from 'local-storage'
 import { FaRegMessage } from "react-icons/fa6";
 import LogIn from '../LogInReg/LogIn'
+import Chats from '../Home/Chats'
+import Messages from '../Home/Messages2'
+import Friends from '../Home/Friends2'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
@@ -26,11 +30,15 @@ class NavBar extends Component {
       count:0,
       createLeagueModal:false,
       showEventCreator:true,
-      count:0,
+      theCount:0,
       isAdmin:false,
       countdownStart:1741960288732,
       countdownStop:1742487300000,
-      theNotification:''
+      theNotification:'',
+      showChats:false,
+      showMessages:false,
+      showFriends:false,
+      theData:'',from:''
     }
   }
   onScroll = () => {
@@ -101,6 +109,8 @@ class NavBar extends Component {
         localStorage.set('userId', userId);
         if(emailVerified===true){localStorage.set('emailVerified', 'true');}
         else{localStorage.set('emailVerified', 'false');}
+        var userRef = firebase.database().ref('/users/'+userId+'/userData/lastSeen')
+        userRef.set(new Date().getTime())
       } else {
         this.setState({ isLogged: false })
         localStorage.set('loggedIn', 'false');
@@ -167,6 +177,7 @@ class NavBar extends Component {
     console.log('openLogInModal')
   };*/
   handleChildClick = (title) => {
+    console.log('aziiiza')
     this.setState({ count: this.state.count + 1});
     if(title==='closeLogInModal'){
     this.setState({openLogInModal: false})
@@ -176,6 +187,25 @@ class NavBar extends Component {
     }
     
   };
+    handleChatsClick = (from,text,theData) => {
+      console.log('theMeso',from,text)
+     // return
+     this.setState({from})
+       this.setState({ theCount: this.state.theCount + 1});
+      if(from==='fromChats'){
+        if(text==='close'){this.setState({ showMessages:false,showChats:false});}
+        else if(text==='openFriends'){this.setState({ showMessages:false,showChats:false,showFriends:true});}
+        else{this.setState({ showMessages:true,showChats:false});}
+      }
+       if(from==='fromFriends'){
+        if(text==='close'){this.setState({ showMessages:false,showChats:true,showFriends:false});}
+        else{this.setState({ showMessages:true,showChats:false,showFriends:false,theData});}
+      }
+      if(from==='fromMessages'){
+        this.setState({ showMessages:false,showChats:true});
+      }
+   
+    }
   theTypeAnimation = (text1, text2) => {
     return (
       <TypeAnimation
@@ -225,7 +255,7 @@ class NavBar extends Component {
               <div className={styles.navMain}>
                 <div className={styles.navDiv3}>
                   <Link href="/" className={styles.navMainLi}>HOME</Link>
-                  <Link href="/about" className={styles.navMainLi}>ABOUT US</Link>
+                  {/*<Link href="/about" className={styles.navMainLi}>ABOUT US</Link>*/}
                   <Link href="/events" className={styles.navMainLi}>EVENT SCORES</Link>
                   {/*<Link href="/"   className={styles.navMainLi}>HOW TO PLAY</Link>*/}
                   <Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>
@@ -233,6 +263,11 @@ class NavBar extends Component {
                 </div>
               </div>
               <div className={styles.logDiv}>
+               {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({ showMessages:false,showChats:true})}>
+                <div className={styles.logDmesoDiv2}>
+                  <p>1</p>
+                 <AiFillMessage className={styles.mesoIc}/>
+                </div></div> :null}
                 {/*<Link href="/" className={styles.talkDiv}>LOG IN</Link>
                 <Link href="/" className={styles.talkDiv1}>SIGN UP</Link>*/}
                 {this.state.isLogged ? <button className={styles.logOutBtn} onClick={() =>this.signOut()}>LOG OUT</button> :
@@ -293,6 +328,9 @@ class NavBar extends Component {
         </div> : null}
         {this.state.progress ? <ProgressBar message='Logging Out' /> : null}
         {this.state.isLogged&&this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
+        {this.state.isLogged&&this.state.showChats?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick}/></div>:null}
+        {this.state.isLogged&&this.state.showMessages?<div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><Messages onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
+          {this.state.isLogged&&this.state.showFriends?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Friends onClick={this.handleChatsClick}/></div>:null}
       </>
     )
   }

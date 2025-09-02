@@ -1,0 +1,33 @@
+  $primaryColor: #ff8801;
+  $secondaryColor: #FED800;
+  $blackish:#292f51;
+  $redColor:#CB1E31;
+  .container{
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box; 
+    margin-bottom: 0px;
+    display: flex;
+    background-color:whitesmoke;
+    padding: 200px 80px 100px 80px;
+    min-height: 100vh;
+  }
+  .cont2{
+    background-color:white;
+    height: 90vh;
+    width: 100vw;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    position: relative;
+     display: flex;
+  }
+  .chatsDiv{
+   width: 35%;
+   border-right: 1px solid #eee;
+   height: 100%;
+  }
+  .mesoDiv{
+   width: 65%;
+   border-right: 1px solid #eee;
+   height: 100%;
+  }

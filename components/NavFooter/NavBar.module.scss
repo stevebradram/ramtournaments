@@ -111,6 +111,43 @@ $blackish:#292f51;
     color: white;
     font-weight: 600;
     background: linear-gradient(to right, #CB1E31 0%, #fa495e 100%);
+ }
+
+.logDmesoDiv{
+  background-color:#e0e0e0;
+  height:37px;
+  width:37px;
+  border-radius:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-right:15px;
+  cursor: pointer;
+  //border: 1px solid $blackish;
+  
+}
+.logDmesoDiv2{
+position: relative;
+}
+.logDmesoDiv2 p{
+    position: absolute;
+    color: white;
+    top:0;right:0;
+    z-index: 2;
+    background-color: $redColor;
+    height: 15px;
+    width: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 600;
+    //display: none;
+}
+.mesoIc{
+    font-size: 22px;
+    color: $blackish;
 }
 .logOutBtn{
     display: flex;
@@ -351,6 +388,15 @@ text-decoration: none;
     color: white;
 }
 .logInModal{
+    position: fixed;
+    top:0;bottom:0;left:0;right:0;
+    z-index: 10;
+    background-color: #00000022;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chatModal{
     position: fixed;
     top:0;bottom:0;left:0;right:0;
     z-index: 10;

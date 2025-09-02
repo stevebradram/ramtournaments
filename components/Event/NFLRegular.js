@@ -146,6 +146,7 @@ class NCAA extends Component {
 
         if ((new Date().getTime() > dataSnapshot.val())) {
           this.notify('Update odds time expired')
+          this.setState({showProgressBar:false})
           console.log('the Z000000', new Date().getTime(), dataSnapshot.val())
         }
         else {
@@ -153,7 +154,7 @@ class NCAA extends Component {
           //axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
           axios.get("https://theramtournament.com/updateNFLRegularOdds?term=" + theQuery)
             .then((res) => {
-              this.setState({showConfirmModal:false})
+              this.setState({showConfirmModal:false,showProgressBar:false})
               var theItems = res.data
               this.notify('Success Updating the NFL odds')
 
@@ -166,6 +167,7 @@ class NCAA extends Component {
     }
   }
   checkForOddsUpdateTime=()=>{
+    this.showProgressBar3()
     if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
     var stopEditTime=''
     if (this.state.currentSelection === 'week1Round') { stopEditTime = 'stopweek1RoundEdit'}
@@ -178,11 +180,11 @@ class NCAA extends Component {
          if(dataSnapshot.val()==='N/A'){
           console.log('yeeeeees 111111')
             //this.checkForOddsUpdate()
-             this.setState({showConfirmModal:false})
+             this.setState({showConfirmModal:false,showProgressBar:false})
             this.notify('Can not update odds. Event not yet populated')
          }else{
          if(new Date().getTime()>=dataSnapshot.val()){
-           this.setState({showConfirmModal:false})
+           this.setState({showConfirmModal:false,showProgressBar:false})
            this.notify('Can not update odds. Event already started')
          }else{
            console.log('yeeeeees 2222222')
@@ -190,7 +192,7 @@ class NCAA extends Component {
          }
          }
       }else{
-         this.setState({showConfirmModal:false})
+         this.setState({showConfirmModal:false,showProgressBar:false})
          this.notify('Can not update odds. Event not yet populated')
       }
      })
@@ -889,6 +891,12 @@ console.log('zzezezezze')
       this.fillEventDetails(this.state.matchStartTime, this.state.matchEndTime)
     }
   }
+    showProgressBar3 = () => {
+    this.setState({ showProgressBar: true })
+    this.timerHandle = setTimeout(
+      () => this.setState({ showProgressBar: false }),
+      30000)
+  }
   showProgressBar = () => {
     this.setState({ showProgressBar: true })
     this.timerHandle = setTimeout(
@@ -910,6 +918,7 @@ console.log('zzezezezze')
     if (this.state.currentSelection === 'superBowl') { idStart = 'superBowlMatch' }
     var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=" + firstEventTime + "&commenceTimeTo=" + lastEventTime + "&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
     //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
+    //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
     console.log('oddsApi', oddsApi)
     const response = await axios.get(oddsApi)
     var theOddsJson = response.data

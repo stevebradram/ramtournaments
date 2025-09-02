@@ -11,7 +11,7 @@
   "dependencies": {
     "axios": "^1.7.9",
     "copy-to-clipboard": "^3.3.3",
-    "dayjs": "^1.11.13",
+    "dayjs": "^1.11.18",
     "firebase": "^8.10.0",
     "framer-motion": "^11.11.9",
     "local-storage": "^2.0.0",
@@ -26,6 +26,7 @@
     "react-image-file-resizer": "^0.4.8",
     "react-player": "^2.16.0",
     "react-slick": "^0.30.2",
+    "react-time-ago": "^7.3.3",
     "react-toastify": "^9.0.3",
     "react-type-animation": "^3.2.0",
     "sass": "^1.80.2",
