@@ -168,6 +168,10 @@ class NCAA extends Component {
   }
   checkForOddsUpdateTime=()=>{
     this.showProgressBar3()
+    if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3){
+      this.notify('Can not update odds. Event not yet populated')
+      this.setState({showConfirmModal:false,showProgressBar:false})
+    }
     if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
     var stopEditTime=''
     if (this.state.currentSelection === 'week1Round') { stopEditTime = 'stopweek1RoundEdit'}
