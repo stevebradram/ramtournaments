@@ -11,6 +11,7 @@ import TheMarchMadness2 from '../components/LeaderBoards/TheMarchMadness2'
 import NFLRegular from '../components/LeaderBoards/NFLRegular'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
+import { MdDeleteOutline } from "react-icons/md";
 var theItems=[]
 /*const importList = [
     { id: 1, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
@@ -37,7 +38,7 @@ class leaderboard extends Component {
     this.tableRef = React.createRef(null);
     this.child = React.createRef();
  }
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,deleteModal:false,
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true,loadMadness1:false,loadMadness2:false}
   componentDidMount=()=>{
      //this.getScoreBoardData()
@@ -521,7 +522,7 @@ class leaderboard extends Component {
            <th>Super Bowl</th>
            </>
           :null}
-           {this.state.isAdmin?<><th>Phone</th><th>Email</th></>:null}
+           {this.state.isAdmin?<><th>Phone</th><th>Email</th><th>Delete</th></>:null}
         </tr>
         {theItems.map((item, index) => {
           var theScore='',theBPS=''
@@ -567,7 +568,7 @@ class leaderboard extends Component {
               <td>{item.finalRoundScore}</td>*/}
               </>
               :null}
-              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}
+              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName,thePicked})}/></td></>:null}
             </tr>
             )
         })}
@@ -649,7 +650,19 @@ class leaderboard extends Component {
    </div>}
       </div>:this.state.sportType!=='NFLRegular'?<>{this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
         <TheMarchMadness2  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}</>
-        :<div><NFLRegular  theEventKey={this.state.theEventKey} currentRound='week1Round' theCount={this.state.count}/></div>}
+        :<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count}/></div>}
+         {this.state.deleteModal?<div className={styles.modal}>
+                <div className={styles.delModal}>
+                  <p className={styles.delModalP1}>Confirm Delete?</p>
+                  <p className={styles.delModalP2}>Are you sure you want to delete "{this.state.deleteName}" picks?</p>
+                  <p className={styles.delModalP2} style={{color:'red'}}>This cannot be reversed!</p>
+                  <div>
+                    <button className={styles.delModalDelBtn} onClick={()=>this.deleteMember()}>Delete</button>
+                    <button className={styles.canModalDelBtn} onClick={()=>this.setState({deleteModal:false})}>Cancel</button>
+                  </div>
+                </div>
+                
+                </div>:null}
             </div>
             {this.state.showProgressBar?<ProgressBar/>:null}
             <ToastContainer/>

@@ -1213,10 +1213,10 @@ console.log('zzezezezze')
          this.notify('Match not yet started')
          return
        }*/
-       if(winner!=='N/A'){
+       /*if(winner!=='N/A'){
         this.notify('Winner already filled')
          return
-       }
+       }*/
       var theItems = this.state.week1RoundArray
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week1RoundArray: theItems })
