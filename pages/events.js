@@ -69,6 +69,7 @@ class events extends Component {
   checkForFirstSport = () => {
     var sportRef = firebase.database().ref('/theEvents/sport1')
     sportRef.once('value', dataSnapshot => {
+      if(dataSnapshot.exists()){
       var theData = dataSnapshot.val().split('###')
       this.setState({ selectedSport: theData[0], selectedId: theData[1] })
       console.log('dataSnapshot.val()', dataSnapshot.val())
@@ -79,6 +80,7 @@ class events extends Component {
           this.state.theEvents.unshift(item);
         }
       });
+    }
     })
   }
   submitSport = () => {

@@ -16,11 +16,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { RiTeamFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
 import { TbCheckbox } from "react-icons/tb";
-import { MdClose, MdCheck } from "react-icons/md";
+import { MdClose, MdCheck,MdOutlineShare} from "react-icons/md";
 import theRamOdds from './ramOdds.json'
 import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
+import copy from 'copy-to-clipboard';
 var allMatches = []
 //week 2 start=>2025-09-12T00:15:00Z  end=>2025-09-16T02:00:00Z 
 //week 3 start=>2025-09-19T00:15:00Z  end=>2025-09-23T00:15:00Z
@@ -93,7 +94,7 @@ class NCAA extends Component {
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
     weekSelect: [{id:'WEEK 1',text:'WEEK 2'},{id:'WEEK 2',text:'WEEK 3'},{id:'WEEK 3',text:'WEEK 4'}], selectedWeek: '',selectedWeek2:'', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
     matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0,allowPicks:['Week 2','Week 3','Week 4'],allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false,
-    eventAlreadyFilled:false
+    eventAlreadyFilled:false,theLink:'',stopweek1RoundEdit:0
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -106,6 +107,7 @@ class NCAA extends Component {
     }
     console.log('azeeza', item)*/
   };
+   
   checkForOddsUpdate2 = async (theLink) => {
     try {
       var theQuery = encodeURIComponent(theLink)
@@ -248,7 +250,17 @@ class NCAA extends Component {
       }
     })
   }
-
+ checkLink = async (userId) => {
+      var flocksDataRef = firebase.database().ref('users/').child(userId + '/flockData/flockNames/' + this.state.theEventKey + '/link')
+      flocksDataRef.once('value', dataSnapshot => {
+        console.log('flocksDataRef the key', dataSnapshot.val())
+        if (dataSnapshot.exists()) {
+          this.setState({ theLink: dataSnapshot.val() })
+        } else {
+          this.setState({ theLink: '' })
+        }
+      })
+    }
   checkUpcomingPastGames = async (userId) => {
     //return
     //console.log('naingia2222222222222')
@@ -264,6 +276,7 @@ class NCAA extends Component {
         var pastG = {}, upcomingG = {}, theEvents = {}
         var key = data.key
         var time = data.val().time
+        var stopweek1RoundEdit = data.val().stopweek1RoundEdit
         var title = data.val().title
         var sportType = data.val().sportType
         var endTime = data.val().endTime
@@ -286,12 +299,12 @@ class NCAA extends Component {
         if (!oddsUpdate) { oddsUpdate = 'N/A' } else { oddsUpdate = new Date(oddsUpdate).toLocaleString() }
         if (!resultsUpdate) { resultsUpdate = 'N/A' } else { resultsUpdate = new Date(resultsUpdate).toLocaleString() }
 
-        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection, theData: theData, oddsUpdate: oddsUpdate, resultsUpdate: resultsUpdate }
+        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection, theData: theData, oddsUpdate: oddsUpdate, resultsUpdate: resultsUpdate,stopweek1RoundEdit }
         allGames.push(theEvents)
 
         if (gamesCount === i) {
-          var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = ''
-          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'] }
+          var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = '',stopweek1RoundEdit=''
+          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'],stopweek1RoundEdit=allGames[0]['stopweek1RoundEdit'] }
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {
@@ -309,8 +322,9 @@ class NCAA extends Component {
         if ((currentSelection === 'week3Round')) {
           this.setState({ isWeek1DataAvailable: true, isWeek2DataAvailable: true, isWeek3DataAvailable: true, editType: 'stopweek3RoundEdit' })
         }*/
-        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection:'week1Round', expired, endTime, oddsUpdate, resultsUpdate }, () => {
+        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection:'week1Round', expired, endTime, oddsUpdate, resultsUpdate,stopweek1RoundEdit }, () => {
           this.getNFLMatches(userId)
+          this.checkLink(userId)
           //////console.log('currentSelection',this.state.currentSelection)
         })
       })
@@ -638,8 +652,8 @@ class NCAA extends Component {
       }
     })
   }
-  loadOtherEvent = async (theEventKey, theEventTitle, currentSelection, oddsUpdate, resultsUpdate) => {
-    this.setState({ oddsUpdate, resultsUpdate })
+  loadOtherEvent = async (theEventKey, theEventTitle, currentSelection, oddsUpdate, resultsUpdate,stopweek1RoundEdit) => {
+    this.setState({ oddsUpdate, resultsUpdate,stopweek1RoundEdit })
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
       var theInfo = dataSnapshot.val()
@@ -655,6 +669,7 @@ class NCAA extends Component {
       //this.setState({isWeek1RoundPicked:false,isWeek2RoundPicked:false,isWeek3RoundPicked:false,isFinalsPicked:false})
       this.setState({ theEventKey, theEventTitle, expired, currentSelection, isWeek1RoundPicked: false, isWeek2RoundPicked: false, isWeek3RoundPicked: false, isFinalsPicked: false }, () => {
         this.getNFLMatches()
+        this.checkLink(this.state.userId)
         if ((currentSelection === 'week1Round')) { this.setState({ editType: 'stopweek1RoundEdit' }) }
         if ((currentSelection === 'week2Round')) { this.setState({ editType: 'stopweek2RoundEdit' }) }
         if ((currentSelection === 'week3Round')) { this.setState({ editType: 'stopweek3RoundEdit' }) }
@@ -1479,6 +1494,10 @@ console.log('zzezezezze')
     this.setState({ showChooseWeekModal: true,eventAlreadyFilled:false })
     
   }
+   copyLink = () => {
+      copy(this.state.theLink);
+      this.notify('Link copied successfully')
+    }
   render() {
     // //console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
     ////console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
@@ -1535,7 +1554,7 @@ console.log('zzezezezze')
               theColor = '#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{ color: theColor, borderColor: theColor }} onClick={() => this.loadOtherEvent(item.id, item.title, item.currentSelection, item.oddsUpdate, item.resultsUpdate)}>
+              <div className={style.headList} key={index} style={{ color: theColor, borderColor: theColor }} onClick={() => this.loadOtherEvent(item.id, item.title, item.currentSelection, item.oddsUpdate, item.resultsUpdate,item.stopweek1RoundEdit)}>
                 <div><p className={style.headListP1}>{item.title}</p>
                   <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                     <p style={{ marginLeft: 2, marginRight: 2 }}>-</p>
@@ -1562,6 +1581,10 @@ console.log('zzezezezze')
           <p className={style.eventP2} onClick={() =>this.setState({ showCreateEventModal: true })}>Create New NFL Event</p>
         </div> : null}
         <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
+         {this.state.theLink.length > 1 && new Date().getTime() < this.state.stopweek1RoundEdit ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
+                      <p>Flock Invite Link</p>
+                      <MdOutlineShare />
+                    </div> : null}
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
           {this.state.dataAvailable ?
