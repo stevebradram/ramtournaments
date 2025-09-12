@@ -271,7 +271,7 @@ class NCAA extends Component {
       var gamesCount = dataSnapshot.numChildren()
       //console.log('naingia 3333',gamesCount)
       dataSnapshot.forEach((data) => {
-        //console.log('naingia 44444',data)
+        console.log('naingia 44444',data.val())
         i++
         var pastG = {}, upcomingG = {}, theEvents = {}
         var key = data.key

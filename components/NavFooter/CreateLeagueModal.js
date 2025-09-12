@@ -63,7 +63,7 @@ class DetailsModal extends Component {
     dataSnapshot.forEach((data,index) => {
       i++
       var eventStartTime=data.val().time
-      var eventStartTime=data.val().time
+      if(data.val().sportType==="NFLRegular"){eventStartTime=data.val().stopweek1RoundEdit}
     if(eventStartTime>currentTimeInMillis){
        var theData={startTime:eventStartTime,id:data.key,title:data.val().title,sportType:data.val().sportType}
        theEventsArr.push(theData)
