@@ -9,7 +9,10 @@ import { HiArrowNarrowLeft } from "react-icons/hi";
 import { MdArrowBackIos } from "react-icons/md";
 import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
+//import  io  from "socket.io-client"
+//const socket = io("http://localhost:3001", {addTrailingSlash: false});
+//const socket = io()
 var lastSeenTime=1756721809290,theLastTime=''
 var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 var  theChats=[{ id:12,time:1693499400000,message:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2},
@@ -46,11 +49,13 @@ class Messages extends Component {
     { id:24,time:1756720200000,message:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',otherUserID:2,senderID:2,status:'sent'},
     { id:25,time:1756824686869,message:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',otherUserID:2,senderID:3,status:'sent'}],
     theMessage:'',incomingData:[],profilePhoto:'',userName:'',acronym:'',lastSeen:'',myUserId:'',isLogged:'',otheUserId:'',areMessagesAvailable:true,theMessageId:'',theMessagesArray:[],lastMesoId:'',theLastSeenChat:0,
-    hasInitializedFirebase :true
+    hasInitializedFirebase :true,count:0
   }
 
     componentDidMount=()=>{
         this.scrollToBottom()
+       // window.addEventListener('receiveMessages', this.receiveMessages)
+        //this.checkIo()
         return
         console.log('theData',this.props.from)
         console.log('theData',this.props.theData)
@@ -63,9 +68,27 @@ class Messages extends Component {
         this.setState({theData:this.props.theData})
         this.checkAuth()
     }
+   /* checkIo=()=>{
+  socket.on("message",(message)=>{
+  console.log('User coonected',message)
+
+        })
+    }*/
   componentDidUpdate () {
     this.scrollToBottom()
+    //window.addEventListener('receiveMessages', this.receiveMessages)
   }
+  componentWillUnmount(){
+   // window.removeEventListener('receiveMessages', this.receiveMessages)
+}
+/*receiveMessages= () => {
+  console.log('updating messages')
+  socket.on("receive_message",(data)=>{
+    console.log('message receiveddddddddddddddddddddddd')
+    alert(data.message)
+    this.setState({count:this.state.count+1})
+  })
+}*/
   scrollToBottom = () => {
     this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -231,6 +254,7 @@ class Messages extends Component {
   sendMessage=()=>{
       console.log('rrrrrrrrrr 22222')
       this.notify("Can't send a message at the moment")
+      socket.emit("send_message",{message:"Kyieeeeeeee"})
       return
   var messageRef = firebase.database().ref('/messaging/messages/')
   var chatRef = firebase.database().ref('/messaging/lastChats/')

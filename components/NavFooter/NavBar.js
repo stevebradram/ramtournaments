@@ -11,7 +11,7 @@ import { FaRegMessage } from "react-icons/fa6";
 import LogIn from '../LogInReg/LogIn'
 import Chats from '../Home/Chats'
 import Messages from '../Home/Messages2'
-import Friends from '../Home/Friends2'
+import Friends from '../Home/Friends'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
@@ -38,7 +38,7 @@ class NavBar extends Component {
       showChats:false,
       showMessages:false,
       showFriends:false,
-      theData:'',from:''
+      theData:'',from:'',count2:0
     }
   }
   onScroll = () => {
@@ -53,6 +53,7 @@ class NavBar extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.onScroll, false);
     this.checkAuth()
+    
     console.log('the time 001',new Date().getTime())
     console.log('the time 0025999',new Date('2025-01-26T20:00:00Z').getTime())
 
@@ -62,6 +63,7 @@ class NavBar extends Component {
     console.log('linkInfo naaav',linkInfo)
     this.getData()
   }
+
   getData=()=>{
     var messageRef = firebase.database().ref('/notifications/message/')
     messageRef.once('value', dataSnapshot => {
@@ -101,9 +103,9 @@ class NavBar extends Component {
         var emailVerified=user.emailVerified
         this.getUserInfo(userId)
         console.log('the user info',user)
-       // if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
           this.setState({isAdmin:true})
-        // }
+         }
         this.setState({ isLogged: true,openLogInModal:false })
         localStorage.set('loggedIn', 'true');
         localStorage.set('userId', userId);

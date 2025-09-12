@@ -94,7 +94,7 @@ class NCAA extends Component {
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
     weekSelect: [{id:'WEEK 1',text:'WEEK 2'},{id:'WEEK 2',text:'WEEK 3'},{id:'WEEK 3',text:'WEEK 4'}], selectedWeek: '',selectedWeek2:'', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
     matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0,allowPicks:['Week 2','Week 3','Week 4'],allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false,
-    eventAlreadyFilled:false,theLink:'',stopweek1RoundEdit:0
+    eventAlreadyFilled:false,theLink:'',stopweek1RoundEdit:0,hasUserPlayed:false
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -303,6 +303,7 @@ class NCAA extends Component {
         allGames.push(theEvents)
 
         if (gamesCount === i) {
+          console.log('zoote',allGames)
           var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = '',stopweek1RoundEdit=''
           if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'],stopweek1RoundEdit=allGames[0]['stopweek1RoundEdit'] }
         }
@@ -494,7 +495,9 @@ class NCAA extends Component {
      userBetsDb.child(selection).once('value', dataSnapshot => {
       console.log('ndani 111111111111',dataSnapshot.exists())
         var dataExists = dataSnapshot.exists()
+        
         if(dataExists){
+          if(selection==='week1Round'){this.setState({hasUserPlayed:true})}
           var i=0
           console.log('ndani 22222',dataSnapshot.val())
           var theData = dataSnapshot.val()
@@ -513,6 +516,8 @@ class NCAA extends Component {
               this.setState({[arrName]:theArr,[isPicked]:true})
             }
           }
+        }else{
+          if(selection==='week1Round'){this.setState({hasUserPlayed:false})}
         }
 
         return
@@ -699,10 +704,10 @@ class NCAA extends Component {
       this.notify("Week 4 picking not allowed at the moment. Please try again later")
       return
     }
-    var itemToModals = ''
-    if (this.state.currentSelection === 'week1Round') { itemToModals = this.state.week1RoundArray }
-    if (this.state.currentSelection === 'week2Round') { itemToModals = this.state.week2RoundArray }
-    if (this.state.currentSelection === 'week3Round') { itemToModals = this.state.week3RoundArray }
+    var itemToModals = '',stopEditTime=''
+    if (this.state.currentSelection === 'week1Round') { itemToModals = this.state.week1RoundArray,stopEditTime='stopweek1RoundEdit' }
+    if (this.state.currentSelection === 'week2Round') { itemToModals = this.state.week2RoundArray,stopEditTime='stopweek2RoundEdit'}
+    if (this.state.currentSelection === 'week3Round') { itemToModals = this.state.week3RoundArray,stopEditTime='stopweek3RoundEdit'}
     this.setState({itemsToDetailsModal:itemToModals})
 
     
@@ -718,16 +723,31 @@ class NCAA extends Component {
         if (pointMissing === true) {
           this.notify('Event points not yet populated')
         } else {
-          this.openTheModal2()
+           var userPlayedRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/stopweek1RoundEdit')
+          userPlayedRef.once('value', dataSnapshot => {
+       if ((new Date().getTime() > dataSnapshot.val())) {
+          if(this.state.hasUserPlayed===false){
+            this.notify("Event pick expired")
+          }else{
+            this.openTheModal2(stopEditTime)
+          }
+       }else{
+         this.openTheModal2(stopEditTime)
+       }
+    })
+          
         }
       }
     })
   }
-  openTheModal2 = () => {
+  openTheModal2 = (stopEditTime) => {
     console.log('this.state.theEventKey', this.state.currentSelection, this.state.theEventKey, this.state.editType)
+    //hasUserPlayed
     //return
     // var theDb =firebase.database().ref('/theEvents/eventsIds/'+theEventKey)
-    var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
+   
+
+    var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/'+stopEditTime)
     editDbRef.once('value', dataSnapshot => {
        console.log('zeve mbyu 0001',dataSnapshot.val())
       console.log('zeve mbyu 002',dataSnapshot.val())
@@ -1224,29 +1244,10 @@ console.log('zzezezezze')
     if (this.state.currentSelection === 'week1Round') {
       var index2 = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
-      /* if(nowTime<time){
+       if(nowTime<time){
          this.notify('Match not yet started')
          return
-       }*/
-       /*if(winner!=='N/A'){
-        this.notify('Winner already filled')
-         return
-       }*/
-      var theItems = this.state.week1RoundArray
-      theItems[index2]['showChooseWinner'] = true
-      this.setState({ week1RoundArray: theItems })
-      console.log('this.state.currentItems 002', theItems)
-    }
-    if (this.state.currentSelection === 'week2Round') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
-      var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      var nowTime = new Date().getTime()
-      var theItems = this.state.week2RoundArray
-
-     /* if (nowTime < time) {
-        this.notify('Match not yet started')
-        return
-      }*/
+       }
       if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return

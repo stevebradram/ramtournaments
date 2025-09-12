@@ -10,6 +10,7 @@ import { MdArrowBackIos } from "react-icons/md";
 import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
+//import io from "socket.io-client"
 var lastSeenTime=1756721809290,theLastTime=''
 var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 var  theChats=[{ id:12,time:1693499400000,message:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2},
@@ -62,6 +63,12 @@ class Messages extends Component {
         this.setState({theData:this.props.theData})
         this.checkAuth()
     }
+       theInterval=()=>{
+       setInterval(() => {
+              console.log("the tiime",new Date().getTime());
+              this.setState({count2:this.state.count2+1});
+            }, 1000);
+          }
   componentDidUpdate () {
     this.scrollToBottom()
   }
@@ -74,6 +81,7 @@ class Messages extends Component {
                 var userId=user.uid
                 this.setState({myUserId:userId,isLogged:true})
                 this.checkData(userId)
+                this.theInterval()
               } else {
                 this.setState({isLogged:false})
               }
