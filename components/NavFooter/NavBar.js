@@ -11,7 +11,7 @@ import { FaRegMessage } from "react-icons/fa6";
 import LogIn from '../LogInReg/LogIn'
 import Chats from '../Home/Chats'
 import Messages from '../Home/Messages2'
-import Friends from '../Home/Friends2'
+import Friends from '../Home/Friends'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
