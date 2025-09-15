@@ -102,7 +102,7 @@ class Friends extends Component {
                 <MdOutlineClose   className={styles.backIc} onClick={()=>this.closeMessenger()}/>
                 </div>
                 <div className={styles.chatsCont}>
-                {this.state.theChats.map((item,index)=>{
+                {this.state.friendsListArr.map((item,index)=>{
                 var theNo=index+1
                 console.log('is even',this.oddOrEven(theNo))
                 var isEvenOdd=this.oddOrEven(theNo)

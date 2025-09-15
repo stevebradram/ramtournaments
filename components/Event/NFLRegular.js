@@ -1233,7 +1233,7 @@ console.log('zzezezezze')
   }
 
   pickWinner = (id, winner, time, selection,p1Points) => {
-    //console.log('trtrt',this.state.currentSelection,selection)
+    console.log('trtrt',this.state.currentSelection,selection)
     //return
     if (p1Points === 'N/A') {this.notify('Points not yet populated at the moment');return}
     if (this.state.currentSelection !== selection) {
@@ -1241,8 +1241,24 @@ console.log('zzezezezze')
       return
     }
     var nowTime = new Date().getTime()
-    if (this.state.currentSelection === 'week1Round') {
+     if (this.state.currentSelection === 'week1Round') {
       var index2 = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+       if(nowTime<time){
+         this.notify('Match not yet started')
+         return
+       }
+      if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }
+      var theItems = this.state.week1RoundArray
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ week1RoundArray: theItems })
+      console.log('heeeeeeeeere',theItems)
+    }
+    if (this.state.currentSelection === 'week2Round') {
+      var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
        if(nowTime<time){
          this.notify('Match not yet started')
@@ -1255,6 +1271,7 @@ console.log('zzezezezze')
       var theItems = this.state.week2RoundArray
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week2RoundArray: theItems })
+      console.log('heeeeeeeeere',theItems)
     }
     if (this.state.currentSelection === 'week3Round') {
       console.log('this.currentSelection', this.state.currentSelection, time, nowTime)

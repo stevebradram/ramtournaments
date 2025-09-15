@@ -11,7 +11,7 @@ import { FaRegMessage } from "react-icons/fa6";
 import LogIn from '../LogInReg/LogIn'
 import Chats from '../Home/Chats'
 import Messages from '../Home/Messages2'
-import Friends from '../Home/Friends'
+import Friends from '../Home/Friends2'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
@@ -103,6 +103,7 @@ class NavBar extends Component {
         var emailVerified=user.emailVerified
         this.getUserInfo(userId)
         console.log('the user info',user)
+         this.setState({isAdmin:true})
         if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
           this.setState({isAdmin:true})
          }

@@ -47,7 +47,7 @@ class Messages extends Component {
     { id:24,time:1756720200000,message:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',otherUserID:2,senderID:2,status:'sent'},
     { id:25,time:1756824686869,message:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',otherUserID:2,senderID:3,status:'sent'}],
     theMessage:'',incomingData:[],profilePhoto:'',userName:'',acronym:'',lastSeen:'',myUserId:'',isLogged:'',otheUserId:'',areMessagesAvailable:'',theMessageId:'',theMessagesArray:[],lastMesoId:'',theLastSeenChat:0,
-    hasInitializedFirebase :true
+    hasInitializedFirebase :true,areThereMessages:false
   }
 
     componentDidMount=()=>{
@@ -109,7 +109,7 @@ class Messages extends Component {
     if(dataSnapshot.exists()){
         console.log('1 exiiiiiists',dataSnapshot.val())
           var theNo=dataSnapshot.numChildren(), i=0
-          this.setState({theMessageId:mesoId1})
+          this.setState({theMessageId:mesoId1})//,areThereMessages:true})
            //this.checkLastSeenChat(mesoId1,this.state.otheUserId)
           dataSnapshot.forEach((data) => {
             i++
@@ -132,7 +132,7 @@ class Messages extends Component {
     if(dataSnapshot.exists()){
          console.log('2 exiiiiiists',dataSnapshot.val())
          var theNo=dataSnapshot.numChildren(), i=0
-          this.setState({theMessageId:mesoId2})
+          this.setState({theMessageId:mesoId2})//,areThereMessages:true})
           //this.checkLastSeenChat(mesoId2,this.state.otheUserId)
           dataSnapshot.forEach((data) => {
             i++
@@ -236,9 +236,6 @@ class Messages extends Component {
       1000)
   }
   sendMessage=()=>{
-      console.log('rrrrrrrrrr 22222')
-      this.notify("Can't send a message at the moment")
-      return
   var messageRef = firebase.database().ref('/messaging/messages/')
   var chatRef = firebase.database().ref('/messaging/lastChats/')
   var theKey=chatRef.push().key
@@ -257,6 +254,7 @@ class Messages extends Component {
   if(this.state.theMessage.length>=1&&mesoId!==''){
    var theMessage={message:this.state.theMessage,time:new Date().getTime(),status:'sent',senderID:this.state.myUserId,otherUserID:this.state.otheUserId}
    var theChat={message:this.state.theMessage,time:new Date().getTime(),status:'sent',senderID:this.state.myUserId,otherUserID:this.state.otheUserId,lastChatSeen:new Date().getTime()}
+   if(this.state.areThereMessages===false){theChat['1stSenderId']=this.state.myUserId}
    messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
    messageRef.child(this.state.otheUserId).child(mesoId).child(theKey).set(theMessage)
    chatRef.child(this.state.myUserId).child(mesoId).set(theMessage)
