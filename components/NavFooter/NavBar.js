@@ -104,7 +104,7 @@ class NavBar extends Component {
         this.getUserInfo(userId)
         console.log('the user info',user)
          //this.setState({isAdmin:true})
-        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
+        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid=="Rrv1gI1gejewMItubSvkWbwHRcR2"||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
           this.setState({isAdmin:true})
          }
         this.setState({ isLogged: true,openLogInModal:false })
