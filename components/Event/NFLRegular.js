@@ -754,7 +754,8 @@ class NCAA extends Component {
       if (dataSnapshot.val() === 'N/A') {
         this.notify('Event pick/edit not available at the moment')
       } else {
-         console.log('now 005', new Date().getTime(), dataSnapshot.val())
+       
+        console.log('now 005', new Date().getTime(), dataSnapshot.val())
         if ((new Date().getTime() > dataSnapshot.val())) {
           console.log('now 005', new Date().getTime(), dataSnapshot.val())
           if (this.state.currentSelection === 'week3Round') {
@@ -1241,14 +1242,15 @@ console.log('zzezezezze')
       return
     }
     var nowTime = new Date().getTime()
+    var pickEditTime=time+86400000
      if (this.state.currentSelection === 'week1Round') {
       var index2 = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      var nowTime = new Date().getTime()
+      //var nowTime = new Date().getTime()
        if(nowTime<time){
          this.notify('Match not yet started')
          return
        }
-      if (winner !== 'N/A') {
+      if (winner !== 'N/A'&&nowTime>pickEditTime) {
         this.notify('Winner already filled')
         return
       }
@@ -1259,12 +1261,12 @@ console.log('zzezezezze')
     }
     if (this.state.currentSelection === 'week2Round') {
       var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      var nowTime = new Date().getTime()
+      //var nowTime = new Date().getTime()
        if(nowTime<time){
          this.notify('Match not yet started')
          return
        }
-      if (winner !== 'N/A') {
+      if (winner !== 'N/A'&&nowTime>pickEditTime) {
         this.notify('Winner already filled')
         return
       }
@@ -1276,14 +1278,14 @@ console.log('zzezezezze')
     if (this.state.currentSelection === 'week3Round') {
       console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.week3RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      var nowTime = new Date().getTime()
+//var nowTime = new Date().getTime()
       var theItems = this.state.week3RoundArray
 
       if (nowTime < time) {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+      if (winner !== 'N/A'&&nowTime>pickEditTime) {
         this.notify('Winner already filled')
         return
       }
@@ -1433,10 +1435,13 @@ console.log('zzezezezze')
       console.log('theLink', theLink, theItems)
       console.log('this.state.shortArr 006', shortArr)
       //return
-       await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term=" + theQuery)
-     //await axios.get("http://localhost:4000/getSingleNCAAFNFLResults?term="+theQuery)
+       await axios.get("https://theramtournament.com/getSingleNFLRegularResults?term=" + theQuery)
+      // await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term=" + theQuery)
+      //await axios.get("http://localhost:4000/getSingleNFLRegularResults?term="+theQuery)
+      //await axios.get("http://localhost:4000/getSingleNCAAFNFLResults?term="+theQuery)
         .then((res) => {
           var theOutcome = res.data
+          console.log('theOutcome',theOutcome)
           this.notify(theOutcome)
           if (theOutcome === 'Success Updating Results') {
             this.checkAuth()
