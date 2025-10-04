@@ -786,6 +786,33 @@ $theDark:#b2b2b2;
     font-size: 18px;
     margin-left: 5px;
 }
+
+.listDivB4{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #8b8b8b;
+    margin-top: 10px;
+}
+
+.listDivB4B{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+     margin-top: 10px;
+    cursor: pointer;
+    color: $redColor;
+}
+.listDivB4B p{
+    margin-left: 10px;
+    font-weight: 500;
+}
+.listDivB4 p{
+    font-size: 14px;
+    margin-left: 10px;
+    font-weight: 500;
+}
 .listDivB2:hover{
     color: $redColor;
 }

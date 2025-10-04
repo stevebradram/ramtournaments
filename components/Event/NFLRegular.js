@@ -94,7 +94,7 @@ class NCAA extends Component {
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
     weekSelect: [{id:'WEEK 1',text:'WEEK 2'},{id:'WEEK 2',text:'WEEK 3'},{id:'WEEK 3',text:'WEEK 4'}], selectedWeek: '',selectedWeek2:'', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
     matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false,chooseWeekErr:'',itemsToDetailsModal:[],cumulativeScore:0,allowPicks:['Week 2','Week 3','Week 4'],allowWeek2Pick:false,allowWeek3Pick:false,allowWeek4Pick:false,
-    eventAlreadyFilled:false,theLink:'',stopweek1RoundEdit:0,hasUserPlayed:false
+    eventAlreadyFilled:false,theLink:'',stopweek1RoundEdit:0,hasUserPlayed:false,pickedId:''
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -1243,7 +1243,10 @@ console.log('zzezezezze')
     }
     var nowTime = new Date().getTime()
     var pickEditTime=time+86400000
+    
      if (this.state.currentSelection === 'week1Round') {
+      var theItems = this.state.week1RoundArray
+      theItems.forEach(item => {item.showChooseWinner=false});
       var index2 = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
       //var nowTime = new Date().getTime()
        if(nowTime<time){
@@ -1254,12 +1257,14 @@ console.log('zzezezezze')
         this.notify('Winner already filled')
         return
       }
-      var theItems = this.state.week1RoundArray
+      
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week1RoundArray: theItems })
       console.log('heeeeeeeeere',theItems)
     }
     if (this.state.currentSelection === 'week2Round') {
+      var theItems = this.state.week2RoundArray
+      theItems.forEach(item => {item.showChooseWinner=false});
       var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
       //var nowTime = new Date().getTime()
        if(nowTime<time){
@@ -1270,28 +1275,28 @@ console.log('zzezezezze')
         this.notify('Winner already filled')
         return
       }
-      var theItems = this.state.week2RoundArray
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week2RoundArray: theItems })
       console.log('heeeeeeeeere',theItems)
     }
     if (this.state.currentSelection === 'week3Round') {
       console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var theItems = this.state.week3RoundArray
+      theItems.forEach(item => {item.showChooseWinner=false});
       var index2 = this.state.week3RoundArray.map(function (x) { return x.id; }).indexOf(id);
 //var nowTime = new Date().getTime()
-      var theItems = this.state.week3RoundArray
-
+  
       if (nowTime < time) {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A'&&nowTime>pickEditTime) {
+    /* if (winner !== 'N/A'&&nowTime>pickEditTime) {
         this.notify('Winner already filled')
         return
-      }
+      }*/
       var theItems = this.state.week3RoundArray
       theItems[index2]['showChooseWinner'] = true
-      this.setState({ week3RoundArray: theItems })
+      this.setState({ week3RoundArray: theItems,pickedId:id})
       console.log('theItems', theItems)
     }
   }
@@ -1356,35 +1361,50 @@ console.log('zzezezezze')
    // return
     if (this.state.currentSelection === 'week1Round') {
       var index = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
+      if (winner !== 'player1' && winner !== 'player2'&& winner !== 'itIsADraw') {
         this.notify('Nothing to submit')
       } else {
-        this.checkForOutcomeSingle(index, winner)
+        this.checkForOutcomeSingle(index, winner,id)
       }
     }
     if (this.state.currentSelection === 'week2Round') {
       var index = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
+      if (winner !== 'player1' && winner !== 'player2'&& winner !== 'itIsADraw') {
         this.notify('Nothing to submit')
       } else {
-        this.checkForOutcomeSingle(index, winner)
+        this.checkForOutcomeSingle(index, winner,id)
       }
     }
     if (this.state.currentSelection === 'week3Round') {
       var index = this.state.week3RoundArray.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
+      if (winner !== 'player1' && winner !== 'player2'&& winner !== 'itIsADraw') {
         this.notify('Nothing to submit')
       } else {
-        this.checkForOutcomeSingle(index, winner)
+        this.checkForOutcomeSingle(index, winner,id)
       }
     }
   }
-  checkForOutcomeSingle = async (index, winner) => {
+  //itIsADraw
+  checkForOutcomeSingle = async (index, winner,id) => {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
       console.log('haaaaaaaaaaaapa 2222', index, winner)
-
+      console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
+      console.log('the ref','theEvents/NFLRegular/' + this.state.theEventKey + '/' + this.state.currentSelection+'/'+id)
+      //return
+      /*if(winner==='itIsADraw'){
+        var matchRef = firebase.database().ref('theEvents/NFLRegular/' + this.state.theEventKey + '/' + this.state.currentSelection+'/'+id);
+        matchRef.child('winner').set('itIsADraw')
+        matchRef.child('status1').set('played', (error) => {
+        if (error) { this.notify('Error picking winner') }
+        else { 
+          this.notify('Success Updating Results 4444')
+          this.checkAuth()
+        }
+      })
+      }else{*/
+        //return
       if ((this.state.currentSelection === 'week1Round')) {
         this.checkForRoundOutcome(index, winner, this.state.week1RoundArray, 'week1RoundArray')
       }
@@ -1392,8 +1412,10 @@ console.log('zzezezezze')
         this.checkForRoundOutcome(index, winner, this.state.week2RoundArray, 'week2RoundArray')
       }
       if ((this.state.currentSelection === 'week3Round')) {
+        //console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
         this.checkForRoundOutcome(index, winner, this.state.week3RoundArray, 'week3RoundArray')
       }
+    //}
     } catch (error) {
       ////console.log('error',error)
     }
@@ -1420,7 +1442,8 @@ console.log('zzezezezze')
         }
         shortArr.push(theItem)
       })
-
+       //console.log('this.state.shortArr 006 klklklk', shortArr)
+       //return
       if (this.state.theEventKey === '', this.state.currentSelection === '', scoreName === '', items.length < 1) return
       var scoreName = ''
       if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
@@ -1434,7 +1457,7 @@ console.log('zzezezezze')
       console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
       console.log('theLink', theLink, theItems)
       console.log('this.state.shortArr 006', shortArr)
-      //return
+     // return
        await axios.get("https://theramtournament.com/getSingleNFLRegularResults?term=" + theQuery)
       // await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term=" + theQuery)
       //await axios.get("http://localhost:4000/getSingleNFLRegularResults?term="+theQuery)
@@ -1520,6 +1543,115 @@ console.log('zzezezezze')
    copyLink = () => {
       copy(this.state.theLink);
       this.notify('Link copied successfully')
+    }
+    itemComp=(theItems,weekMatch)=>{
+      return(
+        <div className={style.divCont}>
+            <div className={style.listCont}>
+              {theItems.map((item, index) => {
+                var playStat = ''
+                var playStatCol = ''
+                if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
+                if (item.status1 === 'ongoing') { playStat = 'Ongoing Event', playStatCol = '#CB1E31' }
+                if (item.status1 === 'played') { playStat = 'Finished Event', playStatCol = '#919191' }
+                var timeDiff = item.timeInMillis - new Date().getTime()
+                var statP1 = item.winner === 'player1' ? 'Won' : 'Lost'
+                var statP2 = item.winner === 'player2' ? 'Won' : 'Lost'
+                var player1Color = ''
+                var player2Color = ''
+                var myOutcome = 'LOST', myOutcomeSpan = '+0', myOutcomeCol = '#CB1E31',statColor='#fff'
+                if (item.winner === 'player1') { player1Color = '#1ecb97' } else { player1Color = '#CB1E31' }
+                if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
+
+                if (item.winner === 'player1' && item.bet === 'player1') {myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
+                if (item.winner === 'player2' && item.bet === 'player2') {myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
+                if (item.winner === 'itIsADraw'){myOutcome='DRAW',statP1='Draw',statP2='Draw',player1Color='#eee',player2Color='#eee',myOutcomeCol='#8b8b8b',statColor='#8b8b8b'}
+                //myOutcome
+                var myPick = ''
+                if (item.bet === 'player1') { myPick = item.player1 }
+                if (item.bet === 'player2') { myPick = item.player2 }
+                var theTime = dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
+                return (
+                  <div className={style.listDiv} key={index}>
+                    <div className={style.theCont0}>
+                      <div className={style.theCont01}>
+                        <p>{weekMatch+' '+(index+1)}</p>
+                        <p>{theTime}</p>
+                      </div>
+                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round',item.p1Points)}>
+                        <p>Pick Winner</p>
+                      </div> : null}
+                      {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
+                        <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
+
+
+                      <div className={style.theCont}>
+                        <div className={style.theContLeft}>
+                          <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
+                            {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
+                            {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor:player1Color,color:statColor}}>{statP1}</p> : null}
+                          </div>
+                          {item.player1NickName !== 'N/A' ? <p className={style.P1}>{item.player1NickName}</p> :
+                            <p className={style.P1}>TBA</p>}
+                          <p className={style.countryP}>{item.fighter1Country}</p>
+                          <p className={style.P2}>{item.p1Rec}</p>
+                        </div>
+                        <BsFillLightningFill className={style.sepIc} />
+                        <div className={style.theContRight}>
+                          <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
+                            {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
+                            {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor:player2Color,color:statColor}}>{statP2}</p> : null}
+                          </div>
+                          {item.player2NickName !== 'N/A' ? <p className={style.P1}>{item.player2NickName}</p> :
+                            <p className={style.P1}>TBA</p>}
+                          <p className={style.countryP}>{item.fighter2Country}</p>
+                          <p>{item.country}</p>
+                          <p className={style.P2}>{item.p2Rec}</p>
+                        </div>
+                      </div>
+                      <div className={style.dateDiv}>
+                        <p className={style.p1Points}>{item.p1Points}</p>
+                        <p className={style.usP}>POINTS</p>
+                        <p className={style.p2Points}>{item.p2Points}</p>
+                      </div>
+                      {this.state.isWeek3RoundPicked && this.state.userLoggedIn ? <div id={style.statDiv}>
+                        <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
+                        <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
+                        <p></p>
+                      </div> :
+                        <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
+                      }
+                    </div>
+                    {this.state.isAdmin && item.showChooseWinner ? <div className={style.listDivB}>
+                      <MdClose className={style.closeIc} onClick={() => this.closePickWinner(item.id)} />
+                      <div>
+                        <p className={style.chooseP}>Choose Winner</p>
+                        <div className={item.chosenWinner === 'player1' ? style.listDivB2C : style.listDivB2} onClick={() => this.chosenWinner(item.id, 'player1')}>
+                          <TbCheckbox size={20} />
+                          <p>{item.player1}</p>
+                        </div>
+                        <div className={item.chosenWinner === 'player2' ? style.listDivB2C : style.listDivB2} onClick={() => this.chosenWinner(item.id, 'player2')}>
+                          <TbCheckbox size={20} />
+                          <p>{item.player2}</p>
+                        </div>
+                        <div className={style.listDivB3}>
+                          <TbCheckbox size={16} />
+                          {item.chosenWinner && item.chosenWinner === 'player1' ? <p>{item.player1}</p> : null}
+                          {item.chosenWinner && item.chosenWinner === 'player2' ? <p>{item.player2}</p> : null}
+                          {item.chosenWinner && item.chosenWinner === 'itIsADraw' ? <p>Draw</p> : null}
+                          {!item.chosenWinner || item.chosenWinner === 'N/A' ? <p>N/A</p> : null}
+
+                        </div>
+                         <div className={item.chosenWinner === 'itIsADraw' ? style.listDivB4B : style.listDivB4} onClick={() => this.chosenWinner(item.id, 'itIsADraw')}>
+                          <TbCheckbox size={15} />
+                          <p>Draw</p>
+                        </div>
+                        <button onClick={() => this.submitWinner(item.id, item.chosenWinner)}>Submit</button>
+                      </div></div> : null}
+                  </div>
+                )
+              })}</div></div>
+      )
     }
   render() {
     // //console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
@@ -1684,7 +1816,7 @@ console.log('zzezezezze')
           </div>
         </div>
         <div className={style.divCont}>
-          {this.state.theMenu === 'week1Round' ? <div className={style.divCont}>
+          {/*this.state.theMenu === 'week1Round' ? <div className={style.divCont}>
             <div className={style.listCont}>
               {this.state.week1RoundArray.map((item, index) => {
                 var playStat = ''
@@ -1785,7 +1917,7 @@ console.log('zzezezezze')
             </div></div> : null}
           {this.state.theMenu === 'week2Round' ? <div className={style.divCont}>
             <div className={style.listCont}>{/*this.itemComponent(this.state.week2RoundArray, 'NCAAF Quarter Finals')*/}
-              {this.state.week2RoundArray.map((item, index) => {
+              {/*this.state.week2RoundArray.map((item, index) => {
                 var playStat = ''
                 var playStatCol = ''
                 if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
@@ -1801,7 +1933,6 @@ console.log('zzezezezze')
                 if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
                 if (item.winner === 'player1' && item.bet === 'player1') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
                 if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
-                //myOutcome
                 var myPick = ''
                 if (item.bet === 'player1') { myPick = item.player1 }
                 if (item.bet === 'player2') { myPick = item.player2 }
@@ -1881,203 +2012,12 @@ console.log('zzezezezze')
                   </div>
                 )
               })}
-            </div></div> : null}
-          {this.state.theMenu === 'week3Round' ? <div className={style.divCont}>
-            <div className={style.listCont}>
-              {this.state.week3RoundArray.map((item, index) => {
-                var playStat = ''
-                var playStatCol = ''
-                if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
-                if (item.status1 === 'ongoing') { playStat = 'Ongoing Event', playStatCol = '#CB1E31' }
-                if (item.status1 === 'played') { playStat = 'Finished Event', playStatCol = '#919191' }
-                var timeDiff = item.timeInMillis - new Date().getTime()
-                var statP1 = item.winner === 'player1' ? 'Won' : 'Lost'
-                var statP2 = item.winner === 'player2' ? 'Won' : 'Lost'
-                var player1Color = ''
-                var player2Color = ''
-                var myOutcome = 'LOST', myOutcomeSpan = '+0', myOutcomeCol = '#CB1E31'
-                if (item.winner === 'player1') { player1Color = '#1ecb97' } else { player1Color = '#CB1E31' }
-                if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
-                if (item.winner === 'player1' && item.bet === 'player1') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
-                if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
-                //myOutcome
-                var myPick = ''
-                if (item.bet === 'player1') { myPick = item.player1 }
-                if (item.bet === 'player2') { myPick = item.player2 }
-                var theTime = dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
-                return (
-                  <div className={style.listDiv} key={index}>
-                    <div className={style.theCont0}>
-                      <div className={style.theCont01}>
-                        <p>Week 4 Match {index+1}</p>
-                        <p>{theTime}</p>
-                      </div>
-                      {this.state.isAdmin ? <div className={style.pickWinnerDiv} onClick={() => this.pickWinner(item.id, item.winner, item.timeInMillis, 'week3Round',item.p1Points)}>
-                        <p>Pick Winner</p>
-                      </div> : null}
-                      {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
-                        <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
+            </div></div> : null*/}
 
-
-                      <div className={style.theCont}>
-                        <div className={style.theContLeft}>
-                          <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
-                            {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                            {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
-                          </div>
-                          {item.player1NickName !== 'N/A' ? <p className={style.P1}>{item.player1NickName}</p> :
-                            <p className={style.P1}>TBA</p>}
-                          <p className={style.countryP}>{item.fighter1Country}</p>
-                          <p className={style.P2}>{item.p1Rec}</p>
-                        </div>
-                        <BsFillLightningFill className={style.sepIc} />
-                        <div className={style.theContRight}>
-                          <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
-                            {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                            {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
-                          </div>
-                          {item.player2NickName !== 'N/A' ? <p className={style.P1}>{item.player2NickName}</p> :
-                            <p className={style.P1}>TBA</p>}
-                          <p className={style.countryP}>{item.fighter2Country}</p>
-                          <p>{item.country}</p>
-                          <p className={style.P2}>{item.p2Rec}</p>
-                        </div>
-                      </div>
-                      <div className={style.dateDiv}>
-                        <p className={style.p1Points}>{item.p1Points}</p>
-                        <p className={style.usP}>POINTS</p>
-                        <p className={style.p2Points}>{item.p2Points}</p>
-                      </div>
-                      {this.state.isWeek3RoundPicked && this.state.userLoggedIn ? <div id={style.statDiv}>
-                        <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
-                        <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
-                        <p></p>
-                      </div> :
-                        <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
-                      }
-                    </div>
-                    {this.state.isAdmin && item.showChooseWinner ? <div className={style.listDivB}>
-                      <MdClose className={style.closeIc} onClick={() => this.closePickWinner(item.id)} />
-                      <div>
-                        <p className={style.chooseP}>Choose Winner</p>
-                        <div className={item.chosenWinner === 'player1' ? style.listDivB2C : style.listDivB2} onClick={() => this.chosenWinner(item.id, 'player1')}>
-                          <TbCheckbox size={20} />
-                          <p>{item.player1}</p>
-                        </div>
-                        <div className={item.chosenWinner === 'player2' ? style.listDivB2C : style.listDivB2} onClick={() => this.chosenWinner(item.id, 'player2')}>
-                          <TbCheckbox size={20} />
-                          <p>{item.player2}</p>
-                        </div>
-                        <div className={style.listDivB3}>
-                          <TbCheckbox size={16} />
-                          {item.chosenWinner && item.chosenWinner === 'player1' ? <p>{item.player1}</p> : null}
-                          {item.chosenWinner && item.chosenWinner === 'player2' ? <p>{item.player2}</p> : null}
-                          {!item.chosenWinner || item.chosenWinner === 'N/A' ? <p>N/A</p> : null}
-
-                        </div>
-                        <button onClick={() => this.submitWinner(item.id, item.chosenWinner)}>Submit</button>
-                      </div></div> : null}
-                  </div>
-                )
-              })}</div></div> : null}
-          {/*<p className={style.titleP}>Super Bowl</p>
-          <div className={style.listCont} style={{ justifyContent: 'center' }}>           
-        {this.state.finalArray.map((item, index) => {
-        var playStat = ''
-        var playStatCol = ''
-        if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }
-        if (item.status1 === 'ongoing') { playStat = 'Ongoing Event', playStatCol = '#CB1E31' }
-        if (item.status1 === 'played') { playStat = 'Finished Event', playStatCol = '#919191' }
-        var timeDiff = item.timeInMillis - new Date().getTime()
-        var statP1 = item.winner === 'player1' ? 'Won' : 'Lost'
-        var statP2 = item.winner === 'player2' ? 'Won' : 'Lost'
-        var player1Color = ''
-        var player2Color = ''
-        var myOutcome = 'LOST', myOutcomeSpan = '+0', myOutcomeCol = '#CB1E31'
-        if (item.winner === 'player1') { player1Color = '#1ecb97' } else { player1Color = '#CB1E31' }
-        if (item.winner === 'player2') { player2Color = '#1ecb97' } else { player2Color = '#CB1E31' }
-        if (item.winner === 'player1' && item.bet === 'player1') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p1Points, myOutcomeCol = '#1ecb97' }
-        if (item.winner === 'player2' && item.bet === 'player2') { myOutcome = 'WON', myOutcomeSpan = '+' + item.p2Points, myOutcomeCol = '#1ecb97' }
-        //myOutcome
-        var myPick = ''
-        if (item.bet === 'player1') {myPick = item.player1}
-        if (item.bet === 'player2') {myPick = item.player2}
-        var theTime=dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
-        return (
-          <div className={style.listDiv} key={index}>
-            <div className={style.theCont0}>
-              <div className={style.theCont01}>
-                <p>Super Bowl</p>
-                <p>{theTime}</p>
-              </div>
-              {this.state.isAdmin?<div className={style.pickWinnerDiv} onClick={()=>this.pickWinner(item.id,item.winner,item.timeInMillis,'superBowl')}>
-              <p>Pick Winner</p>
-              </div>:null}
-              {item.status1 === 'notPlayed' ? <>{timeDiff > 300000 ? <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> : <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p>}</> :
-                <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p>}
-
-
-              <div className={style.theCont}>
-                <div className={style.theContLeft}>
-                  <div className={style.imgDiv1} style={{ borderColor: item.status1 === 'played' ? player1Color : 'transparent' }}>
-                    {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player1' ? '#1ecb97' : '#CB1E31' }}>{statP1}</p> : null}
-                  </div>
-                  {item.player1NickName!=='N/A'?<p className={style.P1}>{item.player1NickName}</p>: 
-                  <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter1Country}</p>
-                  <p className={style.P2}>{item.p1Rec}</p>
-                </div>
-                <BsFillLightningFill className={style.sepIc} />
-                <div className={style.theContRight}>
-                  <div className={style.imgDiv2} style={{ borderColor: item.status1 === 'played' ? player2Color : 'transparent' }}>
-                    {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
-                    {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: item.winner === 'player2' ? '#1ecb97' : '#CB1E31' }}>{statP2}</p> : null}
-                  </div>
-                  {item.player2NickName!=='N/A'?<p className={style.P1}>{item.player2NickName}</p>: 
-                  <p className={style.P1}>TBA</p>}
-                  <p className={style.countryP}>{item.fighter2Country}</p>
-                  <p>{item.country}</p>
-                  <p className={style.P2}>{item.p2Rec}</p>
-                </div>
-              </div>
-              <div className={style.dateDiv}>
-                <p className={style.p1Points}>{item.p1Points}</p>
-                <p className={style.usP}>POINTS</p>
-                <p className={style.p2Points}>{item.p2Points}</p>
-              </div>
-              {this.state.hasUserPicked&&this.state.isFinalsPicked&&this.state.userLoggedIn? <div id={style.statDiv}>
-                <p className={style.pickP}>Your Pick: <span style={{ color: item.status1 === 'played' ? myOutcomeCol : null }}>{myPick}</span></p>
-                <h3 className={style.statP}>Outcome: {item.status1 === 'played' ? <><span className={style.statS1} style={{ color: myOutcomeCol }}>{myOutcome}</span><span className={style.statS2} style={{ color: myOutcomeCol }}>{myOutcomeSpan}</span></> : <span>N/A</span>}</h3>
-                <p></p>
-              </div> :
-                <div className={style.joinRamDiv}><button className={style.joinRamBtn} onClick={() => this.openTheModal()}>MAKE YOUR PICK</button></div>
-              }
-            </div>
-            {this.state.isAdmin&&item.showChooseWinner?<div className={style.listDivB}>
-              <MdClose className={style.closeIc} onClick={()=>this.closePickWinner(item.id)}/>
-              <div>
-                <p className={style.chooseP}>Choose Winner</p>
-                <div className={item.chosenWinner==='player1'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player1')}>
-                  <TbCheckbox size={20}/>
-                  <p>{item.player1}</p>
-                </div>
-                <div className={item.chosenWinner==='player2'?style.listDivB2C:style.listDivB2} onClick={()=>this.chosenWinner(item.id,'player2')}>
-                  <TbCheckbox size={20}/>
-                  <p>{item.player2}</p>
-                </div>
-                <div className={style.listDivB3}>
-                  <TbCheckbox size={16}/>
-                  {item.chosenWinner&&item.chosenWinner==='player1'?<p>{item.player1}</p>:null}
-                  {item.chosenWinner&&item.chosenWinner==='player2'?<p>{item.player2}</p>:null}
-                  {!item.chosenWinner||item.chosenWinner==='N/A'?<p>N/A</p>:null}
-                  
-                </div>
-                <button onClick={()=>this.submitWinner(item.id,item.chosenWinner)}>Submit</button>
-            </div></div>:null}
-          </div>
-        )
-  })}</div>*/}
+          {this.state.theMenu === 'week1Round' ? <div className={style.divCont}>{this.itemComp(this.state.week1RoundArray,'Week 2 Match')}</div>: null}
+          {this.state.theMenu === 'week2Round' ? <div className={style.divCont}>{this.itemComp(this.state.week2RoundArray,'Week 3 Match')}</div>: null}
+          {this.state.theMenu === 'week3Round' ? <div className={style.divCont}>{this.itemComp(this.state.week3RoundArray,'Week 4 Match')}</div>: null}
+          
         </div>
       </div>
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent={this.state.theCurrentEvent} theItems={itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentSelection} /></div> : null}
