@@ -56,7 +56,7 @@ $theDark: #b2b2b2;
     display: flex;
     align-items: center;
     margin-top: 0px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     //background-color: red;
     flex-wrap: wrap;
 }
@@ -86,6 +86,26 @@ $theDark: #b2b2b2;
     padding: 5px 20px;
     margin-right: 5px;
     margin-bottom: 10px;
+}
+.leaderBDiv{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+   
+}
+.leaderBDiv h3{
+ border-bottom: 2px solid #1ecb97;
+ color: #1ecb97;;
+ font-size: 18px;
+ padding-bottom: 2px;
+// 
+}
+.arrIC{
+    margin-left: 5px;
+    font-size: 20px;
+    color: #1ecb97;
+     //color: #4f57c4;
 }
 .matchesHeadDiv{
     display: flex;
@@ -207,6 +227,11 @@ $theDark: #b2b2b2;
     .container {
         padding: 150px 20px 100px 20px;
     }
+.leaderBDiv h3{
+ font-size: 16px;
+ padding-bottom: 2px;
+// 
+}
 }
 
 @media all and (max-width: 360px) {

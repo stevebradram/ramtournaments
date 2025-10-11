@@ -15,10 +15,11 @@ import localStorage from 'local-storage'
 import firebase from '../components/FirebaseClient'
 import dayjs from 'dayjs';
 import { IoPersonSharp } from "react-icons/io5";
-import { MdInfoOutline, MdCheck } from "react-icons/md";
+import { MdInfoOutline, MdKeyboardDoubleArrowRight  } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { SlOptionsVertical } from "react-icons/sl";
 import { ToastContainer, toast } from 'react-toastify';
+import Router,{useRouter,withRouter} from 'next/router'
 var selectedRamUfcArray = [], selectedNflArray = [], selectedMarchMadnesArray = []
 
 
@@ -206,6 +207,7 @@ class events extends Component {
               </div>
             )
           })}</div>
+          <div className={style.leaderBDiv} onClick={()=>Router.push('/leaderboard')}><h3>GO TO LEADERBOARD</h3><MdKeyboardDoubleArrowRight className={style.arrIC}/></div>
         <div className={style.matchesHeadDiv}>
           {/*this.state.allGames.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')

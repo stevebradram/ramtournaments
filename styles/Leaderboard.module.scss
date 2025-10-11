@@ -8,7 +8,41 @@ $pastEve2:#dc9600;
     min-height: 100vh;
     //min-width: 1200px;
 }
+.theNav{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #a2a2a2;
+    padding-bottom: 10px;
+    width: auto;
+}
 
+.navIC{
+    margin-right: 10px;
+    font-size: 35px;
+    color: $blackish;
+    cursor: pointer;
+}
+.leaderBDiv{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: -10px;
+   
+}
+.leaderBDiv h3{
+ border-bottom: 2px solid #1ecb97;
+ color: #1ecb97;;
+ font-size: 18px;
+ padding-bottom: 2px;
+// 
+}
+.arrIC{
+    margin-left: 5px;
+    font-size: 20px;
+    color: #1ecb97;
+     //color: #4f57c4;
+}
 .menu2Div1 {
     box-sizing: border-box;
     background-color: white;
@@ -63,8 +97,7 @@ $pastEve2:#dc9600;
     font-size: 26px;
     font-weight: 700;
     color: $blackish;
-    border-bottom: 1px solid #a2a2a2;
-    padding-bottom: 10px;
+   
 }
 .titleP span{
     margin-left: 5px;
@@ -343,6 +376,11 @@ $pastEve2:#dc9600;
     .eveP{
         font-size: 26px;
     }
+    .leaderBDiv h3{
+ font-size: 16px;
+ padding-bottom: 2px;
+// 
+}
 }
 
 @media all and (max-width: 360px) {

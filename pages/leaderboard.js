@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from "@/styles/Leaderboard.module.scss";
 import firebase from '../components/FirebaseClient'
-import { MdOutlineFolderOff } from "react-icons/md";
+import { MdOutlineFolderOff,MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,7 +11,9 @@ import TheMarchMadness2 from '../components/LeaderBoards/TheMarchMadness2'
 import NFLRegular from '../components/LeaderBoards/NFLRegular'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import PastUpcomingEvents from '../components/Event/PastUpcomingEvents'
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline,MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import Router,{useRouter,withRouter} from 'next/router'
 var theItems=[]
 /*const importList = [
     { id: 1, RAMName: 'Ruddy Duck', flockName: 'Birderz 4 Lyfe',cumScore:'55.62',round64:'23.80',round32:'28.71',finRoundScore:'4.01',sweet16:'3.56'},
@@ -593,7 +595,8 @@ class leaderboard extends Component {
         return (
           <>
             <div className={styles.container}>
-              <p className={styles.titleP}>Leaderboard {this.state.isAdmin?<span> | Admin</span>:null}</p>
+              <div className={styles.theNav}><MdOutlineKeyboardDoubleArrowLeft  className={styles.navIC} onClick={()=>Router.back()}/>
+              <p className={styles.titleP}>Leaderboard {this.state.isAdmin?<span> | Admin</span>:null}</p></div>
               {this.state.showReel?<div className={styles.matchesHeadDiv} style={{marginTop:20}}>
         <PastUpcomingEvents onClick={this.handleChildClick} allGames={this.state.allGames} theEventKey={this.state.theEventKey} selectHomeEvent={this.state.selectHomeEvent} selectHomeEventId={this.state.selectHomeEventId} from='leadersBoard'/>
         </div>:null}
@@ -623,6 +626,7 @@ class leaderboard extends Component {
           )
           })}
         </div>*/}
+         <div className={styles.leaderBDiv} onClick={()=>Router.push('/myFlocks')}><h3>GO TO MY FLOCKS</h3><MdKeyboardDoubleArrowRight className={styles.arrIC}/></div>
               <p className={styles.eveP}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:this.state.theEventTitle}</span></p>
               {/*this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>

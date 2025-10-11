@@ -257,11 +257,11 @@ class NavBar extends Component {
               {/*<img style={{cursor:'pointer'}}  src={"logo.png"} onClick={()=>this.scrollToDiv('/')}></img>*/}
               <div className={styles.navMain}>
                 <div className={styles.navDiv3}>
-                  <Link href="/" className={styles.navMainLi}>HOME</Link>
+                  {/*<Link href="/" className={styles.navMainLi}>HOME</Link>*/}
                   {/*<Link href="/about" className={styles.navMainLi}>ABOUT US</Link>*/}
                   <Link href="/events" className={styles.navMainLi}>EVENT SCORES</Link>
                   {/*<Link href="/"   className={styles.navMainLi}>HOW TO PLAY</Link>*/}
-                  <Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>
+                  {/*<Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>*/}
                   <Link href="/community" passHref className={styles.navMainLi}>COMMUNITY</Link>
                 </div>
               </div>
