@@ -15,7 +15,7 @@ import localStorage from 'local-storage'
 import firebase from '../components/FirebaseClient'
 import dayjs from 'dayjs';
 import { IoPersonSharp } from "react-icons/io5";
-import { MdInfoOutline, MdKeyboardDoubleArrowRight  } from "react-icons/md";
+import { MdInfoOutline, MdKeyboardDoubleArrowRight,MdCheck  } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { SlOptionsVertical } from "react-icons/sl";
 import { ToastContainer, toast } from 'react-toastify';
