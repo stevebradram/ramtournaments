@@ -11,27 +11,21 @@ var flockTeamName=''
 
 
 class DetailsModal extends Component {
-  state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',upcomingRamUfcDetails:true,
+  state={teamName:'',flockName:'',flockName2:'',teamNameErr:'',flockNameErr:'',
     userId:'',theItems:this.props.theItems,allPicked:true,currentEvent:'',mySelection:[],oldRamName:'',submitedFlockName:'',
-    bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],ramFlockName:'',flockNameNoSpace:'',flockNameModal:false,openNewFlockModal:true,
+    bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockName:'',flockNameNoSpace:'',flockNameModal:false,openNewFlockModal:true,
     myEmail:'',myPhoneNo:''}
   componentDidMount=()=>{
     //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
     this.props.hideModal
-    var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
-    ////console.log('this.props.currentSelection 5555',this.props.currentSelection)
-    ////console.log('userId 55555555555',userId,upcomingRamUfcDetails)
-    
+   
     if(this.props.flockTeamName!==false){
       ////console.log('this.props.flockTeamName yoooooooooooooh')
       flockTeamName=this.props.flockTeamName.split('::')
       this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
-    this.setState({currentEvent:this.props.currentEvent,ramFlockNames:[]})
-    if (upcomingRamUfcDetails === 'true') { this.setState({upcomingRamUfcDetails:true,userId:userId})}
-    else{this.setState({upcomingRamUfcDetails:false})}
-
+    this.setState({currentEvent:this.props.currentEvent})
     this.getAuth()
   }
   inputChange = async (e) => {
@@ -117,10 +111,6 @@ class DetailsModal extends Component {
     this.buttonClickStat()
     var mySelection=[]
     ////console.log('this.state.theItems',this.state.theItems)
-    //return
-    ////console.log('the details',this.state.theItems)
-    ////console.log('the user id',this.state.userId)
-
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
     var i=0,theAmount=[]
     this.state.theItems.map((item,index)=>{
@@ -155,25 +145,9 @@ class DetailsModal extends Component {
         this.checkAuth('submitDetails')
  
         })
-        ////console.log('tumemalizaaaaaa',this.state.mySelection)
-        //return
-       
       }
       
     })
-    /*////console.log('this.state.userId',this.state.userId)
-    if(!this.state.userId)return
-    ////console.log('looooooooobo')
-    //return
-    var userInfoDb = firebase.database().ref('users').child(this.state.userId)
-    
-     userInfoDb.child('teamName').set(this.state.teamName)
-     userInfoDb.child('flockName').set(this.state.flockName)
-     .then(det=>{
-      ////console.log('the det ttttttttttttt',det)
-     })
-     localStorage.set('upcomingRamUfcDetails', 'true');
-     this.setState({upcomingRamUfcDetails:true})*/
    }
    getAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -342,8 +316,6 @@ class DetailsModal extends Component {
         Router.push('/reload')        
       }
     })
-    // localStorage.set('upcomingRamUfcDetails', 'true');
-    // this.setState({upcomingRamUfcDetails:true})
    }
    doNothing=(event)=>{
     event.preventDefault()

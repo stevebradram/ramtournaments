@@ -5,7 +5,7 @@ var showRouter=true
 const Layout = ({children})=>{
     const router = useRouter();
     var pathName = router.pathname
-    if (pathName === '/loggin') {
+    if (pathName === '/qgtdfreojlfghrted') {
         showRouter = false
     } else {
         showRouter = true

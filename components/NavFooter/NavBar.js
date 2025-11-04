@@ -258,11 +258,11 @@ class NavBar extends Component {
               <div className={styles.navMain}>
                 <div className={styles.navDiv3}>
                   <Link href="/" className={styles.navMainLi}>HOME</Link>
-                  <Link href="/about" className={styles.navMainLi}>ABOUT US</Link>
+                  {/*<Link href="/about" className={styles.navMainLi}>ABOUT US</Link>*/}
                   <Link href="/events" className={styles.navMainLi}>EVENT SCORES</Link>
-                  {/*<Link href="/"   className={styles.navMainLi}>HOW TO PLAY</Link>*/}
-                  <Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>
-                  <Link href="/community2" passHref className={styles.navMainLi}>COMMUNITY</Link>
+                  {/*<Link href="/"   className={styles.navMainLi}>HOW TO PLAY</Link>
+                  <Link href="/leaderboard" className={styles.navMainLi}>LEADERBOARD</Link>*/}
+                  <Link href="/community" passHref className={styles.navMainLi}>COMMUNITY</Link>
                 </div>
               </div>
               <div className={styles.logDiv}>
@@ -287,9 +287,9 @@ class NavBar extends Component {
           </div>
           {this.state.openAccDiv ? <div className={styles.optionsDiv}>
             <Link href="/" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>HOME</Link>
-            <Link href="/about" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>ABOUT US</Link>
+            {/*<Link href="/about" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>ABOUT US</Link>*/}
             <Link href="/events" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>EVENT SCORES</Link>
-            <Link href="/leaderboard" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>LEADERBOARD</Link>
+           {/*} <Link href="/leaderboard" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>LEADERBOARD</Link>*/}
             <Link href="/community" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>COMMUNITY</Link>
             {/*<Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv2}>LOG IN</Link>
                 <Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv3}>SIGN UP</Link>*/}

@@ -39,6 +39,7 @@ class Reel extends Component {
         this.checkAuth()
         this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId,theItemsNo:this.props.allGames.length})
        // console.log('this.props.allGames.length',this.props.allGames.length)
+       console.log('this.props.allGames zuuuuuuuuuuuu',this.props.allGames)
       }
       componentWillUnmount() {
         window.removeEventListener("resize", this.updateWindowDimensions);
@@ -97,12 +98,14 @@ class Reel extends Component {
            }
      }})}
     
-     loadOtherFights=(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,endTime,stopEdits)=>{
+     loadOtherEvent=(theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)=>{
       console.log('the iiittttttt',stopEdits)
+      console.log('the iiittttttt',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)
+      return
       var nowDate=new Date().getTime(),isEventExpired=false
       if(nowDate>(endTime+86400000)){isEventExpired=true}
-          else{this.setState({isEventExpired:false})}
-      this.props.onClick(this.props.from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime,stopEdits)
+          //else{this.setState({isEventExpired:false})}
+      this.props.onClick(theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired)
       this.setState({theEventKey})
      }
      chooseHomeEvent=(event,item,id)=>{
@@ -236,7 +239,7 @@ class Reel extends Component {
                  return(
                        <div  className={style.titleDivCont} key={item.id}> 
                          <div className={style.testDiv}>
-                      <div className={style.bodyLowerCard} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherFights(item.id,item.title,item.fetchResultsTimeUpdate,item.getEventsTimeUpdate,item.oddsTimeUpdate,item.time,item.sportType,item.currentSelection,item.endTime,item.stopEdits)}>
+                      <div className={style.bodyLowerCard} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.time,item.sportType,item.currentSelection,item.endTime)}>
                       <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>

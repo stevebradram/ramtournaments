@@ -64,10 +64,8 @@ class leaderboard extends Component {
        }
        this.setState({userId,userLoggedIn:true})
        if(userId){this.checkUpcomingPastGames(userId)}
-       
      }else{
       this.setState({userLoggedIn:false})
-      //this.getGamesInfo()
       this.checkUpcomingPastGames(userId)
      }
    })
@@ -459,7 +457,7 @@ class leaderboard extends Component {
       this.setState({ramsInMyFlockArr:this.state.round2Arr})
     }
   }
-  handleChildClick = (from,theEventKey,theEventTitle,fetchResultsTimeUpdate,getEventsTimeUpdate,oddsTimeUpdate,theTime,sportType,currentSelection,isEventExpired,endTime) => {
+  handleChildClick = (theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired) => {
    
     this.loadOtherEvents(sportType,theEventKey,theTime,theEventTitle,currentSelection,isEventExpired)
     this.setState({ count: this.state.count + 1})
