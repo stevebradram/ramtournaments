@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './NavBar.module.scss'
 import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose } from "react-icons/md";
 import { FaSearch, FaHome, FaCarAlt, FaFacebook, FaInstagram, FaTwitterSquare, FaYoutubeSquare, FaBars } from "react-icons/fa";
+import { IoPersonCircle } from "react-icons/io5";
 import { AiFillMessage } from "react-icons/ai";
 import Router, { withRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
@@ -271,6 +272,9 @@ class NavBar extends Component {
                   <p>1</p>
                  <AiFillMessage className={styles.mesoIc}/>
                 </div></div> :null}
+                <div className={styles.logDmesoDiv2} style={{marginRight:10,cursor:'pointer'}} onClick={()=>Router.push('/profile')}>
+                 <IoPersonCircle size={40}  className={styles.mesoIc} style={{color:'#9f9fb6ff'}}/>
+                </div>
                 {/*<Link href="/" className={styles.talkDiv}>LOG IN</Link>
                 <Link href="/" className={styles.talkDiv1}>SIGN UP</Link>*/}
                 {this.state.isLogged ? <button className={styles.logOutBtn} onClick={() =>this.signOut()}>LOG OUT</button> :

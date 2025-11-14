@@ -39,6 +39,7 @@ class leaderboard extends Component {
     super();
     this.tableRef = React.createRef(null);
     this.child = React.createRef();
+    this.nflRegularRef = React.createRef(null);  
  }
   state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,deleteModal:false,
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true,loadMadness1:false,loadMadness2:false}
@@ -75,16 +76,16 @@ class leaderboard extends Component {
   var theUsers=[],i=0
   var userInfoDb=firebase.database().ref('/users/')//.orderByChild('userData')
   await  userInfoDb.once('value',dataSnapshot=>{
-    //console.log('theCountttt',dataSnapshot.val())
+    ////console.log('theCountttt',dataSnapshot.val())
     var theCount=dataSnapshot.numChildren()
     var i=0
-    //console.log('theCountttt',theCount)
+    ////console.log('theCountttt',theCount)
     dataSnapshot.forEach((data) => {
       i++
-      //console.log('users Data',data.val().userData)
+      ////console.log('users Data',data.val().userData)
       theUsers.push(data.val().userData)
       if(theCount===i){
-        //console.log('the users',theUsers)
+        ////console.log('the users',theUsers)
       }
     })
   })
@@ -108,12 +109,12 @@ class leaderboard extends Component {
     //currentSelection='quarterFinals'  
     //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
     this.setState({theEventTitle, theEventKey, theTime,endTime,sportType,currentSelection},()=>{
-      //console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
+      ////console.log('items',theEventTitle,theEventKey,theTime,endTime,sportType)
       this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
       
       
     })
-    //console.log('theData000000',theData)
+    ////console.log('theData000000',theData)
   })
 }
  checkUpcomingPastGames=async(userId)=>{
@@ -122,12 +123,12 @@ class leaderboard extends Component {
   var userInfoDb=firebase.database().ref('/theEvents/eventsIds')
   var i=0,upcomingGames=[],pastGames=[],allGames=[]
   var nowDate= await new Date().getTime()
- // //console.log('nowDate',nowDate)
+ // ////console.log('nowDate',nowDate)
   //return
   await  userInfoDb.once('value',dataSnapshot=>{
     var theCount=dataSnapshot.numChildren()
     var i=0
-    ////console.log('theCountttt',theCount)
+    //////console.log('theCountttt',theCount)
     dataSnapshot.forEach((data) => {
       i++
       var pastG={},upcomingG={}
@@ -137,12 +138,13 @@ class leaderboard extends Component {
       var sportType=data.val().sportType
       var endTime=data.val().endTime
       var currentSelection = data.val().currentSelection
+     
       //currentSelection='quarterFinals'
-      ////console.log('value',time,dataSnapshot.val())
-      ////console.log('nowDate',nowDate,'time',time,'title',title)
+      //////console.log('value',time,dataSnapshot.val())
+      //////console.log('nowDate',nowDate,'time',time,'title',title)
       //var showToAllUsers=true
      // if((nowDate+(86400000*90))<time){showToAllUsers=false}
-      var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,currentSelection:currentSelection}
+      var theItem={id:key,time:time,title:title,sportType:sportType,endTime:endTime,currentSelection:currentSelection,}
      
       
       allGames.push(theItem)
@@ -154,45 +156,27 @@ class leaderboard extends Component {
         var theEventTitle='',theEventKey='',sportType='',theTime=''
         if(allGames.length>0){
           allGames=allGames.sort(function(a, b){return b.endTime - a.endTime});
-          ////console.log('teeeeeee',allGames)
+          //////console.log('teeeeeee',allGames)
           theEventTitle=allGames[0]['title'];sportType=allGames[0]['sportType'],theEventKey=allGames[0]['id'],theTime=allGames[0]['time'],currentSelection=allGames[0]['currentSelection']
           var firstEndTime=allGames[0]['endTime']
           if(nowDate>(firstEndTime+86400000)){this.setState({isEventExpired:true})}
           else{this.setState({isEventExpired:false})}
+          console.log('theEventTitle 00',theEventTitle)
+          console.log('theEventKey 00',theEventKey)
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
-          this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
-          //console.log('sportType555555555',sportType)
+         // this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
+          ////console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
           })
         }
         
      
       }
-      
-        /*if(nowDate>time){
-          pastG={id:key,time:time,title:title,sportType:sportType}
-          pastGames.push(pastG)
-        }
-        if(nowDate<time){
-          upcomingG={id:key,time:time,title:title,sportType:sportType}
-          upcomingGames.push(upcomingG)
-        }*/
-        ////console.log('upcomingGames',upcomingGames)
-        ////console.log('pastGames',pastGames)
     });
-    })
-    /*var theEventTitle='',theEventKey='',sportType=''
-    if(pastGames.length>0){pastGames=pastGames.sort(function(a, b){return a.time - b.time});}
-    if(upcomingGames.length>0){upcomingGames=upcomingGames.sort(function(a, b){return a.time - b.time});theEventTitle=upcomingGames[0]['title'];sportType=upcomingGames[0]['sportType'],theEventKey=upcomingGames[0]['id']}
-    ////console.log('theEventKey',sportType,theEventKey,theEventTitle)
-    await this.setState({pastGames,upcomingGames,theEventTitle,theEventKey,sportType},()=>{
-      this.getScoreBoardData(sportType,theEventKey)
-      //this.getNullScoreBoardData(sportType,theEventKey)
-    })*/
-   
+    })  
 } 
    getNullScoreBoardData=(sportType,theEventKey)=>{
-    ////console.log('At null provider 005',sportType,theEventKey)
+    //////console.log('At null provider 005',sportType,theEventKey)
     var theAllData=[],i=0
     var dbLink="/userBets/"+sportType+'/'+theEventKey+'/' 
     var scoreBoardDb=firebase.database().ref(dbLink)
@@ -208,7 +192,7 @@ class leaderboard extends Component {
       var theId=data.key
       var theData=data.val()
       
-      ////console.log('theId',theId,'theData',theData)
+      //////console.log('theId',theId,'theData',theData)
       var userInfoDb=firebase.database().ref('/users/').child(theId).child('/ramData/events/'+sportType+'/'+theEventKey+'/details/')
       var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
       var theDet={}
@@ -219,7 +203,7 @@ class leaderboard extends Component {
         theDet['email']=theD.email
       })}
       userInfoDb.once('value',dataSnapshot=>{
-        ////console.log('here at nulll',scoreBoardNo,i,dataSnapshot.val())
+        //////console.log('here at nulll',scoreBoardNo,i,dataSnapshot.val())
        if(!dataSnapshot.exists())return
           var data=dataSnapshot.val()
            //theUserData={id:theId,flockName:data.flockName,teamName:data.teamName,bestPossibleScore:data.bestPossibleScore,currentScore:0.00}
@@ -244,10 +228,17 @@ class leaderboard extends Component {
             theDet['conferenceChampionshipScore']=0.00
             theDet['currentSelection']=data.currentPick
           }
+           if(sportType==="NFLRegular"){
+            theDet['week1RoundScore']=0.00
+            theDet['week2RoundScore']=0.00
+            theDet['week3RoundScore']=0.00
+            theDet['week4RoundScore']=0.00
+            theDet['currentSelection']='week1Round'
+          }
           theAllData.push(theDet)
           if(scoreBoardNo===i){
             this.setState({nullData:theAllData,showProgressBar:false})
-           // //console.log('theAllData 0005',theAllData)
+           console.log('theAllData 0005',this.state.isThereNullData,theAllData)
           }
         })
        
@@ -262,13 +253,14 @@ class leaderboard extends Component {
         return false;
 }
   getScoreBoardData=(sportType,theEventKey,theTime,currentSelection)=>{
-    //console.log('dddddata',sportType,theEventKey,currentSelection)
+    console.log('dddddata 896547',sportType,theEventKey,currentSelection)
+    //return
     if(sportType==='NCAAB'){ 
       this.setState({dataAvailable:true,eventCount:this.state.eventCount+1});
       var checkEven=this.isEven(this.state.eventCount)
       if(checkEven){this.setState({loadMadness1:true,loadMadness2:false})}
       else{this.setState({loadMadness1:false,loadMadness2:true})}
-      //console.log('checkEven',checkEven)
+      ////console.log('checkEven',checkEven)
       return}
      
       //return(<TheMarchMadness setClick={click => this.clickChild = click} theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>)
@@ -276,7 +268,7 @@ class leaderboard extends Component {
       
     if(!this.state.userLoggedIn)return
     this.setState({eventStartTime:theTime,sportType})
-    //console.log('curentttttttt 500000',sportType,theEventKey,theTime)
+    ////console.log('curentttttttt 500000',sportType,theEventKey,theTime)
     var dbLink=''
     if(sportType==='NCAAB'){
       if(currentSelection==='round1'){
@@ -294,41 +286,41 @@ class leaderboard extends Component {
     var scoreBoardDb=firebase.database().ref(dbLink)
    var data3=[]
     scoreBoardDb.once('value',dataSnapshot=>{
-      //console.log('dataSnapshot',dataSnapshot.exists())
+      ////console.log('dataSnapshot',dataSnapshot.exists())
       if(!dataSnapshot.val()){
-        //console.log('hapa hakuna data 22222')
+        ////console.log('hapa hakuna data 22222')
         
         var nowMillis=new Date().getTime()
         if((theTime-nowMillis)<1200000||this.state.isAdmin){
-          //console.log('hapa hakuna data 55555555')
+          ////console.log('hapa hakuna data 55555555')
           this.getNullScoreBoardData(sportType,theEventKey)
         }else{
-          //console.log('hapa hakuna data 666666666')
+          ////console.log('hapa hakuna data 666666666')
           this.setState({dataAvailable:false,isTherNormalData:false,isThereNullData:false})
           this.notify('No data to show at the moment')
         }
       }else{
-        //console.log('hapa hakuna data 333333')
+        ////console.log('hapa hakuna data 333333')
       this.setState({dataAvailable:true,isTherNormalData:true,isThereNullData:false})
       var i=0,allData=[]
       var scoreBoardNo=dataSnapshot.numChildren()
-      ////console.log('the scoreBoardNo',scoreBoardNo)
+      //////console.log('the scoreBoardNo',scoreBoardNo)
       dataSnapshot.forEach((data,index) => {
         i++
         var theId=data.key
         var theData=data.val()
         if(!theId)return
-       ////console.log('the iddddd',theId)
-      // //console.log('the theData',theData)
+       //////console.log('the iddddd',theId)
+      // ////console.log('the theData',theData)
         var theDet={}
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         if(this.state.isAdmin){
         userInfoDb2.once('value',dataSnapshot=>{
-          ////console.log('theD.email',theId)
+          //////console.log('theD.email',theId)
           
           var theD=dataSnapshot.val()
           theDet['phone']=theD.phoneNo
-         // //console.log('theD.email',theD.email)
+         // ////console.log('theD.email',theD.email)
           //if(theD.phoneNo!==null){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
           //if(theD.email!==null){theDet['email']=theD.phoneNo}else{theDet['email']='N/A'}
           theDet['email']=theD.email
@@ -337,7 +329,7 @@ class leaderboard extends Component {
         userInfoDb.once('value',dataSnapshot=>{
          
             var userBetData=dataSnapshot.val()
-         //  console.log('dataSnapshot.val()',dataSnapshot.val())
+         //  //console.log('dataSnapshot.val()',dataSnapshot.val())
          //  return
           theDet['id']=theId
           theDet['flockName']=userBetData.flockName
@@ -353,7 +345,7 @@ class leaderboard extends Component {
             theDet['round2BPS']=userBetData.round2BPS
             theDet['finalRoundBPS']=userBetData.finalRoundBPS
           }
-          if(sportType==="NCAAF"){
+          else if(sportType==="NCAAF"){
             var theCurrentScore=Number(userBetData.firstRoundScore)+Number(userBetData.quarterFinalsScore)+Number(userBetData.semiFinalsScore)+Number(userBetData.finalsScore)
             theCurrentScore=theCurrentScore.toFixed(2)
             theDet['finalsScore']=userBetData.finalsScore
@@ -372,7 +364,20 @@ class leaderboard extends Component {
             theDet['conferenceChampionshipScore']=userBetData.conferenceChampionshipScore
             theDet['currentScore']=theCurrentScore,
             theDet['currentSelection']=userBetData.currentPick
-          }else{
+          }else if(sportType==="NFLRegular5"){
+            var theCurrentScore=Number(userBetData.week1RoundScore||0)+Number(userBetData.week2RoundScore||0)+Number(userBetData.week3RoundScore||0)+Number(userBetData.week4RoundScore||0)
+            theCurrentScore=theCurrentScore.toFixed(2)
+            theDet['week1RoundScore']=userBetData.week1RoundScore
+            theDet['week2RoundScore']=userBetData.week2RoundScore
+            theDet['week3RoundScore']=userBetData.week3RoundScore
+            theDet['week4RoundScore']=userBetData.week4RoundScore
+            theDet['week1RoundBPS']=userBetData.week1RoundBPS,
+            theDet['week2RoundBPS']=userBetData.week2RoundBPS,
+            theDet['week3RoundBPS']=userBetData.week3RoundBPS,
+            theDet['week4RoundBPS']=userBetData.week4RoundBPS,
+            theDet['currentSelection']='week1Round'
+          }
+          else{
             theDet['currentScore']=theData
           }
          
@@ -381,15 +386,16 @@ class leaderboard extends Component {
           allData.push(theDet)
           this.setState({theItems:allData})
           
-          //console.log('all data checked',allData)
+          console.log('all data checked 222222',data3)
+          console.log('all data checked 33333',allData)
         })
         
         if(i===scoreBoardNo){
           
-         // //console.log('all data checked',allData)
+         // ////console.log('all data checked',allData)
           this.setState({showProgressBar:false})
-         // //console.log('all data',allData)
-         // //console.log('hureeeeeeeeeeeeeeeeeeeee')
+         // ////console.log('all data',allData)
+         // ////console.log('hureeeeeeeeeeeeeeeeeeeee')
         }
       })}
     })
@@ -411,7 +417,8 @@ class leaderboard extends Component {
   }
 
   loadOtherEvents=async(sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)=>{
-    //console.log('hapaaaa',sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)
+    //return
+    console.log('hapaaaa 0222222',sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)
    // this.setState({sportType})
     //return
     this.showProgressBar()
@@ -422,8 +429,14 @@ class leaderboard extends Component {
     if(!this.state.userLoggedIn){
       this.notify('Please Log In to continue')
     }else{
+      //console.log('hapa tuuuuuu',sportType,theEventKey,theTime,theEventTitle,currentSelection,isExpired)
       this.setState({theEventKey,theEventTitle,currentSelection,isEventExpired:isExpired,sportType})
       this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
+
+      if(sportType!=='NFLRegular')return
+      if (this.nflRegularRef.current) {
+      this.nflRegularRef.current.runCustomLogic(theEventKey,sportType,'week1Round'); // Call child's method
+    }
     }
   }
   notify=(message)=>{
@@ -443,22 +456,10 @@ class leaderboard extends Component {
       () => this.setState({showProgressBar:false}), 
       2000)
   }
-  getCurrentRound=(round)=>{
-    //console.log('roundddd',round)
-    this.setState({currentSelection:round})
-    return
-    if(round==='round1'){
-      this.setState({ramsInMyFlockArr:this.state.round1Arr})
-    }
-    if(round==='round2'){
-      this.setState({ramsInMyFlockArr:this.state.round2Arr})
-    }
-    if(round==='finalRound'){
-      this.setState({ramsInMyFlockArr:this.state.round2Arr})
-    }
-  }
+
   handleChildClick = (theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired) => {
-   
+   //console.log('theItems joooooj',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired)
+   if(sportType==='NFLRegular'){currentSelection='week1Round'}
     this.loadOtherEvents(sportType,theEventKey,theTime,theEventTitle,currentSelection,isEventExpired)
     this.setState({ count: this.state.count + 1})
   };
@@ -466,7 +467,7 @@ class leaderboard extends Component {
     this.setState({ count: this.state.count + 1})
   };
   itemComponent=(theItems)=>{
-   // //console.log('theItems rrrr',theItems)
+   // ////console.log('theItems rrrr',theItems)
     var BSPTitle=''
     if(this.state.sportType==='NCAAB'&&this.state.currentSelection==='round1'){
       theItems=theItems.sort((a, b) => b.round1Score - a.round1Score)
@@ -526,7 +527,7 @@ class leaderboard extends Component {
         </tr>
         {theItems.map((item, index) => {
           var theScore='',theBPS=''
-         // //console.log('item66556',item)
+         // ////console.log('item66556',item)
           if(this.state.currentSelection==='round1'){theScore=item.round1Score,item.round1BPS?theBPS=item.round1BPS:theBPS=0}
           if(this.state.currentSelection==='round2'){theScore=item.round2Score,item.round2BPS?theBPS=item.round2BPS:theBPS=0}
           if(this.state.currentSelection==='finalRound'){theScore=item.finalRoundScore,item.finalRoundBPS?theBPS=item.finalRoundBPS:theBPS=0}
@@ -577,13 +578,20 @@ class leaderboard extends Component {
   }
 
     render() {
-      //console.log('this.state.sportType',this.state.sportType)
-    var titleToShow1=this.state.theEventTitle.replace(/  +/g, ' ')
-    var titleToShow='NFL Season'
-    console.log('this.state.theEventTitle',titleToShow1)
-    if(this.state.theEventTitle){
-    titleToShow1=titleToShow1.split(' ')
-    titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
+    //console.log('this.state.theEventTitle',this.state.theEventKey)
+    //  console.log('theEventTitle 00',this.state.theEventTitle)
+     // console.log('theEventKey 00',this.state.theEventKey)
+    var titleToShow=this.state.theEventTitle.replace(/  +/g, ' ')
+    if(this.state.sportType==='NFLRegular'){
+      var theWeek=''
+      if(this.state.theEventTitle==='NFL REGULAR  2025'){
+        titleToShow='NFL 2025 Wk1-Wk3'
+      }else{
+        titleToShow=titleToShow.split(' ')
+    if(titleToShow[3]){theWeek=' '+titleToShow[3]}
+      titleToShow=titleToShow[0]+' '+titleToShow[2]+' '+theWeek}
+     }
+
       var theItems=[]
       var noData=false 
       var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore    )
@@ -603,7 +611,7 @@ class leaderboard extends Component {
          this.state.allGames.map((item,index)=>{
           var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
           var todayInMillis=new Date().getTime()
-          ////console.log('todayInMillis',item)
+          //////console.log('todayInMillis',item)
           var theColor='#292f51',timing='Active Event',isExpired=false
           if(todayInMillis>(item.endTime+86400000)){
              theColor='#919191'
@@ -625,7 +633,7 @@ class leaderboard extends Component {
           })}
         </div>*/}
          <div className={styles.leaderBDiv} onClick={()=>Router.push('/myFlocks')}><h3>GO TO MY FLOCKS</h3><MdKeyboardDoubleArrowRight className={styles.arrIC}/></div>
-              <p className={styles.eveP}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:this.state.theEventTitle}</span></p>
+              <p className={styles.eveP}>Event: <span>{this.state.sportType==='NFLRegular'?titleToShow:titleToShow}</span></p>
               {/*this.state.sportType==='NCAAB'?<div className={styles.eve2Div}>
             <p id={this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>Round 1</p>
             <p id={this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>Round 2</p>
@@ -652,7 +660,7 @@ class leaderboard extends Component {
    </div>}
       </div>:this.state.sportType!=='NFLRegular'?<>{this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
         <TheMarchMadness2  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}</>
-        :<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count}/></div>}
+        :<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count} ref={this.nflRegularRef}/></div>}
          {this.state.deleteModal?<div className={styles.modal}>
                 <div className={styles.delModal}>
                   <p className={styles.delModalP1}>Confirm Delete?</p>

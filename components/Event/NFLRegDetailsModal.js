@@ -17,7 +17,9 @@ class DetailsModal extends Component {
     myEmail:'',myPhoneNo:''}
   componentDidMount=()=>{
     //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
-    this.props.hideModal
+    //console.log('this.props.currentSelection',this.props.currentSelection)
+   // return
+    //this.props.hideModal
     var userId = localStorage.get('userId');
    
     if(this.props.flockTeamName!==false){
@@ -208,10 +210,13 @@ class DetailsModal extends Component {
         currentRank:false, 
         week1RoundRank:false, 
         week2RoundRank:false, 
-        week3RoundRank:false, 
+        week3RoundRank:false,
+        week4RoundRank:false, 
         currentPick:this.props.currentSelection,
+        week1RoundScore:'0',
         week2RoundScore:'0',
         week3RoundScore:'0',
+        week4RoundScore:'0',
         [thePick]:true
         
       }

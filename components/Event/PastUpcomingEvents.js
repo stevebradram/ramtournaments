@@ -99,9 +99,10 @@ class Reel extends Component {
      }})}
     
      loadOtherEvent=(theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)=>{
-      console.log('the iiittttttt',stopEdits)
-      console.log('the iiittttttt',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)
-      return
+      
+      //console.log('the iiittttttt juuuuuuu',stopEdits)
+      console.log('the iiittttttt 22222222222',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)
+     // return
       var nowDate=new Date().getTime(),isEventExpired=false
       if(nowDate>(endTime+86400000)){isEventExpired=true}
           //else{this.setState({isEventExpired:false})}
@@ -232,10 +233,9 @@ class Reel extends Component {
                   theColor='#919191'
                   timing='Past Event'
                 }
-                if(this.state.theEventKey===item.id){
+                if(this.props.theEventKey===item.id){
                   theColor='#CB1E31'
                 }
-              //  console.log('this.state.theEventKey',this.state.theEventKey)
                  return(
                        <div  className={style.titleDivCont} key={item.id}> 
                          <div className={style.testDiv}>

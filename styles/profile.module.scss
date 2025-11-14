@@ -1,0 +1,81 @@
+$redColor:#CB1E31;
+$orangeColor:#f93c7b;
+$blackish:#292f51;
+.container{
+    height: 100vh;
+     padding-top: 100px;
+    padding: 200px 50px 0px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+
+}
+#container2{
+    background-color: white;
+    width: 400px;
+    height: 430px;
+    overflow: hidden;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    border-radius:20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.editP{
+    width: 360px;
+    text-align: center;
+    color:#949494;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border: 1px solid #949494;
+}
+.deleteP{
+    background-color:$redColor;
+    width: 360px;
+    text-align: center;
+    color: #fff;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+}
+.warningP{
+    margin-top: 10px;
+    font-style: italic;
+     color:$blackish
+}
+.imageDiv{
+    height: 100px;
+    width: 100px;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icProfile{
+    font-size: 98px;
+    color: #eee;
+}
+.nameP{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color:$blackish
+}
+.emailP{
+    margin-bottom: 20px;
+     color:$blackish
+}

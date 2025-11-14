@@ -218,67 +218,6 @@ class DetailsModal extends Component {
   })
   }
     })
-
-     //'http://localhost:3000/invitetojoin~UFC312Event~NairobiKnockoutFlock'
-    
-
-     return
-     /* if(this.state.leagueName!==theDetails[0]||this.state.flockName!==theDetails[1]){
-      var theTeamName=this.state.teamName.replace(/ /g,"_")
-      var theFlockName=this.state.flockName.replace(/ /g,"_")
-      var theOldTeamName=theDetails[0].replace(/ /g,"_")
-        console.log('the verdict something has changed')
-        uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
-          console.log('is thereee db',dataSnapshot)
-          var theInfo=dataSnapshot.val()
-          console.log('is thereee',theInfo)
-          if(!theInfo){
-            uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
-            uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
-            gamesDataRef.child('flockName').set(this.state.flockName)
-            gamesDataRef.child('teamName').set(this.state.teamName,(error) => {
-              if (error) {
-                console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
-              } else {
-                console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
-                uniqueRamNamesRef.child(theOldTeamName).set(null);
-                if(this.state.profilePhoto!==theDetails[2]){
-                  console.log('UPLOADING PHOTO')
-                  this.savePhoto()
-                }else{
-                  Router.push('/reload')
-                }        
-              }
-            })
-          }else{
-            if(theInfo===this.state.userId){
-              uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
-              uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
-              gamesDataRef.child('flockName').set(this.state.flockName)
-              gamesDataRef.child('teamName').set(this.state.teamName,(error) => {
-                if (error) {
-                  console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
-                } else {
-                  console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
-                  uniqueRamNamesRef.child(theOldTeamName).set(null);
-                  if(this.state.profilePhoto!==theDetails[2]){
-                    console.log('UPLOADING PHOTO')
-                    this.savePhoto()
-                  }else{
-                    Router.push('/reload')
-                  }        
-                }
-              })
-            }else{
-              this.notify('RAM Name already taken')
-              this.setState({leagueNameErr:'RAM Name already taken, please try another one'})
-              console.log('change that shit')
-            }
-           
-          }
-
-       })
-      }*/
    }
    doNothing=(event)=>{
     //event.preventDefault()
@@ -367,7 +306,7 @@ closeModal=()=>{
                     </div>
                     <p className={styles.pErr}>{this.state.flockNameErr}</p>
                     <div className={styles.theTextsDiv}>{!this.state.createdEvent?<p className={styles.whyP}>Why? Creating a Flock will activate your “My Leagues” page for engaging in the world’s best sporting events with your coworkers, friends, and/or family.</p>:<p className={styles.whyP} style={{color:'black'}}>To add members to your Flock, simply copy/paste this link via text or email with your coworkers, friends, and/or family:</p>}
-                    {!this.state.createdEvent?<p id={styles.nextP}>Next Steps? After you click submit, you can copy and share your Join My Flock link via a group text or email to build your league.</p>:<p id={styles.nextP} style={{color:'blue',cursor:'pointer'}} onClick={() => this.copyLink()}>{this.state.theLink}</p>}</div>
+                    {!this.state.createdEvent?<p id={styles.nextP}>Next Steps? After you click submit, you can copy and share your Join My Flock link via a group text or email to build your league.</p>:<p id={styles.nextP} style={{color:'#4972faff',cursor:'pointer'}} onClick={() => this.copyLink()}>{this.state.theLink}</p>}</div>
                     {!this.state.createdEvent?<button className={styles.logInBtn} onClick={()=>this.state.buttonClick?this.submitDetails():null}>SUBMIT</button>
                     : <button className={styles.logInBtn} onClick={()=>this.closeModal()}>CLOSE</button>}
                 </div>
