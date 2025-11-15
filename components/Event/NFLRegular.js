@@ -1448,7 +1448,7 @@ class NCAA extends Component {
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
       ////console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
-      ////console.log('theLink', theLink, theItems)
+      ////console.log('theLink', theLink, theItems)ODDSA
       ////console.log('this.state.shortArr 006', shortArr)
       // return
       await axios.get("https://theramtournament.com/getSingleNFLRegularResults?term=" + theQuery)

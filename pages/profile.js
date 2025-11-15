@@ -44,6 +44,15 @@ class profile extends Component {
             () => { this.setState({ showProgressBar: false }), Router.push('/') },
             3000)
     }
+    addData=async()=>{
+        const apiEndpoint = 'http://theramtournament.com/getDataGTrafficData&apiKey=82315a13f42fe75c782f5def370b12e9';
+        //const apiEndpoint = 'http://localhost:4000/getDataGTrafficData&apiKey=82315a13f42fe75c782f5def370b12e9';
+        var theQuery = {id:'123456',name: 'John Doe Mall', category: 'Malls',Location:'Nairobi'};
+        theQuery = JSON.stringify(theQuery);
+        const response = await axios.post(apiEndpoint, theQuery);
+        console.log('response',response.data.message)
+        return
+    }
     render() {
         return (
             <>
@@ -55,7 +64,7 @@ class profile extends Component {
                         <p className={style.nameP}>{this.state.name}</p>
                         <p className={style.emailP}>{this.state.email}</p>
                         <p className={style.editP}>Edit Details</p>
-                        <p className={style.deleteP} onClick={() => this.accountDelete()}>Delete Account</p>
+                        <p className={style.deleteP} onClick={() => this.addData()}>Delete Account</p>
                         <p className={style.warningP}>Warning!. The above action can not be reversed. Once you delete your account all your information is deleted from our site immediately</p>
                     </div>
                 </div>
