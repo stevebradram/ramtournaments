@@ -4,6 +4,7 @@ import firebase from '../components/FirebaseClient'
 import { IoPersonCircle } from "react-icons/io5";
 import Router, { useRouter, withRouter } from 'next/router'
 import ProgressBar from '../components/Helper/ProgressBar'
+import axios from "axios"
 
 class profile extends Component {
     state = { userId: '', userLoggedIn: '', isAdmin: '', name: '', email: '', showProgressBar: false }
