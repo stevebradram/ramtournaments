@@ -125,7 +125,7 @@ class events extends Component {
         if (theCount === i) {
           var theEventTitle = '', theEventKey = '', sportType = '', theTime = '', endTime = 0
           if (allGames.length > 0) {
-            console.log('rrrrrrr', this.state.selectedId, allGames)
+            console.log('rrrrrrr checkForAllEvents', this.state.selectedId, allGames)
             var l = 0
             allGames = allGames.sort(function (a, b) { return b.time - a.time });
             allGames.forEach((item, i) => {
