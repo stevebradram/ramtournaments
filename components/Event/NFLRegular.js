@@ -23,6 +23,7 @@ import axios from "axios"
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import Select from 'react-select'
+import { confirm } from '../Helper/confirmDialog';
 import index from '@/pages';
 const options = [
   { "value": 1, "label": "Week 1" },
@@ -114,7 +115,7 @@ class NCAA extends Component {
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
     weekSelect: [{ id: 'WEEK 1', text: 'WEEK 2' }, { id: 'WEEK 2', text: 'WEEK 3' }, { id: 'WEEK 3', text: 'WEEK 4' }], selectedWeek: '', selectedWeek2: '', week1RoundPostTime: 0, week2RoundPostTime: 0, week3RoundPostTime: 0, week4RoundPostTime: 0, lastPostTime: 0, daysRangeModal: false,
     matchStartTime: '', matchEndTime: '', matchStartTimeErr: '', matchEndTimeErr: '', showProgressBar: false, chooseWeekErr: '', itemsToDetailsModal: [], cumulativeScore: 0, allowPicks: ['Week 2', 'Week 3', 'Week 4'], allowWeek1Pick: false, allowWeek2Pick: false, allowWeek3Pick: false, allowWeek4Pick: false,
-    eventAlreadyFilled: false, theLink: '', stopweek1RoundEdit: 0, hasUserPlayed: false, pickedId: '', selectedFruit: '', selectedWeeks: [], fromWeekTo: '', fromWeekTo2: '', theValues: '', nflModalTitle: '', toDbId: '', toDbRound: '', theScoresMenu: ''
+    eventAlreadyFilled: false, theLink: '', stopweek1RoundEdit: 0, hasUserPlayed: false, pickedId: '', selectedFruit: '', selectedWeeks: [], fromWeekTo: '', fromWeekTo2: '', theValues: '', nflModalTitle: '', toDbId: '', toDbRound: '', theScoresMenu: '',enterEventModal:false
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -131,7 +132,11 @@ class NCAA extends Component {
     }
     ////console.log('azeeza', item)*/
   };
-
+  handleDelete = async () => {
+if (await confirm({ confirmation: 'Do you really want to delete this item?' })) {
+// Perform delete action
+}
+};
   checkForOddsUpdate2 = async (theLink) => {
     try {
       var theQuery = encodeURIComponent(theLink)
@@ -1680,12 +1685,17 @@ class NCAA extends Component {
       if (dataSnapshot.exists()) {
         var dbTime = dataSnapshot.val()
         if (new Date().getTime() > dbTime) {
-          this.notify('You can not edit an event that already started')
+         this.chooseWeekState()
+         // this.notify('You can not edit an event that already started')
+         this.setState({ selectedWeek:theWeek2, selectedWeek2: theWeek2, chooseWeekErr: '', nflModalTitle: theWeek, toDbId: toDbId, toDbRound: toDbRound })
         } else {
-          this.setState({ selectedWeek: theWeek2, selectedWeek2: theWeek2, chooseWeekErr: '', nflModalTitle: theWeek, toDbId: toDbId, toDbRound: toDbRound })
+          this.setState({ selectedWeek:theWeek2, selectedWeek2: theWeek2, chooseWeekErr: '', nflModalTitle: theWeek, toDbId: toDbId, toDbRound: toDbRound })
         }
       }
     })
+  }
+  chooseWeekState=()=>{
+ this.setState({enterEventModal:true})
   }
   render() {
     // //////console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
@@ -2022,6 +2032,17 @@ class NCAA extends Component {
               <button style={{ backgroundColor: '#CB1E31', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.openNFLModal()}>Proceed</button>
             </div>
           </div></div> : null}
+          {this.state.enterEventModal?<div className={style.detailsModal} onClick={()=>this.setState({enterEventModal:false})}>
+                  <div className={style.delModal} onClick={(e)=>this.doNothing(e)}>
+                    <p className={style.delModalP1}>Enter Event Details?</p>
+                    <p className={style.delModalP2}>The matches seem to have started. Are you sure you want to proceed?</p>
+                    <p className={style.delModalP2} style={{color:'red'}}>This cannot be reversed!</p>
+                    <div>
+                      <button className={style.delModalDelBtn} onClick={()=>this.setState({enterEventModal:false})}>Continue</button>
+                      <button className={style.canModalDelBtn} onClick={()=>this.setState({enterEventModal:false,selectedWeek: '', selectedWeek2: '', chooseWeekErr: '', nflModalTitle: '', toDbId: '', toDbRound: '', showChooseWeekModal: false})}>Cancel</button>
+                    </div>
+                  </div>
+                  </div>:null}
         <ToastContainer />
         {this.state.showProgressBar ? <ProgressBar /> : null}
       </>

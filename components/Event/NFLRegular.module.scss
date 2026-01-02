@@ -852,6 +852,28 @@ $theDark:#b2b2b2;
  .shareDiv p{
     margin-right: 5px;
  }
+ .delModal{
+    width: 400px;
+    height: 180px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+.delModalP1{
+    font-size: 18px;
+    font-weight: 600;
+}
+.delModalP2{
+    margin: 10px 0px;
+}
+.delModal div{
+    margin-top: 15px;
+}
+.delModal button{
+    padding: 5px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
 @media all and (max-width: 900px) {
     .profileDiv{
         display: flex;

@@ -17,6 +17,7 @@
     "local-storage": "^2.0.0",
     "next": "14.1.4",
     "react": "^18",
+    "react-confirm": "^0.5.0-1",
     "react-countdown": "^2.3.6",
     "react-custom-checkbox": "^3.2.0",
     "react-datetime-picker": "^6.0.1",
