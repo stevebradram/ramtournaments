@@ -7,7 +7,7 @@ import ProgressBar from '../components/Helper/ProgressBar'
 import axios from "axios"
 
 class profile extends Component {
-    state = { userId: '', userLoggedIn: '', isAdmin: '', name: '', email: '', showProgressBar: false }
+    state = { userId: '', userLoggedIn: '', isAdmin: '', name: '', email: '',phoneNo:'', showProgressBar: false }
     componentDidMount = () => {
         this.checkAuth()
     }
@@ -23,7 +23,7 @@ class profile extends Component {
                     var theRef = 'users/' + userId + '/userData/'
                     flocksDataRef.child(theRef).once('value', dataSnapshot => {
                         console.log('dataSnapshot', dataSnapshot.val())
-                        this.setState({ name: dataSnapshot.val().name, email: dataSnapshot.val().email })
+                        this.setState({ name: dataSnapshot.val().name, email: dataSnapshot.val().email,phoneNo: dataSnapshot.val().phoneNo })
                     })
                 }
                 this.setState({ userId, userLoggedIn: true })
@@ -31,13 +31,11 @@ class profile extends Component {
         })
     }
     accountDelete = async () => {
-
         firebase.auth().signOut().then(()=>{
             this.showProgressBar()
         },(error)=>{
             console.error('Sign Out Error', error);
         });
-
     }
     showProgressBar = () => {
         this.setState({ showProgressBar: true })
@@ -45,7 +43,17 @@ class profile extends Component {
             () => { this.setState({ showProgressBar: false }), Router.push('/') },
             3000)
     }
-    addData=async()=>{
+    deleteFlocks=()=>{
+            var generalRef = firebase.database().ref()
+            var flocksRef = 'users/' + userId + '/flockData/flockNames/'
+            generalRef.child(flocksRef).once('value', dataSnapshot => {
+            dataSnapshot.forEach((data) => {
+            var theEventKey=data.key
+            var theFlockName=data.val().name
+            }) 
+            })
+    }
+   /* addData=async()=>{
         const apiEndpoint = 'https://theramtournament.com/getDataGTrafficData&apiKey=82315a13f42fe75c782f5def370b12e9';
         //const apiEndpoint = 'http://localhost:4000/getDataGTrafficData&apiKey=82315a13f42fe75c782f5def370b12e9';
         var theQuery = {id:'123456',name: 'John Doe Mall', category: 'Malls',Location:'Nairobi'};
@@ -53,7 +61,7 @@ class profile extends Component {
         const response = await axios.post(apiEndpoint, theQuery);
         console.log('response',response.data.message)
         return
-    }
+    }*/
     render() {
         return (
             <>
@@ -64,7 +72,8 @@ class profile extends Component {
                         </div>
                         <p className={style.nameP}>{this.state.name}</p>
                         <p className={style.emailP}>{this.state.email}</p>
-                        <p className={style.editP} onClick={() => this.addData()}>Edit Details</p>
+                        <p className={style.phoneP}>{this.state.phoneNo}</p>
+                        <p className={style.editP}>Edit Details</p>
                         <p className={style.deleteP} onClick={() => this.accountDelete()}>Delete Account</p>
                         <p className={style.warningP}>Warning!. The above action can not be reversed. Once you delete your account all your information is deleted from our site immediately</p>
                     </div>

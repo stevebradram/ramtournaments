@@ -1712,11 +1712,11 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
      var titleToShow=this.state.theEventTitle.replace(/  +/g, ' ')
       var theWeek=''
       if(this.state.theEventTitle==='NFL REGULAR  2025'){
-        titleToShow='NFL 2025 Wk1-Wk3'
+        titleToShow='NFL 2025 SEASON Wk1-Wk3'
       }else{
         titleToShow=titleToShow.split(' ')
     if(titleToShow[3]){theWeek=' '+titleToShow[3]}
-      titleToShow=titleToShow[0]+' '+titleToShow[2]+' '+theWeek}
+      titleToShow=titleToShow[0]+' '+titleToShow[2]+' SEASON '+theWeek}
      
     var showBestPossible = ''
     if (this.state.endTime < todayInMillis && (this.state.endTime - todayInMillis) < -86400000) {
@@ -1781,9 +1781,18 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             if (this.state.theEventKey === item.id) {
               theColor = '#CB1E31'
             }
+            var theTitle = item.title
+           
+                theTitle = theTitle.replace('REGULAR', '')
+                theTitle = theTitle.replace(/ {2}/g, " ");
+                var theTitleSplit = theTitle.split(' ')
+                theTitle = theTitleSplit[0] + ' ' + theTitleSplit[1] + ' SEASON ' + theTitleSplit[2]
+                if (item.title === 'NFL REGULAR  2025') {
+                  theTitle = 'NFL 2025 SEASON Wk1-Wk3'
+                }
             return (
               <div className={style.headList} key={index} style={{ color: theColor, borderColor: theColor }} onClick={() => this.loadOtherEvent(item.id, item.title, item.oddsUpdate, item.resultsUpdate, item.stopweek1RoundEdit, item.theValues)}>
-                <div><p className={style.headListP1}>{item.title}</p>
+                <div><p className={style.headListP1}>{theTitle}</p>
                   <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                     <p style={{ marginLeft: 2, marginRight: 2 }}>-</p>
                     <p className={style.headListP3}>{timing}</p></div></div>

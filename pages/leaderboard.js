@@ -164,6 +164,7 @@ class leaderboard extends Component {
           console.log('theEventTitle 00',theEventTitle)
           console.log('theEventKey 00',theEventKey)
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
+            this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
          // this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
           ////console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
@@ -327,9 +328,9 @@ class leaderboard extends Component {
         })}
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/"+sportType+"/"+theEventKey+"/details/")
         userInfoDb.once('value',dataSnapshot=>{
-         
+         if(!dataSnapshot.exists())return
             var userBetData=dataSnapshot.val()
-         //  //console.log('dataSnapshot.val()',dataSnapshot.val())
+         console.log('dataSnapshot.val() Z0000',theId,sportType,theEventKey,userBetData,userBetData.flockName)
          //  return
           theDet['id']=theId
           theDet['flockName']=userBetData.flockName
@@ -585,11 +586,11 @@ class leaderboard extends Component {
     if(this.state.sportType==='NFLRegular'){
       var theWeek=''
       if(this.state.theEventTitle==='NFL REGULAR  2025'){
-        titleToShow='NFL 2025 Wk1-Wk3'
+        titleToShow='NFL 2025 SEASON Wk1-Wk3'
       }else{
         titleToShow=titleToShow.split(' ')
     if(titleToShow[3]){theWeek=' '+titleToShow[3]}
-      titleToShow=titleToShow[0]+' '+titleToShow[2]+' '+theWeek}
+      titleToShow=titleToShow[0]+' '+titleToShow[2]+' SEASON '+theWeek}
      }
 
       var theItems=[]

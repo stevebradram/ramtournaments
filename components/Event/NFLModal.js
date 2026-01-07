@@ -22,8 +22,8 @@ class NCAAModal extends Component {
     //var incomingData=[...this.props.itemsToNFLModal]
     var incomingData = this.props.itemsToNFLModal.map(item => JSON.parse(JSON.stringify(item)));
     //return
-    console.log('incomingData',this.state.currentSelection,incomingData)
-    console.log('the info',this.props.itemsToNFLModal,this.props.eventToNFLModal,this.props.theEventKey)
+    //console.log('incomingData',this.state.currentSelection,incomingData)
+    //console.log('the info',this.props.itemsToNFLModal,this.props.eventToNFLModal,this.props.theEventKey)
     //return
     if(incomingData.length>0){
       wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
@@ -34,7 +34,7 @@ class NCAAModal extends Component {
       incomingData[index]['bet']=''
       firstMatchTime.push(item.timeInMillis)
         if(item.player1NickName==='N/A'){
-        console.log('item.player1NickName samooooo')
+        //console.log('item.player1NickName samooooo')
         incomingData[index]['commenceTime']=''
         incomingData[index]['timeInMillis']=''
         incomingData[index]['time']=''
@@ -48,7 +48,7 @@ class NCAAModal extends Component {
           if(this.state.currentSelection==='divisionalRound'){divisionalRoundEdit=incomingData,this.setState({divisionalRoundEdit})}
           if(this.state.currentSelection==='conferenceChampionship'){conferenceChampionshipEdit=incomingData,this.setState({conferenceChampionshipEdit})}
           if(this.state.currentSelection==='superBowl'){superBowlEdit=incomingData,this.setState({superBowlEdit})}
-          console.log('modal timeeeeeeee',firstTime,incomingData)
+          //console.log('modal timeeeeeeee',firstTime,incomingData)
         }
       })
   }
@@ -77,22 +77,22 @@ class NCAAModal extends Component {
     if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
     lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
     //firstEventTime=dayjs(firstEventTime)
-    console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
+    //console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
     //return
 
     var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
     //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
-    console.log('oddsApi',oddsApi)
+    //console.log('oddsApi',oddsApi)
     //return
     const response = await axios.get(oddsApi)
     var theOddsJson=response.data
-    console.log('theOddsJson',theOddsJson)
+    //console.log('theOddsJson',theOddsJson)
     this.sortOddsJson(theOddsJson,idStart,menu,incomingData)
   }
    sortOddsJson=async(theOddsJson,idStart,menu,incomingData)=>{
    
     try {
-      //console.log('theOddsJson',theOddsJson)
+      ////console.log('theOddsJson',theOddsJson)
       //return
       var jCount=0
     theOddsJson.map((item1,index)=>{
@@ -104,25 +104,25 @@ class NCAAModal extends Component {
             if(item2.key==='draftkings'){
                
                 draftkingsMarket=item2.markets
-                //console.log('draftkings markets',item2.markets)
-                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+                ////console.log('draftkings markets',item2.markets)
+                ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
                 draftkingsMarket.map((item3)=>{
-                    //console.log('draftkingsMarket 006',item3.outcomes)
+                    ////console.log('draftkingsMarket 006',item3.outcomes)
                    const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                      theOddsJson[index].draftkingsOdds=obj
                 })
             }
            
             if(item1.bookmakers.length===i){
-                //console.log('new array',theOddsJson)
+                ////console.log('new array',theOddsJson)
                
                 var m=0
                 theOddsJson.map((item12,index)=>{
                     m++
-                    //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                    ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
                     var awayPoints=0,homePoints=0
                     if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                        //console.log('shit is undefined')
+                        ////console.log('shit is undefined')
                     }else{
                         var homeFighterName=item12.home_team
                         var awayFighterName=item12.away_team
@@ -136,13 +136,13 @@ class NCAAModal extends Component {
           if(awayPoints<-10000){aTPointsNum=1.01}
           if(homePoints>12620){hTPointsNum=1247.20}
           if(awayPoints>12620){aTPointsNum=1247.20}
-          //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
+          ////console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
          
           if(homePoints<=101&&homePoints>=-101){hTPointsNum=2.03}
           if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
 
 
-          console.log('hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
+          //console.log('hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
 
                 var matchTime= new Date(item12.commence_time);
                 var newItem={player2:item12.away_team,player1:item12.home_team,apiId:item12.id,commenceTime:item12.commence_time,timeInMillis:matchTime.getTime(),
@@ -155,13 +155,13 @@ class NCAAModal extends Component {
                   this.setState({theNewArr:newOddsJson})
                   //newOddsJson
                   this.getLogos2(newOddsJson,menu,incomingData)
-                  console.log('new array laaast',newOddsJson)
+                  //console.log('new array laaast',newOddsJson)
                 }
             }
         })
     })
   } catch (error) {
-    console.log('ERROR OCURRED AT SORTING ODDS', error)
+    //console.log('ERROR OCURRED AT SORTING ODDS', error)
   }
   }
   doNothing = (event) => {
@@ -171,7 +171,7 @@ class NCAAModal extends Component {
   inputChange = async (e, index, type) => {
     this.setState({isItSubmit:false})
     var value = e.target.value
-    console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
     if (type === 'wildCard') {
       wildCardEdit[index][e.target.id] = value
       wildCardEdit[index]['player1'] = 'N/A'
@@ -179,7 +179,7 @@ class NCAAModal extends Component {
       wildCardEdit[index]['p1Photo'] = 'N/A'
       wildCardEdit[index]['p2Photo'] = 'N/A'
       await this.setState({ wildCardEdit })
-      console.log("wildCardEdit", wildCardEdit)
+      //console.log("wildCardEdit", wildCardEdit)
     }
     if (type === 'divisionalRound') {
       divisionalRoundEdit[index][e.target.id] = value
@@ -188,7 +188,7 @@ class NCAAModal extends Component {
       divisionalRoundEdit[index]['p1Photo'] = 'N/A'
       divisionalRoundEdit[index]['p2Photo'] = 'N/A'
       await this.setState({ divisionalRoundEdit })
-      console.log("divisionalRoundEdit", divisionalRoundEdit)
+      //console.log("divisionalRoundEdit", divisionalRoundEdit)
     }
     if (type === 'conferenceChampionship') {
       conferenceChampionshipEdit[index][e.target.id] = value
@@ -197,7 +197,7 @@ class NCAAModal extends Component {
       conferenceChampionshipEdit[index]['p1Photo'] = 'N/A'
       conferenceChampionshipEdit[index]['p2Photo'] = 'N/A'
       await this.setState({ conferenceChampionshipEdit })
-      console.log("conferenceChampionshipEdit", conferenceChampionshipEdit)
+      //console.log("conferenceChampionshipEdit", conferenceChampionshipEdit)
     }
     if (type === 'superBowl') {
       superBowlEdit[index][e.target.id] = value
@@ -206,7 +206,7 @@ class NCAAModal extends Component {
       superBowlEdit[index]['p1Photo'] = 'N/A'
       superBowlEdit[index]['p2Photo'] = 'N/A'
       await this.setState({ superBowlEdit })
-      console.log("superBowlEdit", superBowlEdit)
+      //console.log("superBowlEdit", superBowlEdit)
     }
 
   }
@@ -260,13 +260,13 @@ class NCAAModal extends Component {
       }
       if (i === 4) {
         this.setState({ divisionalRoundEdit})
-        console.log('divisionalRoundEdit',divisionalRoundEdit)
+        //console.log('divisionalRoundEdit',divisionalRoundEdit)
        this.getOddsApiData(divisionalRoundEdit)
       }
     })
   }
   conferenceChampionshipSubmit = () => {
-    console.log('submitting conferenceChampionshipSubmit')
+    //console.log('submitting conferenceChampionshipSubmit')
     var yearNow = new Date().getFullYear()
     var k = 0, l = 0
     this.state.conferenceChampionshipEdit.map((item, index) => {
@@ -314,8 +314,8 @@ class NCAAModal extends Component {
           if (l === 1) {
             this.setState({ superBowlEdit })
             this.getOddsApiData(conferenceChampionshipEdit)
-            console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
-            console.log('superBowlEdit', this.state.superBowlEdit)
+            //console.log('conferenceChampionshipEdit', this.state.conferenceChampionshipEdit)
+            //console.log('superBowlEdit', this.state.superBowlEdit)
           }
         })
       }
@@ -347,7 +347,7 @@ class NCAAModal extends Component {
       if (l === 1) {
         this.setState({ superBowlEdit })
         this.getOddsApiData(superBowlEdit)
-        console.log('superBowlEdit', this.state.superBowlEdit)
+        //console.log('superBowlEdit', this.state.superBowlEdit)
       }
     })
   }
@@ -375,7 +375,7 @@ class NCAAModal extends Component {
     if(this.state.currentSelection==='divisionalRound'){theArr=this.state.divisionalRoundEdit,editTime='stopDivisionalRoundEdit'}
     if(this.state.currentSelection==='conferenceChampionship'){theArr=this.state.conferenceChampionshipEdit,editTime='stopConferenceChampionshipEdit'}
     if(this.state.currentSelection==='superBowl'){theArr=this.state.superBowlEdit,editTime='stopSuperBowlEdit'}
-    console.log('at sendToFirebaseSingle',this.state.currentSelection,theArr)
+    //console.log('at sendToFirebaseSingle',this.state.currentSelection,theArr)
     var i=0
     theArr.map((item, index) => {
       if (item.apiId === ''||item.player1 === ''||item.player1 === 'N/A'||item.player2 === ''||item.p1Photo === ''||item.p1Photo === 'N/A'||item.p2Photo === '') {
@@ -394,13 +394,13 @@ class NCAAModal extends Component {
        var eventIdsLink ='/eventsIds/'+eventKey+'/'
        var eventIdsLink2 ='/NFL/eventsIds/'+eventKey+'/'
        var dataLink ='/NFL/'+eventKey+'/'+this.state.currentSelection//1737147600000
-       console.log('combined items',theArr.length, theArr)//1737235800000
+       //console.log('combined items',theArr.length, theArr)//1737235800000
        var eventIdsEdit = {
       [editTime]:minTime,currentSelection:this.state.currentSelection,oddsTimeUpdate:nowTime}
        theArr.map((item,index) => {
          v++
          theArr[index]['error']=null
-         console.log('matchType',item.matchType)
+         //console.log('matchType',item.matchType)
          toDbArr[item.id] = item
          if (theArr.length === v) {
            generalDb.child(eventIdsLink).update(eventIdsEdit)
@@ -426,7 +426,7 @@ class NCAAModal extends Component {
   }
   sendToFirebase=async()=>{
     this.showProgressBar()
-    console.log('at sendToFirebase',this.state.currentSelection)
+    //console.log('at sendToFirebase',this.state.currentSelection)
     //todo finish here and odds update on onclick
     return
     if(this.state.currentSelection==='wildCard'){}
@@ -444,7 +444,7 @@ class NCAAModal extends Component {
     var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NFL/' + eventKey + '/')
     var eventsIdDb = firebase.database().ref('/theEvents/')
-    console.log('combined items',allItems.length, allItems)
+    //console.log('combined items',allItems.length, allItems)
     allItems.map((item,index) => {
       v++
       if(item.p1Photo===''){allItems[index]['p1Photo']='N/A'}
@@ -455,7 +455,7 @@ class NCAAModal extends Component {
       if(item.player2===''){allItems[index]['player2']='N/A'}
       if(item.player1===''){allItems[index]['player1NickName']='N/A'}
       if(item.player2===''){allItems[index]['player2NickName']='N/A'}
-      console.log('matchType',item.matchType)
+      //console.log('matchType',item.matchType)
       if (item.matchType === 'NFL Wild Card Round') {
         toDbWildCardArr[item.id] = item
       } 
@@ -503,14 +503,15 @@ class NCAAModal extends Component {
   getOddsApiData=async(theArr,stateEdit)=>{
     //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
    //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
-   //var oddsApi="https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-   //const response = await axios.get(oddsApi)
-  // var theOddsJson=response.data
+
+   var oddsApi='https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9'
+   const response = await axios.get(oddsApi)
+   var theOddsJson=response.data
   //TO BE CONTINUED CHECK FOR NAME DATABASE AND ODDS API
    var firstMatchTime=[]
-   var theOddsJson=theNFLOdds
+   var theOddsJson=theOddsJson
    try {
-     console.log('theOddsJson',theOddsJson)
+     //console.log('theOddsJson',theOddsJson)
      var jCount=0
    theOddsJson.map((item1,index)=>{
        var i=0,newOddsJson=[]
@@ -521,25 +522,25 @@ class NCAAModal extends Component {
            if(item2.key==='draftkings'){
               
                draftkingsMarket=item2.markets
-               //console.log('draftkings markets',item2.markets)
-               //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+               ////console.log('draftkings markets',item2.markets)
+               ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
                draftkingsMarket.map((item3)=>{
-                   //console.log('draftkingsMarket 006',item3.outcomes)
+                   ////console.log('draftkingsMarket 006',item3.outcomes)
                   const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                     theOddsJson[index].draftkingsOdds=obj
                })
            }
           
            if(item1.bookmakers.length===i){
-               //console.log('new array',theOddsJson)
+               ////console.log('new array',theOddsJson)
               
                var m=0
                theOddsJson.map((item12,index)=>{
                    m++
-                   //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                   ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
                    var awayPoints=0,homePoints=0
                    if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                       //console.log('shit is undefined')
+                       ////console.log('shit is undefined')
                    }else{
                        var homeFighterName=item12.home_team
                        var awayFighterName=item12.away_team
@@ -558,7 +559,7 @@ class NCAAModal extends Component {
          if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
  
  
-         console.log(item1.id,'hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
+         //console.log(item1.id,'hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
  
                var matchTime= new Date(item12.commence_time);
                var newItem={player2:item12.away_team,player1:item12.home_team,apiId:item12.id,commenceTime:item12.commence_time,timeInMillis:matchTime.getTime(),
@@ -569,7 +570,7 @@ class NCAAModal extends Component {
                })
                if(m===theOddsJson.length){
                  //this.setState({theNewArr:newOddsJson})
-                 console.log('new array laaast',newOddsJson)
+                 //console.log('new array laaast',newOddsJson)
                  theArr.map((item,index)=>{
                    newOddsJson.map((item2)=>{
  
@@ -590,7 +591,7 @@ class NCAAModal extends Component {
                      //var firstTime =  Math.min(...firstMatchTime.map(item => item));
                      this.getLogos(theArr)
                      this.setState({[stateEdit]:theArr})
-                     console.log('malizaaaaa 000024',theArr)
+                     //console.log('malizaaaaa 000024',theArr)
                    }
                  })
                  
@@ -599,7 +600,7 @@ class NCAAModal extends Component {
        })
    })
  } catch (error) {
-   console.log('ERROR OCURRED AT SORTING ODDS', error)
+   //console.log('ERROR OCURRED AT SORTING ODDS', error)
  }
  }
   getOddsApiData2 = async (theArr) => {
@@ -617,7 +618,7 @@ class NCAAModal extends Component {
           theArr[index]['player1'] = item2.home_team
           theArr[index]['player2'] = item2.away_team
           theArr[index]['commenceTime'] = theTime
-          console.log('at getOddsApiData sawaaaaaaaa 222222')
+          //console.log('at getOddsApiData sawaaaaaaaa 222222')
           theArr[index]['time'] = time
           theArr[index]['timeInMillis'] = timeInMillis
            /* item2.bookmakers.map((item2)=>{
@@ -632,20 +633,20 @@ class NCAAModal extends Component {
                  if(item3.outcomes[i]['name']===item2.away_team){
                    wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
                  }
-                 console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                 console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
+                 //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
+                 //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
                  
                 const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                  // wildCardEdit[index].draftkingsOdds=obj
-                 console.log('draftkingsMarket obj',obj)
-                 console.log('draftkingsMarket wildCardEdit',wildCardEdit)
+                 //console.log('draftkingsMarket obj',obj)
+                 //console.log('draftkingsMarket wildCardEdit',wildCardEdit)
              })
              }
            })*/
-          console.log('the Item', item2)
+          //console.log('the Item', item2)
           if (index + 1 === theArr.length) {
             this.getLogos(theArr)
-            console.log('the theArr', theArr)
+            //console.log('the theArr', theArr)
           }
 
 
@@ -670,7 +671,7 @@ class NCAAModal extends Component {
               theArr[index]['player1'] = item2.home_team
               theArr[index]['player2'] = item2.away_team
               theArr[index]['commenceTime'] = theTime
-              console.log('at getOddsApiData sawaaaaaaaa 222222')
+              //console.log('at getOddsApiData sawaaaaaaaa 222222')
               theArr[index]['time'] = time
               theArr[index]['timeInMillis'] = timeInMillis
               /* item2.bookmakers.map((item2)=>{
@@ -685,20 +686,20 @@ class NCAAModal extends Component {
                      if(item3.outcomes[i]['name']===item2.away_team){
                        wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
                      }
-                     console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                     console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
+                     //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
+                     //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
                      
                     const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                      // wildCardEdit[index].draftkingsOdds=obj
-                     console.log('draftkingsMarket obj',obj)
-                     console.log('draftkingsMarket wildCardEdit',wildCardEdit)
+                     //console.log('draftkingsMarket obj',obj)
+                     //console.log('draftkingsMarket wildCardEdit',wildCardEdit)
                  })
                  }
                })*/
-              console.log('the Item', item2)
+              //console.log('the Item', item2)
               if (index + 1 === theArr.length) {
                 this.getLogos(theArr)
-                console.log('the theArr', theArr)
+                //console.log('the theArr', theArr)
               }
 
 
@@ -711,20 +712,20 @@ class NCAAModal extends Component {
   getLogos = async (theArr) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    //console.log(response.data);
+    ////console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
         var resultsArr = res.data['sports']
-        console.log('the logos 1111', resultsArr.length)
+        //console.log('the logos 1111', resultsArr.length)
         var i = 0
         resultsArr.map((item, index) => {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            //console.log('the teams',theItem)
-            //console.log('the team name',theItem['displayName'])
-            // console.log('the team logos',theItem['logos'][0]['href'])
+            ////console.log('the teams',theItem)
+            ////console.log('the team name',theItem['displayName'])
+            // //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -732,20 +733,20 @@ class NCAAModal extends Component {
             smallResultsArr.push(myItems)
 
             if (theTeams.length === index + 1) {
-              console.log('smallResultsArr', smallResultsArr)
+              //console.log('smallResultsArr', smallResultsArr)
               theArr.map((item1, index) => {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // console.log('item1.player1',item1.player1)
+                  // //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName
-                    console.log('ikooooooooooooooo')
+                    //console.log('ikooooooooooooooo')
                   }
                   if (item1.player2 === item2.name) {
                     theArr[index]['p2Photo'] = item2.logo
-                    console.log('hakunaaaaaaaaaaaaaaa')
+                    //console.log('hakunaaaaaaaaaaaaaaa')
                     theArr[index]['player2NickName'] = item2.nickName
                   }
 
@@ -754,7 +755,7 @@ class NCAAModal extends Component {
               })
             }
             if (theTeams.length === index + 1) {
-              console.log('theArr 22222222 kufinish', theArr)
+              //console.log('theArr 22222222 kufinish', theArr)
               if (this.state.currentSelection==='wildCard') {this.setState({wildCardEdit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:theArr,isItSubmit:true})}
               if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:theArr,isItSubmit:true})}
@@ -770,20 +771,20 @@ class NCAAModal extends Component {
   getLogos2 = async (theArr,menu,incomingData) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    //console.log(response.data);
+    ////console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
         var resultsArr = res.data['sports']
-        console.log('the logos 1111', resultsArr.length)
+        //console.log('the logos 1111', resultsArr.length)
         var i = 0
         resultsArr.map((item, index) => {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            //console.log('the teams',theItem)
-            //console.log('the team name',theItem['displayName'])
-            // console.log('the team logos',theItem['logos'][0]['href'])
+            ////console.log('the teams',theItem)
+            ////console.log('the team name',theItem['displayName'])
+            // //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -791,20 +792,20 @@ class NCAAModal extends Component {
             smallResultsArr.push(myItems)
 
             if (theTeams.length === index + 1) {
-              console.log('smallResultsArr', smallResultsArr)
+              //console.log('smallResultsArr', smallResultsArr)
               theArr.map((item1, index) => {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // console.log('item1.player1',item1.player1)
+                  // //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName
-                    console.log('ikooooooooooooooo')
+                    //console.log('ikooooooooooooooo')
                   }
                   if (item1.player2 === item2.name) {
                     theArr[index]['p2Photo'] = item2.logo
-                    console.log('hakunaaaaaaaaaaaaaaa')
+                    //console.log('hakunaaaaaaaaaaaaaaa')
                     theArr[index]['player2NickName'] = item2.nickName
                   }
 
@@ -828,12 +829,12 @@ class NCAAModal extends Component {
               incomingData[index]['commenceTime']=item.commenceTime
               incomingData[index]['time']=item.commenceTime.slice(0,16)
               if(theArr.length===index+1){
-                console.log('this.state.currentSelection',this.state.currentSelection)
-                console.log('theArr 22222222 kufinish', theArr)
-                console.log('theArr 22222222 incomingData', incomingData)
+                //console.log('this.state.currentSelection',this.state.currentSelection)
+                //console.log('theArr 22222222 kufinish', theArr)
+                //console.log('theArr 22222222 incomingData', incomingData)
                 if (this.state.currentSelection==='divisionalRound') {this.setState({divisionalRoundEdit:incomingData,isItSubmit:true})}
                 if (this.state.currentSelection==='conferenceChampionship') {this.setState({conferenceChampionshipEdit:incomingData,isItSubmit:true})}
-                if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:incomingData,isItSubmit:true});console.log('haapa kwa sssssssssssss')}
+                if (this.state.currentSelection==='superBowl') {this.setState({superBowlEdit:incomingData,isItSubmit:true})}
                 this.setState({ showProgressBar: false })
               }
               }) 
@@ -850,7 +851,7 @@ class NCAAModal extends Component {
       })
   }
   itemComponent = (compItems, type,title) => {
-  console.log('compItems',compItems)
+  //console.log('compItems',compItems)
     return (
       compItems.map((item, index) => {
         return (

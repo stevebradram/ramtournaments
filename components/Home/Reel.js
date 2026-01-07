@@ -21,7 +21,7 @@ class Reel extends Component {
         1000,
         'FIFA MAJORS',
         1000,
-        'NFL REGULAR',
+        'NFL SEASON',
         1000,
          'NFL PLAYOFFS',
         1000

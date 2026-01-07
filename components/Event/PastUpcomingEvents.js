@@ -236,11 +236,21 @@ class Reel extends Component {
                 if(this.props.theEventKey===item.id){
                   theColor='#CB1E31'
                 }
+                var theTitle=item.title
+              if(item.sportType==='NFLRegular'){
+               theTitle=theTitle.replace('REGULAR','')
+               theTitle=theTitle.replace(/ {2}/g, " ");
+               var theTitleSplit=theTitle.split(' ')
+               theTitle=theTitleSplit[0]+' '+theTitleSplit[1]+' SEASON '+theTitleSplit[2]
+                if (item.title === 'NFL REGULAR  2025') {
+                  theTitle = 'NFL 2025 SEASON Wk1-Wk3'
+                }
+              }
                  return(
                        <div  className={style.titleDivCont} key={item.id}> 
                          <div className={style.testDiv}>
                       <div className={style.bodyLowerCard} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.time,item.sportType,item.currentSelection,item.endTime)}>
-                      <div><p className={style.headListP1}>{item.title}</p>
+                      <div><p className={style.headListP1}>{theTitle}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
                <p className={style.headListP3}>{timing}</p></div></div>

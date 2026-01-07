@@ -56,6 +56,12 @@ class MyFlocks extends Component {
       }
     })
   }
+    safeSplit = (str, separator) => {
+  if (str && typeof str === 'string' && str.length > 0) {
+    return str.split(separator);
+  }
+  return []; 
+};
   checkUpcomingPastGames = async (userId) => {
     var userInfoDb = firebase.database().ref('/theEvents/eventsIds')
     var i = 0, upcomingGames = [], pastGames = [], allGames = []
@@ -97,7 +103,7 @@ class MyFlocks extends Component {
               this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, currentSelection,currentSubSelection:allGames[0]['currentSelection'], eventStarted: isEventStarted,endTime,nflRegularEditsTime:allGames[0]['stopEdits'],theValues}, () => {
               this.getRamsInFlock(theEventKey, isEventStarted,currentSelection,sportType)
               {this.state.isAdmin?this.loadAdminData(theEventKey):null} 
-              var theScoresMenu = theValues.split('|')
+              var theScoresMenu =this.safeSplit(theValues,'|')
                theScoresMenu = 'Week ' + theScoresMenu[0] + ' Round'
                 this.setState({ theScoresMenu:theScoresMenu})
               // console.log('allGames 9000000',allGames)
@@ -505,16 +511,18 @@ class MyFlocks extends Component {
   
   };
   render() {
-     var titleToShow=this.state.theEventTitle.replace(/  +/g, ' ')
-      var theWeek=''
-      if(this.state.theEventTitle==='NFL REGULAR  2025'){
-        titleToShow='NFL 2025 Wk1-Wk3'
-      }else{
-        titleToShow=titleToShow.split(' ')
-    if(titleToShow[3]){theWeek=' '+titleToShow[3]}
-      titleToShow=titleToShow[0]+' '+titleToShow[2]+' '+theWeek}
+     var titleToShow = this.state.theEventTitle.replace(/  +/g, ' ')
+    if (this.state.sportType === 'NFLRegular') {
+      var theWeek = ''
+      if (this.state.theEventTitle === 'NFL REGULAR  2025') {
+        titleToShow = 'NFL 2025 SEASON Wk1-Wk3'
+      } else {
+        titleToShow = titleToShow.split(' ')
+        if (titleToShow[3]) { theWeek = ' ' + titleToShow[3] }
+        titleToShow = titleToShow[0] + ' ' + titleToShow[2] + ' SEASON ' + theWeek
+      }
+    }
     var NFLRegOverallStatus=false
-    //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
     console.log('yoooooh',this.state.sportType,this.state.currentSelection,this.state.flockNameAvailable,this.state.menuToShow,this.state.ramsInMyFlockArr)
     if(this.state.sportType==='NFLRegular'&&this.state.currentSelection==='overall'){NFLRegOverallStatus=true}
     //this.state.sportType==='NFLRegular'&&this.state.currentSelection
@@ -574,17 +582,14 @@ class MyFlocks extends Component {
            </div>:null}
 
            {this.state.sportType==='NFLRegular'?<div className={styles.eve2Div}>
-            {this.state.theValues.split('|').map((item, index) => {
+            {this.state.theValues?this.state.theValues.split('|').map((item, index) => {
                                   var theIndex = index + 1
                                   var theMenu = 'week' + theIndex +'Round'
-                                  var theArr = 'week' + theIndex + 'RoundArray'
-                                  var theWeekEdit = 'stopweek' + theIndex + 'RoundEdit'
-                                  var theScoresMenu = 'Week ' + item + ' Round'
                                   var theItem='round'+theIndex
                                   return (
                                     <p key={index} id={this.state.currentSelection === theItem||this.state.currentSelection === theMenu ? styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound(theItem)}>{'WEEK ' + item}</p>
                                   )
-                                })}
+                                }):null}
                                 <p id={this.state.currentSelection === 'overall' ? styles.theSubMenuP2 : null} onClick={() => this.getCurrentRound('overall')}>OVERALL</p>
             {/*<p id={this.state.currentSelection==='week1Round'||this.state.currentSelection==='round1'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round1')}>WEEK 2</p>
             <p id={this.state.currentSelection==='week2Round'||this.state.currentSelection==='round2'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('round2')}>WEEK 3</p>

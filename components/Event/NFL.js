@@ -454,7 +454,6 @@ class NCAA extends Component {
         this.notify('No internet! please check your internet connection')
         return
       }
-      //this.setState({isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false})
       this.setState({ theEventKey, theEventTitle, expired,currentSelection,isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false}, () => {
         this.getNFLMatches()
         if ((currentSelection === 'wildCard')) {this.setState({editType:'stopWildCardEdit'})}
@@ -500,7 +499,6 @@ class NCAA extends Component {
   console.log('this.state.theEventKey',this.state.currentSelection,this.state.theEventKey,this.state.editType)
   var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
   editDbRef.once('value', dataSnapshot => {
-    //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
     if(dataSnapshot.val()==='N/A'){
       this.notify('Event pick/edit not available at the moment')
     }else{
@@ -672,6 +670,7 @@ class NCAA extends Component {
     }
     }
     createEvent = (eventKey,eventTitle) => {
+        
       var wildCardRoundArr = {}, divisionalRoundArr = {}, conChampRoundArr = {}, superBowlRoundArr = {}
       var generalDb = firebase.database().ref('/theEvents/NFL/' + eventKey)
         wildCardRound.map((item, index) => {
@@ -768,6 +767,7 @@ class NCAA extends Component {
                 var editDbRef2=firebase.database().ref('/theEvents/NFL/eventsIds/'+eventKey+'/')
                 editDbRef.set(toTheEventsIds)
                 editDbRef2.set(toTheEventsIds)
+                console.log('toTheEventsIds',toTheEventsIds)
                 this.notify('Event created successfully')
                 this.setState({showCreateEventModal:false})
               }
@@ -789,14 +789,14 @@ class NCAA extends Component {
         if(this.state.currentSelection==='wildCard'){
         var index2 = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
         var nowTime=new Date().getTime()
-       /* if(nowTime<time){
+        if(nowTime<time){
           this.notify('Match not yet started')
           return
         }
         if(winner!=='N/A'){
          this.notify('Winner already filled')
           return
-        }*/
+        }
         var theItems=this.state.firstRoundArray
         theItems[index2]['showChooseWinner']=true
         this.setState({firstRoundArray:theItems})
