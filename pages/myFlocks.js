@@ -124,7 +124,7 @@ class MyFlocks extends Component {
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
     userInfoDb.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-        var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
+        var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase() //this.safeSplit(theValues,'|').toUpperCase()
         this.setState({ currentFlockName: theFName, flockNameAvailable: true,myFlockName:dataSnapshot.val()})
         this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted,currentSelection,sportType)
         

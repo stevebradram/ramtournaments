@@ -44,11 +44,9 @@ class leaderboard extends Component {
   state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,deleteModal:false,
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true,loadMadness1:false,loadMadness2:false}
   componentDidMount=()=>{
-     //this.getScoreBoardData()
      this.showProgressBar()
      this.checkAuth()
      this.showReel()
-     //this.getUsers()
   }
   showReel = () => {
     this.timerHandle = setTimeout(
@@ -278,7 +276,9 @@ class leaderboard extends Component {
       if(currentSelection==='round2'){
         dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/round2/'
         } 
-    }else{
+    }
+    else if(sportType==='NFL'){dbLink='/userBets/NFL/' + theEventKey + '/'}
+    else{
       dbLink="/userBets/scoreBoards/"+sportType+'/'+theEventKey+'/' 
     }
    //ole.log('the db link',dbLink)

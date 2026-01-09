@@ -60,7 +60,8 @@ $theDark: #b2b2b2;
     //background-color: red;
     flex-wrap: wrap;
 }
-.selectDiv{
+
+.selectDiv {
     display: flex;
     align-items: center;
     background-color: $redColor;
@@ -87,32 +88,44 @@ $theDark: #b2b2b2;
     margin-right: 5px;
     margin-bottom: 10px;
 }
-.leaderBDiv{
+
+.leaderBDiv {
     cursor: pointer;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-   
+    background-color: rgb(0, 60, 255);
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0px;
+    border-radius: 5px;
 }
-.leaderBDiv h3{
- border-bottom: 2px solid #1ecb97;
- color: #1ecb97;;
- font-size: 18px;
- padding-bottom: 2px;
-// 
+
+.leaderBDiv h3 {
+    //border-bottom: 2px solid #9b7306;
+    color: #fff;
+    ;
+    font-size: 20px;
+    padding-bottom: 2px;
+    // 
 }
-.arrIC{
+
+.arrIC {
     margin-left: 5px;
     font-size: 20px;
-    color: #1ecb97;
-     //color: #4f57c4;
+    color: #fff;
+    //color: #4f57c4;
 }
-.matchesHeadDiv{
+
+.matchesHeadDiv {
     display: flex;
     align-items: center;
     margin-top: 0px;
 }
-.headList{
+
+.headList {
     margin-right: 20px;
     border: 1px solid $blackish;
     padding: 5px 20px;
@@ -124,82 +137,98 @@ $theDark: #b2b2b2;
     font-weight: 600;
     cursor: pointer;
 }
-.headListP1{
-   font-size: 14px; 
+
+.headListP1 {
+    font-size: 14px;
 }
-.headListP2{
-    font-size: 10px; 
-    
+
+.headListP2 {
+    font-size: 10px;
+
 }
-.headListP3{
-    font-size: 10px; 
+
+.headListP3 {
+    font-size: 10px;
 }
-.headList div{
+
+.headList div {
     display: flex;
     margin-top: 0px;
     align-items: center;
 }
-.detailsModal{
+
+.detailsModal {
     position: fixed;
-    top:0;bottom:0;left:0;right:0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
     background-color: #00000022;
     display: flex;
     align-items: center;
     justify-content: center;
 }
- .createEventDiv{
+
+.createEventDiv {
     width: 350px;
     height: auto;
     background-color: white;
     padding: 20px 20px 40px 20px;
     border-radius: 5px;
-    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
 }
-.weekP{
+
+.weekP {
     font-weight: 600;
     color: $blackish;
     margin-bottom: 15px;
 }
-.selectorDiv{
+
+.selectorDiv {
     display: flex;
     align-items: center;
     margin-top: 10px;
     cursor: pointer;
 }
-.selectorDiv p{
+
+.selectorDiv p {
     margin-left: 5px;
     color: $blackish;
     font-weight: 500;
 }
 
-.boxDiv3{
-  height:18px;
-  width:18px;
-  border: 2px solid $redColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: $redColor;
-  color: white;
+.boxDiv3 {
+    height: 18px;
+    width: 18px;
+    border: 2px solid $redColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $redColor;
+    color: white;
 }
-.boxDiv3b{
-  height:18px;
-  width:18px;
-  border: 2px solid $blackish;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  color: $blackish;
+
+.boxDiv3b {
+    height: 18px;
+    width: 18px;
+    border: 2px solid $blackish;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: $blackish;
 }
-.checkDiv{
-  cursor: pointer;
+
+.checkDiv {
+    cursor: pointer;
 }
+
 @media all and (max-width: 900px) {
     .eventsDiv {
         margin-right: 0px;
     }
+
     .container {
         padding: 190px 40px 100px 40px;
     }
@@ -227,11 +256,15 @@ $theDark: #b2b2b2;
     .container {
         padding: 150px 20px 100px 20px;
     }
-.leaderBDiv h3{
- font-size: 16px;
- padding-bottom: 2px;
-// 
-}
+
+    .leaderBDiv {
+        width: 220px;
+    }
+
+    .leaderBDiv h3 {
+        font-size: 18px;
+        padding-bottom: 2px;
+    }
 }
 
 @media all and (max-width: 360px) {
