@@ -64,6 +64,21 @@ $theDark:#b2b2b2;
     position: relative;
     
 }
+ .shareDiv{
+    border: 1px solid $redColor;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    height: 30px;
+    align-items: center;
+    border-radius: 5px;
+    color: $redColor;
+    margin-top: 10px;
+    cursor: pointer;
+ }
+ .shareDiv p{
+    margin-right: 5px;
+ }
 .finalsDiv{
     display: flex;
     justify-content: center;

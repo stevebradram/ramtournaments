@@ -16,9 +16,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import { RiTeamFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
 import { TbCheckbox } from "react-icons/tb";
-import { MdClose } from "react-icons/md";
+import { MdClose,MdOutlineShare } from "react-icons/md";
 import axios from "axios"
 import dayjs from 'dayjs';
+import copy from 'copy-to-clipboard';
 var allMatches = []
 
 const wildCardRound = [
@@ -52,7 +53,7 @@ class NCAA extends Component {
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', upcomingGames: [], currentEventUserInfo: {}, allMatches: [], expired: false, nflModal: false,
     firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], allEvents: [], currentSelection: '', isFirstRoundDataAvailable: false,allGames:[],
     isQuarterFinalsDataAvailable: false, isSemiFinalsDataAvailable: false, isFinalsDataAvailable: false,endTime:'',editType:'',eventToNFLModal:'',showCreateEventModal:false,
-    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,itemsToNFLModal:[],wildCardTime:'',wildCardErr:'',divisionalsTime:'',
+    isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,selectHomeEvent:false,itemsToNFLModal:[],wildCardTime:'',wildCardErr:'',divisionalsTime:'',theLink:'',stopWildCardEdit:'',
     divisionalsTime:'',divisionalsErr:'',conChampTime:'',conChampErr:'',superBowlTime:'',superBowlErr:'',hasUserPicked:false,oddsUpdate:'',resultsUpdate:'',showConfirmModal:false,confirmMessage:'',confirmModalType:''
   }
   componentDidMount = () => {
@@ -190,18 +191,20 @@ class NCAA extends Component {
         var endTime = data.val().endTime
         var theData = data.val()
         var currentSelection = data.val().currentSelection
-
+        var stopWildCardEdit = data.val().stopWildCardEdit
+        if(!stopWildCardEdit){stopWildCardEdit=100}
+        if(stopWildCardEdit==='N/A'){stopWildCardEdit=0}
         var oddsUpdate= data.val().oddsTimeUpdate
         var resultsUpdate= data.val().fetchResultsTimeUpdate
         if(!oddsUpdate){oddsUpdate='N/A'}else{oddsUpdate=new Date(oddsUpdate).toLocaleString()}
         if(!resultsUpdate){resultsUpdate='N/A'}else{resultsUpdate=new Date(resultsUpdate).toLocaleString()}
 
-        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData,oddsUpdate:oddsUpdate,resultsUpdate:resultsUpdate}
+        theEvents = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection,theData:theData,oddsUpdate:oddsUpdate,resultsUpdate:resultsUpdate,stopWildCardEdit}
         allGames.push(theEvents)
 
         if (gamesCount === i) {
-          var theEventTitle = '', theEventKey = '', theEventTime = 0,oddsUpdate='',resultsUpdate=''
-          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime'],oddsUpdate= allGames[0]['oddsUpdate'],resultsUpdate= allGames[0]['resultsUpdate']}
+          var theEventTitle = '', theEventKey = '', theEventTime = 0,oddsUpdate='',resultsUpdate='',stopWildCardEdit=''
+          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime'],oddsUpdate= allGames[0]['oddsUpdate'],resultsUpdate= allGames[0]['resultsUpdate'],stopWildCardEdit= allGames[0]['stopWildCardEdit']}
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {
@@ -219,8 +222,9 @@ class NCAA extends Component {
         if ((currentSelection === 'superBowl')) {
           this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
         }
-        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,oddsUpdate,resultsUpdate }, () => {
+        this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,oddsUpdate,resultsUpdate,stopWildCardEdit}, () => {
           this.getNFLMatches(userId)
+          this.checkLink(userId)
           //////console.log('currentSelection',this.state.currentSelection)
         })
       })
@@ -440,7 +444,7 @@ class NCAA extends Component {
   }
 })
   }
-  loadOtherEvent = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate) => {
+  loadOtherEvent = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate,stopWildCardEdit) => {
     this.setState({oddsUpdate,resultsUpdate})
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
     await eventsInfo.once('value', dataSnapshot => {
@@ -454,8 +458,9 @@ class NCAA extends Component {
         this.notify('No internet! please check your internet connection')
         return
       }
-      this.setState({ theEventKey, theEventTitle, expired,currentSelection,isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false}, () => {
+      this.setState({ theEventKey, theEventTitle, expired,currentSelection,isFirstRoundPicked:false,isQuarterFinalsPicked:false,isSemiFinalsPicked:false,isFinalsPicked:false,stopWildCardEdit}, () => {
         this.getNFLMatches()
+        this.checkLink(this.state.userId)
         if ((currentSelection === 'wildCard')) {this.setState({editType:'stopWildCardEdit'})}
         if ((currentSelection === 'divisionalRound')) {this.setState({editType:'stopDivisionalRoundEdit'})}
         if ((currentSelection === 'conferenceChampionship')) {this.setState({editType:'stopConferenceChampionshipEdit'})}
@@ -779,7 +784,17 @@ class NCAA extends Component {
       e.preventDefault()
       e.stopPropagation()
       }
-
+  checkLink = async (userId) => {
+    var flocksDataRef = firebase.database().ref('users/').child(userId + '/flockData/flockNames/' + this.state.theEventKey + '/link')
+    flocksDataRef.once('value', dataSnapshot => {
+      ////console.log('flocksDataRef the key', dataSnapshot.val())
+      if (dataSnapshot.exists()) {
+        this.setState({ theLink: dataSnapshot.val() })
+      } else {
+        this.setState({ theLink: '' })
+      }
+    })
+  }
       pickWinner=(id,winner,time,selection)=>{
         if(this.state.currentSelection!==selection){
           this.notify('Not available at the moment')
@@ -981,6 +996,19 @@ class NCAA extends Component {
               ////console.log('error',error)
             }
         }
+          copyLink = () => {
+             if(this.state.stopWildCardEdit===100){
+             this.notify('Can not copy link at the moment')
+             return
+             }
+             if(this.state.stopWildCardEdit<new Date().getTime()){
+           this.notify('Event already started')
+            }else{
+            copy(this.state.theLink);
+            this.notify('Link copied successfully')
+            }
+            
+          }
         checkForRoundOutcome=async (index,winner,items,name) => {
           try {
             //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
@@ -1081,7 +1109,7 @@ class NCAA extends Component {
               theColor='#CB1E31'
             }
             return (
-              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.currentSelection,item.oddsUpdate,item.resultsUpdate)}>
+              <div className={style.headList} key={index} style={{color:theColor,borderColor:theColor}}  onClick={()=>this.loadOtherEvent(item.id,item.title,item.currentSelection,item.oddsUpdate,item.resultsUpdate,item.stopWildCardEdit)}>
                <div><p className={style.headListP1}>{item.title}</p>
                <div className={style.headListDiv2}><p className={style.headListP2}>{eventTime}</p>
                <p style={{marginLeft:2,marginRight:2}}>-</p>
@@ -1108,6 +1136,10 @@ class NCAA extends Component {
           <p className={style.eventP2} onClick={() =>this.setState({showCreateEventModal:true})}>Create New NFL Event</p>
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
+         {this.state.theLink.length > 1  ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
+                  <p>Flock Invite Link</p>
+                  <MdOutlineShare />
+                </div> : null}
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
           {this.state.dataAvailable ?
