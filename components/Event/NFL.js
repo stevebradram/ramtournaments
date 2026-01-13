@@ -793,10 +793,10 @@ class NCAA extends Component {
           this.notify('Match not yet started')
           return
         }
-        if(winner!=='N/A'){
+       /* if(winner!=='N/A'){
          this.notify('Winner already filled')
           return
-        }
+        }*/
         var theItems=this.state.firstRoundArray
         theItems[index2]['showChooseWinner']=true
         this.setState({firstRoundArray:theItems})

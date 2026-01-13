@@ -200,7 +200,6 @@ class events extends Component {
             if (item.name === 'NFL Playoffs' && this.state.theNfl === true) { colorP = '#b2b2b2', clickable = false }
             if (item.name === 'NFL Season' && this.state.theNflRegular === true) { colorP = '#b2b2b2', clickable = false }
             if (item.name === 'RAM UFC' && this.state.theRamUfc === true) { colorP = '#b2b2b2', clickable = false }
-            //if(item.name==='ALL'&&this.state.theRamUfc===false){colorP='#b2b2b2',clickable=false}
             return (
               <div key={index} onClick={() => this.chooseEvent(item.name)}>
                 <p className={style.listP} style={{ color: colorP, borderColor: colorP }} id={this.state.selectedEvent === item.name ? style.playerP3 : style.playerP}>{item.name}</p>

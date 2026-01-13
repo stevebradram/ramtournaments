@@ -315,9 +315,6 @@ class DetailsModal extends Component {
       membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
     }
    
-   
-   
-   
     keysDbRef.child(this.props.theEventKey).set(true)
     gamesDataRef.child(this.props.theEventKey+'/details/').update(detailsData)
     gamesDataRef.child(this.props.theEventKey+'/bets/').update(itemsData)
