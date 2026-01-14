@@ -5,6 +5,7 @@ import { MdClose } from "react-icons/md";
 import Router,{useRouter,withRouter} from 'next/router'
 import firebase from '../components/FirebaseClient'
 import LogIn from '../components/LogInReg/LogIn2'
+import Meta from '../components/Meta'
 import { ToastContainer, toast } from 'react-toastify';
 class invite extends Component {
   state={creatorName:'',creatorId:'',eventTitle:'',flockName:'',flockNameWithSpaces:'',flockNameWithoutSpaces:'',startTime:'',sportType:'',eventId:'',userId:'',detailsReady:false,sucessSubmiting:false,userLoggedIn:false,openLogInModal1:true,myName:'',myEmail:'',myPhoneNo:''}
@@ -219,7 +220,9 @@ notify = (message) => {
 };
   render() {
     return (
-      <><div className={styles.container}>
+      <>
+      <Meta title='RAM Tournaments - Flock invite link' description={'Click on this link to join '+this.state.flockNameWithSpaces+' Flock'}/>
+      <div className={styles.container}>
         <Community/>
         {!this.state.userLoggedIn?
         <>
