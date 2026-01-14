@@ -191,7 +191,7 @@ class MarchMadness extends Component {
               stopRound1Edit = '', stopRound2Edit = '', stopFinalEdit = '', stopSweet16Edit = '',
               stopElite8Edit = '', stopFinal4Edit = '', eventYear = ''
             if (allGames.length > 0) {
-              allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
+              allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
               stopRound1Edit = allGames[0]['stopRound1Edit'], stopRound2Edit = allGames[0]['stopRound2Edit'], stopFinalEdit = allGames[0]['stopFinalEdit'], stopSweet16Edit = allGames[0]['stopSweet16Edit'], stopElite8Edit = allGames[0]['stopElite8Edit'], stopFinal4Edit = allGames[0]['stopFinal4Edit'], eventYear = allGames[0]['eventYear']
             }
           }

@@ -65,19 +65,25 @@ $theDark:#b2b2b2;
     
 }
  .shareDiv{
-    border: 1px solid $redColor;
-    width: 150px;
+    
+    //width: 200px;
     display: flex;
-    justify-content: center;
-    height: 30px;
-    align-items: center;
-    border-radius: 5px;
-    color: $redColor;
+    //justify-content: center;
+   // height: 35px;
+   // align-items: center;
+    
     margin-top: 10px;
     cursor: pointer;
  }
  .shareDiv p{
     margin-right: 5px;
+    font-size: 14px;
+    padding: 5px 20px;
+    font-weight: 700;
+    background-color: #2d85b8;
+   // background-color: #2db88a;
+    color: white;
+    border-radius: 5px;
  }
 .finalsDiv{
     display: flex;

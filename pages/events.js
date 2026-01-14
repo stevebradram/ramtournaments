@@ -183,6 +183,7 @@ class events extends Component {
     });
   }
   render() {
+    console.log('this.state.theEvents',this.state.theEvents)
     var isPastEvent = ''
     var todayInMillis = new Date().getTime()
     if (this.state.endTime < todayInMillis && (this.state.endTime - todayInMillis) < -86400000) {

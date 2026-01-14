@@ -221,7 +221,7 @@ notify = (message) => {
   render() {
     return (
       <>
-      <Meta title='RAM Tournaments - Flock invite link' description={'Click on this link to join '+this.state.flockNameWithSpaces+' Flock'}/>
+      <Meta title='RAM Tournaments - Flock invite link' description={'Click on this link to join this Flock'}/>
       <div className={styles.container}>
         <Community/>
         {!this.state.userLoggedIn?

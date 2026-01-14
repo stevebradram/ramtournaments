@@ -203,8 +203,9 @@ class NCAA extends Component {
         allGames.push(theEvents)
 
         if (gamesCount === i) {
+          allGames.sort((a, b)=> a.endTime - b.endTime);
           var theEventTitle = '', theEventKey = '', theEventTime = 0,oddsUpdate='',resultsUpdate='',stopWildCardEdit=''
-          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime'],oddsUpdate= allGames[0]['oddsUpdate'],resultsUpdate= allGames[0]['resultsUpdate'],stopWildCardEdit= allGames[0]['stopWildCardEdit']}
+          if (allGames.length > 0) { allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'],endTime= allGames[0]['endTime'],oddsUpdate= allGames[0]['oddsUpdate'],resultsUpdate= allGames[0]['resultsUpdate'],stopWildCardEdit= allGames[0]['stopWildCardEdit']}
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {
@@ -222,6 +223,7 @@ class NCAA extends Component {
         if ((currentSelection === 'superBowl')) {
           this.setState({isFirstRoundDataAvailable: true, isQuarterFinalsDataAvailable: true, isSemiFinalsDataAvailable: true, isFinalsDataAvailable: true,editType:'stopSuperBowlEdit'})
         }
+        
         this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, expired,endTime,oddsUpdate,resultsUpdate,stopWildCardEdit}, () => {
           this.getNFLMatches(userId)
           this.checkLink(userId)
@@ -1069,7 +1071,7 @@ class NCAA extends Component {
    // //console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     ////console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
     ////console.log('this.state.isSemiFinalsDataAvailable',this.state.isSemiFinalsDataAvailable)
-    ////console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
+    console.log('this.state.allEvents',this.state.allEvents)
     var flockTeamName = ''
     var itemToModals = ''
     var isPastEvent=''
@@ -1089,6 +1091,8 @@ class NCAA extends Component {
 
     if (this.state.dataAvailable) { flockTeamName = this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] }
     else { flockTeamName = false }
+
+   // cars.sort(function(a, b){return a.year - b.year});
     //if(this.state.dataAvailable){itemToModals=this.state.theItems}else{itemToModals=this.state.ramUfcMaincardArray}
     return (
       <><div className={style.container}>
@@ -1137,8 +1141,7 @@ class NCAA extends Component {
         </div>:null}
         <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
          {this.state.theLink.length > 1  ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
-                  <p>Flock Invite Link</p>
-                  <MdOutlineShare />
+                  <p>{this.state.theEventTitle+': Flock Invite'}</p>
                 </div> : null}
         <div className={style.picksDiv} onClick={() => this.openTheModal()}>
           {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}

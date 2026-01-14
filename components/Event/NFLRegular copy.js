@@ -327,7 +327,7 @@ class NCAA extends Component {
         if (gamesCount === i) {
           console.log('zoote', allGames)
           var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = '', stopweek1RoundEdit = ''
-          if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return a.time - b.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'], stopweek1RoundEdit = allGames[0]['stopweek1RoundEdit'] }
+          if (allGames.length > 0) { allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'], stopweek1RoundEdit = allGames[0]['stopweek1RoundEdit'] }
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {

@@ -442,7 +442,7 @@ class TheMarchMadness extends Component {
          
               const updatedArr = this.state.theItems.filter(item => item.id !== this.state.userIdToBeDeleted);
               this.setState({ theItems: updatedArr, deleteModal: false })
-              this.notify('Member removed successfully 2 '+this.state.userIdToBeDeleted)
+               this.notify('Member '+this.state.deleteName+' removed successfully')
            
         }
       }else{
@@ -451,7 +451,7 @@ class TheMarchMadness extends Component {
          
               const updatedArr = this.state.theItems.filter(item => item.id !== this.state.userIdToBeDeleted);
               this.setState({ theItems: updatedArr, deleteModal: false })
-              this.notify('Member removed successfully 3 '+this.state.userIdToBeDeleted)
+               this.notify('Member '+this.state.deleteName+' removed successfully')
       }
     })
 } catch (error) {

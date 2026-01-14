@@ -41,7 +41,7 @@ class leaderboard extends Component {
     this.child = React.createRef();
     this.nflRegularRef = React.createRef(null);  
  }
-  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,deleteModal:false,
+  state={openModal:false,openModal2:false,openModal3:false,openModal4:false,theItems:[],isThereNullData:false,allGames:[],showProgressBar:false,isAdmin:false,endTime:'',isEventExpired:'',count:0,eventCount:0,deleteModal:false,userIdToBeDeleted:'',
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:'',currentSelection:'',showReel:true,loadMadness1:false,loadMadness2:false}
   componentDidMount=()=>{
      this.showProgressBar()
@@ -330,8 +330,7 @@ class leaderboard extends Component {
         userInfoDb.once('value',dataSnapshot=>{
          if(!dataSnapshot.exists())return
             var userBetData=dataSnapshot.val()
-         console.log('dataSnapshot.val() Z0000',theId,sportType,theEventKey,userBetData,userBetData.flockName)
-         //  return
+       
           theDet['id']=theId
           theDet['flockName']=userBetData.flockName
           theDet['teamName']=userBetData.teamName
@@ -386,9 +385,6 @@ class leaderboard extends Component {
           data3.push(theDet4)
           allData.push(theDet)
           this.setState({theItems:allData})
-          
-          console.log('all data checked 222222',data3)
-          console.log('all data checked 33333',allData)
         })
         
         if(i===scoreBoardNo){
@@ -457,7 +453,102 @@ class leaderboard extends Component {
       () => this.setState({showProgressBar:false}), 
       2000)
   }
+   deleteMember= () => {
+     var timeRef=''
+     if(this.state.sportType==='NFL'&&this.state.sportType==='NFLRegular')return
+     if(this.state.sportType==='NFL'){timeRef='stopWildCardEdit'}
+     if(this.state.sportType==='NFLRegular'){timeRef='stopweek1RoundEdit'}
+     var eventStartTimeRef = firebase.database().ref('/theEvents/eventsIds/'+this.state.theEventKey+'/'+timeRef)
+    eventStartTimeRef.once('value', dataSnapshot => {
+     var startTime = dataSnapshot.val()
+     if(!startTime||startTime==='N/A'){
+      this.deleteMember3()
+     }else{
+     if((new Date().getTime()>startTime)){
+       this.notify("Can't delete a member on an already started event")
+      }else{
+        this.deleteMember3()
+      }
+     }
+     })
+    }
+    deleteMember2= () => {
+     console.log('to the deletion')
 
+   var generalDb = firebase.database().ref()
+   var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)
+   var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey+'/admin')
+   var gamesDataRef = firebase.database().ref('users/').child(this.state.userIdToBeDeleted+'/ramData/').child('events').child(this.state.sportType)
+   var ramsBets = firebase.database().ref('userBets/'+this.state.sportType+'/')
+ 
+
+   gamesDataRef.child(this.state.theEventKey+'/').set(null)
+   generalDb.child('users/'+this.state.userIdToBeDeleted+'/ramData/upcomingEvents/'+this.state.sportType+'/').child(this.state.theEventKey).set(null)
+   ramsBets.child(this.state.theEventKey+'/'+this.state.userIdToBeDeleted).set(null)
+   adminRef.child(this.state.userIdToBeDeleted).set(null)
+   membersFlockNamesRef.child('/members/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+   membersFlockNamesRef.child('/membersScores/'+this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+   generalDb.child('users/'+this.state.userIdToBeDeleted+'/flockData/flockNames/'+this.state.theEventKey).set(null,(error) => {
+     if (!error){
+       const updatedArr = this.state.theItems.filter(item => item.uid !== this.state.userIdToBeDeleted);
+       this.setState({theItems:updatedArr,deleteModal:false})
+       this.notify('Member '+this.state.deleteName+' removed successfully')
+   }
+ })
+    }
+      deleteMember3 = () => {
+        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + this.state.theEventKey)
+        var adminRef = firebase.database().ref('/flocksSystem/flockNames/' + this.state.theEventKey + '/admin')
+        var generalDb = firebase.database().ref()
+        var userRef = firebase.database().ref('users/').child(this.state.userIdToBeDeleted + '/ramData/')
+        var userBets = firebase.database().ref('userBets/')
+        try {
+        generalDb.child('users/' + this.state.userIdToBeDeleted + '/flockData/flockNames/' + this.state.theEventKey).set(null)
+        userRef.child('events/' + this.state.sportType + '/' + this.state.theEventKey).set(null)
+        userRef.child('upcomingEvents/' + this.state.sportType + '/' + this.state.theEventKey).set(null)
+        userBets.child(this.state.sportType + '/' + this.state.theEventKey + '/' + this.state.userIdToBeDeleted).set(null)
+        adminRef.child(this.state.userIdToBeDeleted).set(null)
+        membersFlockNamesRef.child('/membersScores/' + this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+        membersFlockNamesRef.child('/members/' + this.state.flockToBeDeleted).once('value', dataSnapshot => {
+          if (dataSnapshot.exists()) {
+            var theCount = dataSnapshot.numChildren()
+            var toDbMembersNo = Number(theCount) - 1
+            if (theCount <= 1) {
+              //start here
+              membersFlockNamesRef.child('/members/' + this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+              membersFlockNamesRef.child('/membersScores/' + this.state.flockToBeDeleted).set(null)
+              membersFlockNamesRef.child('/theFlocks/' + this.state.flockToBeDeleted).set(null)
+              membersFlockNamesRef.child('/flockCreators/' + this.state.userIdToBeDeleted).set(null)
+              membersFlockNamesRef.child('/unique/' + this.state.flockToBeDeleted).set(null)
+             
+                  const updatedArr = this.state.theItems.filter(item => item.id !== this.state.userIdToBeDeleted);
+                  this.setState({ theItems: updatedArr, deleteModal: false })
+                  this.notify('Member removed successfully 1 '+this.state.userIdToBeDeleted)
+                
+            
+            } else {
+              membersFlockNamesRef.child('/members/' + this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+              membersFlockNamesRef.child('/theFlocks/' + this.state.flockToBeDeleted + '/membersNo/').set(toDbMembersNo)
+             
+                  const updatedArr = this.state.theItems.filter(item => item.id !== this.state.userIdToBeDeleted);
+                  this.setState({ theItems: updatedArr, deleteModal: false })
+                   this.notify('Member '+this.state.deleteName+' removed successfully')
+               
+            }
+          }else{
+              membersFlockNamesRef.child('/members/' + this.state.flockToBeDeleted).child(this.state.userIdToBeDeleted).set(null)
+             
+             
+                  const updatedArr = this.state.theItems.filter(item => item.id !== this.state.userIdToBeDeleted);
+                  this.setState({ theItems: updatedArr, deleteModal: false })
+                   this.notify('Member '+this.state.deleteName+' removed successfully')
+          }
+        })
+    } catch (error) {
+          //console.log('An error occured unfortunately',error)
+          this.notify('An error occured unfortunately')
+        }
+      }
   handleChildClick = (theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired) => {
    //console.log('theItems joooooj',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime, isEventExpired)
    if(sportType==='NFLRegular'){currentSelection='week1Round'}
@@ -528,7 +619,6 @@ class leaderboard extends Component {
         </tr>
         {theItems.map((item, index) => {
           var theScore='',theBPS=''
-         // ////console.log('item66556',item)
           if(this.state.currentSelection==='round1'){theScore=item.round1Score,item.round1BPS?theBPS=item.round1BPS:theBPS=0}
           if(this.state.currentSelection==='round2'){theScore=item.round2Score,item.round2BPS?theBPS=item.round2BPS:theBPS=0}
           if(this.state.currentSelection==='finalRound'){theScore=item.finalRoundScore,item.finalRoundBPS?theBPS=item.finalRoundBPS:theBPS=0}
@@ -570,7 +660,7 @@ class leaderboard extends Component {
               <td>{item.finalRoundScore}</td>*/}
               </>
               :null}
-              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.theName,deleteModal:true,userIdToBeDeleted:item.uid,flockToBeDeleted:item.flockName,thePicked})}/></td></>:null}
+              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.teamName,deleteModal:true,userIdToBeDeleted:item.id,flockToBeDeleted:item.flockName})}/></td></>:null}
             </tr>
             )
         })}

@@ -142,7 +142,7 @@ class Reel extends Component {
         if (window.innerWidth>1300){
           if(theGamesNo>6){showArrows=true}
           slidesToShow=6,slidesToScroll=6
-          console.log('haaapa 1111',showArrows)
+         
         }
         if (window.innerWidth>1100&&window.innerWidth<1300){
           if(theGamesNo>5){showArrows=true}
