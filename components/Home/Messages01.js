@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import styles from "./Messages.module.scss";
 import Image from 'next/image'
 import postTime from '../Helper/postTime';
-import lastSeen from '../Helper/lastSeen2';
-import MessagesGames from './MessagesGames'
+import lastSeen from '../Helper/lastSeen';
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import { HiArrowNarrowLeft } from "react-icons/hi";
@@ -12,58 +11,42 @@ import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
 import PageVisibility from 'react-page-visibility';
-import { io}  from "socket.io-client"
-/*var socket = io("http://localhost:4000", {
-  withCredentials: true,
-  transports: ["websocket", "polling"] // Forces websocket first to avoid some polling CORS issues
-});*/
-var socket = io("https://theramtournament.com", {
-  withCredentials: true,
-  transports: ["websocket"], 
-  autoConnect: true,
-  reconnection: true,
-  reconnectionAttempts: 5
-});
-var isFirstTime=false
 //import io from "socket.io-client"
 var lastSeenTime = 1756721809290, theLastTime = ''
 var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
-const mainCard=[
-  {id:1,matchNo:1,time:'Nov 3 2024, 03:00PM',player1:'Brandon Moreno-Mexico',p1Rec:'21-8-2',p1Points:'1.42',player2:'Amir Albazi-Iraq',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player1.png',p2Photo:'player2.png',status1:'notPlayed',bestPossibleScore:'', status2:'',bet:'',winner:'player1',match:'Mens Flyweight'},
-  {id:2,matchNo:2,time:'Nov 3 2024, 03:00PM',player1:'Erin Blanchfield-USA',p1Rec:'21-8-2',p1Points:'1.42',player2:'Rose Namajunas-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player3.png',p2Photo:'player4.png',status1:'ongoing',bestPossibleScore:'',status2:'',bet:'player1',winner:'player2',match:'Womens Flyweight'},
-  {id:3,matchNo:3,time:'Nov 3 2024, 03:00PM',player1:'Derrick Lewis-USA',p1Rec:'21-8-2',p1Points:'1.42',player2:'Jhonata Diniz-Brazil',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player5.png',p2Photo:'player6.png',status1:'played',bestPossibleScore:'',status2:'',bet:'',winner:'player1',match:'Mens Heavyweight'},
-  {id:4,matchNo:4,time:'Nov 3 2024, 03:00PM',player1:'Caio Machado-Brazil',p1Rec:'21-8-2',p1Points:'1.42',player2:'Brendson Ribeiro-Brazil',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player7.png',p2Photo:'player8.png',status1:'played',bestPossibleScore:'',status2:'',bet:'player2',winner:'player2',match:'Mens Light Heavyweight'},
-  {id:5,matchNo:5,time:'Nov 3 2024, 03:00PM',player1:'Marc Andre Barriault-Canada',p1Rec:'21-8-2',p1Points:'1.42',player2:'Dustin Stoltzfus-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player9.png',p2Photo:'player10.png',status1:'played',status2:'',bet:'player1',winner:'player1',match:'Mens Middleweight'},
-  {id:6,matchNo:6,time:'Nov 3 2024, 03:00PM',player1:'Mike Malott-Canada',p1Rec:'21-8-2',p1Points:'1.42',player2:'Trevin Giles-USA',p2Rec:'17-1-0',p2Points:'6.48',stat:'player', game:'UFC',p1Photo:'player11.png',p2Photo:'player12.png',status1:'played',status2:'',bestPossibleScore:'',bet:'player1',winner:'player2',match:'Mens Welterweight'},
-  ]
 class Messages extends Component {
   constructor() {
     super();
     this.messagesEndRef = React.createRef(null);
   }
   state = {
+    theChats: [
+      { id: 12, time: 1693499400000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'read' },
+      { id: 13, time: 1725121800000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 14, time: 1746117000000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'read' },
+      { id: 15, time: 1753979400000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 16, time: 1755707400000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 3, senderID: 2, status: 'read' },
+      { id: 17, time: 1756398600000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 18, time: 1756571400000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'read' },
+      { id: 19, time: 1756657200000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'sent' },
+      { id: 20, time: 1756657800000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 21, time: 1756657920000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 22, time: 1756658400000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'sent' },
+      { id: 23, time: 1756658460000, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' },
+      { id: 24, time: 1756720200000, message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', otherUserID: 2, senderID: 2, status: 'sent' },
+      { id: 25, time: 1756824686869, message: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', otherUserID: 2, senderID: 3, status: 'sent' }],
     theMessage: '', incomingData: [], profilePhoto: '', userName: '', acronym: '', lastSeen: '', myUserId: '', isLogged: '', otheUserId: '', areMessagesAvailable: '', theMessageId: '', theMessagesArray: [], lastMesoId: '', theLastSeenChat: 0,
-    hasInitializedFirebase: true, areThereMessages: false,isWindowInFocus: true,otherUserLastSeen:'Offline',isFirstTime:'',myMesoId:'',otherUserMesoId:''
+    hasInitializedFirebase: true, areThereMessages: false,isWindowInFocus: true,
   }
 
   componentDidMount = () => {
-   
-   /* socket = io("http://localhost:4000", {
-  withCredentials: true,
-  transports: ["websocket", "polling"] // Forces websocket first to avoid some polling CORS issues
-});*/
     this.scrollToBottom()
-    
-    console.log('theData rrrrrrrrra',this.props.theData)
+    //console.log('theData',this.props.from)
+    //console.log('theData',this.props.theData)
     var theData = this.props.theData
-    console.log('theData 365214',this.props.from,theData)
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
-      console.log('ddddddddd')
-      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'],otheUserId: theData['uid'] })
-    }
-     if (this.props.from === 'fromChats' && theData !== 'N/A') {
-      console.log('ddddddddd')
-      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
+      //console.log('ddddddddd')
+      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], lastSeen: theData['lastSeen'], otheUserId: theData['uid'] })
     }
     //this.props.theData['profilePhoto']
     this.setState({ theData: this.props.theData })
@@ -72,59 +55,7 @@ class Messages extends Component {
       if (!isWindowInFocus) {
         console.log('page visible 1111',isWindowInFocus)
       }*/
-      socket.on('new_message', (payload,callback) => {
-      console.log("New message received 004:", payload,'message',payload.message);
-      console.log('Details message:',payload.message);
-       this.upadateLastSeenChat(this.state.otherUserMesoId, this.state.otheUserId)
-       var {theMessagesArray}=this.state
-        theMessagesArray.push(payload.message)
-         this.setState({theMessagesArray, lastMesoId:payload.mesoId,areMessagesAvailable:true})
-    console.log('theMessagesArray 001',this.state.theMessagesArray)
-    if (typeof callback === 'function') {
-    callback({ status: 'received' }); 
   }
-   
-    });
-    socket.on('message_status_update', (data) => {
-  console.log("Status update for message:", data.mesoId, "is now:", data.status);
-   this.setState({theLastSeenChat:new Date().getTime()})
-   this.upadateLastSeenChat(this.state.theMessageId, this.state.myUserId)
-  //  this.checkLastSeenChat(mesoId2, this.state.otheUserId)
-});
-socket.on('user_presence_update', (data) => {
-    if (data.userId === this.state.otheUserId) {
-        // Use react-toastify to show the notification
-        toast.info("The other user just joined the chat!", {
-            position: "top-center",
-            autoClose: 3000
-        });
-         if (data.status === 'offline') {
-          this.setState({otherUserLastSeen:new Date().getTime()})
-   console.log('update offline')
-  }else if (data.status === 'viewing_chat') {
-    this.setState({otherUserLastSeen:'Online'})
-   console.log('update viewing chat')
-  }
-        this.setState({theLastSeenChat:new Date().getTime()})
-        console.log('data.userId',data.userId,this.state.otheUserId,new Date().getTime())
-        var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + this.state.theMessageId + '/lastChatSeen/')
-         chatRef.once('value', dataSnapshot => {
-         if (dataSnapshot.exists()){chatRef.set(new Date().getTime())}})
-        console.log('new Date().getTime()',new Date().getTime())
-      // this.checkLastSeenChat(mesoId2, this.state.otheUserId)
-        // Optionally update UI to show they are "Active Now"
-        //this.setState({ lastSeen: 'Active Now' });
-    }
-});
-     
-  }
-  handleUnload = (e) => {
-  // We don't log here because the console will be gone.
-  // We just execute the kill command.
-  if (socket) {
-    socket.disconnect();
-  }
-}
    listentoWindow = isVisible => {
     console.log('page visible 22222',isVisible)
       this.setState({
@@ -141,24 +72,12 @@ socket.on('user_presence_update', (data) => {
     this.scrollToBottom()
    
   }
-  checkOnlinePresence=(otherUserId)=>{
-     var onlineRef = firebase.database().ref('/online/'+otherUserId+'/online/');
-    onlineRef.once('value', dataSnapshot => {this.setState({otherUserLastSeen:dataSnapshot.val()})})
-   
-  }
-  onlinePresence=(myUserId,value)=>{
-     var userRef = firebase.database().ref('/online/'+myUserId+'/online/');
-    userRef.set(value)
-  }
   componentWillUnmount() {
     var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + this.state.theMessageId + '/time')
     chatRef.off('value');
-   // var userRef = firebase.database().ref('/online/'+this.state.myUserId+'/online/');
-   // userRef.set(null)
-   this.onlinePresence(this.state.myUserId,new Date().getTime())
-    console.log('called componentWillUnmount',socket)
-   // window.removeEventListener('beforeunload', this.handleUnload);
-     if (socket) socket.disconnect();
+    var userRef = firebase.database().ref('/online/'+this.state.myUserId+'/online/');
+    userRef.set(null)
+    //console.log('went offfff')
   }
 
   scrollToBottom = () => {
@@ -169,27 +88,10 @@ socket.on('user_presence_update', (data) => {
       if (user) {
         var userId = user.uid
         this.setState({ myUserId: userId, isLogged: true })
-        console.log('my iddddd friends',userId)
-        this.checkMessages(userId)
-        //this.checkOnline(userId)
-        this.onlinePresence(userId,'Online')
-        this.checkOnlinePresence(this.state.otheUserId)
-
-       
-         if (socket.connected) {
-        socket.emit('identify', userId);
-        socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
-      }else {
-        console.log('no connected socketttttttttt')
-        socket.connect(); // Force reconnection if it's dead
-        socket.once('connect', () => {
-          socket.emit('identify', userId);
-          socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
-
-        });
-      }
+        //console.log('my iddddd',userId)
+        this.checkData(userId)
+        this.checkOnline(userId)
         //this.theInterval()
-
       } else {
         this.setState({ isLogged: false })
       }
@@ -203,13 +105,12 @@ socket.on('user_presence_update', (data) => {
     event.stopPropagation();
     event.preventDefault()
   }
-  checkMessages = (myUid) => {
+  checkData = (myUid) => {
     //console.log('uids',myUid,this.state.otheUserId)
     var myUidKey = myUid.slice(-10);
     var otherUidKey = this.state.otheUserId.slice(-10);
     var mesoId1 = myUidKey + otherUidKey
     var mesoId2 = otherUidKey + myUidKey
-    this.setState({myMesoId:mesoId1,otherUserMesoId:mesoId2})
     //console.log('mesoidddddddd',mesoId1,mesoId2)
     var messageRef1 = firebase.database().ref('/messaging/messages/' + myUid + '/' + mesoId1)
     var messageRef2 = firebase.database().ref('/messaging/messages/' + myUid + '/' + mesoId2)
@@ -219,7 +120,7 @@ socket.on('user_presence_update', (data) => {
         //console.log('1 exiiiiiists',dataSnapshot.val())
         var theNo = dataSnapshot.numChildren(), i = 0
         this.setState({ theMessageId: mesoId1 })//,areThereMessages:true})
-        this.checkLastSeenChat(mesoId1, myUid)
+        this.checkLastSeenChat(mesoId1, this.state.otheUserId)
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
@@ -228,16 +129,16 @@ socket.on('user_presence_update', (data) => {
           if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             //console.log('objMax',objMax,objMax['id'])
-            console.log('theMessages1',theMessages)
+            //console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] }, () => {
-              this.upadateLastSeenChat(mesoId2,this.state.otheUserId)
-              //this.realTimeUpdate(mesoId1)
+              //this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
+              this.realTimeUpdate(mesoId1)
             })
 
           }
         })
       } else {
-       /* messageRef2.once('value', dataSnapshot => {
+        messageRef2.once('value', dataSnapshot => {
           if (dataSnapshot.exists()) {
             //console.log('2 exiiiiiists',dataSnapshot.val())
             var theNo = dataSnapshot.numChildren(), i = 0
@@ -251,10 +152,10 @@ socket.on('user_presence_update', (data) => {
               if (theNo === i) {
                 let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
                 //console.log('objMax',objMax,objMax['id'])
-                console.log('theMessages2',theMessages)
+                //console.log('theMessages2',theMessages)
                 this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] }, () => {
-                   this.upadateLastSeenChat(mesoId2,this.state.otheUserId)
-                 // this.realTimeUpdate(mesoId2)
+                  // this.upadateLastSeenChat(mesoId2,this.state.otheUserId)
+                  this.realTimeUpdate(mesoId2)
                 })
               }
             })
@@ -262,7 +163,7 @@ socket.on('user_presence_update', (data) => {
           } else {
             this.setState({ areMessagesAvailable: false })
           }
-        })*/
+        })
       }
     })
   }
@@ -285,11 +186,9 @@ socket.on('user_presence_update', (data) => {
       }
     });
   }
-  checkLastSeenChat = (messageId, myUid) => {
-    var chatRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/' + messageId + '/lastChatSeen/')
-    chatRef.once('value', dataSnapshot => { this.setState({ theLastSeenChat: dataSnapshot.val() }) 
-    console.log('theLastSeenChat',messageId,myUid,dataSnapshot.val())
-  })
+  checkLastSeenChat = (messageId, otherUserId) => {
+    var chatRef = firebase.database().ref('/messaging/lastChats/' + otherUserId + '/' + messageId + '/lastChatSeen/')
+    chatRef.once('value', dataSnapshot => { this.setState({ theLastSeenChat: dataSnapshot.val() }) })
   }
   updateMessages = () => {
     var messageRef = firebase.database().ref('/messaging/messages/' + this.state.myUserId + '/' + this.state.theMessageId).orderByKey().startAfter(this.state.lastMesoId);
@@ -362,63 +261,6 @@ socket.on('user_presence_update', (data) => {
       () => this.setState({ hasInitializedFirebase: true }),
       1000)
   }
- /* postMyPicks= () => {
-    var teamName=this.props.teamName
-    var flockName=this.props.flockName
-    var selectedPickTitle=this.props.selectedPickTitle
-    var theGames=this.props.theGames
-    var sportTitle=this.props.sportType+' - '+selectedPickTitle
-    var pickDetails=teamName+'####'+flockName+'####'+sportTitle
-    var theMessage=this.props.sportType+' - '+selectedPickTitle
-    console.log('dettssssss',teamName,flockName,selectedPickTitle,sportTitle,theGames)
-    if(pickDetails.length&&theGames.length){
-    this.sendPickMessage(pickDetails,theGames,theMessage)
-    }
-    
-  }
-    sendPickMessage = (pickDetails,theGames,theMessage) => {
-    var messageRef = firebase.database().ref('/messaging/messages/')
-    var chatRef = firebase.database().ref('/messaging/lastChats/')
-    var theKey = chatRef.push().key
-    var myUidKey = this.state.myUserId.slice(-10);
-    var otherUidKey = this.state.otheUserId.slice(-10);
-    var theMessagesArray=this.state.theMessagesArray
-    var mesoId = ''
-    if (this.state.theMessageId.length < 5) {
-      mesoId = myUidKey + otherUidKey
-    } else {
-      mesoId = this.state.theMessageId
-    }
-   console.log('dettssssss',theMessage,pickDetails,mesoId,this.state.myUserId,this.state.otheUserId,theGames)
-    //return
-    if (theMessage.length >= 1 && mesoId !== '') {
-      var theMessage = { message:theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId,status:'picks',pickDetails:pickDetails,thePicks:theGames}
-      var theChat = { message:theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId,status:'picks',pickDetails:pickDetails,thePicks:theGames,lastChatSeen: new Date().getTime() }
-      if (this.state.areThereMessages === false) { theChat['1stSenderId'] = this.state.myUserId }
-      messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
-      messageRef.child(this.state.otheUserId).child(mesoId).child(theKey).set(theMessage)
-      chatRef.child(this.state.myUserId).child(mesoId).set(theMessage)
-      chatRef.child(this.state.otheUserId).child(mesoId).set(theChat, (error) => {
-        if (error) { this.notify('Error sending message') }
-        else { 
-           theMessage['id']=mesoId
-          socket.emit('send_private_message', {
-      from:'sendMessage',
-      recipientId:this.state.otheUserId,
-      senderId:this.state.myUserId,
-      message:theMessage,
-      mesoId:mesoId
-    });
-   
-    theMessagesArray.push(theMessage)
-    console.log('theMessagesArray 001',theMessagesArray)
-    this.setState({theMessagesArray, lastMesoId:mesoId})     
-    this.notify('Message send successfully');this.setState({ theMessageId: mesoId }) }
-      })
-    } else {
-      this.notify('You can not send an empty message')
-    }
-  }*/
   sendMessage = () => {
     var messageRef = firebase.database().ref('/messaging/messages/')
     var chatRef = firebase.database().ref('/messaging/lastChats/')
@@ -426,36 +268,25 @@ socket.on('user_presence_update', (data) => {
     //console.log('rrrrrrrrrr',theKey)
     var myUidKey = this.state.myUserId.slice(-10);
     var otherUidKey = this.state.otheUserId.slice(-10);
-    var theMessagesArray=this.state.theMessagesArray
-     var mesoId =myUidKey + otherUidKey
-    var otherUserMesoId=otherUidKey+myUidKey
+    var mesoId = ''
+    if (this.state.theMessageId.length < 5) {
+      mesoId = myUidKey + otherUidKey
+    } else {
+      mesoId = this.state.theMessageId
+    }
     //console.log('mesoId',mesoId)
     // return
 
     if (this.state.theMessage.length >= 1 && mesoId !== '') {
       var theMessage = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId }
-      var theChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId}
+      var theChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId, lastChatSeen: new Date().getTime() }
       if (this.state.areThereMessages === false) { theChat['1stSenderId'] = this.state.myUserId }
       messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
-      messageRef.child(this.state.otheUserId).child(otherUserMesoId).child(theKey).set(theMessage)
-      chatRef.child(this.state.myUserId).child(mesoId).update(theChat)
-      chatRef.child(this.state.otheUserId).child(otherUserMesoId).update(theChat, (error) => {
+      messageRef.child(this.state.otheUserId).child(mesoId).child(theKey).set(theMessage)
+      chatRef.child(this.state.myUserId).child(mesoId).set(theMessage)
+      chatRef.child(this.state.otheUserId).child(mesoId).set(theChat, (error) => {
         if (error) { this.notify('Error sending message') }
-        else { 
-           theMessage['id']=mesoId
-          socket.emit('send_private_message', {
-      from:'sendMessage',
-      recipientId:this.state.otheUserId,
-      senderId:this.state.myUserId,
-      message:theMessage,
-      mesoId:mesoId
-    });
-   
-    theMessagesArray.push(theMessage)
-    console.log('theMessages theChat 001',theMessage,theChat)
-    console.log('theMessagesArray 001',theMessagesArray)
-    this.setState({theMessagesArray, lastMesoId:mesoId,areMessagesAvailable:true})     
-    this.notify('Message send successfully'); this.setState({ theMessage: '' }); this.setState({ theMessageId: mesoId }) }
+        else { this.notify('Message send successfully'); this.setState({ theMessage: '' }); this.setState({ theMessageId: mesoId }) }
       })
     } else {
       this.notify('You can not send an empty message')
@@ -478,13 +309,13 @@ socket.on('user_presence_update', (data) => {
     });
   }
   render() {
-   // console.log('hehehe',this.state.areMessagesAvailable,this.state.theMessagesArray)
     return (
      <PageVisibility onChange={this.listentoWindow}>
         <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
           <div className={styles.container2}>
             <div className={styles.chatsCont} /*style={{backgroundImage: "url(" + "chatBack.jpg" + ")"}}*/>
               {this.state.areMessagesAvailable ? <>{this.state.theMessagesArray.map((item, index) => {
+                {/*this.state.areMessagesAvailable?<>{this.state.theChats.map((item,index)=>{*/ }
                 var postDate = '', showTime = false, theMessageTime = ''
                 var theTime = dayjs(item.time).format('MMMM DD YYYY')
                 var todayTime = dayjs(new Date())
@@ -514,7 +345,6 @@ socket.on('user_presence_update', (data) => {
                       <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={30} width={30} objectFit='fit' />
                     </div>
                       <div className={styles.theMessageDiv}>
-                        {item.status==='picks'?<MessagesGames status='otherUser' myPicks={item.thePicks} pickDetails={item.pickDetails}/>:null}
                         <p className={styles.mesoP}>{item.message}</p>
                         <div className={styles.timeDiv1}>
                           <p className={styles.timeP}>{theMessageTime}</p>
@@ -523,7 +353,6 @@ socket.on('user_presence_update', (data) => {
                       <div className={styles.chatItenDiv1}>
                         <div className={styles.chatItenDiv2}>
                           <div className={styles.theMessageDiv2}>
-                        {item.status==='picks'?<MessagesGames status='me' myPicks={item.thePicks} pickDetails={item.pickDetails}/>:null}
                             <p className={styles.mesoP} style={{ marginRight: item.message.length <= 3 ? 30 : null }}>{item.message}</p>
                             <div className={styles.timeDiv2}>
                               <p className={styles.timeP2}>{theMessageTime}</p>
@@ -549,7 +378,7 @@ socket.on('user_presence_update', (data) => {
               </div>
               <div>
                 <p className={styles.userNameP}>{this.state.userName}</p>
-                <p className={styles.lastSeenP} style={{color:this.state.otherUserLastSeen==='Online'?'#3abba5ff':null}}>{this.state.otherUserLastSeen==='Online'||this.state.otherUserLastSeen==='Offline'?this.state.otherUserLastSeen==='Online'?'Online':'Offline':'Last Seen '+lastSeen(this.state.otherUserLastSeen)}</p>
+                <p className={styles.lastSeenP}>Last Seen {lastSeen(lastSeenTime)} </p>
 
               </div>
             </div>

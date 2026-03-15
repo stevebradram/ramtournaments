@@ -4,80 +4,148 @@ import postTime from '../Helper/postTime';
 import Image from 'next/image'
 var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 import { AiFillMessage } from "react-icons/ai";
-import { MdOutlineClose,MdAddComment } from "react-icons/md";
+import { MdOutlineClose, MdAddComment } from "react-icons/md";
+import firebase from '../FirebaseClient'
+import dayjs from 'dayjs';
 
 class Chats extends Component {
-    state={theChats:[
-    {id:1693499400000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1725121800000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'},
-    {id:1746117000000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1753979400000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'},
-    {id:1755707400000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1756398600000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'},
-    {id:1756571400000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1756657200000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'send'},
-    {id:1756657800000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'},
-    {id:1756657920000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'read'},
-    {id:1756658400000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1756658460000,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'},
-    {id:1756720200000,meso:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',userId:2,status:'read'},
-    {id:1756720723788,meso:'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa',userId:3,status:'send'}
-  ]}
+  state = {
+    theChats: [
+      { id: 1693499400000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1725121800000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
+      { id: 1746117000000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1753979400000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
+      { id: 1755707400000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1756398600000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
+      { id: 1756571400000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1756657200000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'send' },
+      { id: 1756657800000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
+      { id: 1756657920000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'read' },
+      { id: 1756658400000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1756658460000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
+      { id: 1756720200000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
+      { id: 1756720723788, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' }
+    ], theChatsId: '', areChatsAvailable: false, theChatsArray: [], lastMesoId: '', myUserId: '', isLogged: ''
+  }
 
-    componentDidMount=()=>{
-        var theChats = this.state.theChats.sort(function (a, b) { return b.id - a.id });
-        this.setState({theChats})
-    }
-    
-    openMessages=()=>{
-        console.log('clicked!')
-    this.props.onClick('fromChats','chatId')
-    }
-     openFriends=()=>{
-        console.log('clicked!')
-    this.props.onClick('fromChats','openFriends','N/A')
-    }
-    closeMessenger=()=>{
-        console.log('clicked!')
-        this.props.onClick('fromChats','close','N/A')
-    }
-    doNothing = (event) => {
+  componentDidMount = () => {
+    var theChats = this.state.theChats.sort(function (a, b) { return b.id - a.id });
+    this.setState({ theChats })
+    this.checkAuth()
+  }
+  checkAuth = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        var userId = user.uid
+        this.setState({ myUserId: userId, isLogged: true })
+        this.checkChats(userId)
+      } else {
+        this.setState({ isLogged: false })
+      }
+    })
+  }
+  checkChats = (myUid) => {
+    var chatsRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/')
+    var userRef = firebase.database().ref('/users/')
+    var theChats = []
+    chatsRef.once('value', dataSnapshot => {
+      if (dataSnapshot.exists()) {
+        //console.log('1 exiiiiiists',dataSnapshot.val())
+        var theNo = dataSnapshot.numChildren(), i = 0
+
+        // this.checkLastSeenChat(mesoId1, this.state.otheUserId)
+        dataSnapshot.forEach((data) => {
+          i++
+          var theData = data.val()
+          theData['id'] = data.key
+          var otherUserID=data.val().otherUserID
+          userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
+            var profilePhoto = dataSnapshot.val().profilePhoto
+            var userName = dataSnapshot.val().name
+            var matches = userName.match(/\b(\w)/g);
+            var acronym = matches.join('');
+            theData['userName'] = userName
+            theData['acronym'] = acronym
+            if (profilePhoto) { theData['profilePhoto'] = profilePhoto }
+            else { theData['profilePhoto'] = 'N/A' }
+            theChats.push(theData)
+               if (theNo === i) {
+            let objMax=''
+            if(theChats.length){objMax=theChats.reduce((max, curren) => max.time > curren.time ? max : curren);}
+            //console.log('objMax',objMax,objMax['id'])
+            console.log('theChats1232323', theChats)
+           // return
+            this.setState({ areChatsAvailable: true, theChatsArray: theChats, lastMesoId: objMax['id'] }, () => {
+              //console.log('allChats', theChats)
+              // this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
+              //this.realTimeUpdate(mesoId1)
+            })
+
+          }
+          })
+        
+        })
+      } else { this.setState({ areChatsAvailable: false }) }
+
+    })
+  }
+  openMessages = (item) => {
+    console.log('clicked!',item)
+    var theItem={uid:item.otherUserID,acronym:item.acronym,profilePhoto:item.profilePhoto,userName:item.userName}
+    this.props.onClick('fromChats', 'chatId',theItem)
+  }
+  openFriends = () => {
+    console.log('clicked!')
+    this.props.onClick('fromChats', 'openFriends', 'N/A')
+  }
+  closeMessenger = () => {
+    console.log('clicked!')
+    this.props.onClick('fromChats', 'close', 'N/A')
+  }
+  doNothing = (event) => {
     event.stopPropagation();
     event.preventDefault()
   }
-    render() {
-        return (
-            <div className={styles.container} onClick={(event)=>this.doNothing(event)}>
-                <div className={styles.headerDiv}>
-                    <h2>Chats</h2>
-                <MdOutlineClose   className={styles.backIc} onClick={()=>this.closeMessenger()}/>
+  render() {
+    return (
+      <div className={styles.container} onClick={(event) => this.doNothing(event)}>
+        <div className={styles.headerDiv}>
+          <h2>Chats</h2>
+          <MdOutlineClose className={styles.backIc} onClick={() => this.closeMessenger()} />
+        </div>
+        {this.state.areChatsAvailable?<div className={styles.chatsCont}>
+          {this.state.theChatsArray.map((item, index) => {
+            var messageRead=false
+          if(item.lastChatSeen){
+            if(item.lastChatSeen>item.time){messageRead=true}
+          }
+            return (
+              <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
+                <div className={styles.imgDiv}>
+                  {item.profilePhoto!=='N/A'?<Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' />:
+                   <p>{item.acronym}</p>}
+                 
                 </div>
-                <div className={styles.chatsCont}>
-                {this.state.theChats.map((item,index)=>{
-        
-                 return(
-                    <div className={styles.chatItenDiv} key={index} onClick={()=>this.openMessages()}>
-                        <div className={styles.imgDiv}>
-                       <Image className={styles.theImg} src={theImg}  alt={'RAM User'} height={50} width={50} objectFit='fit'/>
-                        </div>
-                        <div>
-                          <div className={styles.nameDiv}>
-                           <p className={styles.nameP}>Kim John</p>
-                           <p className={styles.timeP} style={{color:item.status!=='read'?'#df5959ff':null}}>{postTime(item.id)}</p>
-                            </div>
-                            <p className={styles.mesoP}>{item.meso}</p>
-                            
-                               {item.status!=='read'?<AiFillMessage className={styles.mesoIc}/>:null}
-                           
-                        </div>
-                    </div>)})}
+                <div>
+                  <div className={styles.nameDiv}>
+                    <p className={styles.nameP}>{item.userName}</p>
+                    <p className={styles.timeP} style={{ color: messageRead===false?'#df5959ff' : null}}>{postTime(item.time)}</p>
+                  </div>
+                  <p className={styles.mesoP}>{item.message}</p>
+                  {messageRead?null:<AiFillMessage className={styles.mesoIc}/>}
                 </div>
-                <div className={styles.addChat} onClick={()=>this.openFriends()}>
-                    <MdAddComment className={styles.chatIc}/>
-                </div>
-            </div>
-        );
-    }
+              </div>)
+          })}
+        </div>:
+        <div className={styles.noDataDiv}>
+                  <p>Your chats will appear here</p>
+                </div>}
+        <div className={styles.addChat} onClick={() => this.openFriends()}>
+          <MdAddComment className={styles.chatIc} />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Chats;

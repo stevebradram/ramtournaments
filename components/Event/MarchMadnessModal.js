@@ -51,7 +51,7 @@ class NCAAModal extends Component {
     if(this.state.currentSelection!=='round1'){this.setState({getFromOddsApi:true})}
     var firstMatchTime=[]
     if(incomingData.length>0){
-      incomingData=incomingData.slice(0,4)
+      incomingData=incomingData
       round1Edit=[],round2Edit=[],sweet16Edit=[],elite8Edit=[],final4Edit=[],finalRoundEdit=[]
       incomingData.map((item,index)=>{
         incomingData[index]['bet']=''

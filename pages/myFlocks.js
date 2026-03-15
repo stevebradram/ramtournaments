@@ -19,6 +19,7 @@ class MyFlocks extends Component {
   constructor() {
     super();
     this.tableRef = React.createRef(null);
+    this.marchMadnessRef= React.createRef(null);
   }
   state = {
     openModal: false, openModal2: false, openModal4: false, theItems: [], isThereNullData: false, allGames: [], showProgressBar: false, isAdmin: false, endTime: '', communitySelection: 'My Flocks', creatorId: '', showNCAAB: false, count: 0, showReel: false,
@@ -542,15 +543,24 @@ class MyFlocks extends Component {
     }
   }
   handleChildClick = (theEventKey, theEventTitle, theTime, sportType, currentSelection, endTime, isEventExpired) => {
-    this.loadOtherEvents(sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime)
-    this.setState({ count: this.state.count + 1, sportType })
-    ////console.log('chuccccccccc',sportType,stopEdits)
+     console.log('chuccccccccc',sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime)
+     this.setState({ count: this.state.count + 1,theEventKey, sportType },()=>{
+     this.loadOtherEvents(sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime,isEventExpired)
+     })
+    
+     if (this.marchMadnessRef.current) {
+        this.marchMadnessRef.current.runCustomLogic(theEventKey, 'round1', sportType,endTime); // Call child's method
+        console.log('running cutom logic marchMadnessRef')
+      }
+    
     /*if(sportType==='NCAAB'||sportType==='NFLRegular'){
       this.setState({communitySelection:'My Flocks',currentSelection:'round1'})
     }*/
     if (sportType === 'NFLRegular') { currentSelection = 'week1Round' }
     // this.loadOtherEvents(sportType,theEventKey,theTime,theEventTitle,currentSelection,isEventExpired)
     this.setState({ count: this.state.count + 1 })
+
+    //theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection
 
   };
   render() {
@@ -842,7 +852,7 @@ class MyFlocks extends Component {
                 </div> </div> : <div>
                 <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
                 <p className={styles.noDataP1}>No Admin data available for this event</p>
-              </div>}</> : null}</> : this.state.showNCAAB ? <CommMarchMadness theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection} /> : null}
+              </div>}</> : null}</> : this.state.showNCAAB ? <CommMarchMadness ref={this.marchMadnessRef} theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection} /> : null}
 
           </div>
         </div>

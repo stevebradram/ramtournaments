@@ -1,11 +1,73 @@
 import React, { Component } from 'react';
+import styles from "./Messages.module.scss";
+import { io}  from "socket.io-client"
+import { IoMdArrowDroprightCircle } from "react-icons/io";
+import firebase from '../FirebaseClient'
+const socket = io("http://localhost:4000", {
+  withCredentials: true,
+  transports: ["websocket", "polling"] // Forces websocket first to avoid some polling CORS issues
+});
 
 class Messages4 extends Component {
+  state={myUserId:'',isLogged:false}
+
+  componentDidMount=()=>{
+    this.checkAuth()
+    // socket.off('new_message');
+     socket.on('new_message', (payload) => {
+      console.log("New message received:", payload);
+    });
+  }
+ componentWillUnmount() {
+  console.log('message 4 unmounted')
+  socket.off('new_message');
+  //socket.disconnect();
+}
+    checkAuth = () => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          var userId = user.uid
+          this.setState({ myUserId: userId, isLogged: true })
+         // socket.emit('identify', userId);
+         if (socket.connected) {
+        socket.emit('identify', userId);
+      }
+        } else {
+          this.setState({ isLogged: false })
+        }
+      })
+    }
+      sendMessage=()=>{
+      console.log('rrrrrrrrrr 22222')
+      //this.notify("Can't send a message at the moment")
+     // socket.emit("send_message",{message:message})
+     socket.emit('send_private_message', {
+      recipientId: 'qXeqfrI5VNV7bPMkrzl0QsySmoi2',
+      senderId:this.state.myUserId,
+      message: 'mumua mundu '+new Date()
+    });
+  }
+    doNothing = (event) => {
+    event.stopPropagation();
+    event.preventDefault()
+  } 
+    inputChange = async (e) => {
+    var value = e.target.value
+   // console.log('theId', e.target.id)
+   //await this.setState({ [e.target.id]: value })
+  }
   render() {
     return (
-      <div>
-        
-      </div>
+      <div className={styles.container} onClick={(event)=>this.doNothing(event)}>
+                             <div className={styles.container2}>
+                             <div className={styles.chatsCont}></div>
+                                  <div className={styles.editDiv}>
+                                                 <textarea className={styles.mesoInput} id='theMessage' placeholder='Write your message here message 3'  multiple onChange={(event)=>this.inputChange(event)}/>
+                                                 <IoMdArrowDroprightCircle className={styles.sendIc} onClick={()=>this.sendMessage()} />
+                                                 </div>
+                 
+             </div>
+             </div>  
     );
   }
 }

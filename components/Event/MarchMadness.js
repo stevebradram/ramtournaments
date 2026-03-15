@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import style from "./MarchMadness.module.scss";
+import dynamic from 'next/dynamic';
 import { ToastContainer, toast } from 'react-toastify';
 import DateTimePicker from 'react-datetime-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
@@ -7,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import firebase from '../FirebaseClient'
 import { IoPersonSharp } from "react-icons/io5";
-import { MdOutlineShare } from "react-icons/md";
+import { MdOutlineShare, MdCheck } from "react-icons/md";
 import { TypeAnimation } from 'react-type-animation';
 import { RiTeamFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -15,12 +16,19 @@ import Countdown from 'react-countdown';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import { BsFillLightningFill } from "react-icons/bs";
+import { FaRegCopy } from "react-icons/fa";
 import { TbCheckbox } from "react-icons/tb";
 import { MdClose } from "react-icons/md";
 import DetailsModal from './MarchMadnessDetailsModal';
+import DetailsModal3 from './DetailsModal3';
 import EditDetails from './DetailsModalFlockSystem'
 import MarchMadnessModal from './MarchMadnessModal'
 import TheMarchMadness from '../LeaderBoards/TheMarchMadness'
+import Friends from '../Home/Friends'
+const Messages = dynamic(() => import('../Home/Messages'), { 
+  ssr: false,
+  loading: () => <p>Loading Chat...</p> // Optional loading state
+});
 import axios from "axios"
 var thePoints = [{ seed: 1, val: 1.01 }, { seed: 2, val: 1.08 }, { seed: 3, val: 1.17 }, { seed: 4, val: 1.27 }, { seed: 5, val: 1.54 }, { seed: 6, val: 1.61 }, { seed: 7, val: 1.63 }, { seed: 8, val: 2.02 },
 { seed: 9, val: 1.95 }, { seed: 10, val: 2.58 }, { seed: 11, val: 2.62 }, { seed: 12, val: 2.86 }, { seed: 13, val: 4.75 }, { seed: 14, val: 6.91 }, { seed: 15, val: 13.81 }, { seed: 16, val: 76 }
@@ -107,7 +115,8 @@ class MarchMadness extends Component {
     eastRound1Arr: [], eastRound2Arr: [], eastSweet16Arr: [], eastElite8Arr: [], dataAvailable: false, currentEventUserInfo: {}, currentItems: [], westRound1Arr: [], westRound2Arr: [], westSweet16Arr: [], westElite8Arr: [], southRound1Arr: [], southRound2Arr: [], southSweet16Arr: [], southElite8Arr: [],
     midWestRound1Arr: [], midWestRound2Arr: [], midWestSweet16Arr: [], midWestElite8Arr: [], final4Arr: [], finalArr: [], showUpperBar: true, currentRound: '', currentFinalsSubRound: '', theLink: '', theTime: '', round1EastArr: [], round1WestArr: [], round1SouthArr: [], round1midWestArr: [], allRound1MatchesArr: [], oldRound1Array: [],
     round2EastArr: [], round2WestArr: [], round2SouthArr: [], round2midWestArr: [], allRound2MatchesArr: [], allRoundFinalArr: [], sweet16Arr: [], elite8Arr: [], opendetailsModal: false, itemToModals: [], modalTitle: '', finalRoundScore: '', editDetailsModal: false, marchMadnessModal: false, selectHomeEvent: false, selectHomeEventId: '',
-    stopRound1Edit: '', stopRound2Edit: '', stopSweet16Edit: '', stopElite8Edit: '', stopFinal4Edit: '', stopFinalEdit: '', currentSelection: '', eventYear: '', theEventTitle: '', theEventKey: '', theEventTime: '',selectionToModal:''
+    stopRound1Edit: '', stopRound2Edit: '', stopSweet16Edit: '', stopElite8Edit: '', stopFinal4Edit: '', stopFinalEdit: '', currentSelection: '', eventYear: '', theEventTitle: '', theEventKey: '', theEventTime: '', selectionToModal: '', trialModal: true, openShareMatchesModal:false, selectedPick: '', picksSelect: [{ id: 'round1', text: 'Round of 64' }, { id: 'round2', text: 'Round of 32' }, { id: 'sweet16', text: 'Sweet 16' }, { id: 'elite8', text: 'Elite 8' }, { id: 'final4', text: 'Final 4' }, { id: 'finalRound', text: 'Finals' }],
+    selectedPickErr: false,selectedPickTitle:'',showFriends:false,toMessageArray:[],showMessagesPage:false,theData:'',count:0
   }
 
   componentDidMount = () => {
@@ -191,7 +200,7 @@ class MarchMadness extends Component {
               stopRound1Edit = '', stopRound2Edit = '', stopFinalEdit = '', stopSweet16Edit = '',
               stopElite8Edit = '', stopFinal4Edit = '', eventYear = ''
             if (allGames.length > 0) {
-              allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
+              allGames = allGames.sort((a, b) => b.time - a.time); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
               stopRound1Edit = allGames[0]['stopRound1Edit'], stopRound2Edit = allGames[0]['stopRound2Edit'], stopFinalEdit = allGames[0]['stopFinalEdit'], stopSweet16Edit = allGames[0]['stopSweet16Edit'], stopElite8Edit = allGames[0]['stopElite8Edit'], stopFinal4Edit = allGames[0]['stopFinal4Edit'], eventYear = allGames[0]['eventYear']
             }
           }
@@ -1085,7 +1094,7 @@ class MarchMadness extends Component {
     })
 
   }
-  openMarchMadnessModal2=()=> {
+  openMarchMadnessModal2 = () => {
 
   }
   openMarchMadnessModal = async () => {
@@ -1093,77 +1102,83 @@ class MarchMadness extends Component {
     var gamesInfo = firebase.database().ref('/theEvents/NCAAB/eventsIds/' + this.state.theEventKey)
     gamesInfo.once('value', dataSnapshot => {
       var currentSelection = dataSnapshot.val().currentSelection
-      var stopRound1Edit=dataSnapshot.val().stopRound1Edit
-      var stopRound2Edit=dataSnapshot.val().stopRound2Edit
-      var stopSweet16Edit=dataSnapshot.val().stopSweet16Edit
-      var stopElite8Edit=dataSnapshot.val().stopElite8Edit
-      var stopFinal4Edit=dataSnapshot.val().stopFinal4Edit
-      var stopFinalEdit=dataSnapshot.val().stopFinalRoundEdit
+      var stopRound1Edit = dataSnapshot.val().stopRound1Edit
+      var stopRound2Edit = dataSnapshot.val().stopRound2Edit
+      var stopSweet16Edit = dataSnapshot.val().stopSweet16Edit
+      var stopElite8Edit = dataSnapshot.val().stopElite8Edit
+      var stopFinal4Edit = dataSnapshot.val().stopFinal4Edit
+      var stopFinalEdit = dataSnapshot.val().stopFinalRoundEdit
       var year = this.state.eventYear
-      
-     /* if (currentSelection === 'round1') {
-        if (this.state.stopRound1Edit !== 'N/A') { }
-      }
-      if (currentSelection === 'round2') { }
-      if (currentSelection === 'sweet16') { }
-      if (currentSelection === 'elite8') { }
-      if (currentSelection === 'final4') { }
-      if (currentSelection === 'finalRound') { }*/
 
-    //if (currentSelection === 'finalRound') { }  
-    
-    var itemToModals = '', modalTitle = ''
-    var eventYear = this.state.eventYear
-    var time = new Date().getTime()
-    if (currentSelection === 'round1'&&stopRound1Edit !== 'N/A' && time > (stopRound1Edit+3600000)){currentSelection='round2'}
-    if (currentSelection === 'round2'&&stopRound2Edit !== 'N/A' && time > (stopRound2Edit+3600000)){currentSelection='sweet16'}
-    if (currentSelection === 'sweet16'&&stopSweet16Edit !== 'N/A' && time > (stopSweet16Edit+3600000)){currentSelection='elite8'}
-    if (currentSelection === 'elite8'&&stopElite8Edit !== 'N/A' && time > (stopElite8Edit+3600000)){currentSelection='final4'}
-    if (currentSelection === 'final4'&&stopFinal4Edit !== 'N/A' && time > (stopFinal4Edit+3600000)){currentSelection='finalRound'}
+      /* if (currentSelection === 'round1') {
+         if (this.state.stopRound1Edit !== 'N/A') { }
+       }
+       if (currentSelection === 'round2') { }
+       if (currentSelection === 'sweet16') { }
+       if (currentSelection === 'elite8') { }
+       if (currentSelection === 'final4') { }
+       if (currentSelection === 'finalRound') { }*/
 
-    console.log('currentSelection',currentSelection,time,stopRound1Edit)
+      //if (currentSelection === 'finalRound') { }  
+
+      var itemToModals = '', modalTitle = ''
+      var eventYear = this.state.eventYear
+      var time = new Date().getTime()
+      if (currentSelection === 'round1' && stopRound1Edit !== 'N/A' && time > (stopRound1Edit + 3600000)) { currentSelection = 'round2' }
+      if (currentSelection === 'round2' && stopRound2Edit !== 'N/A' && time > (stopRound2Edit + 3600000)) { currentSelection = 'sweet16' }
+      if (currentSelection === 'sweet16' && stopSweet16Edit !== 'N/A' && time > (stopSweet16Edit + 3600000)) { currentSelection = 'elite8' }
+      if (currentSelection === 'elite8' && stopElite8Edit !== 'N/A' && time > (stopElite8Edit + 3600000)) { currentSelection = 'final4' }
+      if (currentSelection === 'final4' && stopFinal4Edit !== 'N/A' && time > (stopFinal4Edit + 3600000)) { currentSelection = 'finalRound' }
+
+      console.log('currentSelection', currentSelection, time, stopRound1Edit)
       //return
-    //return
-    if (currentSelection === 'round1') {
-      if (stopRound1Edit !== 'N/A' && time > stopRound1Edit) { this.notify('Event already started'); return }
-      else{
-        modalTitle = 'March Madness ' + year + ' > Round 1'
-        this.setState({ itemToModals:this.state.allRound1MatchesArr, marchMadnessModal: true, modalTitle,selectionToModal:'round1' })
-    }}
-    if (currentSelection === 'round2') {
-      if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
-      else{
-        modalTitle = 'March Madness ' + year + ' > Round 2'
-        this.setState({ itemToModals:this.state.allRound2MatchesArr, marchMadnessModal: true, modalTitle,selectionToModal:'round2' })
-    }}
-    if (currentSelection === 'sweet16') {
-      if (stopSweet16Edit !== 'N/A' && time > stopSweet16Edit) { this.notify('Event already started'); return }
-      else{
-        modalTitle = 'March Madness ' + year + ' > Sweet 16'
-        this.setState({ itemToModals:this.state.sweet16Arr, marchMadnessModal: true, modalTitle,selectionToModal:'sweet16' })
-    }}
-    if (currentSelection === 'elite8') {
-      if (stopElite8Edit !== 'N/A' && time > stopElite8Edit) { this.notify('Event already started'); return }
-      else{
-        modalTitle = 'March Madness ' + year + ' > Elite 8'
-        this.setState({ itemToModals:this.state.elite8Arr, marchMadnessModal: true, modalTitle,selectionToModal:'elite8' })
-    }}
-    if (currentSelection === 'final4') {
-      if (stopFinal4Edit !== 'N/A' && time > stopFinal4Edit) { this.notify('Event already started'); return }
-      else{
-        modalTitle = 'March Madness ' + year + ' > Final 4'
-        this.setState({ itemToModals:this.state.final4Arr, marchMadnessModal: true, modalTitle,selectionToModal:'final4' })
-    }}
-    if (currentSelection === 'finalRound') {
-      if (stopFinalEdit !== 'N/A' && time > stopFinalEdit) { 
-        if(time>Number(stopFinalEdit+86400000)){this.notify('Event Expired');return}
-        else{this.notify('Event already started'); return}}
-      else{
-        modalTitle = 'March Madness ' + year + ' > Championship'
-        this.setState({ itemToModals:this.state.finalArr, marchMadnessModal: true, modalTitle,selectionToModal:'finalRound' })
-    }
-  }
-  })
+      //return
+      if (currentSelection === 'round1') {
+        if (stopRound1Edit !== 'N/A' && time > stopRound1Edit) { this.notify('Event already started'); return }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Round 1'
+          this.setState({ itemToModals: this.state.allRound1MatchesArr, marchMadnessModal: true, modalTitle, selectionToModal: 'round1' })
+        }
+      }
+      if (currentSelection === 'round2') {
+        if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Round 2'
+          this.setState({ itemToModals: this.state.allRound2MatchesArr, marchMadnessModal: true, modalTitle, selectionToModal: 'round2' })
+        }
+      }
+      if (currentSelection === 'sweet16') {
+        if (stopSweet16Edit !== 'N/A' && time > stopSweet16Edit) { this.notify('Event already started'); return }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Sweet 16'
+          this.setState({ itemToModals: this.state.sweet16Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'sweet16' })
+        }
+      }
+      if (currentSelection === 'elite8') {
+        if (stopElite8Edit !== 'N/A' && time > stopElite8Edit) { this.notify('Event already started'); return }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Elite 8'
+          this.setState({ itemToModals: this.state.elite8Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'elite8' })
+        }
+      }
+      if (currentSelection === 'final4') {
+        if (stopFinal4Edit !== 'N/A' && time > stopFinal4Edit) { this.notify('Event already started'); return }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Final 4'
+          this.setState({ itemToModals: this.state.final4Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'final4' })
+        }
+      }
+      if (currentSelection === 'finalRound') {
+        if (stopFinalEdit !== 'N/A' && time > stopFinalEdit) {
+          if (time > Number(stopFinalEdit + 86400000)) { this.notify('Event Expired'); return }
+          else { this.notify('Event already started'); return }
+        }
+        else {
+          modalTitle = 'March Madness ' + year + ' > Championship'
+          this.setState({ itemToModals: this.state.finalArr, marchMadnessModal: true, modalTitle, selectionToModal: 'finalRound' })
+        }
+      }
+    })
     return
     if (this.state.currentRound === 'round1') { itemToModals = this.state.allRound1MatchesArr, modalTitle = 'March Madness ' + year + ' > Round 1' }
     if (this.state.currentRound === 'round2') { itemToModals = this.state.allRound2MatchesArr, modalTitle = 'March Madness ' + year + ' > Round 2' }
@@ -1652,6 +1667,92 @@ class MarchMadness extends Component {
       ////console.log('error',error)
     }
   }
+  checkMatchPicked = () => {
+    console.log('the details rrrrr', 'NCAAB', this.state.theEventKey, this.state.selectedPick)
+    var thePick = ''
+    if (this.state.selectedPick === 'round1' || this.state.selectedPick === 'round2') {
+      thePick = this.state.selectedPick
+    } else {thePick = 'final/'+this.state.selectedPick}
+    if (!this.state.selectedPick) { this.setState({ selectedPickErr: true }) }
+    else {
+      var userBetsDb = firebase.database().ref('/users/').child(this.state.userId).child("/ramData/events/NCAAB/" + this.state.theEventKey + '/bets/' + this.state.selectedPick + '/')
+      userBetsDb.once('value', dataSnapshot => {
+        if (!dataSnapshot.exists()) { this.notify('Only picked events can be shared') }
+        else {
+          var i = 0, theItems = []
+          var count = dataSnapshot.numChildren()
+          dataSnapshot.forEach((data) => {
+            i++
+            var item ={ id: data.key, bet: data.val() }
+            theItems.push(item)
+            if (count === i) {
+              console.log('the details theItems 1', theItems)
+              var k = 0, theItems2 = []
+              var gamesInfo = firebase.database().ref('/theEvents/NCAAB/' + this.state.theEventKey + '/' + thePick + '/')
+              gamesInfo.once('value', dataSnapshot => {
+                var gamesCount = dataSnapshot.numChildren()
+                dataSnapshot.forEach((data) => {
+                  k++
+                  var place = ''
+                  if (data.val().place) { place = data.val().place }
+                  var item ={ id: data.key, player1: data.val().player1, player2: data.val().player2, p1Points: data.val().p1Points, p2Points: data.val().p2Points, place: place }
+                  theItems2.push(item)
+                  if (gamesCount === k) {
+                    console.log('the details theItems 2', theItems, theItems2)
+                    var toMessageArray = this.mergeById(theItems, theItems2)
+                    this.setState({toMessageArray,showFriends:true,openShareMatchesModal:false})
+                    console.log('combined2',this.state.currentEventUserInfo['teamName'],this.state.currentEventUserInfo['flockName'],this.state.selectedPickTitle,toMessageArray)
+                  }
+                })
+              })
+            }
+          })
+        }
+      })
+    }
+
+
+  }
+  mergeById = (arr1, arr2) => {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+      throw new TypeError("Both inputs must be arrays");
+    }
+    const map = new Map();
+    arr1.forEach(item => {
+      if (item && typeof item.id !== "undefined") {
+        map.set(item.id, { ...item });
+      }
+    });
+    arr2.forEach(item => {
+      if (item && typeof item.id !== "undefined") {
+        if (map.has(item.id)) {
+          map.set(item.id, { ...map.get(item.id), ...item });
+        } else {
+          map.set(item.id, { ...item });
+        }
+      }
+    });
+    return Array.from(map.values());
+  }
+      handleChatsClick = (from,text,theData) => {
+      console.log('theMeso',from,text,theData)
+      this.setState({ theCount: this.state.theCount + 1,theData})
+      if(from==='fromFriends'){if(text==='close'){this.setState({showMessagesPage:false,showFriends:false})}else{this.setState({showMessagesPage:true,showFriends:false})}}
+      if(from==='fromMessages'){this.setState({showMessagesPage:false,showFriends:false})}
+     /*f(from==='fromChats'){
+        if(text==='close'){this.setState({ showMessages:false,showChats:false});}
+        else if(text==='openFriends'){this.setState({ showMessages:false,showChats:false,showFriends:true});}
+        else{this.setState({ showMessages:true,showChats:false});}
+      }
+       if(from==='fromFriends'){
+        if(text==='close'){this.setState({ showMessages:false,showChats:true,showFriends:false});}
+        else{this.setState({ showMessages:true,showChats:false,showFriends:false,theData});}
+      }
+      if(from==='fromMessages'){
+        this.setState({ showMessages:false,showChats:true});
+      }*/
+   
+    }
   render() {
     var flockTeamName = false
     var todayInMillis = new Date().getTime()
@@ -1738,10 +1839,15 @@ class MarchMadness extends Component {
               <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal: true })}>Create New March Madness Event</p>
             </div> : null}
             <p className={style.eveP}>Event: <span>{this.state.theEventTitle}</span></p>
-            {this.state.theLink.length > 1 && new Date().getTime() < this.state.theTime ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
-              <p>Flock Invite Link</p>
-              <MdOutlineShare />
-            </div> : null}
+            <div className={style.linksDiv}>
+              {this.state.theLink.length > 1 && new Date().getTime() < this.state.theTime ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
+                <p>Flock Invite Link</p>
+                <FaRegCopy />
+              </div> : null}
+              <div className={style.sharePicksDiv} onClick={() => this.setState({ openShareMatchesModal: true })}>
+                <p>Share Picks With Friends</p>
+                <MdOutlineShare />
+              </div></div>
             <div className={style.picksDiv} onClick={() => this.openTheModal()}>
               {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
               {this.state.dataAvailable ?
@@ -1828,7 +1934,7 @@ class MarchMadness extends Component {
               <p id={this.state.theMenu === 'sweet16' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('sweet16')}>SWEET 16</p>
               <p id={this.state.theMenu === 'elite8' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('elite8')}>ELITE 8</p>
               <p id={this.state.theMenu === 'final4' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('final4')}>FINAL 4</p>
-              <p id={this.state.theMenu === 'finalRound' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('finalRound')}>CHAMPIONSHIP</p>
+              <p id={this.state.theMenu === 'finalRound' ? style.playerP2 : style.playerP} onClick={() => this.selectEvent('finalRound')}>FINALS</p>
 
             </div> : null}
             {/*this.state.showUpperBar?<div className={style.eve2Div}>
@@ -1978,8 +2084,24 @@ class MarchMadness extends Component {
         <ToastContainer />
         {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu} /></div> : null}
         {/*this.state.editDetailsModal ? <div className={style.detailsModal} onClick={e => e.currentTarget === e.target && this.setState({ editDetailsModal: false })} ><EditDetails theDetails={this.state.currentEventUserInfo['teamName'] + '::' + this.state.currentEventUserInfo['flockName'] + '::' + this.state.profilePhoto + '::' + this.state.theCurrentEvent} eventType={this.state.theMenu} theEventKey={this.state.theEventKey} /></div> : null*/}
-        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={this.state.selectionToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey}  onClick={this.handleChildClick} /></div> : null}
-
+        {this.state.marchMadnessModal ? <div className={style.detailsModal} onClick={() => this.setState({ marchMadnessModal: false })}><MarchMadnessModal eventToNCAABModal={this.state.selectionToModal} itemsToNCAABModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
+        {/*this.state.trialModal ? <div className={style.detailsModal}><DetailsModal3/></div>:null*/}
+        {this.state.openShareMatchesModal ? <div className={style.detailsModal} onClick={() => this.setState({ openShareMatchesModal: false })}><div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
+          <p className={style.shareMatchesTitle}>Select event picks to share</p>
+          {this.state.picksSelect.map((item, index) => {
+            return (
+              <div className={style.selectorDiv} key={index} onClick={() => this.setState({ selectedPick: item.id,selectedPickTitle:item.text})}>
+                <div className={this.state.selectedPick === item.id ? style.boxDiv3 : style.boxDiv3b}>
+                  <MdCheck size={15} /></div>
+                <p style={{ color: this.state.selectedPick === item.id ? '#CB1E31' : null }}>{item.text}</p>
+              </div>
+            )
+          })}
+          {this.state.selectedPickErr ? <p className={style.shareMatchesTitle} style={{ marginTop: 10, color: 'red' }}>No selected Event</p> : null}
+          <button className={style.submitBtn} onClick={() => this.checkMatchPicked()}>Share Matches</button>
+        </div></div> : null}
+       {this.state.userId&&this.state.showFriends?<div className={style.detailsModal} onClick={() => this.setState({ showFriends: false })}><Friends onClick={this.handleChatsClick} teamName={this.state.currentEventUserInfo['teamName']} flockName={this.state.currentEventUserInfo['flockName']} selectedPickTitle={this.state.selectedPickTitle} theGames={this.state.toMessageArray} sportType={this.state.theEventTitle} theData={this.state.theData} from='events'/></div>:null}
+        {this.state.userId&&this.state.showMessagesPage?<div className={style.detailsModal} onClick={() => this.setState({ showMessagesPage: false })}><Messages onClick={this.handleChatsClick} teamName={this.state.currentEventUserInfo['teamName']} flockName={this.state.currentEventUserInfo['flockName']} selectedPickTitle={this.state.selectedPickTitle} theGames={this.state.toMessageArray} sportType={this.state.theEventTitle} theData={this.state.theData}  from='fromFriends'/></div>:null}
       </>
     )
   }

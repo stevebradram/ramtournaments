@@ -770,6 +770,10 @@ $theDark:#b2b2b2;
      align-items: center;
      margin-right: 10px;
  }
+ .linksDiv{
+    display: flex;
+    align-items: center;
+ }
  .shareDiv{
     border: 1px solid $redColor;
     width: 150px;
@@ -781,9 +785,28 @@ $theDark:#b2b2b2;
     color: $redColor;
     margin-top: 10px;
     cursor: pointer;
+    margin-right: 10px;
+ }
+  .sharePicksDiv{
+    border: 1px solid #2d85b8;
+    width: 205px;
+    display: flex;
+    justify-content: center;
+    height: 30px;
+    align-items: center;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #2d85b8;
+ }
+  .sharePicksDiv p{
+    margin-right: 5px;
+    font-weight: 500;
  }
  .shareDiv p{
     margin-right: 5px;
+     font-weight: 500;
  }
 .detailsModal{
     position: fixed;
@@ -807,6 +830,68 @@ $theDark:#b2b2b2;
     cursor: pointer;
     font-weight: 500;
     color: #70c070;
+}
+#selectorDiv{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-bottom:20px;
+}
+#selectorDiv2{
+    display: flex;
+    align-items: center;
+    margin-right:10px;
+    cursor: pointer;
+    color:$blackish;
+}
+#picksP{
+    font-size:18px;
+    font-weight:700;
+    color:$blackish;
+}
+    #selectorDiv2 p{
+   margin-left:5px;
+   font-weight:500;
+    }
+.selectorDiv{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.selectorDiv p{
+    margin-left: 5px;
+    color: $blackish;
+    font-weight: 500;
+}
+
+.boxDiv3{
+  height:18px;
+  width:18px;
+  border: 2px solid $redColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $redColor;
+  color: white;
+}
+.boxDiv3b{
+  height:18px;
+  width:18px;
+  border: 2px solid $blackish;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: $blackish;
+}
+.checkDiv{
+  cursor: pointer;
+}
+.shareMatchesTitle{
+    font-weight: 600;
+    color: $blackish;
 }
 @media all and (max-width: 900px) {
     .profileDiv{

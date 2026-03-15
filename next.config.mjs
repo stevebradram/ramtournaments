@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
     images:{
     domains:['firebasestorage.googleapis.com','images.pexels.com'],
     minimumCacheTTL: 3600,

@@ -13,16 +13,9 @@ import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
 import PageVisibility from 'react-page-visibility';
 import { io}  from "socket.io-client"
-/*var socket = io("http://localhost:4000", {
+var socket = io("http://localhost:4000", {
   withCredentials: true,
   transports: ["websocket", "polling"] // Forces websocket first to avoid some polling CORS issues
-});*/
-var socket = io("https://theramtournament.com", {
-  withCredentials: true,
-  transports: ["websocket"], 
-  autoConnect: true,
-  reconnection: true,
-  reconnectionAttempts: 5
 });
 var isFirstTime=false
 //import io from "socket.io-client"
@@ -54,17 +47,14 @@ class Messages extends Component {
 });*/
     this.scrollToBottom()
     
-    console.log('theData rrrrrrrrra',this.props.theData)
+    //console.log('theData',this.props.theData)
     var theData = this.props.theData
     console.log('theData 365214',this.props.from,theData)
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
       console.log('ddddddddd')
-      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'],otheUserId: theData['uid'] })
+      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], lastSeen: theData['lastSeen'], otheUserId: theData['uid'] })
     }
-     if (this.props.from === 'fromChats' && theData !== 'N/A') {
-      console.log('ddddddddd')
-      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
-    }
+    
     //this.props.theData['profilePhoto']
     this.setState({ theData: this.props.theData })
     this.checkAuth()

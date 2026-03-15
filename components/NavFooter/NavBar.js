@@ -1,24 +1,33 @@
 import React, { Component } from 'react';
 import styles from './NavBar.module.scss'
-import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose } from "react-icons/md";
+import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose,MdPersonAddAlt  } from "react-icons/md";
 import { FaSearch, FaHome, FaCarAlt, FaFacebook, FaInstagram, FaTwitterSquare, FaYoutubeSquare, FaBars } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
 import { AiFillMessage } from "react-icons/ai";
+import { IoMdPersonAdd } from "react-icons/io";
+import { BiMessageRoundedDots } from "react-icons/bi";
 import Router, { withRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import localStorage from 'local-storage'
 import { FaRegMessage } from "react-icons/fa6";
+import dynamic from 'next/dynamic';
 import LogIn from '../LogInReg/LogIn'
 import Chats from '../Home/Chats'
-import Messages from '../Home/Messages2'
-import Friends from '../Home/Friends2'
+//import Messages from '../Home/Messages'
+
+import Friends from '../Home/Friends'
+import AddFriends from '../Home/AddFriends'
 import Link from 'next/link';
 import ProgressBar from '../Helper/ProgressBar'
 import firebase from '../FirebaseClient'
 import CreateLeagueModal from './CreateLeagueModal'
 import Countdown from 'react-countdown';
 import { TypeAnimation } from 'react-type-animation';
+const Messages = dynamic(() => import('../Home/Messages'), { 
+  ssr: false,
+  loading: () => <p>Loading Chat...</p> // Optional loading state
+});
 class NavBar extends Component {
   constructor(props) {
     super(props)
@@ -39,7 +48,7 @@ class NavBar extends Component {
       showChats:false,
       showMessages:false,
       showFriends:false,
-      theData:'',from:'',count2:0
+      theData:'',from:'',count2:0,showAddFriends:false
     }
   }
   onScroll = () => {
@@ -199,7 +208,7 @@ class NavBar extends Component {
       if(from==='fromChats'){
         if(text==='close'){this.setState({ showMessages:false,showChats:false});}
         else if(text==='openFriends'){this.setState({ showMessages:false,showChats:false,showFriends:true});}
-        else{this.setState({ showMessages:true,showChats:false});}
+        else{this.setState({ showMessages:true,showChats:false,theData});}
       }
        if(from==='fromFriends'){
         if(text==='close'){this.setState({ showMessages:false,showChats:true,showFriends:false});}
@@ -208,7 +217,7 @@ class NavBar extends Component {
       if(from==='fromMessages'){
         this.setState({ showMessages:false,showChats:true});
       }
-   
+      if(from==='fromAddFriends'){this.setState({ showMessages:false,showChats:false,showFriends:false,showAddFriends:false});}
     }
   theTypeAnimation = (text1, text2) => {
     return (
@@ -267,10 +276,15 @@ class NavBar extends Component {
                 </div>
               </div>
               <div className={styles.logDiv}>
-               {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({ showMessages:false,showChats:true})}>
+                 {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({showAddFriends:true,showMessages:false,showChats:false})}>
                 <div className={styles.logDmesoDiv2}>
                   <p>1</p>
-                 <AiFillMessage className={styles.mesoIc}/>
+                 <MdPersonAddAlt   className={styles.mesoIc}/>
+                </div></div> :null}
+               {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({showMessages:false,showChats:true})}>
+                <div className={styles.logDmesoDiv2}>
+                  <p>1</p>
+                 <BiMessageRoundedDots className={styles.mesoIc}/>
                 </div></div> :null}
                 <div className={styles.logDmesoDiv2} style={{marginRight:10,cursor:'pointer'}} onClick={()=>Router.push('/profile')}>
                  <IoPersonCircle size={40}  className={styles.mesoIc} style={{color:'#9f9fb6ff'}}/>
@@ -335,9 +349,10 @@ class NavBar extends Component {
         </div> : null}
         {this.state.progress ? <ProgressBar message='Logging Out' /> : null}
         {this.state.isLogged&&this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
-        {this.state.isLogged&&this.state.showChats?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick}/></div>:null}
+        {this.state.isLogged&&this.state.showChats?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
         {this.state.isLogged&&this.state.showMessages?<div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><Messages onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
-          {this.state.isLogged&&this.state.showFriends?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Friends onClick={this.handleChatsClick}/></div>:null}
+          {this.state.isLogged&&this.state.showFriends?<div className={styles.chatModal} onClick={() => this.setState({ showFriends: false })}><Friends onClick={this.handleChatsClick}/></div>:null}
+          {this.state.isLogged&&this.state.showAddFriends?<div className={styles.chatModal} onClick={() => this.setState({ showAddFriends: false })}><AddFriends onClick={this.handleChatsClick}/></div>:null}
       </>
     )
   }
