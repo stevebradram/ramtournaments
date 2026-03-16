@@ -125,11 +125,11 @@ class Friends extends Component {
     // console.log('dettssssss',theMessage,pickDetails,mesoId,this.state.myUserId,otheUserId,theGames)
     // return
     if (theMessage.length >= 1 && mesoId !== '') {
-      var theMessage = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId, status: 'picks', pickDetails: pickDetails, thePicks: theGames}
+      var theMessageItem = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId, status: 'picks', pickDetails: pickDetails, thePicks: theGames}
       var theChat = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId}
       if (this.state.areThereMessages === false) { theChat['1stSenderId'] = this.state.myUserId }
-      messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
-      messageRef.child(otheUserId).child(otherUserMesoId).child(theKey).set(theMessage)
+      messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessageItem)
+      messageRef.child(otheUserId).child(otherUserMesoId).child(theKey).set(theMessageItem)
       chatRef.child(this.state.myUserId).child(mesoId).update(theChat)
       chatRef.child(otheUserId).child(otherUserMesoId).update(theChat, (error) => {
         if (error) { this.notify('Error sending message') }

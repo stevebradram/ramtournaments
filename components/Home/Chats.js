@@ -48,6 +48,7 @@ class Chats extends Component {
     var chatsRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/')
     var userRef = firebase.database().ref('/users/')
     var theChats = []
+    console.log('my chat id',myUid)
     chatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         //console.log('1 exiiiiiists',dataSnapshot.val())
@@ -59,6 +60,7 @@ class Chats extends Component {
           var theData = data.val()
           theData['id'] = data.key
           var otherUserID=data.val().otherUserID
+           console.log('my otherUserID id',otherUserID)
           userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
             var profilePhoto = dataSnapshot.val().profilePhoto
             var userName = dataSnapshot.val().name

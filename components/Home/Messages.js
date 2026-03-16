@@ -57,6 +57,7 @@ class Messages extends Component {
     console.log('theData rrrrrrrrra',this.props.theData)
     var theData = this.props.theData
     console.log('theData 365214',this.props.from,theData)
+   // return
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
       console.log('ddddddddd')
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'],otheUserId: theData['uid'] })
@@ -269,7 +270,8 @@ socket.on('user_presence_update', (data) => {
   upadateLastSeenChat = (messageId, otherUserId) => {
     //console.log('otherUserId to be updated',otherUserId,'ny id',this.state.myUserId)
     var chatRef = firebase.database().ref('/messaging/lastChats/' + otherUserId + '/' + messageId + '/lastChatSeen/')
-    chatRef.set(new Date().getTime())
+     chatRef.once('value', dataSnapshot => {
+         if (dataSnapshot.exists()){chatRef.set(new Date().getTime())}})
   }
   checkOnline = (userId) => {
     var amOnline = firebase.database().ref(".info/connected")
