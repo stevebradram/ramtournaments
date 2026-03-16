@@ -250,7 +250,7 @@ class NCAAModal extends Component {
         })
       }else{
         console.log('the teams data nooot available')
-        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=ab081cf890e745c19fa1e28313b164af"
        var firebaseItem={}
         axios.get(oddsApi)
         .then((res) => {
@@ -349,7 +349,7 @@ class NCAAModal extends Component {
         })
       }else{
         console.log('the teams data nooot available')
-        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=ab081cf890e745c19fa1e28313b164af"
        var firebaseItem={}
         axios.get(oddsApi)
         .then((res) => {
@@ -448,7 +448,7 @@ class NCAAModal extends Component {
         })
       }else{
         console.log('the teams data nooot available')
-        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=ab081cf890e745c19fa1e28313b164af"
        var firebaseItem={}
         axios.get(oddsApi)
         .then((res) => {
@@ -547,7 +547,7 @@ class NCAAModal extends Component {
         })
       }else{
         console.log('the teams data nooot available')
-        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=4a474f7d13314c6098a394987bed453f"
+        var oddsApi = "https://api.sportsdata.io/v3/cbb/scores/json/teams?key=ab081cf890e745c19fa1e28313b164af"
        var firebaseItem={}
         axios.get(oddsApi)
         .then((res) => {
@@ -914,7 +914,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
 itemComponent = (compItems, type) => {
   console.log('compItems',sweet16Edit,compItems,type)
     return (
-      compItems.map((item, index) => {
+      compItems.slice(0,1).map((item, index) => {
         var name1ReadOnly=true
         var name2ReadOnly=true
         if(item.team1IdReadOnly!==undefined&&item.team1IdReadOnly===false){name1ReadOnly=false}
