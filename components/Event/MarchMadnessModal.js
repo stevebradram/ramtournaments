@@ -4,6 +4,7 @@ import { BsFillLightningFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
+import localStorage from 'local-storage'
 import ProgressBar from '../Helper/ProgressBar'
 import axios from "axios"
 import dayjs from 'dayjs';
@@ -579,7 +580,7 @@ sortOddsJson=async(theArr,stateEdit)=>{
    //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
   //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
   var oddsApi="https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
- // const response = await axios.get(oddsApi)
+  const response = await axios.get(oddsApi)
   var theOddsJson=response.data
   //var theOddsJson=theNCAABOdds
   var firstMatchTime=[]
@@ -901,20 +902,25 @@ sortOddsJson=async(theArr,stateEdit)=>{
       }
     })
   }
+  setLocalStorage= (key,value) => {
+    localStorage.setItem(key, value);
+  }
   submitMatches = () => {
-   
-    if(this.state.currentSelection==='round1'){this.round1Submit()}
-    if(this.state.currentSelection==='round2'){this.round2Submit()}
-    if(this.state.currentSelection==='sweet16'){this.sweet16Submit()}
+    var theData=''
+    //localStorage.setItem(this.props.theEventKey+this.state.currentSelection, JSON.stringify(this.state.round1Edit));
+    if(this.state.currentSelection==='round1'){this.round1Submit();theData=this.state.round1Edit}
+    if(this.state.currentSelection==='round2'){this.round2Submit();theData=this.state.round2Edit}
+    if(this.state.currentSelection==='sweet16'){this.sweet16Submit();theData=this.state.sweet16Edit}
 
-    if(this.state.currentSelection==='elite8'){this.elite8Submit(this.state.elite8Edit,'elite8Edit')}
-    if(this.state.currentSelection==='final4'){this.elite8Submit(this.state.final4Edit,'final4Edit')}
-    if(this.state.currentSelection==='finalRound'){this.elite8Submit(this.state.finalRoundEdit,'finalRoundEdit')}
+    if(this.state.currentSelection==='elite8'){this.elite8Submit(this.state.elite8Edit,'elite8Edit');}
+    if(this.state.currentSelection==='final4'){this.elite8Submit(this.state.final4Edit,'final4Edit');}
+    if(this.state.currentSelection==='finalRound'){this.elite8Submit(this.state.finalRoundEdit,'finalRoundEdit');}
+    //this.setLocalStorage(this.props.theEventKey+this.state.currentSelection,JSON.stringify(theData))
   }
 itemComponent = (compItems, type) => {
   console.log('compItems',sweet16Edit,compItems,type)
     return (
-      compItems.slice(0,1).map((item, index) => {
+      compItems.map((item, index) => {
         var name1ReadOnly=true
         var name2ReadOnly=true
         if(item.team1IdReadOnly!==undefined&&item.team1IdReadOnly===false){name1ReadOnly=false}
