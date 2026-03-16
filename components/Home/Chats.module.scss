@@ -88,7 +88,10 @@ $blackish:#292f51;
     cursor: pointer;
     position: relative;
 }
-
+#chatItenDiv{
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
 .chatItenDiv:hover{
   background-color: whitesmoke;
 

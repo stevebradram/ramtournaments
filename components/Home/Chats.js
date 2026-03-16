@@ -7,7 +7,7 @@ import { AiFillMessage } from "react-icons/ai";
 import { MdOutlineClose, MdAddComment } from "react-icons/md";
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
-
+import { ToastContainer, toast } from 'react-toastify';
 class Chats extends Component {
   state = {
     theChats: [
@@ -25,7 +25,7 @@ class Chats extends Component {
       { id: 1756658460000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
       { id: 1756720200000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
       { id: 1756720723788, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' }
-    ], theChatsId: '', areChatsAvailable: false, theChatsArray: [], lastMesoId: '', myUserId: '', isLogged: ''
+    ], theChatsId: '', areChatsAvailable: false, theChatsArray: [], lastMesoId: '', myUserId: '', isLogged: '', adminChatsItem: ''
   }
 
   componentDidMount = () => {
@@ -38,17 +38,29 @@ class Chats extends Component {
       if (user) {
         var userId = user.uid
         this.setState({ myUserId: userId, isLogged: true })
+        this.checkAdminChats()
         this.checkChats(userId)
       } else {
         this.setState({ isLogged: false })
       }
     })
   }
+  checkAdminChats = (myUid) => {
+    var adminChatsRef = firebase.database().ref('/messaging/adminChats/')
+    console.log('my chat id zzzzz', myUid)
+    adminChatsRef.once('value', dataSnapshot => {
+      if (dataSnapshot.exists()) {
+        this.setState({ adminChatsItem: dataSnapshot.val() })
+        console.log('rrrrrrrrrr',dataSnapshot.val())
+      }
+
+    })
+  }
   checkChats = (myUid) => {
     var chatsRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/')
     var userRef = firebase.database().ref('/users/')
     var theChats = []
-    console.log('my chat id',myUid)
+    console.log('my chat id', myUid)
     chatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         //console.log('1 exiiiiiists',dataSnapshot.val())
@@ -59,8 +71,8 @@ class Chats extends Component {
           i++
           var theData = data.val()
           theData['id'] = data.key
-          var otherUserID=data.val().otherUserID
-           console.log('my otherUserID id',otherUserID)
+          var otherUserID = data.val().otherUserID
+          console.log('my otherUserID id', otherUserID)
           userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
             var profilePhoto = dataSnapshot.val().profilePhoto
             var userName = dataSnapshot.val().name
@@ -71,30 +83,30 @@ class Chats extends Component {
             if (profilePhoto) { theData['profilePhoto'] = profilePhoto }
             else { theData['profilePhoto'] = 'N/A' }
             theChats.push(theData)
-               if (theNo === i) {
-            let objMax=''
-            if(theChats.length){objMax=theChats.reduce((max, curren) => max.time > curren.time ? max : curren);}
-            //console.log('objMax',objMax,objMax['id'])
-            console.log('theChats1232323', theChats)
-           // return
-            this.setState({ areChatsAvailable: true, theChatsArray: theChats, lastMesoId: objMax['id'] }, () => {
-              //console.log('allChats', theChats)
-              // this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
-              //this.realTimeUpdate(mesoId1)
-            })
+            if (theNo === i) {
+              let objMax = ''
+              if (theChats.length) { objMax = theChats.reduce((max, curren) => max.time > curren.time ? max : curren); }
+              //console.log('objMax',objMax,objMax['id'])
+              console.log('theChats1232323', theChats)
+              // return
+              this.setState({ areChatsAvailable: true, theChatsArray: theChats, lastMesoId: objMax['id'] }, () => {
+                //console.log('allChats', theChats)
+                // this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
+                //this.realTimeUpdate(mesoId1)
+              })
 
-          }
+            }
           })
-        
+
         })
       } else { this.setState({ areChatsAvailable: false }) }
 
     })
   }
   openMessages = (item) => {
-    console.log('clicked!',item)
-    var theItem={uid:item.otherUserID,acronym:item.acronym,profilePhoto:item.profilePhoto,userName:item.userName}
-    this.props.onClick('fromChats', 'chatId',theItem)
+    console.log('clicked!', item)
+    var theItem = { uid: item.otherUserID, acronym: item.acronym, profilePhoto: item.profilePhoto, userName: item.userName }
+    this.props.onClick('fromChats', 'chatId', theItem)
   }
   openFriends = () => {
     console.log('clicked!')
@@ -104,48 +116,77 @@ class Chats extends Component {
     console.log('clicked!')
     this.props.onClick('fromChats', 'close', 'N/A')
   }
+  openAdminMessages=()=>{
+    this.notify('No messages for now')
+  }
   doNothing = (event) => {
     event.stopPropagation();
     event.preventDefault()
   }
+    notify = (message) => {
+      toast.warn(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   render() {
+    var adminMessageRead=true
     return (
-      <div className={styles.container} onClick={(event) => this.doNothing(event)}>
+      <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
         <div className={styles.headerDiv}>
           <h2>Chats</h2>
           <MdOutlineClose className={styles.backIc} onClick={() => this.closeMessenger()} />
         </div>
-        {this.state.areChatsAvailable?<div className={styles.chatsCont}>
+        <div className={styles.chatItenDiv} id={styles.chatItenDiv}  onClick={() => this.openAdminMessages()}>
+          <div className={styles.imgDiv}>
+            <Image className={styles.theImg} src={'/icon3.png'} alt={'RAM'} height={50} width={50} objectFit='fit' />
+          </div>
+          <div>
+            <div className={styles.nameDiv}>
+              <p className={styles.nameP}>RAM</p>
+              <p className={styles.timeP} style={{ color: adminMessageRead === false ? '#df5959ff' : null }}>{postTime(this.state.adminChatsItem['time'])}</p>
+            </div>
+            <p className={styles.mesoP}>{this.state.adminChatsItem['message']}</p>
+            {adminMessageRead?null:<AiFillMessage className={styles.mesoIc}/>}
+          </div>
+        </div>
+
+        {this.state.areChatsAvailable ? <div className={styles.chatsCont}>
           {this.state.theChatsArray.map((item, index) => {
-            var messageRead=false
-          if(item.lastChatSeen){
-            if(item.lastChatSeen>item.time){messageRead=true}
-          }
+            var messageRead = false
+            if (item.lastChatSeen) {
+              if (item.lastChatSeen > item.time) { messageRead = true }
+            }
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
                 <div className={styles.imgDiv}>
-                  {item.profilePhoto!=='N/A'?<Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' />:
-                   <p>{item.acronym}</p>}
-                 
+                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
+                    <p>{item.acronym}</p>}
+
                 </div>
                 <div>
                   <div className={styles.nameDiv}>
                     <p className={styles.nameP}>{item.userName}</p>
-                    <p className={styles.timeP} style={{ color: messageRead===false?'#df5959ff' : null}}>{postTime(item.time)}</p>
+                    <p className={styles.timeP} style={{ color: messageRead === false ? '#df5959ff' : null }}>{postTime(item.time)}</p>
                   </div>
                   <p className={styles.mesoP}>{item.message}</p>
-                  {messageRead?null:<AiFillMessage className={styles.mesoIc}/>}
+                  {messageRead ? null : <AiFillMessage className={styles.mesoIc} />}
                 </div>
               </div>)
           })}
-        </div>:
-        <div className={styles.noDataDiv}>
-                  <p>Your chats will appear here</p>
-                </div>}
+        </div> :
+          <div className={styles.noDataDiv}>
+            <p>Your chats will appear here</p>
+          </div>}
         <div className={styles.addChat} onClick={() => this.openFriends()}>
           <MdAddComment className={styles.chatIc} />
         </div>
-      </div>
+      </div><ToastContainer /></>
     );
   }
 }
