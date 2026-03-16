@@ -46,7 +46,7 @@ class NCAAModal extends Component {
   
   componentDidMount=()=>{
    // var incomingData = JSON.parse(JSON.stringify(this.props.itemsToNCAABModal));
-    var incomingData = this.props.itemsToNCAABModal.slice(0,2).map(item => JSON.parse(JSON.stringify(item)));
+    var incomingData = this.props.itemsToNCAABModal.map(item => JSON.parse(JSON.stringify(item)));
     //var incomingData=[].concat(this.props.itemsToNCAABModal)//[...this.props.itemsToNCAABModal]
     console.log('incomingData',this.props.eventToNCAABModal,this.state.currentSelection,incomingData)
     if(this.state.currentSelection!=='round1'){this.setState({getFromOddsApi:true})}
