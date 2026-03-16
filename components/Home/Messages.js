@@ -17,15 +17,9 @@ import { io}  from "socket.io-client"
   withCredentials: true,
   transports: ["websocket", "polling"] // Forces websocket first to avoid some polling CORS issues
 });*/
-var socket = io("https://theramtournament.com", {
-  withCredentials: true,
-  transports: ["websocket"], 
-  autoConnect: true,
-  reconnection: true,
-  reconnectionAttempts: 5
-});
+
 var isFirstTime=false
-//import io from "socket.io-client"
+//import io from "this.socket.io-client"
 var lastSeenTime = 1756721809290, theLastTime = ''
 var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 const mainCard=[
@@ -40,6 +34,13 @@ class Messages extends Component {
   constructor() {
     super();
     this.messagesEndRef = React.createRef(null);
+    this.socket = io("https://theramtournament.com", {
+  withCredentials: true,
+  transports:["polling", "websocket"],
+  autoConnect: true,
+  reconnection: true,
+  reconnectionAttempts: 5
+});
   }
   state = {
     theMessage: '', incomingData: [], profilePhoto: '', userName: '', acronym: '', lastSeen: '', myUserId: '', isLogged: '', otheUserId: '', areMessagesAvailable: '', theMessageId: '', theMessagesArray: [], lastMesoId: '', theLastSeenChat: 0,
@@ -73,26 +74,34 @@ class Messages extends Component {
       if (!isWindowInFocus) {
         console.log('page visible 1111',isWindowInFocus)
       }*/
-      socket.on('new_message', (payload,callback) => {
+     this.socket.off('new_message');
+      this.socket.on('new_message', (payload,callback) => {
       console.log("New message received 004:", payload,'message',payload.message);
       console.log('Details message:',payload.message);
+      this.setState(prevState => ({
+    theMessagesArray: [...prevState.theMessagesArray, payload.message],
+    lastMesoId: payload.mesoId,
+    areMessagesAvailable: true
+  }));
        this.upadateLastSeenChat(this.state.otherUserMesoId, this.state.otheUserId)
-       var {theMessagesArray}=this.state
-        theMessagesArray.push(payload.message)
-         this.setState({theMessagesArray, lastMesoId:payload.mesoId,areMessagesAvailable:true})
+     ///  var {theMessagesArray}=this.state
+      //  theMessagesArray.push(payload.message)
+        // this.setState({theMessagesArray, lastMesoId:payload.mesoId,areMessagesAvailable:true})
     console.log('theMessagesArray 001',this.state.theMessagesArray)
     if (typeof callback === 'function') {
     callback({ status: 'received' }); 
   }
    
     });
-    socket.on('message_status_update', (data) => {
+    this.socket.off('message_status_update');
+    this.socket.on('message_status_update', (data) => {
   console.log("Status update for message:", data.mesoId, "is now:", data.status);
    this.setState({theLastSeenChat:new Date().getTime()})
    this.upadateLastSeenChat(this.state.theMessageId, this.state.myUserId)
   //  this.checkLastSeenChat(mesoId2, this.state.otheUserId)
 });
-socket.on('user_presence_update', (data) => {
+this.socket.off('user_presence_update');
+this.socket.on('user_presence_update', (data) => {
     if (data.userId === this.state.otheUserId) {
         // Use react-toastify to show the notification
         toast.info("The other user just joined the chat!", {
@@ -123,7 +132,7 @@ socket.on('user_presence_update', (data) => {
   // We don't log here because the console will be gone.
   // We just execute the kill command.
   if (socket) {
-    socket.disconnect();
+    this.socket.disconnect();
   }
 }
    listentoWindow = isVisible => {
@@ -159,7 +168,7 @@ socket.on('user_presence_update', (data) => {
    this.onlinePresence(this.state.myUserId,new Date().getTime())
     console.log('called componentWillUnmount',socket)
    // window.removeEventListener('beforeunload', this.handleUnload);
-     if (socket) socket.disconnect();
+     if (socket) this.socket.disconnect();
   }
 
   scrollToBottom = () => {
@@ -177,15 +186,16 @@ socket.on('user_presence_update', (data) => {
         this.checkOnlinePresence(this.state.otheUserId)
 
        
-         if (socket.connected) {
-        socket.emit('identify', userId);
-        socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
+         if (this.socket.connected) {
+        this.socket.emit('identify', userId);
+        this.socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
       }else {
         console.log('no connected socketttttttttt')
-        socket.connect(); // Force reconnection if it's dead
-        socket.once('connect', () => {
-          socket.emit('identify', userId);
-          socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
+        this.socket.off('connect');
+        this.socket.connect(); // Force reconnection if it's dead
+        this.socket.once('connect', () => {
+          this.socket.emit('identify', userId);
+          this.socket.emit('opened_chat', {myUserId: userId,otherUserId: this.state.otheUserId});
 
         });
       }
@@ -404,7 +414,7 @@ socket.on('user_presence_update', (data) => {
         if (error) { this.notify('Error sending message') }
         else { 
            theMessage['id']=mesoId
-          socket.emit('send_private_message', {
+          this.socket.emit('send_private_message', {
       from:'sendMessage',
       recipientId:this.state.otheUserId,
       senderId:this.state.myUserId,
@@ -445,7 +455,7 @@ socket.on('user_presence_update', (data) => {
         if (error) { this.notify('Error sending message') }
         else { 
            theMessage['id']=mesoId
-          socket.emit('send_private_message', {
+          this.socket.emit('send_private_message', {
       from:'sendMessage',
       recipientId:this.state.otheUserId,
       senderId:this.state.myUserId,
