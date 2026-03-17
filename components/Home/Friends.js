@@ -44,6 +44,9 @@ class Friends extends Component {
     var theChats = this.state.theChats.sort(function (a, b) { return b.id - a.id });
     this.setState({ theChats })
     this.checkAuth()
+    socket.on("connect", () => {
+        console.log("Connected to Socket Server:", socket.id);
+    });
   }
     componentWillUnmount() {
        if (socket) socket.disconnect();
@@ -126,19 +129,20 @@ class Friends extends Component {
     // return
     if (theMessage.length >= 1 && mesoId !== '') {
       var theMessageItem = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId, status: 'picks', pickDetails: pickDetails, thePicks: theGames}
-      var theChat = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId}
-      if (this.state.areThereMessages === false) { theChat['1stSenderId'] = this.state.myUserId }
+       var myChat = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId }
+      var otherUserChat = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.myUserId }
+      if (this.state.areThereMessages === false) { myChat['1stSenderId'] = this.state.myUserId }
       messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessageItem)
       messageRef.child(otheUserId).child(otherUserMesoId).child(theKey).set(theMessageItem)
-      chatRef.child(this.state.myUserId).child(mesoId).update(theChat)
-      chatRef.child(otheUserId).child(otherUserMesoId).update(theChat, (error) => {
+      chatRef.child(this.state.myUserId).child(mesoId).update(myChat)
+      chatRef.child(otheUserId).child(otherUserMesoId).update(otherUserChat, (error) => {
         if (error) { this.notify('Error sending message') }
         else {
            socket.emit('send_private_message', {
       from:'sendMessage',
       recipientId:otheUserId,
       senderId:this.state.myUserId,
-      message:theMessage,
+      message:theMessageItem,
       mesoId:mesoId})
           this.notify('Message send successfully');
           this.props.onClick('fromFriends', 'chatId', item)

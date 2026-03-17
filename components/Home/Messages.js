@@ -35,9 +35,9 @@ class Messages extends Component {
   }
   componentDidMount = () => {
     this.scrollToBottom()
-    console.log('theData rrrrrrrrra', this.props.theData)
+   // console.log('theData rrrrrrrrra', this.props.theData)
     var theData = this.props.theData
-    console.log('theData 365214', this.props.from, theData)
+  //  console.log('theData 365214', this.props.from, theData)
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
     }
@@ -47,6 +47,7 @@ class Messages extends Component {
     this.setState({ theData: this.props.theData })
     this.checkAuth()
     socket.on('new_message', (payload, callback) => {
+      console.group('new mesoooooooooooooo',payload)
       this.upadateLastSeenChat(this.state.otherUserMesoId, this.state.otheUserId)
       this.setState(prevState => ({
                 theMessagesArray: [...prevState.theMessagesArray, payload.message],
