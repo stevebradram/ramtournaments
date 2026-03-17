@@ -126,10 +126,10 @@ class Friends extends Component {
   acceptFriendRequest=(item)=>{
      var otherUserId=item.uid
     console.log('iteeeeem',otherUserId,this.state.myUserId,item,this.state.friendsListArr)
-     var friendRequestRef = firebase.database().ref('/messaging/friends/')
+     var friendsRef = firebase.database().ref('/messaging/friends/')
      var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
-     friendRequestRef.child(this.state.myUserId).child(otherUserId).set(new Date().getTime())
-     friendRequestRef.child(otherUserId).child(this.state.myUserId).set(new Date().getTime())
+     friendsRef.child(this.state.myUserId).child(otherUserId).set(new Date().getTime())
+     friendsRef.child(otherUserId).child(this.state.myUserId).set(new Date().getTime())
      var safeId = Obfuscator.mask(this.state.myUserId);
      var otherUserSafeId = Obfuscator.mask(otherUserId);
      friendRequestRef.child(safeId).child(otherUserSafeId).set(null,(error) => {
@@ -152,6 +152,7 @@ class Friends extends Component {
             if(dataSnapshot.exists()){
               var theUid=dataSnapshot.val()
               var safeId = Obfuscator.mask(this.state.myUserId);
+              console.log('friend reqqqqq',theUid,safeId)
               friendRequestRef.child(theUid).child(safeId).set(new Date().getTime())
               this.notify('Friend request send successfully')
               this.setState({emailErr:'',showAddFrienModal:false})

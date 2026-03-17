@@ -1092,7 +1092,6 @@ class MarchMadness extends Component {
         }
       }
     })
-
   }
   openMarchMadnessModal2 = () => {
 
