@@ -73,7 +73,7 @@ class TheMarchMadness extends Component {
      var leadersRef = firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + eventKey + '/theValues/')
      leadersRef.once('value', dataSnapshot => {
       var theValues = dataSnapshot.val()
-      theValues=theValues.split('|')
+      theValues=theValues?.split('|')
       this.setState({howManyWeeks:theValues.length})
       if(theValues.length===4){this.setState({howManyWeeks:4,isWeek1Available:true,isWeek2Available:true,isWeek3Available:true,isWeek4Available:true})}
       if(theValues.length===3){this.setState({howManyWeeks:3,isWeek1Available:true,isWeek2Available:true,isWeek3Available:true,isWeek4Available:false})}
@@ -467,7 +467,7 @@ class TheMarchMadness extends Component {
       <>
         <div>
           <div className={styles.eve2Div}>
-                    {this.state.theValues.split('|').map((item, index) => {
+                    {this.state.theValues?.split('|').map((item, index) => {
                       var theIndex = index + 1
                       var theMenu = 'week' + theIndex 
                       var theArr = 'week' + theIndex + 'RoundArray'
@@ -532,7 +532,7 @@ class TheMarchMadness extends Component {
                           {this.state.isWeek4Available?<td>{item.week4RoundScore ? item.week4RoundScore : '0.00'}</td>:null}
                         </> : null
                       }
-                      {this.state.isAdmin ? <><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={() => this.setState({ deleteName: item.teamName, deleteModal: true, userIdToBeDeleted: item.id, flockToBeDeleted:item.flockName.split(' ').join('|')})} /></td></> : null}
+                      {this.state.isAdmin ? <><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={() => this.setState({ deleteName: item.teamName, deleteModal: true, userIdToBeDeleted: item.id, flockToBeDeleted:item.flockName?.split(' ').join('|')})} /></td></> : null}
                     </tr>)
                 }
                 )}

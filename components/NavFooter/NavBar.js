@@ -67,7 +67,7 @@ class NavBar extends Component {
     console.log('the time 001',new Date().getTime())
     console.log('the time 0025999',new Date('2025-01-26T20:00:00Z').getTime())
 
-    var linkInfo = window.location.href.split("/");
+    var linkInfo = window.location.href?.split("/");
     linkInfo=linkInfo.pop()
     if(linkInfo.length>15){this.setState({showEventCreator:false})}
     console.log('linkInfo naaav',linkInfo)

@@ -71,7 +71,7 @@ class events extends Component {
     var sportRef = firebase.database().ref('/theEvents/sport1')
     sportRef.once('value', dataSnapshot => {
       if(dataSnapshot.exists()){
-      var theData = dataSnapshot.val().split('###')
+      var theData = dataSnapshot.val()?.split('###')
       this.setState({ selectedSport: theData[0], selectedId: theData[1] })
       console.log('dataSnapshot.val()', dataSnapshot.val())
       this.chooseEvent(dataSnapshot.val())

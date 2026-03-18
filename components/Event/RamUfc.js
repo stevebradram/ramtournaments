@@ -147,12 +147,12 @@ class RamUfc extends Component {
         var millisNow = theEventTime//new Date().getTime()
         var firstEventTime = new Date(millisNow - (86400000 * 2)).toLocaleDateString()
         var lastEventTime = new Date(millisNow + (86400000 * 4)).toLocaleDateString()
-        firstEventTime = firstEventTime.split('/')
+        firstEventTime = firstEventTime?.split('/')
         var theMonthFirst = '', theDateFirst = ''
         if (firstEventTime[0].length <= 1) { theMonthFirst = '0' + firstEventTime[0] } else { theMonthFirst = firstEventTime[0] }
         if (firstEventTime[1].length <= 1) { theDateFirst = '0' + firstEventTime[1] } else { theDateFirst = firstEventTime[1] }
         firstEventTime = firstEventTime[2] + '-' + theMonthFirst + '-' + theDateFirst + 'T21:00:00Z'
-        lastEventTime = lastEventTime.split('/')
+        lastEventTime = lastEventTime?.split('/')
         var theMonthLast = '', theDateLast = ''
         if (lastEventTime[0].length <= 1) { theMonthLast = '0' + lastEventTime[0] } else { theMonthLast = lastEventTime[0] }
         if (lastEventTime[1].length <= 1) { theDateLast = '0' + lastEventTime[1] } else { theDateLast = lastEventTime[1] }
@@ -411,7 +411,7 @@ class RamUfc extends Component {
          .then((res) => {
            var theOutcome = res.data
            if(theOutcome.includes('UFC Matches Populated successfully')){
-             theOutcome=theOutcome.split('::')
+             theOutcome=theOutcome?.split('::')
              console.log('theOutcome',theOutcome)
              this.notify(theOutcome[0])
              var howManyExist=theOutcome[1]
@@ -511,14 +511,14 @@ class RamUfc extends Component {
         newOddsJson.map((item2) => {
           var allName = item2.homeTeam + ' ' + item2.awayTeam
           var subDifference = matchMillis + 86400000
-          var p1Name = item2.homeTeam//.split(' ')[0]
-          var p2Name = item2.awayTeam//.split(' ')[0]
+          var p1Name = item2.homeTeam//?.split(' ')[0]
+          var p2Name = item2.awayTeam//?.split(' ')[0]
 
 
-          var fullName1 = item2.homeTeam.split(' ')[0] + item2.homeTeam.split(' ')[1]
-          var fullName2 = item2.awayTeam.split(' ')[0] + item2.awayTeam.split(' ')[1]
-          var fullName1B = item2.homeTeam.split(' ')[1] + item2.homeTeam.split(' ')[0]
-          var fullName2B = item2.awayTeam.split(' ')[1] + item2.awayTeam.split(' ')[0]
+          var fullName1 = item2.homeTeam?.split(' ')[0] + item2.homeTeam?.split(' ')[1]
+          var fullName2 = item2.awayTeam?.split(' ')[0] + item2.awayTeam?.split(' ')[1]
+          var fullName1B = item2.homeTeam?.split(' ')[1] + item2.homeTeam?.split(' ')[0]
+          var fullName2B = item2.awayTeam?.split(' ')[1] + item2.awayTeam?.split(' ')[0]
           //if ((p1Name===item1.p1Name2||p1Name===item1.p2Name2)||(p2Name===item1.p2Name2||p2Name===item1.p2Name2))
           if ((p1Name.includes(item1.p1Name2) || p1Name.includes(item1.p1Name3)) && (p2Name.includes(item1.p2Name2) || p2Name.includes(item1.p2Name3))) {
             console.log('allName', allName)
@@ -535,7 +535,7 @@ class RamUfc extends Component {
             if (item2.awayTeamPoints < 101 && item2.awayTeamPoints > -101) { aTPointsNum = 2.03 }
             if (!item2.homeTeamPoints||item2.homeTeamPoints===undefined||item2.homeTeamPoints===null){hTPointsNum='N/A',aTPointsNum='N/A'}
 
-            var theId = item1.fighter1Name.split(' ')[0] + item1.fighter2Name.split(' ')[0]
+            var theId = item1.fighter1Name?.split(' ')[0] + item1.fighter2Name?.split(' ')[0]
             theFights[index]['p1Points'] = hTPointsNum
             theFights[index]['p2Points'] = aTPointsNum
             theFights[index]['commenceTime'] = item2.commenceTime
@@ -559,7 +559,7 @@ class RamUfc extends Component {
             if (item2.homeTeamPoints < 101 && item2.homeTeamPoints > -101) { hTPointsNum = 2.03 }
             if (item2.awayTeamPoints < 101 && item2.awayTeamPoints > -101) { aTPointsNum = 2.03 }
 
-            var theId = item1.fighter2Name.split(' ')[0] + item1.fighter1Name.split(' ')[0]
+            var theId = item1.fighter2Name?.split(' ')[0] + item1.fighter1Name?.split(' ')[0]
             theFights[index]['p2Points'] = hTPointsNum
             theFights[index]['p1Points'] = aTPointsNum
             theFights[index]['fighter1Name'] = item1.fighter2Name
@@ -923,7 +923,7 @@ class RamUfc extends Component {
 
     await userInfoDb.once('value', dataSnapshot => {
       var theInfo = dataSnapshot.val()
-      if (theInfo.ramUfc !== false) { this.setState({ eventRamUfc: true, ufcSubHeadings: theInfo.ramUfc.split(':') }); this.getUfcItems('ramUfc'); }
+      if (theInfo.ramUfc !== false) { this.setState({ eventRamUfc: true, ufcSubHeadings: theInfo.ramUfc?.split(':') }); this.getUfcItems('ramUfc'); }
       if (theInfo.marchMadness === true) { this.setState({ eventMarchMadness: true }), this.getNflMarchMadnessItems('marchMadness', 'marchMadnessArray') }
       if (theInfo.nfl === true) { this.setState({ eventNfl: true }), this.getNflMarchMadnessItems('nfl', 'nflArray') }
 

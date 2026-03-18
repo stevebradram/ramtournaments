@@ -352,7 +352,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection: 'week1Round', expired, endTime, oddsUpdate, resultsUpdate, stopweek1RoundEdit, theValues }, () => {
           this.getNFLMatches(userId)
           this.checkLink(userId)
-          var theScoresMenu = theValues.split('|')
+          var theScoresMenu = theValues?.split('|')
           theScoresMenu = 'Week ' + theScoresMenu[0] + ' Round'
           this.setState({ theScoresMenu: theScoresMenu })
         })
@@ -543,7 +543,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       this.setState({ theEventKey, theEventTitle, expired, isWeek1RoundPicked: false, isWeek2RoundPicked: false, isWeek3RoundPicked: false, isFinalsPicked: false, editType: 'stopweek1RoundEdit' }, () => {
         this.getNFLMatches(this.state.userId)
         this.checkLink(this.state.userId)
-        var theScoresMenu = theValues.split('|')
+        var theScoresMenu = theValues?.split('|')
         theScoresMenu = 'Week ' + theScoresMenu[0] + ' Round'
         this.setState({ theScoresMenu: theScoresMenu })
         //if ((currentSelection === 'week1Round')) { this.setState({ editType: 'stopweek1RoundEdit' }) }
@@ -558,7 +558,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     ////////////console.log('Button clicked!');
   };
   openTheModal = async () => {
-    var theVal = this.state.theValues.split('|')
+    var theVal = this.state.theValues?.split('|')
     if (this.state.userLoggedIn === false) {
       this.notify("Please Log In to continue")
       this.setState({ openLoginModal: true })
@@ -747,7 +747,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     //this.state.matchEndTime
     if (this.state.matchEndTime.length >= 3) {
       ////console.log('zzezezezze')
-      var lastMatchTime = this.state.matchEndTime.split(':')
+      var lastMatchTime = this.state.matchEndTime?.split(':')
       ////console.log('lastMatchTime', lastMatchTime)
       var part1 = lastMatchTime[0]
       var part2 = lastMatchTime[1]
@@ -1573,10 +1573,10 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             var theTime = dayjs(item.timeInMillis).format('MMM D, YYYY h:mm A')
             var matchNo = item.theId.replace(/(\d+)/g, ' $1 ');
             matchNo = matchNo.replace(/\b\w/g, char => char.toUpperCase());
-            matchNo = matchNo.split(" ").slice(0, 3).join(" ");
+            matchNo = matchNo?.split(" ").slice(0, 3).join(" ");
             //console.log('this.state.eventKey',this.state.theEventKey)
             if (this.state.theEventKey === 'NFLRegular-2025') {
-              matchNo = this.state.theScoresMenu.split(' ').slice(0, 2).join(' ')
+              matchNo = this.state.theScoresMenu?.split(' ').slice(0, 2).join(' ')
               matchNo = matchNo + ' Game'
             }
             return (
@@ -1714,7 +1714,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       if(this.state.theEventTitle==='NFL REGULAR  2025'){
         titleToShow='NFL 2025 SEASON Wk1-Wk3'
       }else{
-        titleToShow=titleToShow.split(' ')
+        titleToShow=titleToShow?.split(' ')
     if(titleToShow[3]){theWeek=' '+titleToShow[3]}
       titleToShow=titleToShow[0]+' '+titleToShow[2]+' SEASON '+theWeek}
      
@@ -1785,7 +1785,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
            
                 theTitle = theTitle.replace('REGULAR', '')
                 theTitle = theTitle.replace(/ {2}/g, " ");
-                var theTitleSplit = theTitle.split(' ')
+                var theTitleSplit = theTitle?.split(' ')
                 theTitle = theTitleSplit[0] + ' ' + theTitleSplit[1] + ' SEASON ' + theTitleSplit[2]
                 if (item.title === 'NFL REGULAR  2025') {
                   theTitle = 'NFL 2025 SEASON Wk1-Wk3'
@@ -1853,7 +1853,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           <div>
             <p id={style.picksP}>Allow Week Picks</p>
             <div id={style.selectorDiv}>
-              {this.state.theValues.split('|').map((item, index) => {
+              {this.state.theValues?.split('|').map((item, index) => {
                 var theIndex = index + 1
                 var stateWeek = 'allowWeek' + theIndex + 'Pick'
                 var theWeek = 'Week ' + item
@@ -1888,7 +1888,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           </div>*/}
         </div> : null}
         <div className={style.eveDiv}>
-          {this.state.theValues.split('|').map((item, index) => {
+          {this.state.theValues?.split('|').map((item, index) => {
             var theIndex = index + 1
             var theMenu = 'week' + theIndex + 'Round'
             var theArr = 'week' + theIndex + 'RoundArray'
@@ -2006,7 +2006,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         {this.state.showChooseWeekModal ? <div className={style.detailsModal} onClick={() => this.setState({ showChooseWeekModal: false })}>
           <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
             <p className={style.weekP}>Choose Event Week</p>
-            {this.state.theValues.split('|').map((item, index) => {
+            {this.state.theValues?.split('|').map((item, index) => {
               var theIndex = index + 1
               var stateWeek = 'allowWeek' + theIndex + 'Pick'
               var theWeek = 'WEEK ' + item

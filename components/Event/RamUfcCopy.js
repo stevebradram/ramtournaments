@@ -146,12 +146,12 @@ showProgressBar2=()=>{
     var millisNow=theEventTime//new Date().getTime()
     var firstEventTime = new Date(millisNow-(86400000*2)).toLocaleDateString()
     var lastEventTime = new Date(millisNow+(86400000*4)).toLocaleDateString()
-    firstEventTime=firstEventTime.split('/')
+    firstEventTime=firstEventTime?.split('/')
     var theMonthFirst='',theDateFirst=''
     if(firstEventTime[0].length<=1){theMonthFirst='0'+firstEventTime[0]}else{theMonthFirst=firstEventTime[0]}
     if(firstEventTime[1].length<=1){theDateFirst='0'+firstEventTime[1]}else{theDateFirst=firstEventTime[1]}
     firstEventTime=firstEventTime[2]+'-'+theMonthFirst+'-'+theDateFirst+'T21:00:00Z'
-    lastEventTime=lastEventTime.split('/')
+    lastEventTime=lastEventTime?.split('/')
     var theMonthLast='',theDateLast=''
     if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
     if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
@@ -179,7 +179,7 @@ showProgressBar2=()=>{
             .then((res) => {
               var theOutcome = res.data
               if(theOutcome.includes('UFC Matches Populated successfully')){
-                theOutcome=theOutcome.split('::')
+                theOutcome=theOutcome?.split('::')
                 console.log('theOutcome',theOutcome)
                 this.notify(theOutcome[0])
                 var howManyExist=theOutcome[1]
@@ -686,7 +686,7 @@ loadOtherFights=async(theEventKey,theEventTitle,fetchResultsTimeUpdate,getEvents
   
   await  userInfoDb.once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
-      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc.split(':')});this.getUfcItems('ramUfc');}
+      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc?.split(':')});this.getUfcItems('ramUfc');}
       if(theInfo.marchMadness===true){this.setState({eventMarchMadness:true}),this.getNflMarchMadnessItems('marchMadness','marchMadnessArray')}
       if(theInfo.nfl===true){this.setState({eventNfl:true}),this.getNflMarchMadnessItems('nfl','nflArray')}
       

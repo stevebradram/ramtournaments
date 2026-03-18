@@ -72,7 +72,7 @@ class Reel extends Component {
                 <Slider ref={c => (this.slider = c)} {...settings}>
                   
                 {theTopics.map((item)=>{
-                 //var theTitle=item.title.split('-')
+                 //var theTitle=item.title?.split('-')
                  return(
                        <div  className={style.titleDivCont} key={item.id}>    
                       <div className={style.testDiv}>

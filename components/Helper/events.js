@@ -69,7 +69,7 @@ class events extends Component {
   
   await  userInfoDb.once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
-      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc.split(':')});this.getUfcItems('ramUfc');console.log('is there ufc',theInfo.ramUfc)}
+      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc?.split(':')});this.getUfcItems('ramUfc');console.log('is there ufc',theInfo.ramUfc)}
       if(theInfo.marchMadness===true){this.setState({eventMarchMadness:true}),this.getNflMarchMadnessItems('marchMadness','marchMadnessArray')}
       if(theInfo.nfl===true){this.setState({eventNfl:true}),this.getNflMarchMadnessItems('nfl','nflArray')}
       
@@ -358,8 +358,8 @@ getUfcItems=async(name)=>{
                 </div>*/}
         <div className={style.listCont}>
         {this.state.theItems.map((item,index)=>{
-          var player1=item.player1.split('-')
-          var player2=item.player2.split('-')
+          var player1=item.player1?.split('-')
+          var player2=item.player2?.split('-')
           var playStat=''
           var playStatCol=''
           if(item.status1==='notPlayed'){playStat='Upcoming Event',playStatCol='#292f51'}

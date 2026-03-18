@@ -158,10 +158,7 @@ class Chats extends Component {
 
         {this.state.areChatsAvailable ? <div className={styles.chatsCont}>
           {this.state.theChatsArray.map((item, index) => {
-            var messageRead = false
-            if (item.lastChatSeen) {
-              if (item.lastChatSeen > item.time) { messageRead = true }
-            }
+            const messageRead = item.lastChatSeen ? item.lastChatSeen > item.time : false;
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
                 <div className={styles.imgDiv}>

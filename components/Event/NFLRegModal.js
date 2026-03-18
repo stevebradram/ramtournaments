@@ -105,13 +105,13 @@ class NCAAModal extends Component {
     var firstEventTime = await Math.min(...incomingData.map(item => item.timeInMillis));
     var lastEventTime = await Math.max(...incomingData.map(item => item.timeInMillis));
     firstEventTime=new Date(firstEventTime-86400000).toLocaleDateString()
-    firstEventTime=firstEventTime.split('/')
+    firstEventTime=firstEventTime?.split('/')
     var theMonthFirst='',theDateFirst=''
     if(firstEventTime[0].length<=1){theMonthFirst='0'+firstEventTime[0]}else{theMonthFirst=firstEventTime[0]}
     if(firstEventTime[1].length<=1){theDateFirst='0'+firstEventTime[1]}else{theDateFirst=firstEventTime[1]}
     firstEventTime=firstEventTime[2]+'-'+theMonthFirst+'-'+theDateFirst+'T21:00:00Z'
     lastEventTime=new Date(lastEventTime+(86400000*2)).toLocaleDateString()
-    lastEventTime=lastEventTime.split('/')
+    lastEventTime=lastEventTime?.split('/')
     var theMonthLast='',theDateLast=''
     if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
     if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}

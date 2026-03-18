@@ -16,10 +16,10 @@ class invite extends Component {
  getLinkAuthDetails=()=>{
   if(!window)return
   //console.log('routerr',decodeURIComponent(window.location.href))
-  var linkInfo = decodeURIComponent(window.location.href).split("/");
-  linkInfo=linkInfo.pop().split("~")
+  var linkInfo = decodeURIComponent(window.location.href)?.split("/");
+  linkInfo=linkInfo.pop()?.split("~")
   var eventId=linkInfo[1]
-  var flockNameWithSpaces=linkInfo[2].split('|').join(' ')
+  var flockNameWithSpaces=linkInfo[2]?.split('|').join(' ')
   var flockNameWithoutSpaces=linkInfo[2]//.replace(/%7C/g,'|')
   var creatorId=linkInfo[3]
   //console.log('linkInfo',creatorId,linkInfo)
@@ -69,7 +69,7 @@ class invite extends Component {
       .once('value', dataSnapshot => {
         console.log('userIdLink dataSnapshot',dataSnapshot.val())
         var name=dataSnapshot.val()
-        var flockNameWithSpaces=name.split('|').join(' ')
+        var flockNameWithSpaces=name?.split('|').join(' ')
         var flockNameWithoutSpaces=name
         this.getDetails(eventId,flockNameWithoutSpaces,flockNameWithSpaces)
       })

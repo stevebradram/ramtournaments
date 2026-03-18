@@ -94,7 +94,7 @@ class Results extends Component {
                   var theColor=''
                   var status=item.status
                   if(status.includes('-')){theColor='red'}else{theColor='#0cc27c'}
-                 //var theTitle=item.title.split('-')
+                 //var theTitle=item.title?.split('-')
                  return(
                        <div  className={style.titleDivCont} key={item.id}>    
                       <div className={style.testDiv}>

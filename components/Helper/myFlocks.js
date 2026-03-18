@@ -112,7 +112,7 @@ class MyFlocks extends Component {
     var userInfoDb = firebase.database().ref('/users/' + this.state.userId + '/flockData/flockNames/').child(theEventKey).child('name')
     userInfoDb.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-        var theFName = dataSnapshot.val().split('|').join(' ').toUpperCase()
+        var theFName = dataSnapshot.val()?.split('|').join(' ').toUpperCase()
         this.setState({ currentFlockName: theFName, flockNameAvailable: true,myFlockName:dataSnapshot.val()})
         this.getRamMembersData(theEventKey, dataSnapshot.val(), isEventStarted,currentSelection,sportType)
         
@@ -284,14 +284,14 @@ class MyFlocks extends Component {
           i++
           var theUid=data.key
           var theData = data.val()
-          theData = theData.split('!!')
+          theData = theData?.split('!!')
           var name = theData[0]
           var picked = ''
           if (name.includes('$$$')) { picked = false }
           else { { picked = true } }
-          var newName = theData[0].split('$$$').join('')
+          var newName = theData[0]?.split('$$$').join('')
           var theArr={}
-          var theFname= theData[1].split(' ').join('|')
+          var theFname= theData[1]?.split(' ').join('|')
           flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
             if (dataSnapshot.exists()){
              // console.log('ikoooooooooo',theUid)
@@ -478,7 +478,7 @@ class MyFlocks extends Component {
     var titleToShow='NFL Season'
     console.log('this.state.theEventTitle',titleToShow1)
     if(this.state.theEventTitle){
-    titleToShow1=titleToShow1.split(' ')
+    titleToShow1=titleToShow1?.split(' ')
     titleToShow=titleToShow1[0]+' '+titleToShow1[2]+' Season'}
     var NFLRegOverallStatus=false
     //console.log('this.state.theAdminFlocksArr.length',this.state.theAdminFlocksArr.length)
@@ -687,7 +687,7 @@ class MyFlocks extends Component {
                     return (
                       <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.myFlockName ? '#292f51' : index===0?'#CB1E31':null, color: item.flockName === this.state.myFlockName ? 'white' : index===0?'#fff':'#292f51'}}>
                         <td>{index + 1}</td>
-                        <td>{item.flockName.split("|").join(' ')}</td>
+                        <td>{item.flockName?.split("|").join(' ')}</td>
                         <td>{theMembersNo?theMembersNo:0}</td>
                         <td>{theScore?theScore:0}</td>
                         <td>{theAvScore?theAvScore:0}</td>

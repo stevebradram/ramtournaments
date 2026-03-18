@@ -289,7 +289,7 @@ class UFCEvent extends Component {
     if (this.state.sportType === 'NFLRegular') {
       theTitle = theTitle.replace('REGULAR', '')
       theTitle = theTitle.replace(/ {2}/g, " ");
-      var theTitleSplit = theTitle.split(' ')
+      var theTitleSplit = theTitle?.split(' ')
       theTitle = theTitleSplit[0] + ' ' + theTitleSplit[1] + ' SEASON ' + theTitleSplit[2]
       if (this.state.theEventTitle === 'NFL REGULAR  2025') {
         theTitle = 'NFL 2025 SEASON Wk1-Wk3'

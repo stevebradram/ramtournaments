@@ -26,7 +26,7 @@ class DetailsModal extends Component {
     
     if(this.props.flockTeamName!==false){
       ////console.log('this.props.flockTeamName yoooooooooooooh')
-      flockTeamName=this.props.flockTeamName.split('::')
+      flockTeamName=this.props.flockTeamName?.split('::')
       this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
     this.setState({currentEvent:this.props.currentEvent,ramFlockNames:[]})
@@ -248,7 +248,7 @@ class DetailsModal extends Component {
         myFlockNamesRef.once('value',dataSnapshot=>{
           if(dataSnapshot.exists()){
           var theFlockName=dataSnapshot.val().name
-          theFlockName=theFlockName.split("|").join(" ")
+          theFlockName=theFlockName?.split("|").join(" ")
           console.log('hapa 0044444  kkkk',theFlockName)
           this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
           }else{
@@ -263,7 +263,7 @@ class DetailsModal extends Component {
     myFlockNamesRef.once('value',dataSnapshot=>{
       if(dataSnapshot.exists()){
       var theFlockName=dataSnapshot.val().name
-      theFlockName=theFlockName.split("|").join(" ")
+      theFlockName=theFlockName?.split("|").join(" ")
       console.log('hapa 0044444  kkkk',theFlockName)
       this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
       }else{
@@ -557,12 +557,12 @@ console.log('theItems 1111111111',theItems)
                                 <th>Points</th>
                             </tr>
                             {tableArray.map((item, index) => {
-                              var theItem=item.split('#')
+                              var theItem=item?.split('#')
                               var selected=theItem[2]
 
                               var seed=''
                               var seedAvailable=theItem[4]
-                              if(seedAvailable){seed=theItem[3].split('|')}
+                              if(seedAvailable){seed=theItem[3]?.split('|')}
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>
                               if(index===0&&selected==='player1'){
                                 selectedToShow=<div className={styles.boxDiv3}><MdCheck color="#fff" size={15} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}/></div>

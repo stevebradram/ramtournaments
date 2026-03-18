@@ -69,7 +69,7 @@ class DetailsModal extends Component {
                                 <th>Points</th>
                             </tr>*/}
                             {tableArray.map((item, index) => {
-                              var theItem=item.split('#')
+                              var theItem=item?.split('#')
                               var selected=theItem[2]
                              // //console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>

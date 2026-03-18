@@ -678,7 +678,7 @@ class leaderboard extends Component {
       if(this.state.theEventTitle==='NFL REGULAR  2025'){
         titleToShow='NFL 2025 SEASON Wk1-Wk3'
       }else{
-        titleToShow=titleToShow.split(' ')
+        titleToShow=titleToShow?.split(' ')
     if(titleToShow[3]){theWeek=' '+titleToShow[3]}
       titleToShow=titleToShow[0]+' '+titleToShow[2]+' SEASON '+theWeek}
      }

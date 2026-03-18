@@ -113,7 +113,7 @@ class EditTheProfile extends Component {
         }else{
           var info=user.isAnonymous+'$$$'+user.uid+'$$$'+user.phoneNumber+'$$$'
           +user.displayName+'$$$'+user.photoURL
-          var reqInfo =info.split('$$$')
+          var reqInfo =info?.split('$$$')
           myId=user.uid
           console.log('this.state.reqInfo',reqInfo)
           this.setState({reqInfo})
@@ -187,7 +187,7 @@ class EditTheProfile extends Component {
     }
     if (name === 'store') {
       selCategories = this.state.shopCats.replace(/ /g, '-').replace(/,-/g, ',')
-      selCategories = selCategories.split(',')
+      selCategories = selCategories?.split(',')
     
       var theFinalCat = (selCategories + '').replace(/-/g, ' ').replace(/,/g, ', ')
       this.setState({ catNames: theFinalCat, pLayout: false, sLayout: true, mLayout: false, pColor: iC, sColor: aC, mColor: iC })
@@ -284,7 +284,7 @@ class EditTheProfile extends Component {
       } else {
         this.setState({ showError2B: 'Password must be above 6 characters' })
       }
-      //var theMail=event.target.value.split('@')
+      //var theMail=event.target.value?.split('@')
       //var mail = theMail[0]
     }
     if (this.state.theChange === 'phone') {
@@ -568,7 +568,7 @@ class EditTheProfile extends Component {
       await theRef.once('value', (snapshot) => {
         snapshot.forEach((data) => {
           const locationName = data.key
-          const theSubName = locationName.split('-').join(' ');
+          const theSubName = locationName?.split('-').join(' ');
           array1 = {
             locationName: theSubName, fullLocation: locationName
           }
@@ -602,7 +602,7 @@ class EditTheProfile extends Component {
         await theRef.once('value', (snapshot) => {
           snapshot.forEach((data) => {
             const locationName = data.key
-            const theSubName = locationName.split('-').join(' ');
+            const theSubName = locationName?.split('-').join(' ');
             array1 = {
               locationName: theSubName, fullLocation: locationName
             }
@@ -623,7 +623,7 @@ class EditTheProfile extends Component {
     await catsRef.once('value', (snapshot) => {
       snapshot.forEach((data) => {
         const subCatName = data.key
-        const theSubName = subCatName.split('-').join(' ');
+        const theSubName = subCatName?.split('-').join(' ');
         catArray = {
           fullCat: subCatName, editedCat: theSubName
         }
@@ -868,7 +868,7 @@ class EditTheProfile extends Component {
   firePostArr=async()=>{
     var shopCatsRef = firebase.database().ref('/shops/shopCats/');
     var initCats = (sCats+'').replace(/ /g, '-').replace(/,-/g, ',')
-    if (initCategories.length===0) {initCategories = initCats.split(',')}
+    if (initCategories.length===0) {initCategories = initCats?.split(',')}
  
    await selCategories.forEach((element)=>{
     if (!initCategories.includes(element)) {

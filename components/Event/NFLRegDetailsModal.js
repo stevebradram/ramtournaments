@@ -24,7 +24,7 @@ class DetailsModal extends Component {
    
     if(this.props.flockTeamName!==false){
       ////console.log('this.props.flockTeamName yoooooooooooooh')
-      flockTeamName=this.props.flockTeamName.split('::')
+      flockTeamName=this.props.flockTeamName?.split('::')
       this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
     this.setState({currentEvent:this.props.currentEvent})
@@ -64,7 +64,7 @@ class DetailsModal extends Component {
       //this.setState({openNewFlockModal:false})
       if(dataSnapshot.exists()){
       var theFlockName=dataSnapshot.val().name
-      theFlockName=theFlockName.split("|").join(" ")
+      theFlockName=theFlockName?.split("|").join(" ")
       this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
       }else{
         this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
@@ -441,7 +441,7 @@ class DetailsModal extends Component {
                                 <th>Points</th>
                             </tr>
                             {tableArray.map((item, index) => {
-                              var theItem=item.split('#')
+                              var theItem=item?.split('#')
                               var selected=theItem[2]
                              // ////console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>

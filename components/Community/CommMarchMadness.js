@@ -59,7 +59,7 @@ this.getRamMembersData()
     var allArr = [], round1Arr = [], round2Arr = []
     var theEventKey = this.state.theEventKey
     var flockNameWithSpaces = this.state.flockNameWithNoSpaces
-    var flockNameWithNoSpaces = flockNameWithSpaces.split(' ').join('|')
+    var flockNameWithNoSpaces = flockNameWithSpaces?.split(' ').join('|')
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores/' + flockNameWithNoSpaces)
     var flockCreatorRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/unique/' + flockNameWithNoSpaces + '/creatorId')
     //console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey,currentSelection,sportType)
@@ -281,12 +281,12 @@ this.getRamMembersData()
           i++
           var theUid = data.key
           var theData = data.val()
-          theData = theData.split('!!')
+          theData = theData?.split('!!')
           var name = theData[0]
           var picked = ''
           if (name.includes('$$$')) { picked = false }
           else { { picked = true } }
-          var newName = theData[0].split('$$$').join('')
+          var newName = theData[0]?.split('$$$').join('')
           var theArr = {}
           flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
             if (dataSnapshot.exists()) {
@@ -413,7 +413,7 @@ this.getRamMembersData()
                 return (
                   <tr key={index} id={theSeparator < index + 1 && item.flockName !== this.state.flockNameWithNoSpaces ? styles.table1Tr2D : styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.flockNameWithNoSpaces ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.flockName === this.state.flockNameWithNoSpaces ? 'white' : '#292f51' }}>
                     <td>{index + 1}</td>
-                    <td>{item.flockName.split("|").join(' ')}</td>
+                    <td>{item.flockName?.split("|").join(' ')}</td>
                     <td>{item.membersNo}</td>
                     <td>{item.score}</td>
                     <td>{item.avScore}</td>

@@ -28,7 +28,7 @@ class DetailsModal extends Component {
     //console.log('this.props.flockTeamName',this.props.flockTeamName)
     if(this.props.flockTeamName!==false){
       //console.log('this.props.flockTeamName yoooooooooooooh')
-      var flockTeamName=this.props.flockTeamName.split('::')
+      var flockTeamName=this.props.flockTeamName?.split('::')
       this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1]})
     }
     this.setState({currentEvent:this.props.currentEvent,ramFlockNames:[]})
@@ -394,7 +394,7 @@ class DetailsModal extends Component {
                                 <th>Points</th>
                             </tr>
                             {tableArray.map((item, index) => {
-                              var theItem=item.split('#')
+                              var theItem=item?.split('#')
                               var selected=theItem[2]
                              // //console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>

@@ -16,7 +16,7 @@ class DetailsModal extends Component {
   state={teamName:'',flockName:'',teamNameErr:'',flockNameErr:'',ramDetails:true,userId:'',theDetails:'',profilePhoto:'',profilePhoto2:'',currentEvent:'',
     compressedUri:'',buttonClick:true,showProgressBar:false,flockNameModal:false,ramFlockNames:[]}
   componentDidMount=()=>{
-    theDetails=this.props.theDetails.split('::')
+    theDetails=this.props.theDetails?.split('::')
     this.setState({teamName:theDetails[0],flockName:theDetails[1],profilePhoto:theDetails[2],currentEvent:theDetails[3],ramFlockNames:[]})
     this.checkAuth()
     console.log('infoooooo',this.props.theEventKey,theDetails[3])

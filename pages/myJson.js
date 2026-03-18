@@ -3096,14 +3096,14 @@ class myJason extends Component {
      render() {
        
        var theWord="Don't Miss A Moment Of UFC 310 Pantoja vs Asakura, Live From T-Mobile Arena In Las Vegas, Nevada On December 7, 2024"
-        theWord=theWord.trim().split(" ").slice(-3).join('-').replace(',','')
+        theWord=theWord.trim()?.split(" ").slice(-3).join('-').replace(',','')
         var dateObj = new Date()
         console.log('theWord',dateObj.toLocaleString())
 
         /*var matchTime ='Sun, Dec 15 / 5:00 AM SAST'
         var matchTime2 ='December-14-2024'
-        var year=matchTime2.split("-").pop();
-        matchTime=matchTime.split(' ')
+        var year=matchTime2?.split("-").pop();
+        matchTime=matchTime?.split(' ')
         matchTime=matchTime[1]+'-'+matchTime[2]+'-'+year+', '+matchTime[4]+' '+matchTime[5]
         var timeObj = new Date(matchTime).getTime(); 
         console.log('timeObj',timeObj)

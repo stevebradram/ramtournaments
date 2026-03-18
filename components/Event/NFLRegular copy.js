@@ -926,7 +926,7 @@ class NCAA extends Component {
     //this.state.matchEndTime
     if (this.state.matchEndTime.length >= 3) {
       console.log('zzezezezze')
-      var lastMatchTime = this.state.matchEndTime.split(':')
+      var lastMatchTime = this.state.matchEndTime?.split(':')
       console.log('lastMatchTime', lastMatchTime)
       var part1 = lastMatchTime[0]
       var part2 = lastMatchTime[1]
@@ -1851,7 +1851,7 @@ class NCAA extends Component {
     var titleToShow = 'NFL Season'
     console.log('this.state.theEventTitle', titleToShow1)
     if (this.state.theEventTitle) {
-      titleToShow1 = titleToShow1.split(' ')
+      titleToShow1 = titleToShow1?.split(' ')
       titleToShow = titleToShow1[0] + ' ' + titleToShow1[2] + ' Season'
     }
     var showBestPossible = ''

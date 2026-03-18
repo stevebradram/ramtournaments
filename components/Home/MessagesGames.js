@@ -18,29 +18,10 @@ const mainCard = [
 ]
 
 class DetailsModal extends Component {
-  state = {}
-  notify = (message) => {
-    toast.warn(message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
-  openFlockModal = () => {
-    if (navigator.onLine === false) {
-      this.notify('No internet! please check your internet connection')
-      return
-    }
-    this.setState({ flockNameModal: !this.state.flockNameModal })
-  }
   render() {
     var theEvent = ''
     var theUser = this.props.status
-    var pickDetails = this.props.pickDetails.split('####')
+    var pickDetails = this.props.pickDetails?.split('####')
     if (this.props.currentEvent === 'ramUfc') { theEvent = 'RAM UFC' }
     return (
       <><div className={styles.container2} onClick={(event) => this.doNothing(event)}>
@@ -65,15 +46,9 @@ class DetailsModal extends Component {
                 <p className={styles.matchP} style={{ color: theUser === 'me' ? '#fff' : null }}>Match #{index + 1}</p>
                 <div id={styles.table1Div}>
                   <table className={styles.table1}>
-                    {/*<tr id={styles.table1Tr1}>
-                                <th><div className={styles.boxDiv}><MdCheck color="#292f51" size={15} /></div></th>
-                                <th>Name</th>
-                                <th>Points</th>
-                            </tr>*/}
                     {tableArray.map((item, index) => {
-                      var theItem = item.split('#')
+                      var theItem = item?.split('#')
                       var selected = theItem[2]
-                      // //console.log('the item',item)
                       var selectedToShow = selectedToShow = <div className={theUser === 'me'?styles.boxDiv2:styles.boxDiv2B} onClick={() => this.selectedItems(theId, index, theBet, player1Points, player2Points)}><MdCheck color="#fff" size={15} /></div>
                       if (index === 0 && selected === 'player1') {
                         selectedToShow = <div className={theUser === 'me'?styles.boxDiv3:styles.boxDiv3B} ><MdCheck color="#fff" size={15} onClick={() => this.selectedItems(theId, index, theBet, player1Points, player2Points)} /></div>

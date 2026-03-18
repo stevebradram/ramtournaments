@@ -3037,7 +3037,7 @@ class myJason extends Component {
      }
      render() {
        /* var theWord="Don't Miss A Moment Of UFC 310 Pantoja vs Asakura, Live From T-Mobile Arena In Las Vegas, Nevada On December 7, 2024"
-        theWord=theWord.trim().split(" ").slice(-3)
+        theWord=theWord.trim()?.split(" ").slice(-3)
         var day=theWord[1].replace(',',''),month=theWord[0],year=theWord[2]
         //var month=theWord[0]
         //var year=theWord[2]
