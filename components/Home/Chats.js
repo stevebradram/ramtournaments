@@ -6,6 +6,7 @@ var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 import { AiFillMessage } from "react-icons/ai";
 import { MdOutlineClose, MdAddComment } from "react-icons/md";
 import firebase from '../FirebaseClient'
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 class Chats extends Component {
@@ -25,7 +26,7 @@ class Chats extends Component {
       { id: 1756658460000, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' },
       { id: 1756720200000, meso: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor', userId: 2, status: 'read' },
       { id: 1756720723788, meso: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa', userId: 3, status: 'send' }
-    ], theChatsId: '', areChatsAvailable: false, theChatsArray: [], lastMesoId: '', myUserId: '', isLogged: '', adminChatsItem: ''
+    ], theChatsId: '', areChatsAvailable: false, theChatsArray: [], lastMesoId: '', myUserId: '', isLogged: '', adminChatsItem: '',adminChatLastSeen:0
   }
 
   componentDidMount = () => {
@@ -38,7 +39,7 @@ class Chats extends Component {
       if (user) {
         var userId = user.uid
         this.setState({ myUserId: userId, isLogged: true })
-        this.checkAdminChats()
+        this.checkAdminChats(userId)
         this.checkChats(userId)
       } else {
         this.setState({ isLogged: false })
@@ -47,11 +48,16 @@ class Chats extends Component {
   }
   checkAdminChats = (myUid) => {
     var adminChatsRef = firebase.database().ref('/messaging/adminChats/')
-    console.log('my chat id zzzzz', myUid)
+    var adminLastSeenChatsRef = firebase.database().ref('/messaging/adminChatLastSeen/'+myUid+'/')
+    // console..log('my chat id zzzzz', myUid)
     adminChatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         this.setState({ adminChatsItem: dataSnapshot.val() })
-        console.log('rrrrrrrrrr',dataSnapshot.val())
+        adminLastSeenChatsRef.once('value', dataSnapshot => {
+         if (dataSnapshot.exists()) {
+          this.setState({adminChatLastSeen:dataSnapshot.val()})
+         }})
+        // console..log('rrrrrrrrrr',dataSnapshot.val())
       }
 
     })
@@ -60,10 +66,10 @@ class Chats extends Component {
     var chatsRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/')
     var userRef = firebase.database().ref('/users/')
     var theChats = []
-    console.log('my chat id', myUid)
+    // console..log('my chat id', myUid)
     chatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-        //console.log('1 exiiiiiists',dataSnapshot.val())
+        //// console..log('1 exiiiiiists',dataSnapshot.val())
         var theNo = dataSnapshot.numChildren(), i = 0
 
         // this.checkLastSeenChat(mesoId1, this.state.otheUserId)
@@ -72,7 +78,7 @@ class Chats extends Component {
           var theData = data.val()
           theData['id'] = data.key
           var otherUserID = data.val().otherUserID
-          console.log('my otherUserID id', otherUserID)
+          // console..log('my otherUserID id', otherUserID)
           userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
             var profilePhoto = dataSnapshot.val().profilePhoto
             var userName = dataSnapshot.val().name
@@ -86,11 +92,11 @@ class Chats extends Component {
             if (theNo === i) {
               let objMax = ''
               if (theChats.length) { objMax = theChats.reduce((max, curren) => max.time > curren.time ? max : curren); }
-              //console.log('objMax',objMax,objMax['id'])
-              console.log('theChats1232323', theChats)
+              //// console..log('objMax',objMax,objMax['id'])
+              // console..log('theChats1232323', theChats)
               // return
               this.setState({ areChatsAvailable: true, theChatsArray: theChats, lastMesoId: objMax['id'] }, () => {
-                //console.log('allChats', theChats)
+                //// console..log('allChats', theChats)
                 // this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
                 //this.realTimeUpdate(mesoId1)
               })
@@ -104,21 +110,23 @@ class Chats extends Component {
     })
   }
   openMessages = (item) => {
-    console.log('clicked!', item)
+    // console..log('clicked!', item)
     var theItem = { uid: item.otherUserID, acronym: item.acronym, profilePhoto: item.profilePhoto, userName: item.userName }
     this.props.onClick('fromChats', 'chatId', theItem)
   }
+    openAdminMessages=() => {
+    //this.notify('Going to admin messages')
+    this.props.onClick('fromChatsToAdmin', 'chatId')
+  }
   openFriends = () => {
-    console.log('clicked!')
+    // console..log('clicked!')
     this.props.onClick('fromChats', 'openFriends', 'N/A')
   }
   closeMessenger = () => {
-    console.log('clicked!')
+    // console..log('clicked!')
     this.props.onClick('fromChats', 'close', 'N/A')
   }
-  openAdminMessages=()=>{
-    this.notify('No messages for now')
-  }
+
   doNothing = (event) => {
     event.stopPropagation();
     event.preventDefault()
@@ -136,6 +144,7 @@ class Chats extends Component {
     }
   render() {
     var adminMessageRead=true
+    if(this.state.adminChatLastSeen<this.state.adminChatsItem['time']){adminMessageRead=true}
     return (
       <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
         <div className={styles.headerDiv}>
@@ -148,10 +157,11 @@ class Chats extends Component {
           </div>
           <div>
             <div className={styles.nameDiv}>
-              <p className={styles.nameP}>RAM</p>
+              {/*<p className={styles.nameP}>RAM</p>*/}
+              <div style={{display:'flex',alignItems:'center'}}><p className={styles.nameP} style={{marginRight:5,fontWeight:700,fontSize:17}}>RAM</p><RiVerifiedBadgeFill color={'#428adb'}/></div>
               <p className={styles.timeP} style={{ color: adminMessageRead === false ? '#df5959ff' : null }}>{postTime(this.state.adminChatsItem['time'])}</p>
             </div>
-            <p className={styles.mesoP}>{this.state.adminChatsItem['message']}</p>
+            <p className={styles.mesoP} style={{fontWeight:500}}>{this.state.adminChatsItem['title']}</p>
             {adminMessageRead?null:<AiFillMessage className={styles.mesoIc}/>}
           </div>
         </div>
@@ -162,7 +172,7 @@ class Chats extends Component {
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
                 <div className={styles.imgDiv}>
-                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
+                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={item.profilePhoto} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
                     <p>{item.acronym}</p>}
 
                 </div>
