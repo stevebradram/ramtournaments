@@ -116,7 +116,7 @@ class Chats extends Component {
   }
     openAdminMessages=() => {
     //this.notify('Going to admin messages')
-    this.props.onClick('fromChatsToAdmin', 'chatId')
+    this.props.onClick('fromChatsToAdmin','openAdminMessages', 'chatId')
   }
   openFriends = () => {
     // console..log('clicked!')

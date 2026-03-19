@@ -217,6 +217,7 @@ class NavBar extends Component {
         else{this.setState({ showMessages:true,showChats:false,theData});}
       }
        if(from==='fromChatsToAdmin'){
+       // openAdminMessages
         if(text==='close'){this.setState({ showAdminMessages:false,showChats:false});}
         else{
           console.log('goiing to admiiiiiiiiiiiiiiin')
@@ -363,7 +364,7 @@ class NavBar extends Component {
         {this.state.isLogged&&this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
         {this.state.isLogged&&this.state.showChats?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
         {this.state.isLogged&&this.state.showMessages?<div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><Messages onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
-         {this.state.isLogged&&this.state.showAdminMessages?<div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><AdminMessages onClick={this.handleChatsClick}/></div>:null}
+         {this.state.isLogged&&this.state.showAdminMessages?<div className={styles.chatModal} onClick={() => this.setState({ showAdminMessages: false })}><AdminMessages onClick={this.handleChatsClick}/></div>:null}
           {this.state.isLogged&&this.state.showFriends?<div className={styles.chatModal} onClick={() => this.setState({ showFriends: false })}><Friends onClick={this.handleChatsClick}/></div>:null}
           {this.state.isLogged&&this.state.showAddFriends?<div className={styles.chatModal} onClick={() => this.setState({ showAddFriends: false })}><AddFriends onClick={this.handleChatsClick}/></div>:null}
       </>

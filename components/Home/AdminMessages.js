@@ -50,7 +50,7 @@ class Messages extends Component {
     })
   }
   closeMessenger = () => {
-    this.props.onClick('fromMessages', 'chatId', 'N/A')
+     this.props.onClick('fromMessages', 'chatId', 'N/A')
   }
   doNothing = (event) => {
     event.stopPropagation();
