@@ -224,6 +224,24 @@ $blackish:#292f51;
     margin-top: 2px;
    
 }
+.timeDiv3{
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    margin-right: 0px;
+    position: absolute;
+    right: 0;
+    left: 0;
+    justify-content: space-between;
+    margin-top: 2px;
+}
+.adminP{
+    margin-left: 10px;
+    font-size: 11px;
+    color: #636262;
+    //font-style: italic;
+    font-weight: 600;
+}
 .timeP{
     font-size: 10px;
     color: #808080;

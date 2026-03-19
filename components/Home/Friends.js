@@ -68,7 +68,6 @@ class Friends extends Component {
     console.log('userId', userId)
     var messageRef = firebase.database().ref('/messaging/friends/' + userId)
     var userRef = firebase.database().ref('/users/')
-
     var friendsListArr = []
     messageRef.once('value', dataSnapshot => {
       var theNo = dataSnapshot.numChildren(), i = 0

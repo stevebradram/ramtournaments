@@ -144,7 +144,7 @@ class Chats extends Component {
     }
   render() {
     var adminMessageRead=true
-    if(this.state.adminChatLastSeen<this.state.adminChatsItem['time']){adminMessageRead=true}
+    if(this.state.adminChatLastSeen<this.state.adminChatsItem['time']){adminMessageRead=false}
     return (
       <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
         <div className={styles.headerDiv}>

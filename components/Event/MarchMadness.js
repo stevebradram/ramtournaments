@@ -1843,10 +1843,10 @@ class MarchMadness extends Component {
                 <p>Flock Invite Link</p>
                 <FaRegCopy />
               </div> : null}
-              <div className={style.sharePicksDiv} onClick={() => this.setState({ openShareMatchesModal: true })}>
+              {this.state.isAdmin?<div className={style.sharePicksDiv} onClick={() => this.setState({ openShareMatchesModal: true })}>
                 <p>Share Picks With Friends</p>
                 <MdOutlineShare />
-              </div></div>
+              </div>:null}</div>
             <div className={style.picksDiv} onClick={() => this.openTheModal()}>
               {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
               {this.state.dataAvailable ?

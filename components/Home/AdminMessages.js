@@ -38,12 +38,12 @@ class Messages extends Component {
   checkAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        var userId = user.uid
+        var userId = user.uid,isAdmin=false
          if (user.uid === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3' || user.uid === 'zZTNto5p3XVSLYeovAwWXHjvkN43' || user.uid === 'vKBbDsyLvqZQR1UR39XIJQPwwgq1') {
-          this.setState({ isAdmin: true })
+          isAdmin=true;this.setState({ isAdmin: true })
         }
         this.setState({ myUserId: userId, isLogged: true })
-        this.checkMessages(userId)
+        this.checkMessages(isAdmin)
       } else {
         this.setState({ isLogged: false })
       }
@@ -56,7 +56,7 @@ class Messages extends Component {
     event.stopPropagation();
     event.preventDefault()
   }
-  checkMessages = () => {
+  checkMessages = (isAdmin) => {
     var messageRef = firebase.database().ref('/messaging/adminMessages/')
     var theMessages = []
     messageRef.once('value', dataSnapshot => {
@@ -65,52 +65,39 @@ class Messages extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          theMessages.push(theData)
-          if (theNo === i) {
+          var uid = data.val().adminId
+           var userRef = firebase.database().ref('/users/'+uid+'/userData/name/')
+          if(isAdmin){userRef.once('value', dataSnapshot => {
+            var name=dataSnapshot.val()
+            theData['name']=name
+            theMessages.push(theData)
+            if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             var lastMesoId=objMax['id']
             console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()
             })
-
           }
+           })}else{
+if (theNo === i) {
+            let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
+            var lastMesoId=objMax['id']
+            console.log('theMessages1',theMessages)
+            this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
+            this.upadateLastSeenChat()})}
+           } 
         })
       } else {
             this.setState({ areMessagesAvailable: false })
           }
     })
   }
-  upadateLastSeenChat = (messageId, otherUserId) => {
+  upadateLastSeenChat = () => {
     var chatRef = firebase.database().ref('/messaging/adminChatLastSeen/'+this.state.myUserId+ '/')
     chatRef.set(new Date().getTime())
   }
 
-  updateMessages = () => {
-    var messageRef = firebase.database().ref('/messaging/adminMessages/').orderByKey().startAfter(this.state.lastMesoId);
-    var theMessages = [...this.state.messagesArray], updateMessages = []
-    console.log('weeeeeee', theMessages)
-    // return
-    messageRef.once('value', dataSnapshot => {
-      if (dataSnapshot.exists()) {
-        var theNo = dataSnapshot.numChildren(), i = 0
-        dataSnapshot.forEach((data) => {
-          i++
-          var theData = data.val()
-          theData['id'] = data.key
-          theMessages.push(theData)
-          updateMessages.push(theData)
-          if (theNo === i) {
-            //console.log('updateMessages',theMessages)
-            let objMax = updateMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-            this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] })
-          }
-        })
-      } else {
-        //console.log('no daaata currentlyyyyyy')
-      }
-    })
-  }
   sendMessage = () => {
     var messageRef = firebase.database().ref('/messaging/adminMessages/')
     var chatRef = firebase.database().ref('/messaging/adminChats/')
@@ -189,9 +176,12 @@ class Messages extends Component {
                         {/*<div className={styles.verifiedataitle}><p className={styles.userNameP} style={{marginRight:5}}>RAM</p><RiVerifiedBadgeFill  color={'#428adb'}/></div>*/}
                         <p className={styles.titleP}>{item.title}</p>
                         <p className={styles.mesoP}>{item.message}</p>
-                        <div className={styles.timeDiv1}>
+                        {this.state.isAdmin?<div className={styles.timeDiv3}>
+                            <p className={styles.adminP}>Admin: {item.name}</p>
                           <p className={styles.timeP}>{theMessageTime}</p>
-                        </div>
+                        </div>:<div className={styles.timeDiv1}>
+                          <p className={styles.timeP}>{theMessageTime}</p>
+                        </div>}
                       </div></div> 
                   </div>)
               })}
