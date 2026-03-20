@@ -64,10 +64,10 @@ class invite extends Component {
   var generalDb = firebase.database().ref()
  // var userIdLink=userIdChunk[2]+userIdChunk[0]+userIdChunk[1]+userIdChunk[3]
   var userIdLink=userIdChunk[1]+userIdChunk[2]+userIdChunk[0]+userIdChunk[3]
-  console.log('userIdLink yyyyyyyyyyyyyy',userIdLink)
+  //console.log('userIdLink yyyyyyyyyyyyyy',userIdLink)
   generalDb.child('users/'+userIdLink+'/flockData/flockNames/'+eventId+'/name/')
       .once('value', dataSnapshot => {
-        console.log('userIdLink dataSnapshot',dataSnapshot.val())
+        //console.log('userIdLink dataSnapshot',dataSnapshot.val())
         var name=dataSnapshot.val()
         var flockNameWithSpaces=name?.split('|').join(' ')
         var flockNameWithoutSpaces=name
@@ -110,7 +110,7 @@ class invite extends Component {
     })
  }
  confirm=()=>{
-  console.log('daaaaata',this.state.userId,this.state.sportType,this.state.eventId,this.state.flockNameWithSpaces)
+  //console.log('daaaaata',this.state.userId,this.state.sportType,this.state.eventId,this.state.flockNameWithSpaces)
   //return
    var generalDb=firebase.database().ref()
    var generalDb2=firebase.database().ref()
@@ -147,7 +147,7 @@ class invite extends Component {
      generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/')
      .once('value', dataSnapshot => {
        if (dataSnapshot.exists()){
-         console.log('existenceeeeeeee')
+         //console.log('existenceeeeeeee')
        
          if(this.state.sportType==='NCAAB'){
          var theData=dataSnapshot.val()
@@ -164,7 +164,7 @@ class invite extends Component {
            sweet16Score:'0',elite8Score:'0',final4Score:'0',
            currentPick:currentSelection,theMenu:theMenu,[bps2]:theBPS,
            ramName:teamName,picked:true,[thePick]:true}
-           console.log('existenceeeeeeee',scoreData2)
+           //console.log('existenceeeeeeee',scoreData2)
            
          var detailsRef=generalDb.child('users/'+this.state.userId+'/ramData/events/'+this.state.sportType+'/'+this.state.eventId+'/details/')
          detailsRef.child('/flockName/').set(this.state.flockName)
@@ -198,7 +198,7 @@ class invite extends Component {
     })
   }
 })
-  ////console.log('')
+  //console.log('')
   //var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.eventId+'/members')
   //membersFlockNamesRef.child(this.state.flockNameWithoutSpaces).child(this.state.userId).set(this.state.creatorName)
  }

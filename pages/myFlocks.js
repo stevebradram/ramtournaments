@@ -70,7 +70,7 @@ class MyFlocks extends Component {
     await userInfoDb.once('value', dataSnapshot => {
       var theCount = dataSnapshot.numChildren()
       var i = 0
-      ////console.log('theCountttt',theCount)
+      //console.log('theCountttt',theCount)
       dataSnapshot.forEach((data) => {
         i++
         var pastG = {}, upcomingG = {}
@@ -89,7 +89,7 @@ class MyFlocks extends Component {
         var theItem = { id: key, time: time, title: title, sportType: sportType, endTime: endTime, currentSelection: currentSelection, stopEdits, theValues: theValues }
         allGames.push(theItem)
         if (theCount === i) {
-          ////console.log('allGames 895623111',allGames)
+          //console.log('allGames 895623111',allGames)
           // return
           var theEventTitle = '', theEventKey = '', sportType = '', theTime = '', endTime = '', theValues = ''
           if (allGames.length > 0) {
@@ -107,8 +107,8 @@ class MyFlocks extends Component {
               var theScoresMenu = this.safeSplit(theValues, '|')
               theScoresMenu = 'Week ' + theScoresMenu[0] + ' Round'
               this.setState({ theScoresMenu: theScoresMenu })
-              console.log('allGames 9000000', allGames, currentSelection)
-              ////console.log('sportType555555555', sportType, theEventKey)
+              //console.log('allGames 9000000', allGames, currentSelection)
+              //console.log('sportType555555555', sportType, theEventKey)
             })
           }
 
@@ -150,7 +150,7 @@ class MyFlocks extends Component {
           dataSnapshot.forEach((data) => {
             i++
             var theData = data.val()
-            ////console.log('the daaaaaaaaata',theData)
+            //console.log('the daaaaaaaaata',theData)
             var theUserId = data.key
             var BPS = '', theScore = '', r1BPS = '', r2BPS = '', r3BPS = '', r4BPS = '', r1S = '', r2S = '', r3S = '', r4S = '', round1Pick = false, round2Pick = false, round3Pick = false, round4Pick = false
             if (sportType === 'NCAAB' || sportType === 'NFLRegular') {
@@ -245,7 +245,7 @@ class MyFlocks extends Component {
             }
             if (count === i) {
               this.showNCAAB()
-              ////console.log('allArr55555555555',allArr)
+              //console.log('allArr55555555555',allArr)
               if (isEventStarted) { allArr = allArr.sort(function (a, b) { return b.score - a.score }); }
               else { allArr = allArr.sort(function (a, b) { return b.BPS - a.BPS }); }
 
@@ -271,7 +271,7 @@ class MyFlocks extends Component {
                 //console.log('the NFLRegular', round1Arr,round2Arr,round3Arr,round4Arr)
               }
               else { this.setState({ ramsInMyFlockArr: allArr }) }
-              // //console.log('the maliza', allArr)
+              //console.log('the maliza', allArr)
             }
           })
         } else {
@@ -293,7 +293,7 @@ class MyFlocks extends Component {
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          // //console.log('theFlocksArr 7777 theData',data.key, theData)
+          //console.log('theFlocksArr 7777 theData',data.key, theData)
           var totalScore = 0, week1Score = 0, week2Score = 0, week3Score = 0, theArr2 = '', scoreSum = 0
           if (sportType === 'NFLRegular') {
             if (theData.week1RoundAvScore) { totalScore = totalScore + theData.week1RoundAvScore, week1Score = theData.week1RoundAvScore, scoreSum = scoreSum + theData.week1RoundScore }
@@ -352,10 +352,10 @@ class MyFlocks extends Component {
           var theFname = theData[1]?.split(' ').join('|')
           flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
             if (dataSnapshot.exists()) {
-              // //console.log('ikoooooooooo',theUid)
+              //console.log('ikoooooooooo',theUid)
               theArr = { theUid, name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked, isCreator: 'true' }
             } else {
-              // //console.log('hakunaaaaaa',theUid)
+              //console.log('hakunaaaaaa',theUid)
               theArr = { theUid, name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked, isCreator: 'false' }
             }
             flockMembersRef.child(theFname + '/' + theUid).once('value', dataSnapshot => {
@@ -498,23 +498,24 @@ class MyFlocks extends Component {
     //console.log('roundddd',this.state.sportType, round)
     this.setState({ currentSelection: round })
     if (this.state.sportType === 'NCAAB') {
+      this.marchMadnessRef.current.runCustomLogic2('round',round)
       if (round === 'round1') {
         this.setState({ ramsInMyFlockArr: this.state.round1Arr })
-        // //console.log('round 1111',this.state.round1Arr)
+        //console.log('round 1111',this.state.round1Arr)
       }
       if (round === 'round2') {
         this.setState({ ramsInMyFlockArr: this.state.round2Arr })
-        // //console.log('round 2222',this.state.round2Arr)
+        //console.log('round 2222',this.state.round2Arr)
       }
     }
     if (this.state.sportType === 'NFLRegular') {
       if (round === 'round1') {
         this.setState({ ramsInMyFlockArr: this.state.round1Arr })
-        // //console.log('round 1111',this.state.round1Arr)
+        //console.log('round 1111',this.state.round1Arr)
       }
       if (round === 'round2') {
         this.setState({ ramsInMyFlockArr: this.state.round2Arr })
-        // //console.log('round 2222',this.state.round2Arr)
+        //console.log('round 2222',this.state.round2Arr)
       }
       if (round === 'round3') {
         this.setState({ ramsInMyFlockArr: this.state.round3Arr })
@@ -543,14 +544,14 @@ class MyFlocks extends Component {
     }
   }
   handleChildClick = (theEventKey, theEventTitle, theTime, sportType, currentSelection, endTime, isEventExpired) => {
-     console.log('chuccccccccc',sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime)
+     //console.log('chuccccccccc',sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime)
      this.setState({ count: this.state.count + 1,theEventKey, sportType },()=>{
      this.loadOtherEvents(sportType, theEventKey, theTime, theEventTitle, currentSelection, endTime,isEventExpired)
      })
     
      if (this.marchMadnessRef.current) {
         this.marchMadnessRef.current.runCustomLogic(theEventKey, 'round1', sportType,endTime); // Call child's method
-        console.log('running cutom logic marchMadnessRef')
+        //console.log('running cutom logic marchMadnessRef')
       }
     
     /*if(sportType==='NCAAB'||sportType==='NFLRegular'){
@@ -563,6 +564,10 @@ class MyFlocks extends Component {
     //theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection
 
   };
+  changeMenuToShow=(type,menu)=>{
+    this.setState({menuToShow:menu})
+     this.marchMadnessRef.current.runCustomLogic2(type,menu)
+  }
   render() {
     var titleToShow = this.state.theEventTitle.replace(/  +/g, ' ')
     if (this.state.sportType === 'NFLRegular') {
@@ -605,7 +610,7 @@ class MyFlocks extends Component {
             {this.state.allGames.map((item, index) => {
               var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
               var todayInMillis = new Date().getTime()
-              ////console.log('todayInMillis',item)
+              //console.log('todayInMillis',item)
               var theColor = '#292f51', timing = 'Active Event'
               if (item.endTime < todayInMillis && (item.endTime - todayInMillis) < -86400000) {
                 theColor = '#919191'
@@ -655,7 +660,7 @@ class MyFlocks extends Component {
               {['Rams In Your Flock', 'Flocks Among Flocks', this.state.isAdmin ? 'Admin' : null].map((item, index) => {
 
                 return (
-                  <p style={{ color: this.state.menuToShow === item ? '#CB1E31' : null, borderBottomColor: this.state.menuToShow === item ? '#CB1E31' : null }} key={index} onClick={() => this.setState({ menuToShow: item })}>{item}</p>
+                  <p style={{ color: this.state.menuToShow === item ? '#CB1E31' : null, borderBottomColor: this.state.menuToShow === item ? '#CB1E31' : null }} key={index} onClick={() => this.changeMenuToShow('ramsChange',item)}>{item}</p>
                 )
               })}
             </div> : null}
@@ -754,16 +759,16 @@ class MyFlocks extends Component {
 
                     {this.state.theFlocksArr.map((item, index) => {
                       var theMembersNo = '', theScore = '', theAvScore = ''
-                      // //console.log('the rrrrrr',this.state.currentSelection,this.state.sportType,item)
+                      //console.log('the rrrrrr',this.state.currentSelection,this.state.sportType,item)
                       if (this.state.sportType === 'NCAAB') {
-                        ////console.log('haaapa round 1')
+                        //console.log('haaapa round 1')
                         if (this.state.currentSelection === 'round1') {
                           theMembersNo = item.theData.round1MembersNo
                           theScore = item.theData.round1Score
                           theAvScore = item.theData.round1AvScore
                         }
                         if (this.state.currentSelection === 'round2') {
-                          // //console.log('haaapa round 2')
+                          //console.log('haaapa round 2')
                           theMembersNo = item.theData.round2MembersNo
                           theScore = item.theData.round2Score
                           theAvScore = item.theData.round2AvScore
@@ -776,13 +781,13 @@ class MyFlocks extends Component {
                           theAvScore = item.theData.week1RoundAvScore
                         }
                         if (this.state.currentSelection === 'round2') {
-                          // //console.log('haaapa round 2')
+                          //console.log('haaapa round 2')
                           theMembersNo = item.theData.week2RoundMembersNo
                           theScore = item.theData.week2RoundScore
                           theAvScore = item.theData.week2RoundAvScore
                         }
                         if (this.state.currentSelection === 'round3') {
-                          // //console.log('haaapa round 2')
+                          //console.log('haaapa round 2')
                           theMembersNo = item.theData.week3RoundMembersNo
                           theScore = item.theData.week3RoundScore
                           theAvScore = item.theData.week3RoundAvScore

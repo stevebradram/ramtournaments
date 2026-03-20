@@ -19,25 +19,25 @@ class DetailsModal extends Component {
     theDetails=this.props.theDetails?.split('::')
     this.setState({teamName:theDetails[0],flockName:theDetails[1],profilePhoto:theDetails[2],currentEvent:theDetails[3],ramFlockNames:[]})
     this.checkAuth()
-    console.log('infoooooo',this.props.theEventKey,theDetails[3])
+    //console.log('infoooooo',this.props.theEventKey,theDetails[3])
     /*var ramDetails = localStorage.get('ramDetails');
     var userId = localStorage.get('userId');
-    console.log('the props',this.props.theDetails)
-    console.log('userId 55555555555',userId,ramDetails)
+    //console.log('the props',this.props.theDetails)
+    //console.log('userId 55555555555',userId,ramDetails)
     if (ramDetails === 'true') { this.setState({ramDetails:true,userId:userId})}
     else{this.setState({ramDetails:false})}*/
     
   }
   inputChange = async (e) => {
     var value = e.target.value
-    console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
     value=value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
     await this.setState({[e.target.id]: value})
       if (e.target.id ==='teamName'){
         if (this.state.teamName.length>=3){this.setState({teamNameErr:''})}
       }
       if (e.target.id ==='flockName'){
-        console.log('hapa tu',e.target.id)
+        //console.log('hapa tu',e.target.id)
         if (this.state.flockName.length>=3){this.setState({flockNameErr:''})}
       }
   }
@@ -58,16 +58,16 @@ class DetailsModal extends Component {
   myFlockNamesRef.once('value',dataSnapshot=>{
     var flockCount=dataSnapshot.numChildren()
     if(!dataSnapshot.val()){
-      console.log('hakuna kitu mzeeee')
-    }else{console.log('kunaaaaaaaaaa kitu mzeeee')}
+      //console.log('hakuna kitu mzeeee')
+    }
     dataSnapshot.forEach((data,index) => {
       i++
-     console.log('the flock names',data.key,flockCount)
+     //console.log('the flock names',data.key,flockCount)
      var theKey=data.key.replace(/_/g,' ')
      flocks.push(theKey)
      if(flockCount===i){
       this.setState({ramFlockNames:flocks})
-      console.log('the flockssss',flocks)
+      //console.log('the flockssss',flocks)
      }
     })
   })
@@ -81,7 +81,7 @@ class DetailsModal extends Component {
     if (!this.state.buttonClick) return
     this.buttonClickStat(2000)
     if(!this.state.userId)return
-    console.log('looooooooobo')
+    //console.log('looooooooobo')
     //return
     //kufika set unqueeeeeeeeee
     //var gameRef = firebase.database().ref('users').child(this.state.userId).child('upcomingEvents').child(this.state.currentEvent)
@@ -94,10 +94,10 @@ class DetailsModal extends Component {
     if (this.state.flockName<3){this.setState({flockNameErr:'Flock Name must be 3 characters and above'});return}
     if(this.state.teamName===theDetails[0]&&this.state.flockName===theDetails[1]){
     if(this.state.profilePhoto!==theDetails[2]){
-        console.log('UPLOADING PHOTO')
+        //console.log('UPLOADING PHOTO')
         this.savePhoto()
       }else{  
-      console.log('the verdict Nothing has changed')
+      //console.log('the verdict Nothing has changed')
       Router.push('/reload')
     }
      }
@@ -106,23 +106,23 @@ class DetailsModal extends Component {
       var theTeamName=this.state.teamName.replace(/ /g,"_")
       var theFlockName=this.state.flockName.replace(/ /g,"_")
       var theOldTeamName=theDetails[0].replace(/ /g,"_")
-        console.log('the verdict something has changed')
+        //console.log('the verdict something has changed')
         uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
-          console.log('is thereee db',dataSnapshot)
+          //console.log('is thereee db',dataSnapshot)
           var theInfo=dataSnapshot.val()
-          console.log('is thereee',theInfo)
+          //console.log('is thereee',theInfo)
           if(!theInfo){
             uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
             uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
             gamesDataRef.child('flockName').set(this.state.flockName)
             gamesDataRef.child('teamName').set(this.state.teamName,(error) => {
               if (error) {
-                console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
+                //console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
               } else {
-                console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
+                //console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
                 uniqueRamNamesRef.child(theOldTeamName).set(null);
                 if(this.state.profilePhoto!==theDetails[2]){
-                  console.log('UPLOADING PHOTO')
+                  //console.log('UPLOADING PHOTO')
                   this.savePhoto()
                 }else{
                   Router.push('/reload')
@@ -136,12 +136,12 @@ class DetailsModal extends Component {
               gamesDataRef.child('flockName').set(this.state.flockName)
               gamesDataRef.child('teamName').set(this.state.teamName,(error) => {
                 if (error) {
-                  console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
+                  //console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
                 } else {
-                  console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
+                  //console.log('POSTING UFC RESULTS TO FIREBASE WAS SUCCESSFUL') 
                   uniqueRamNamesRef.child(theOldTeamName).set(null);
                   if(this.state.profilePhoto!==theDetails[2]){
-                    console.log('UPLOADING PHOTO')
+                    //console.log('UPLOADING PHOTO')
                     this.savePhoto()
                   }else{
                     Router.push('/reload')
@@ -151,7 +151,7 @@ class DetailsModal extends Component {
             }else{
               this.notify('RAM Name already taken')
               this.setState({teamNameErr:'RAM Name already taken, please try another one'})
-              console.log('change that shit')
+              //console.log('change that shit')
             }
            
           }
@@ -167,10 +167,10 @@ class DetailsModal extends Component {
     //setFile(event.target.files[0]); // Set the selected file
   };
   pickPhoto =async(event) =>{
-    console.log('hapa kwa pic photoooooooooooo')
+    //console.log('hapa kwa pic photoooooooooooo')
     var theFile=event.target.files[0]
     var phoroURL=URL.createObjectURL(event.target.files[0])
-    console.log('phoroURL',phoroURL)
+    //console.log('phoroURL',phoroURL)
     this.setState({profilePhoto:phoroURL})
    // this.setState({shopPhoto:phoroURL})
      Resizer.imageFileResizer(
@@ -194,7 +194,7 @@ savePhoto =async() =>{
             "state_changed",
         snapshot=>{},
             error=>{
-                console.log(error);
+                //console.log(error);
             },
             ()=>{
                firebase.storage()
@@ -204,9 +204,9 @@ savePhoto =async() =>{
                 .then(url=>{
                   gameRef.child('profilePhoto').set(url,(error) => {
                     if (error) {
-                      console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
+                      //console.log('AN ERROR OCCURED WHILE POSTING UFC RESULTS TO FIREBASE',)
                     } else {
-                      console.log('the photo url',url)
+                      //console.log('the photo url',url)
                       this.setState({profilePhoto:url,compressedUri:''})
                       this.notify('UPLOAD SUCCESS')
                       Router.push('/reload')

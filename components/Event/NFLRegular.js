@@ -130,7 +130,7 @@ class NCAA extends Component {
     /*if(title==='getOdds'&&item.length>10){
     this.checkForOddsUpdate2(item)
     }
-    ////console.log('azeeza', item)*/
+    //console.log('azeeza', item)*/
   };
   handleDelete = async () => {
 if (await confirm({ confirmation: 'Do you really want to delete this item?' })) {
@@ -140,7 +140,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   checkForOddsUpdate2 = async (theLink) => {
     try {
       var theQuery = encodeURIComponent(theLink)
-      ////console.log('the theLink 000000', theLink)
+      //console.log('the theLink 000000', theLink)
       //return
       var editDbRef = firebase.database().ref('/theEvents/NFL/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
       editDbRef.once('value', dataSnapshot => {
@@ -148,20 +148,20 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           this.notify('Update odds time expired')
         }
         else {
-          ////console.log('kufinish kudonjo')
+          //console.log('kufinish kudonjo')
           axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
 
             .then((res) => {
               var theItems = res.data.result
               this.notify('Success Updating NFL the odds')
-              ////////console.log('theItems', theItems)
+              //console.log('theItems', theItems)
 
             })
         }
       })
 
     } catch (error) {
-      ////////console.log('error', error)
+      //console.log('error', error)
     }
   }
   checkForOddsUpdate = async () => {
@@ -170,7 +170,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
       var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
-      ////console.log('the theLink 11111', theLink)
+      //console.log('the theLink 11111', theLink)
       //return
       var editDbRef = firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
       editDbRef.once('value', dataSnapshot => {
@@ -178,10 +178,10 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         if ((new Date().getTime() > dataSnapshot.val())) {
           this.notify('Update odds time expired')
           this.setState({ showProgressBar: false })
-          ////console.log('the Z000000', new Date().getTime(), dataSnapshot.val())
+          //console.log('the Z000000', new Date().getTime(), dataSnapshot.val())
         }
         else {
-          ////console.log('the theLink RRRRRAAAAAAA', theLink)
+          //console.log('the theLink RRRRRAAAAAAA', theLink)
           //axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
           axios.get("https://theramtournament.com/updateNFLRegularOdds?term=" + theQuery)
             .then((res) => {
@@ -194,7 +194,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       })
 
     } catch (error) {
-      ////////console.log('error', error)
+      //console.log('error', error)
     }
   }
   checkForOddsUpdateTime = () => {
@@ -211,9 +211,9 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     var theDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEditTime)
     theDb.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-        ////console.log('dataSnapshot.val()', dataSnapshot.val())
+        //console.log('dataSnapshot.val()', dataSnapshot.val())
         if (dataSnapshot.val() === 'N/A') {
-          ////console.log('yeeeeees 111111')
+          //console.log('yeeeeees 111111')
           //this.checkForOddsUpdate()
           this.setState({ showConfirmModal: false, showProgressBar: false })
           this.notify('Can not update odds. Event not yet populated')
@@ -222,7 +222,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             this.setState({ showConfirmModal: false, showProgressBar: false })
             this.notify('Can not update odds. Event already started')
           } else {
-            ////console.log('yeeeeees 2222222')
+            //console.log('yeeeeees 2222222')
             this.checkForOddsUpdate()
           }
         }
@@ -247,19 +247,19 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       //var theLink='theEvents::NFL::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
       var theQuery = encodeURIComponent(theLink)
-      ////console.log('theLink', theLink)
+      //console.log('theLink', theLink)
       //return
 
       //await axios.get("http://localhost:4000/getNCAAFNFLResults?term="+theQuery)
       await axios.get("https://theramtournament.com/getNCAAFNFLResults?term=" + theQuery)
         .then((res) => {
-          ////////console.log('theItems',res)
+          //console.log('theItems',res)
           var theOutcome = res.data
-          ////////console.log('theItems',theOutcome)
+          //console.log('theItems',theOutcome)
           if (theOutcome === 'sucesss') { }
         })
     } catch (error) {
-      ////////console.log('error',error)
+      //console.log('error',error)
     }
   }
   checkAuth = () => {
@@ -282,7 +282,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   checkLink = async (userId) => {
     var flocksDataRef = firebase.database().ref('users/').child(userId + '/flockData/flockNames/' + this.state.theEventKey + '/link')
     flocksDataRef.once('value', dataSnapshot => {
-      ////console.log('flocksDataRef the key', dataSnapshot.val())
+      //console.log('flocksDataRef the key', dataSnapshot.val())
       if (dataSnapshot.exists()) {
         this.setState({ theLink: dataSnapshot.val() })
       } else {
@@ -292,15 +292,15 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   }
   checkUpcomingPastGames = async (userId) => {
     //return
-    //////console.log('naingia2222222222222')
+    //console.log('naingia2222222222222')
     var gamesInfo = firebase.database().ref('/theEvents/NFLRegular/eventsIds/')
     var i = 0, allGames = []
 
     await gamesInfo.once('value', dataSnapshot => {
       var gamesCount = dataSnapshot.numChildren()
-      //////console.log('naingia 3333',gamesCount)
+      //console.log('naingia 3333',gamesCount)
       dataSnapshot.forEach((data) => {
-        ////console.log('naingia 44444', data.val())
+        //console.log('naingia 44444', data.val())
         i++
         var pastG = {}, upcomingG = {}, theEvents = {}
         var key = data.key
@@ -337,7 +337,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         allGames.push(theEvents)
 
         if (gamesCount === i) {
-          ////console.log('zoote', allGames)
+          //console.log('zoote', allGames)
           var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = '', stopweek1RoundEdit = '', theValues = ''
           if (allGames.length > 0) { allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'], stopweek1RoundEdit = allGames[0]['stopweek1RoundEdit'], theValues = allGames[0]['theValues'] }
         }
@@ -395,7 +395,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       //return
       if (theInfo.week2Round) {
         var array1 = []
-        //////////console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.week2Round) {
           i++
@@ -413,7 +413,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       }
       if (theInfo.week3Round) {
         var array1 = []
-        //////////console.log('iko earlyPrelims')
+        //console.log('iko earlyPrelims')
         var i = 0
         for (var key in theInfo.week3Round) {
           i++
@@ -432,7 +432,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       }
       if (theInfo.week4Round) {
         var array1 = []
-        //////////console.log('iko earlyPrelims')
+        //console.log('iko earlyPrelims')
         var i = 0
         for (var key in theInfo.week4Round) {
           i++
@@ -451,39 +451,39 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         }
       }
       // return
-      // ////console.log('userId 565565',userId,this.state.theEventKey)
+      //console.log('userId 565565',userId,this.state.theEventKey)
       // return
       var totalScore = 0
       var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
       var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/NFLRegular/" + this.state.theEventKey + '/details/')
       userInfoDb.once('value', dataSnapshot => {
-        ////console.log('ndani 111111111111', dataSnapshot.exists())
+        //console.log('ndani 111111111111', dataSnapshot.exists())
         var dataExists = dataSnapshot.exists()
         if (!dataExists) return
         photoRefDb.once('value', dataSnapshot => {
-          //////////console.log('proofile photo',dataSnapshot.val())
+          //console.log('proofile photo',dataSnapshot.val())
           if (dataSnapshot.val()) {
             this.setState({ profilePhoto: dataSnapshot.val() })
           }
         })
         userInfoDb.once('value', dataSnapshot => {
           if (!dataSnapshot.val()) return
-          ////console.log('the type user 0000000000000', dataSnapshot.val())
+          //console.log('the type user 0000000000000', dataSnapshot.val())
           if (dataSnapshot.val()) {
             var theInfo = dataSnapshot.val()
             totalScore = Number(theInfo.week1RoundScore) + Number(theInfo.week2RoundScore) + Number(theInfo.week3RoundScore)
             this.setState({ currentEventUserInfo: theInfo, currentRank: theInfo.currentRank, cumulativeScore: totalScore, dataAvailable: true })
             // currentEventUserInfo = dataSnapshot.val()
 
-            ////console.log('the dddddddd', theInfo)
+            //console.log('the dddddddd', theInfo)
           }
         })
       })
     })
-    //////////console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
+    //console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
   }
   getMatchesInfo = async (userId, selection, theArr, arrName, isPicked) => {
-    //////console.log('allMatches',userId,this.state.theEventKey,theArr,arrName)
+    //console.log('allMatches',userId,this.state.theEventKey,theArr,arrName)
     //return
     var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NFLRegular/" + this.state.theEventKey + '/')
     var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
@@ -494,13 +494,13 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
 
     userBetsDb.child(selection).once('value', dataSnapshot => {
-      ////console.log('ndani 111111111111', dataSnapshot.exists())
+      //console.log('ndani 111111111111', dataSnapshot.exists())
       var dataExists = dataSnapshot.exists()
 
       if (dataExists) {
         if (selection === 'week1Round') { this.setState({ hasUserPlayed: true }) }
         var i = 0
-        ////console.log('ndani 22222', dataSnapshot.val())
+        //console.log('ndani 22222', dataSnapshot.val())
         var theData = dataSnapshot.val()
         var theCount = dataSnapshot.numChildren()
         for (var key in theData) {
@@ -513,7 +513,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             }
           })
           if (theCount === i) {
-            ////console.log('round 19 item', theArr)
+            //console.log('round 19 item', theArr)
             this.setState({ [arrName]: theArr, [isPicked]: true })
           }
         }
@@ -555,7 +555,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
   hideModal = () => {
     this.setState({ opendetailsModal: false })
-    ////////////console.log('Button clicked!');
+    //console.log('Button clicked!');
   };
   openTheModal = async () => {
     var theVal = this.state.theValues?.split('|')
@@ -564,8 +564,8 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       this.setState({ openLoginModal: true })
       return
     }
-    console.log('this.state.currentSelection', this.state.currentSelection)
-    console.log('this.state.allowWeek1Pick', theVal, theVal[0], this.state.allowWeek1Pick, this.state.allowWeek2Pick, this.state.allowWeek3Pick, this.state.allowWeek4Pick)
+    //console.log('this.state.currentSelection', this.state.currentSelection)
+    //console.log('this.state.allowWeek1Pick', theVal, theVal[0], this.state.allowWeek1Pick, this.state.allowWeek2Pick, this.state.allowWeek3Pick, this.state.allowWeek4Pick)
     if (this.state.currentSelection === 'week1Round' && this.state.allowWeek1Pick === false) {
       var theNotMeso = 'Week ' + theVal[0] + ' pick not allowed at the moment. Please try again later'
       this.notify(theNotMeso)
@@ -598,10 +598,10 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
 
     var i = 0, pointMissing = false
-    ////console.log('this.state.theItems rr', this.state.currentSelection, this.state.editType, itemToModals)
+    //console.log('this.state.theItems rr', this.state.currentSelection, this.state.editType, itemToModals)
     await itemToModals.map((item, index) => {
       i++
-      //////console.log('item.p1Points',item.p1Points)
+      //console.log('item.p1Points',item.p1Points)
       if (item.p1Points === 'N/A' || item.p2Points === 'N/A') {
         pointMissing = true
       }
@@ -627,7 +627,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     })
   }
   openTheModal2 = (stopEditTime) => {
-    ////console.log('this.state.theEventKey', this.state.currentSelection, this.state.theEventKey, this.state.editType)
+    //console.log('this.state.theEventKey', this.state.currentSelection, this.state.theEventKey, this.state.editType)
     //hasUserPlayed
     //return
     // var theDb =firebase.database().ref('/theEvents/eventsIds/'+theEventKey)
@@ -635,15 +635,15 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
     var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEditTime)
     editDbRef.once('value', dataSnapshot => {
-      ////console.log('zeve mbyu 0001', dataSnapshot.val())
-      ////console.log('zeve mbyu 002', dataSnapshot.val())
+      //console.log('zeve mbyu 0001', dataSnapshot.val())
+      //console.log('zeve mbyu 002', dataSnapshot.val())
       if (dataSnapshot.val() === 'N/A') {
         this.notify('Event pick/edit not available at the moment')
       } else {
 
-        ////console.log('now 005', new Date().getTime(), dataSnapshot.val())
+        //console.log('now 005', new Date().getTime(), dataSnapshot.val())
         if ((new Date().getTime() > dataSnapshot.val())) {
-          ////console.log('now 005', new Date().getTime(), dataSnapshot.val())
+          //console.log('now 005', new Date().getTime(), dataSnapshot.val())
           if (this.state.currentSelection === 'week3Round') {
             this.notify("Event pick expired")
           } else { this.notify("Can't make a pick when the event has already started") }
@@ -656,7 +656,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       /* if(this.state.currentSelection!=='wildCard'){
          var theDbRef=firebase.database().ref('/userBets/scoreBoards/NFL/'+this.state.theEventKey)
          theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-           //////console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+           //console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
             if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
             else{this.notify("Can't make a pick when the event has already started")}
          })
@@ -693,7 +693,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     event.stopPropagation()
     event.preventDefault()
     data['id'] = id
-    ////console.log('data', data)
+    //console.log('data', data)
     //return
     var theDb = firebase.database().ref('/theEvents/eventToShowHomePage/')
     theDb.set(data, error => {
@@ -710,13 +710,13 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     sortOddsJson(theOddsJson)
   }
   openRangeLModal = () => {
-    ////console.log('detailsssssss', this.state.theEventKey, this.state.selectedWeek)
+    //console.log('detailsssssss', this.state.theEventKey, this.state.selectedWeek)
     if (this.state.selectedWeek === '') {
       this.setState({ chooseWeekErr: 'Data not filled in' })
       this.notify('Fill in week to continue')
       return
     }
-    ////console.log('rrrrrrrrrrrrrrrrrrra')
+    //console.log('rrrrrrrrrrrrrrrrrrra')
     this.setState({ chooseWeekErr: '', daysRangeModal: true, showChooseWeekModal: false })
   }
   openNFLModal = () => {
@@ -739,16 +739,16 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   }
   inputChange = async (e) => {
     var value = e.target.value
-    ////console.log('valueee', value)
+    //console.log('valueee', value)
 
     await this.setState({ [e.target.id]: value })
     if (this.state.week1Time.length >= 3) { this.setState({ week1Err: '' }) }
     if (this.state.week2Time.length >= 3) { this.setState({ week2Err: '' }) }
     //this.state.matchEndTime
     if (this.state.matchEndTime.length >= 3) {
-      ////console.log('zzezezezze')
+      //console.log('zzezezezze')
       var lastMatchTime = this.state.matchEndTime?.split(':')
-      ////console.log('lastMatchTime', lastMatchTime)
+      //console.log('lastMatchTime', lastMatchTime)
       var part1 = lastMatchTime[0]
       var part2 = lastMatchTime[1]
       var part3 = lastMatchTime[2]
@@ -759,7 +759,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       if (part2.length <= 1) { part2 = '0' + part2 }
       var newTime = part1 + ':' + part2 + ':' + part3
       this.setState({ matchEndTime: newTime })
-      ////console.log('newTimerrrrrrr', newTime)
+      //console.log('newTimerrrrrrr', newTime)
     }
     if (this.state.week3Time.length >= 3) {
 
@@ -769,11 +769,11 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   }
   inputChange2 = async (e, index) => {
     var value = e.target.value
-    ////console.log('valueee', value)
+    //console.log('valueee', value)
     const theItems = [...this.state.selectedWeeks];
     theItems[index].theDate = value;
     this.setState({ selectedWeeks: theItems })
-    ////console.log('valueee 44', theItems)
+    //console.log('valueee 44', theItems)
 
   }
   enterEventDetails = () => {
@@ -810,20 +810,20 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=" + firstEventTime + "&commenceTimeTo=" + lastEventTime + "&regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
     //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
     //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    ////console.log('oddsApi', oddsApi)
-    ////console.log('the theOddsJson 019', idStart, matchType, this.state.selectedWeek)
+    //console.log('oddsApi', oddsApi)
+    //console.log('the theOddsJson 019', idStart, matchType, this.state.selectedWeek)
     // return
 
     const response = await axios.get(oddsApi)
     var theOddsJson = response.data
     this.sortOddsJson(theOddsJson, idStart, matchType, this.state.selectedWeek)
-    ////console.log('the theOddsJson', theOddsJson)
+    //console.log('the theOddsJson', theOddsJson)
 
   }
   sortOddsJson = async (theOddsJson, idStart, matchType, selectedWeek) => {
 
     try {
-      //////console.log('theOddsJson',theOddsJson)
+      //console.log('theOddsJson',theOddsJson)
       //return
       var jCount = 0
       theOddsJson.map((item1, index) => {
@@ -835,25 +835,25 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           if (item2.key === 'draftkings') {
 
             draftkingsMarket = item2.markets
-            //////console.log('draftkings markets',item2.markets)
-            //////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+            //console.log('draftkings markets',item2.markets)
+            //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
             draftkingsMarket.map((item3) => {
-              //////console.log('draftkingsMarket 006',item3.outcomes)
+              //console.log('draftkingsMarket 006',item3.outcomes)
               const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
               theOddsJson[index].draftkingsOdds = obj
             })
           }
 
           if (item1.bookmakers.length === i) {
-            //////console.log('new array',theOddsJson)
+            //console.log('new array',theOddsJson)
 
             var m = 0
             theOddsJson.map((item12, index) => {
               m++
-              //////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+              //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
               var awayPoints = 0, homePoints = 0
               if (item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0) {
-                //////console.log('shit is undefined')
+                //console.log('shit is undefined')
               } else {
                 var homeFighterName = item12.home_team
                 var awayFighterName = item12.away_team
@@ -867,13 +867,13 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
               if (awayPoints < -10000) { aTPointsNum = 1.01 }
               if (homePoints > 12620) { hTPointsNum = 1247.20 }
               if (awayPoints > 12620) { aTPointsNum = 1247.20 }
-              //////console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
+              //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
 
               if (homePoints <= 101 && homePoints >= -101) { hTPointsNum = 2.03 }
               if (awayPoints <= 101 && awayPoints >= -101) { aTPointsNum = 2.03 }
 
 
-              ////console.log('hTPointsNum', hTPointsNum, 'aTPointsNum', aTPointsNum)
+              //console.log('hTPointsNum', hTPointsNum, 'aTPointsNum', aTPointsNum)
 
               var matchTime = new Date(item12.commence_time);
               var newItem = {
@@ -888,32 +888,32 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
               // this.setState({theNewArr:newOddsJson})
               //newOddsJson
               this.getLogos(newOddsJson, selectedWeek)
-              ////console.log('new array laaast 225', newOddsJson)
+              //console.log('new array laaast 225', newOddsJson)
             }
           }
         })
       })
     } catch (error) {
-      ////console.log('ERROR OCURRED AT SORTING ODDS', error)
+      //console.log('ERROR OCURRED AT SORTING ODDS', error)
     }
   }
   getLogos = async (theArr, selectedWeek) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    //////console.log(response.data);
+    //console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
         var resultsArr = res.data['sports']
-        ////console.log('the logos 1111', resultsArr.length)
+        //console.log('the logos 1111', resultsArr.length)
         var i = 0
         resultsArr.map((item, index) => {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            //////console.log('the teams',theItem)
-            //////console.log('the team name',theItem['displayName'])
-            // ////console.log('the team logos',theItem['logos'][0]['href'])
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -921,20 +921,20 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             smallResultsArr.push(myItems)
 
             if (theTeams.length === index + 1) {
-              ////console.log('smallResultsArr', smallResultsArr)
+              //console.log('smallResultsArr', smallResultsArr)
               theArr.map((item1, index) => {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // ////console.log('item1.player1',item1.player1)
+                  //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName
-                    ////console.log('ikooooooooooooooo')
+                    //console.log('ikooooooooooooooo')
                   }
                   if (item1.player2 === item2.name) {
                     theArr[index]['p2Photo'] = item2.logo
-                    ////console.log('hakunaaaaaaaaaaaaaaa')
+                    //console.log('hakunaaaaaaaaaaaaaaa')
                     theArr[index]['player2NickName'] = item2.nickName
                   }
 
@@ -943,7 +943,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
               })
             }
             if (theTeams.length === index + 1) {
-              ////console.log('theArr 22222222 kufinish', theArr)
+              //console.log('theArr 22222222 kufinish', theArr)
               this.setState({ itemsToNFLModal: [], showChooseWeekModal: false, daysRangeModal: false, showProgressBar: false, eventAlreadyFilled: true })
               var theSelection = ''
               if (this.state.selectedWeek === 'WEEK 1') { theSelection = 'week1Round', this.setState({ eventToNFLModal: 'week1Round', itemsToNFLModal: theArr, nflModal: true, lastPostTime: new Date().getTime() }) }
@@ -971,15 +971,15 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       if (index === 0) { gameStartYear = new Date(item.theDate).getFullYear() }
       selectedWeeks[index]['stopweek' + item.value + 'RoundEdit'] = 'N/A'
       var dateMillis = new Date(item.theDate).getTime()
-      ////console.log('the millis',dateMillis)
+      //console.log('the millis',dateMillis)
       if (!item.theDate) { this.notify('Date must be filled'); return }
       if (currentMillis >= dateMillis) { this.notify('Date must be current or future'); return }
       i++
       if (selectedWeeks.length === i) {
         var eventKey = 'NFLRegular-' + gameStartYear + this.state.fromWeekTo
         var eventTitle = 'NFL REGULAR ' + gameStartYear + ' ' + this.state.fromWeekTo2
-        ////console.log('mambo sambaba',gameStartYear,eventKey,eventTitle)
-        ////console.log('zabee',selectedWeeks)
+        //console.log('mambo sambaba',gameStartYear,eventKey,eventTitle)
+        //console.log('zabee',selectedWeeks)
         //return
         checkEventDb.child(eventKey).once('value', dataSnapshot => {
           if (dataSnapshot.exists()) {
@@ -1032,18 +1032,18 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           editDbRef2.child(theEdLink).set(dateMillis)
           editDbRef.child(theEdLink2).set(false)
           editDbRef2.child(theEdLink2).set(false)
-          // ////console.log('mambo sambaba',gameStartYear,eventKey,eventTitle)
-          ////console.log('the arrrrrr',eventKey,eventTitle,theId,theWeeksArr)
-          // ////console.log('week1Round 1111', week1Arr)
+          //console.log('mambo sambaba',gameStartYear,eventKey,eventTitle)
+          //console.log('the arrrrrr',eventKey,eventTitle,theId,theWeeksArr)
+          //console.log('week1Round 1111', week1Arr)
           generalDb.child('/' + toRef + '/').update(theWeeksArr)
         }
       })
       if (selectedWeeks.length === j) {
         //  var theEdLink='stopweek'+item.value+'RoundEdit'
         var lastWeekTime = item.theDate
-        ////console.log('the theEdLink',theEdLink)
+        //console.log('the theEdLink',theEdLink)
         //  editDbRef.child(theEdLink).set('N/A')
-        ////console.log('the tiime',item.theDate,currentSelec)
+        //console.log('the tiime',item.theDate,currentSelec)
         theWeeks = theWeeks.join('|'); theValues = theValues.join('|');
         var toTheEventsIds = {
           time: new Date(lastWeekTime).getTime(), title: eventTitle, sportType: 'NFLRegular', endTime: new Date(lastWeekTime).getTime(), getEventsTimeUpdate: new Date().getTime(),
@@ -1064,7 +1064,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       week1Arr[item.id] = item
 
       if (week1Round.length === index + 1) {
-        ////console.log('week1Round 1111', week1Arr)
+        //console.log('week1Round 1111', week1Arr)
         generalDb.child('/week1Round/').update(week1Arr)
       }
     })
@@ -1074,7 +1074,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       week2Round[index]['time'] = this.state.week2Time
       week2Arr[item.id] = item
       if (week2Round.length === index + 1) {
-        ////console.log('week2Arr 1111', week2Arr)
+        //console.log('week2Arr 1111', week2Arr)
         generalDb.child('/week2Round/').update(week2Arr)
       }
     })
@@ -1084,7 +1084,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       week3Round[index]['time'] = this.state.week3Time
       week3Arr[item.id] = item
       if (week3Round.length === index + 1) {
-        ////console.log('week3Arr 1111', week3Arr)
+        //console.log('week3Arr 1111', week3Arr)
         generalDb.child('/week3Round/').update(week3Arr, (error) => {
           if (error) {
             this.notify('An error occured while creating event, try again')
@@ -1128,7 +1128,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
       var eventKey = 'NFLRegular-' + week1Year
       var eventTitle = 'NFL REGULAR ' + week1Year
-      ////console.log('week1Year', week1Year, week2Year, week3Year, eventKey, eventTitle)
+      //console.log('week1Year', week1Year, week2Year, week3Year, eventKey, eventTitle)
 
       //return
       checkEventDb.child(eventKey).once('value', dataSnapshot => {
@@ -1164,7 +1164,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       week1Arr[item.id] = item
 
       if (week1Round.length === index + 1) {
-        ////console.log('week1Round 1111', week1Arr)
+        //console.log('week1Round 1111', week1Arr)
         generalDb.child('/week1Round/').update(week1Arr)
       }
     })
@@ -1187,7 +1187,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
       week2Arr[item.id] = item
       if (week2Round.length === index + 1) {
-        ////console.log('week2Arr 1111', week2Arr)
+        //console.log('week2Arr 1111', week2Arr)
         generalDb.child('/week2Round/').update(week2Arr)
       }
     })
@@ -1208,7 +1208,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       ////
       week3Arr[item.id] = item
       if (week3Round.length === index + 1) {
-        ////console.log('week3Arr 1111', week3Arr)
+        //console.log('week3Arr 1111', week3Arr)
         generalDb.child('/week3Round/').update(week3Arr, (error) => {
           if (error) {
             this.notify('An error occured while creating event, try again')
@@ -1234,7 +1234,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   }
 
   pickWinner = (id, winner, time, p1Points) => {
-    ////console.log('trtrt',id,winner,time,p1Points)
+    //console.log('trtrt',id,winner,time,p1Points)
     //return
     if (p1Points === 'N/A') { this.notify('Points not yet populated at the moment'); return }
     var nowTime = new Date().getTime()
@@ -1253,7 +1253,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       var index2 = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week1RoundArray: theItems })
-      ////console.log('heeeeeeeeere', theItems)
+      //console.log('heeeeeeeeere', theItems)
     }
     if (this.state.currentSelection === 'week2Round') {
       var theItems = this.state.week2RoundArray
@@ -1262,10 +1262,10 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       //var nowTime = new Date().getTime()
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week2RoundArray: theItems })
-      ////console.log('heeeeeeeeere', theItems)
+      //console.log('heeeeeeeeere', theItems)
     }
     if (this.state.currentSelection === 'week3Round') {
-      ////console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var theItems = this.state.week3RoundArray
       theItems.forEach(item => { item.showChooseWinner = false });
       var index2 = this.state.week3RoundArray.map(function (x) { return x.id; }).indexOf(id);
@@ -1273,17 +1273,17 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week3RoundArray: theItems, pickedId: id })
-      ////console.log('theItems', theItems)
+      //console.log('theItems', theItems)
     }
     if (this.state.currentSelection === 'week4Round') {
-      ////console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var theItems = this.state.week4RoundArray
       theItems.forEach(item => { item.showChooseWinner = false });
       var index2 = this.state.week4RoundArray.map(function (x) { return x.id; }).indexOf(id);
 
       theItems[index2]['showChooseWinner'] = true
       this.setState({ week4RoundArray: theItems, pickedId: id })
-      ////console.log('theItems', theItems)
+      //console.log('theItems', theItems)
     }
   }
   chosenWinner = (id, winner) => {
@@ -1294,14 +1294,14 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       theItems[index2]['status1'] = 'played'
       // theItems[index2]['isItPlayed']='played'
       this.setState({ week1RoundArray: theItems })
-      ////console.log('this.state.currentItems 008888', theItems)
+      //console.log('this.state.currentItems 008888', theItems)
     }
     if (this.state.currentSelection === 'week2Round') {
       var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.week2RoundArray
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      ////console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
       this.setState({ week2RoundArray: theItems })
     }
     if (this.state.currentSelection === 'week3Round') {
@@ -1309,7 +1309,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       var theItems = this.state.week3RoundArray
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      ////console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
       this.setState({ week3RoundArray: theItems })
     }
     if (this.state.currentSelection === 'week4Round') {
@@ -1317,7 +1317,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       var theItems = this.state.week4RoundArray
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      ////console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
       this.setState({ week4RoundArray: theItems })
     }
   }
@@ -1329,7 +1329,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       delete theItems[index2]['showChooseWinner']
       theItems[index2]['status1'] = 'N/A'
       this.setState({ week1RoundArray: theItems })
-      ////console.log('this.state.currentItems 0065656', theItems)
+      //console.log('this.state.currentItems 0065656', theItems)
     }
     if (this.state.currentSelection === 'week2Round') {
       var index2 = this.state.week2RoundArray.map(function (x) { return x.id; }).indexOf(id);
@@ -1338,7 +1338,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       delete theItems[index2]['showChooseWinner']
       theItems[index2]['status1'] = 'N/A'
       this.setState({ week2RoundArray: theItems })
-      ////console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
     if (this.state.currentSelection === 'week3Round') {
       var index2 = this.state.week3RoundArray.map(function (x) { return x.id; }).indexOf(id);
@@ -1347,7 +1347,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       delete theItems[index2]['showChooseWinner']
       theItems[index2]['status1'] = 'N/A'
       this.setState({ week3RoundArray: theItems })
-      ////console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
     if (this.state.currentSelection === 'week4Round') {
       var index2 = this.state.week4RoundArray.map(function (x) { return x.id; }).indexOf(id);
@@ -1356,11 +1356,11 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       delete theItems[index2]['showChooseWinner']
       theItems[index2]['status1'] = 'N/A'
       this.setState({ week4RoundArray: theItems })
-      ////console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
   }
   submitWinner = (id, winner) => {
-    // ////console.log('haaaaaaaaaaaapa 000000')
+    //console.log('haaaaaaaaaaaapa 000000')
     // return
     if (this.state.currentSelection === 'week1Round') {
       var index = this.state.week1RoundArray.map(function (x) { return x.id; }).indexOf(id);
@@ -1405,30 +1405,30 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         this.checkForRoundOutcome(index, winner, this.state.week2RoundArray, 'week2RoundArray')
       }
       if ((this.state.currentSelection === 'week3Round')) {
-        //////console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
+        //console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
         this.checkForRoundOutcome(index, winner, this.state.week3RoundArray, 'week3RoundArray')
       }
       if ((this.state.currentSelection === 'week4Round')) {
-        //////console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
+        //console.log('haaaaaaaaaaaapa 4444444', index, winner,this.state.week3RoundArray)
         this.checkForRoundOutcome(index, winner, this.state.week4RoundArray, 'week4RoundArray')
       }
       //}
     } catch (error) {
       this.notify('An error occured, please try again later')
-      ////////console.log('error',error)
+      //console.log('error',error)
     }
   }
   checkForRoundOutcome = async (index, winner, items, name) => {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
-      ////console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
+      //console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
       items[index]['winner'] = winner
       delete items[index]['chosenWinner']
       delete items[index]['showChooseWinner']
       this.setState({ [name]: items })
       items.map((item, index) => {
-        ////console.log('shortArr', shortArr)
+        //console.log('shortArr', shortArr)
         shortArr['p1Points'] = item.p1Points
         shortArr['p2Points'] = item.p2Points
         shortArr['winner'] = item.winner
@@ -1440,7 +1440,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         }
         shortArr.push(theItem)
       })
-      //////console.log('this.state.shortArr 006 klklklk', shortArr)
+      //console.log('this.state.shortArr 006 klklklk', shortArr)
       //return
       if (this.state.theEventKey === '', this.state.currentSelection === '', scoreName === '', items.length < 1) return
       var scoreName = ''
@@ -1452,9 +1452,9 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection + '::' + scoreName + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
-      ////console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
-      ////console.log('theLink', theLink, theItems)ODDSA
-      ////console.log('this.state.shortArr 006', shortArr)
+      //console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
+      //console.log('theLink', theLink, theItems)
+      //console.log('this.state.shortArr 006', shortArr)
       // return
       await axios.get("https://theramtournament.com/getSingleNFLRegularResults?term=" + theQuery)
         // await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term=" + theQuery)
@@ -1462,19 +1462,19 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         //await axios.get("http://localhost:4000/getSingleNCAAFNFLResults?term="+theQuery)
         .then((res) => {
           var theOutcome = res.data
-          ////console.log('theOutcome', theOutcome)
+          //console.log('theOutcome', theOutcome)
           this.notify(theOutcome)
           if (theOutcome === 'Success Updating Results') {
-            console.log('theOutcome', theOutcome)
+            //console.log('theOutcome', theOutcome)
             this.checkAuth()
           }
         })
     } catch (error) {
-      ////////console.log('error',error)
+      //console.log('error',error)
     }
   }
   openConfirmModal = (message, type) => {
-    //////console.log('kang',this.state.currentSelection)
+    //console.log('kang',this.state.currentSelection)
     this.setState({ confirmMessage: message, showConfirmModal: true, confirmModalType: type })
   }
   proceed = () => {
@@ -1518,7 +1518,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
   checkForPicks = (theEventKey) => {
     var theDb = firebase.database().ref('/theEvents/eventsIds/' + theEventKey)
     theDb.once('value', dataSnapshot => {
-      ////console.log('yhhhhhhhhhhhh', dataSnapshot.val())
+      //console.log('yhhhhhhhhhhhh', dataSnapshot.val())
       var allowWeek1Pick = dataSnapshot.val().allowWeek1Pick
       var allowWeek2Pick = dataSnapshot.val().allowWeek2Pick
       var allowWeek3Pick = dataSnapshot.val().allowWeek3Pick
@@ -1675,7 +1675,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       this.notify(`You can only select up to 4 items.`);
     }
     return
-    console.log('50000', selectedOption.length)
+    //console.log('50000', selectedOption.length)
 
     //isOptionDisabled={() =>this.state.selectedWeeks.length>=4}
   }
@@ -1698,12 +1698,12 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
  this.setState({enterEventModal:true})
   }
   render() {
-    // //////console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
-    ////////console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
-    ////////console.log('this.state.isWeek3DataAvailable',this.state.isWeek3DataAvailable)
-    ////////console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
-    ////console.log('this.state.currentSelection', this.state.currentSelection)
-    console.log('this.state.theEventTitle',this.state.theEventTitle,this.state.sportType)
+    //console.log('this.state.isWeek1DataAvailable',this.state.isWeek1DataAvailable)
+    //console.log('this.state.isWeek2DataAvailable',this.state.isWeek2DataAvailable)
+    //console.log('this.state.isWeek3DataAvailable',this.state.isWeek3DataAvailable)
+    //console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
+    //console.log('this.state.currentSelection', this.state.currentSelection)
+    //console.log('this.state.theEventTitle',this.state.theEventTitle,this.state.sportType)
     var flockTeamName = ''
     var itemToModals = ''
     var isPastEvent = ''
@@ -1857,7 +1857,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
                 var theIndex = index + 1
                 var stateWeek = 'allowWeek' + theIndex + 'Pick'
                 var theWeek = 'Week ' + item
-                console.log('{this.state[stateWeek]',this.state[stateWeek])
+                //console.log('{this.state[stateWeek]',this.state[stateWeek])
                 return (
                   <div id={style.selectorDiv2} key={index} onClick={() => this.allowWeekPicks(theWeek, this.state[stateWeek], stateWeek)}>
                     <div className={this.state[stateWeek] === true ? style.boxDiv3 : style.boxDiv3b}>

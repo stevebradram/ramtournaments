@@ -38,8 +38,8 @@ class Reel extends Component {
         }
         this.checkAuth()
         this.setState({theEventKey:this.props.theEventKey,selectHomeEvent:this.props.selectHomeEvent,selectHomeEventId:this.props.selectHomeEventId,theItemsNo:this.props.allGames.length})
-       // console.log('this.props.allGames.length',this.props.allGames.length)
-       console.log('this.props.allGames zuuuuuuuuuuuu',this.props.allGames)
+       //console.log('this.props.allGames.length',this.props.allGames.length)
+       //console.log('this.props.allGames zuuuuuuuuuuuu',this.props.allGames)
       }
       componentWillUnmount() {
         window.removeEventListener("resize", this.updateWindowDimensions);
@@ -58,22 +58,22 @@ class Reel extends Component {
         if (window.innerWidth>1300){
           if(this.state.theItemsNo>6){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:6,slidesToScroll:6})
-          console.log('haaapa 1111',this.state.showArrows)
+          //console.log('haaapa 1111',this.state.showArrows)
         }
         if (window.innerWidth>1100&&window.innerWidth<1300){
           if(theGamesNo>5){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:5,slidesToScroll:5})
-          console.log('haaapa 2222',showArrows)
+          //console.log('haaapa 2222',showArrows)
         }
         if (window.innerWidth>800&&window.innerWidth<1100){
           if(theGamesNo>4){this.setState({showArrows:true}),showArrows=true}
           this.setState({slidesToShow:4,slidesToScroll:4})
-          console.log('haaapa 3333',this.state.showArrows)
+          //console.log('haaapa 3333',this.state.showArrows)
         }
         if (window.innerWidth>600&&window.innerWidth<800){
           if(theGamesNo>3){this.setState({showArrows:true},showArrows=true)}
           this.setState({slidesToShow:3,slidesToScroll:3})
-          console.log('haaapa 4444',this.state.showArrows)
+          //console.log('haaapa 4444',this.state.showArrows)
         }
         if (window.innerWidth>400&&window.innerWidth<600){
           if(theGamesNo>2){this.setState({showArrows:true}),showArrows=true}
@@ -101,7 +101,7 @@ class Reel extends Component {
      loadOtherEvent=(theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)=>{
       
       //console.log('the iiittttttt juuuuuuu',stopEdits)
-      console.log('the iiittttttt 22222222222',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)
+      //console.log('the iiittttttt 22222222222',theEventKey,theEventTitle,theTime,sportType,currentSelection,endTime)
      // return
       var nowDate=new Date().getTime(),isEventExpired=false
       if(nowDate>(endTime+86400000)){isEventExpired=true}
@@ -131,7 +131,7 @@ class Reel extends Component {
       })
     }
     render() {
-        // console.log('this.props.allGames',this.props.allGames)
+        //console.log('this.props.allGames',this.props.allGames)
          let donateStyle=''
          let reelTextStyle=''
          var todayInMillis=new Date().getTime()
@@ -147,7 +147,7 @@ class Reel extends Component {
         if (window.innerWidth>1100&&window.innerWidth<1300){
           if(theGamesNo>5){showArrows=true}
           slidesToShow=5,slidesToScroll=5
-         // console.log('haaapa 2222',showArrows)
+         //console.log('haaapa 2222',showArrows)
         }
         if (window.innerWidth>800&&window.innerWidth<1100){
           if(theGamesNo>4){showArrows=true}
@@ -208,9 +208,9 @@ class Reel extends Component {
             
             if((todayInMillis+(86400000*90)<item.time)&&!this.state.isAdmin){
               adminGames.push(item)
-             // console.log('to the admins')
+             //console.log('to the admins')
             }else{
-             // console.log('to the users')
+             //console.log('to the users')
               adminGames.push(item)
               userGames.push(item)}
             if(this.props.allGames.length===index+1){

@@ -16,7 +16,7 @@ class DetailsModal extends Component {
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,flockNameModal:false,openNewFlockModal:true,
     myEmail:'',myPhoneNo:'',ramFlockName:'',flockNameNoSpace:''}
   componentDidMount=()=>{
-    console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
+    //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
@@ -62,7 +62,7 @@ class DetailsModal extends Component {
   }
   getFlockNames=(userId)=>{
     var flocks=[],i=0
-    console.log('this.props.theEventKey',this.props.theEventKey)
+    //console.log('this.props.theEventKey',this.props.theEventKey)
     var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
     myFlockNamesRef.once('value',dataSnapshot=>{
       //this.setState({openNewFlockModal:false})
@@ -110,7 +110,7 @@ class DetailsModal extends Component {
       }
       
       //console.log('the amount',theAmount)
-      //if(!item.bet||item.bet===''){console.log('it iiiis',item.bet,index)}
+      //if(!item.bet||item.bet===''){//console.log('it iiiis',item.bet,index)}
       if(!item.bet||item.bet===''){
         this.setState({allPicked:false})
         this.notify('Ensure all matches are picked to proceed')
@@ -210,7 +210,7 @@ class DetailsModal extends Component {
     }
     var i=0
     this.state.theItems.map((item,index)=>{
-      console.log('iteeem',item.id,item.bet)
+      //console.log('iteeem',item.id,item.bet)
       i++
       itemsData[item.id]=item.bet
           if(this.state.theItems.length===i){
@@ -223,8 +223,8 @@ class DetailsModal extends Component {
     uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
       var theName=dataSnapshot.key
-      console.log('theName',theName,'theInfo',theInfo)
-      console.log('flockTeamName[0]',flockTeamName[0])
+      //console.log('theName',theName,'theInfo',theInfo)
+      //console.log('flockTeamName[0]',flockTeamName[0])
      // return
       if(!theInfo){
         if(flockTeamName[0]){
@@ -241,7 +241,7 @@ class DetailsModal extends Component {
             uniqueRamNamesRef.child(name1).set(null)
           }
           this.toDatabase2(detailsData,itemsData,uniqueRamNamesRef,theTeamName,scoreData)
-          console.log('continue 222222')
+          //console.log('continue 222222')
         }else{
         this.notify('RAM Name already taken')
         this.setState({teamNameErr:'RAM Name already taken, please try another one'})}
@@ -388,7 +388,7 @@ class DetailsModal extends Component {
                             {tableArray.map((item, index) => {
                               var theItem=item?.split('#')
                               var selected=theItem[2]
-                             // //console.log('the item',item)
+                             //console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>
                               if(index===0&&selected==='player1'){
                                 selectedToShow=<div className={styles.boxDiv3}><MdCheck color="#fff" size={15} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}/></div>

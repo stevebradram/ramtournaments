@@ -68,7 +68,7 @@ class UFCEvent extends Component {
       var sportType = theData.sportType
       //var theItem={id:key,time:time,title:title,sportType: sportType, endTime: endTime}
       this.setState({ theEventTitle, theEventKey, time, endTime, sportType }, () => {
-        console.log('items', theEventTitle, theEventKey, time, endTime, sportType)
+        //console.log('items', theEventTitle, theEventKey, time, endTime, sportType)
         if (sportType === 'NCAAF') {
           this.getNCAAFMatches()
         } else if (sportType === 'NCAAB') {
@@ -84,7 +84,7 @@ class UFCEvent extends Component {
         }
 
       })
-      console.log('theData000000', theData)
+      //console.log('theData000000', theData)
     })
   }
   checkUpcomingPastGames = async (userId) => {
@@ -96,7 +96,7 @@ class UFCEvent extends Component {
       var theCount = dataSnapshot.numChildren()
       dataSnapshot.forEach((data) => {
         i++
-        // console.log('data22222222222',data.val())
+        //console.log('data22222222222',data.val())
         var pastG = {}, upcomingG = {}
         var key = data.key
         var time = data.val().time
@@ -126,7 +126,7 @@ class UFCEvent extends Component {
     if (allGames.length > 0) { allGames = allGames.sort(function (a, b) { return b.time - a.time }); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], endTime = allGames[0]['endTime'], sportType = allGames[0]['sportType'] }
     await this.setState({ allGames, theEventTitle, theEventKey, theEventTime, endTime, sportType }, () => {
       //this.getUfcMatches(userId)
-      console.log('items', theEventTitle, theEventKey, theEventTime, endTime, sportType)
+      //console.log('items', theEventTitle, theEventKey, theEventTime, endTime, sportType)
       if (sportType === 'NCAAF') {
         this.getNCAAFMatches()
       } else if (sportType === 'NCAAB') {
@@ -205,12 +205,12 @@ class UFCEvent extends Component {
     var userInfoDb = firebase.database().ref('/theEvents/NCAAF/').child(this.state.theEventKey)
     userInfoDb.child('firstRound').once('value', dataSnapshot => {
       var firstRoundCount = dataSnapshot.numChildren()
-      console.log('firstRoundCount', firstRoundCount)
+      //console.log('firstRoundCount', firstRoundCount)
       dataSnapshot.forEach((data) => {
         v++
         theItems.push(data.val())
         if (firstRoundCount === v) {
-          console.log('theItems rrrr', theItems)
+          //console.log('theItems rrrr', theItems)
           this.setState({ theItems })
         }
       })
@@ -221,12 +221,12 @@ class UFCEvent extends Component {
     var userInfoDb = firebase.database().ref('/theEvents/NFL/').child(this.state.theEventKey)
     userInfoDb.child('wildCard').once('value', dataSnapshot => {
       var firstRoundCount = dataSnapshot.numChildren()
-      console.log('firstRoundCount', firstRoundCount)
+      //console.log('firstRoundCount', firstRoundCount)
       dataSnapshot.forEach((data) => {
         v++
         theItems.push(data.val())
         if (firstRoundCount === v) {
-          console.log('theItems rrrr', theItems)
+          //console.log('theItems rrrr', theItems)
           this.setState({ theItems })
         }
       })
@@ -237,12 +237,12 @@ class UFCEvent extends Component {
     var userInfoDb = firebase.database().ref('/theEvents/NFLRegular/').child(this.state.theEventKey)
     userInfoDb.child('week1Round').once('value', dataSnapshot => {
       var firstRoundCount = dataSnapshot.numChildren()
-      console.log('firstRoundCount', firstRoundCount)
+      //console.log('firstRoundCount', firstRoundCount)
       dataSnapshot.forEach((data) => {
         v++
         theItems.push(data.val())
         if (firstRoundCount === v) {
-          console.log('theItems rrrr', theItems)
+          //console.log('theItems rrrr', theItems)
           this.setState({ theItems })
         }
       })
@@ -253,12 +253,12 @@ class UFCEvent extends Component {
     var userInfoDb = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey)
     userInfoDb.child('round1').limitToLast(10).once('value', dataSnapshot => {
       var firstRoundCount = dataSnapshot.numChildren()
-      console.log('firstRoundCount NCAAB', firstRoundCount)
+      //console.log('firstRoundCount NCAAB', firstRoundCount)
       dataSnapshot.forEach((data) => {
         v++
         theItems.push(data.val())
         if (firstRoundCount === v) {
-          console.log('theItems rrrr', theItems)
+          //console.log('theItems rrrr', theItems)
           this.setState({ theItems })
         }
       })
@@ -268,7 +268,7 @@ class UFCEvent extends Component {
     this.setState({ theMenu, theItems })
   }
   render() {
-    console.log('this.state.sportType', this.state.sportType)
+    //console.log('this.state.sportType', this.state.sportType)
     let donateStyle = ''
     let reelTextStyle = ''
     const settings = {
@@ -315,7 +315,7 @@ class UFCEvent extends Component {
         </div>
         <Slider ref={c => (this.slider = c)} {...settings}>
           {this.state.theItems.map((item, index) => {
-            // console.log('iteeeem',item)
+            //console.log('iteeeem',item)
             var playStat = ''
             var playStatCol = ''
             if (item.status1 === 'notPlayed') { playStat = 'Upcoming Event', playStatCol = '#292f51' }

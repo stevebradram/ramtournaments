@@ -73,7 +73,7 @@ class events extends Component {
       if(dataSnapshot.exists()){
       var theData = dataSnapshot.val()?.split('###')
       this.setState({ selectedSport: theData[0], selectedId: theData[1] })
-      console.log('dataSnapshot.val()', dataSnapshot.val())
+      //console.log('dataSnapshot.val()', dataSnapshot.val())
       this.chooseEvent(dataSnapshot.val())
       this.state.theEvents.forEach((item, i) => {
         if (item.name === theData[0]) {
@@ -125,7 +125,7 @@ class events extends Component {
         if (theCount === i) {
           var theEventTitle = '', theEventKey = '', sportType = '', theTime = '', endTime = 0
           if (allGames.length > 0) {
-            console.log('rrrrrrr checkForAllEvents', this.state.selectedId, allGames)
+            //console.log('rrrrrrr checkForAllEvents', this.state.selectedId, allGames)
             var l = 0
             allGames = allGames.sort(function (a, b) { return b.time - a.time });
             allGames.forEach((item, i) => {
@@ -152,7 +152,7 @@ class events extends Component {
     })
   }
   chooseEvent = (name) => {
-    console.log('name 00015',name)
+    //console.log('name 00015',name)
     if (name === 'March Madness') { this.setState({ theCurrentEvent: 'marchMadness',selectedEvent:name}) }
     if (name === 'NFL Playoffs') { this.setState({ theCurrentEvent: 'nfl',selectedEvent:name }) }//NFL Season
     if (name === 'NFL Season') { this.setState({ theCurrentEvent: 'nflRegular',selectedEvent:name }) }
@@ -183,7 +183,7 @@ class events extends Component {
     });
   }
   render() {
-    console.log('this.state.theEvents',this.state.theEvents)
+    //console.log('this.state.theEvents',this.state.theEvents)
     var isPastEvent = ''
     var todayInMillis = new Date().getTime()
     if (this.state.endTime < todayInMillis && (this.state.endTime - todayInMillis) < -86400000) {

@@ -6,7 +6,6 @@ import { MdOutlineClose, MdAddComment, MdSend } from "react-icons/md";
 import { AiFillMessage } from "react-icons/ai";
 import firebase from '../FirebaseClient'
 import { ToastContainer, toast } from 'react-toastify';
-var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 import { io}  from "socket.io-client"
 /*var socket = io("http://localhost:4000", {
   withCredentials: true,
@@ -45,7 +44,7 @@ class Friends extends Component {
     this.setState({ theChats })
     this.checkAuth()
     socket.on("connect", () => {
-        console.log("Connected to Socket Server:", socket.id);
+        //console.log("Connected to Socket Server:", socket.id);
     });
   }
     componentWillUnmount() {
@@ -56,7 +55,7 @@ class Friends extends Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         var userId = user.uid
-        console.log('myyyyyyyyyyyyyyyyyyy user id', userId)
+        //console.log('myyyyyyyyyyyyyyyyyyy user id', userId)
         this.setState({ myUserId: userId, isLogged: true })
         this.getData(userId)
       } else {
@@ -65,7 +64,7 @@ class Friends extends Component {
     })
   }
   getData = (userId) => {
-    console.log('userId', userId)
+    //console.log('userId', userId)
     var messageRef = firebase.database().ref('/messaging/friends/' + userId)
     var userRef = firebase.database().ref('/users/')
     var friendsListArr = []
@@ -88,11 +87,11 @@ class Friends extends Component {
           else { friendsList['profilePhoto'] = 'N/A' }
           friendsListArr.push(friendsList)
           if (theNo === i) {
-            console.log('friendsListArr', friendsListArr)
+            //console.log('friendsListArr', friendsListArr)
             this.setState({ friendsListArr })
           }
         })
-        console.log('the uid', theUserId)
+        //console.log('the uid', theUserId)
       })
     })
     //messageRef.set('kkkk')
@@ -109,7 +108,7 @@ class Friends extends Component {
     var sportTitle = this.props.sportType + ' - ' + selectedPickTitle
     var pickDetails = teamName + '####' + flockName + '####' + sportTitle
     var theMessage = this.props.sportType + ' - ' + selectedPickTitle
-    console.log('dettssssss', teamName, flockName, selectedPickTitle, sportTitle, item, theGames)
+    //console.log('dettssssss', teamName, flockName, selectedPickTitle, sportTitle, item, theGames)
     if (pickDetails.length && theGames.length) {
       this.sendPickMessage(pickDetails, theGames, theMessage, item)
     }
@@ -124,7 +123,7 @@ class Friends extends Component {
     var otherUidKey = otheUserId.slice(-10);
     var mesoId =myUidKey + otherUidKey
     var otherUserMesoId=otherUidKey+myUidKey// myUidKey + otherUidKey
-    // console.log('dettssssss',theMessage,pickDetails,mesoId,this.state.myUserId,otheUserId,theGames)
+    //console.log('dettssssss',theMessage,pickDetails,mesoId,this.state.myUserId,otheUserId,theGames)
     // return
     if (theMessage.length >= 1 && mesoId !== '') {
       var theMessageItem = { message: theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: otheUserId, status: 'picks', pickDetails: pickDetails, thePicks: theGames}
@@ -163,7 +162,7 @@ class Friends extends Component {
     });
   }
   closeMessenger = () => {
-    console.log('clicked!')
+    //console.log('clicked!')
     this.props.onClick('fromFriends', 'close', 'N/A')
   }
   doNothing = (event) => {
@@ -183,18 +182,18 @@ class Friends extends Component {
         <div className={styles.chatsCont}>
           {this.state.friendsListArr.map((item, index) => {
             var theNo = index + 1
-            console.log('is even', this.oddOrEven(theNo))
+            //console.log('is even', this.oddOrEven(theNo))
             var isEvenOdd = this.oddOrEven(theNo)
             //4fabcf
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
                 <div className={styles.imgDiv} style={{ backgroundColor: isEvenOdd === 'even' ? '#4fabcf' : '#5d6779' }}>
-                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
+                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={item.profilePhoto} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
                     <p className={styles.acroP}>{item.acronym}</p>}
                 </div>
                 <div>
                   <div className={styles.nameDiv}>
-                    <p className={styles.nameP}>{item.userName ? item.userName : 'John Keem'}</p>
+                    <p className={styles.nameP}>{item.userName}</p>
                   </div>
                   {this.props.from === '!events' ? <p className={styles.mesoP}>Click to send message</p> : <p className={styles.mesoP}>Click to share picks</p>}
                   {this.props.from === 'events' ?

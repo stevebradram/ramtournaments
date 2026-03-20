@@ -115,7 +115,7 @@ class EditTheProfile extends Component {
           +user.displayName+'$$$'+user.photoURL
           var reqInfo =info?.split('$$$')
           myId=user.uid
-          console.log('this.state.reqInfo',reqInfo)
+          //console.log('this.state.reqInfo',reqInfo)
           this.setState({reqInfo})
           this.fetchData()
         }
@@ -124,7 +124,7 @@ class EditTheProfile extends Component {
   }
 
   fetchData = async () => {
-    console.log('this.state.reqInfo',this.state.reqInfo)
+    //console.log('this.state.reqInfo',this.state.reqInfo)
     var userInfoRef = firebase.database().ref('/atumii/allAccountInfo/' + this.state.reqInfo[1]);
     var passRef = firebase.database().ref('/atumii/syindu/' + this.state.reqInfo[1]+'/p');
 
@@ -1026,7 +1026,7 @@ saveProfileMongo = async (det, post,shopId) => {
               },
               body: JSON.stringify({'info':'','time':-1})
          })
-         console.log('result1',result1,'result2',result2)
+         //console.log('result1',result1,'result2',result2)
          Router.push('/reauth3')
       } catch (error) {
           Router.push('/')
@@ -1081,7 +1081,7 @@ savePhoto =async(event) =>{
             "state_changed",
         snapshot=>{},
             error=>{
-               // console.log(error);
+               //console.log(error);
             },
             ()=>{
                firebase.storage()

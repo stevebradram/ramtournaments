@@ -21,11 +21,11 @@ class DetailsModal extends Component {
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
-    ////console.log('this.props.currentSelection 5555',this.props.currentSelection)
-    ////console.log('userId 55555555555',userId,upcomingRamUfcDetails)
+    //console.log('this.props.currentSelection 5555',this.props.currentSelection)
+    //console.log('userId 55555555555',userId,upcomingRamUfcDetails)
     
     if(this.props.flockTeamName!==false){
-      ////console.log('this.props.flockTeamName yoooooooooooooh')
+      //console.log('this.props.flockTeamName yoooooooooooooh')
       flockTeamName=this.props.flockTeamName?.split('::')
       this.setState({teamName:flockTeamName[0],flockName:flockTeamName[1],flockName2:flockTeamName[1],submitedFlockName:flockTeamName[1]})
     }
@@ -37,14 +37,14 @@ class DetailsModal extends Component {
   }
   inputChange = async (e) => {
     var value = e.target.value
-    ////console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
     value=value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
     await this.setState({[e.target.id]: value})
       if (e.target.id ==='teamName'){
         if (this.state.teamName.length>=3){this.setState({teamNameErr:''})}
       }
       if (e.target.id ==='flockName'){
-        ////console.log('hapa tu',e.target.id)
+        //console.log('hapa tu',e.target.id)
         if (this.state.flockName.length>=3){this.setState({flockNameErr:''})}
       }
   }
@@ -135,10 +135,10 @@ class DetailsModal extends Component {
     if (!this.state.buttonClick)return
     this.buttonClickStat()
     var mySelection=[]
-    ////console.log('this.state.theItems',this.state.theItems)
+    //console.log('this.state.theItems',this.state.theItems)
     //return
-    ////console.log('the details',this.state.theItems)
-    ////console.log('the user id',this.state.userId)
+    //console.log('the details',this.state.theItems)
+    //console.log('the user id',this.state.userId)
 
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
     if (this.state.ramFlockName<3){this.setState({
@@ -152,51 +152,51 @@ class DetailsModal extends Component {
       var amount=0
       if(item.bet==='player1'){
         amount=Number(item.p1Points)
-        ////console.log('the amount 1',Number(item.p1Points))
+        //console.log('the amount 1',Number(item.p1Points))
         theAmount.push(amount)
       }
       if(item.bet==='player2'){
         amount=Number(item.p2Points)
-        ////console.log('the amount 2',Number(item.p2Points))
+        //console.log('the amount 2',Number(item.p2Points))
         theAmount.push(amount)
       }
       
-      ////console.log('the amount',theAmount)
+      //console.log('the amount',theAmount)
       //if(!item.bet||item.bet===''){//console.log('it iiiis',item.bet,index)}
       if(!item.bet||item.bet===''){
         j++
         this.setState({allPicked:false})
       }
-      console.log('rrrrrrr',index,item.bet)
+      //console.log('rrrrrrr',index,item.bet)
       if(j===1&&(!item.bet||item.bet==='')){this.notify('Ensure all matches are picked to proceed')}
       if(!item.bet||item.bet==='')return
       var theArr={id:item.id,player1:item.player1,player2:item.player2,bet:item.bet,matchNo:item.matchNo}
       mySelection.push(theArr)
-      ////console.log('mySelection',mySelection)
+      //console.log('mySelection',mySelection)
       i++
       if(i===this.state.theItems.length){
         const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-        ////console.log('the suummmm',sum)
+        //console.log('the suummmm',sum)
         this.setState({allPicked:true,mySelection:mySelection,bestPossibleScore:sum.toFixed(2)},()=>{
         this.checkAuth('submitDetails')
  
         })
-        ////console.log('tumemalizaaaaaa',this.state.mySelection)
+        //console.log('tumemalizaaaaaa',this.state.mySelection)
         //return
        
       }
       
     })
-    /*////console.log('this.state.userId',this.state.userId)
+    /*//console.log('this.state.userId',this.state.userId)
     if(!this.state.userId)return
-    ////console.log('looooooooobo')
+    //console.log('looooooooobo')
     //return
     var userInfoDb = firebase.database().ref('users').child(this.state.userId)
     
      userInfoDb.child('teamName').set(this.state.teamName)
      userInfoDb.child('flockName').set(this.state.flockName)
      .then(det=>{
-      ////console.log('the det ttttttttttttt',det)
+      //console.log('the det ttttttttttttt',det)
      })
      localStorage.set('upcomingRamUfcDetails', 'true');
      this.setState({upcomingRamUfcDetails:true})*/
@@ -238,18 +238,18 @@ class DetailsModal extends Component {
    if(this.props.currentSelection==='finalRound'){
     theSelection=this.props.theMenu
    }
-   console.log('daaaaaaaaaata hghghgh',userId,this.props.currentEvent,this.props.theEventKey,theSelection)
+   //console.log('daaaaaaaaaata hghghgh',userId,this.props.currentEvent,this.props.theEventKey,theSelection)
   var myFlockNamesRef=firebase.database().ref('/users/').child(userId+'/flockData/flockNames/').child(this.props.theEventKey)
   var betsRef = firebase.database().ref('users/').child(userId+'/ramData/').child('events').child(this.props.currentEvent+'/'+this.props.theEventKey+'/bets/round1')
   if(theSelection!=='round1'){
     betsRef.once('value',dataSnapshot=>{
-      console.log('daaaaaaaaaata',dataSnapshot.val())
+      //console.log('daaaaaaaaaata',dataSnapshot.val())
       if (dataSnapshot.exists()) {
         myFlockNamesRef.once('value',dataSnapshot=>{
           if(dataSnapshot.exists()){
           var theFlockName=dataSnapshot.val().name
           theFlockName=theFlockName?.split("|").join(" ")
-          console.log('hapa 0044444  kkkk',theFlockName)
+          //console.log('hapa 0044444  kkkk',theFlockName)
           this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
           }else{
             this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
@@ -264,7 +264,7 @@ class DetailsModal extends Component {
       if(dataSnapshot.exists()){
       var theFlockName=dataSnapshot.val().name
       theFlockName=theFlockName?.split("|").join(" ")
-      console.log('hapa 0044444  kkkk',theFlockName)
+      //console.log('hapa 0044444  kkkk',theFlockName)
       this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
       }else{
         this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
@@ -276,7 +276,7 @@ class DetailsModal extends Component {
     if(dataSnapshot.exists()){
       var theName=dataSnapshot.val()
     this.setState({teamName:theName})
-    console.log('team naaaaaaame',theName)
+    //console.log('team naaaaaaame',theName)
     }
   })
 }
@@ -369,7 +369,7 @@ class DetailsModal extends Component {
            
         
     //return
-    ////console.log('detailsData',detailsData)
+    //console.log('detailsData',detailsData)
     var theTeamName=this.state.teamName.replace(/ /g,"_")
     var theFlockName=this.state.ramFlockName.replace(/ /g,"_")
     var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
@@ -399,16 +399,16 @@ class DetailsModal extends Component {
         }else{
         this.notify('RAM Name already taken')
         this.setState({teamNameErr:'RAM Name already taken, please try another one'})}
-          ////console.log('change that shit')
+          //console.log('change that shit')
       }})
 
     }
   })
    }
    toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)=>{
-    console.log('detailsData',detailsData)
-    console.log('itemsData',itemsData)
-    console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,theSelection,this.state.userId)
+    //console.log('detailsData',detailsData)
+    //console.log('itemsData',itemsData)
+    //console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,theSelection,this.state.userId)
     //return
     var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents').child(this.state.currentEvent)
     var gamesDataRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('events').child(this.state.currentEvent)
@@ -433,9 +433,9 @@ class DetailsModal extends Component {
     //adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
     ramsBets.child(this.props.theEventKey+'/').child(this.state.userId+'/'+theSelection+'/').update(itemsData,(error) => {
       if (error) {
-        ////console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
+        //console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
       } else {
-        ////console.log('Your picks have been submitted successfully') 
+        //console.log('Your picks have been submitted successfully') 
         this.notify('Your picks have been submitted successfully')
         Router.push('/reload')        
       }
@@ -446,7 +446,7 @@ class DetailsModal extends Component {
     event.stopPropagation()
    }
    selectedItems=(id,index,theBet,player1Points,player2Points)=>{
-    ////console.log('the idddddddd',id,index,theBet,player1Points,player2Points)
+    //console.log('the idddddddd',id,index,theBet,player1Points,player2Points)
     //return
     const theItems = [...this.state.theItems];
     const targetIndex = theItems.findIndex(f=>f.id===id); 
@@ -463,7 +463,7 @@ class DetailsModal extends Component {
     }
     this.setState({theItems})
 
-console.log('theItems 1111111111',theItems)
+//console.log('theItems 1111111111',theItems)
    }
    notify=(message)=>{
     toast.warn(message, {
@@ -488,7 +488,7 @@ console.log('theItems 1111111111',theItems)
     if(this.props.currentEvent==='ramUfc'){theEvent='RAM UFC'}
     if(this.props.currentEvent==='NCAAF'){theEvent='NCAAF'}
     if(this.props.currentEvent==='NFL'){theEvent='NFL'}
-    console.log('theItems',this.state.theItems)
+    //console.log('theItems',this.state.theItems)
     return (
       <><div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
                     <h1>Enter RAM Details</h1>
@@ -537,7 +537,7 @@ console.log('theItems 1111111111',theItems)
           var tableArray=[details1+'#'+item.p1Points+'#'+item.bet+'#'+team1Seed,details2+'#'+item.p2Points+'#'+item.bet+'#'+team2Seed]
           
           
-         // console.log('sedddddd',theSeed)
+         //console.log('sedddddd',theSeed)
          var place=''
           var yourPick='N/A',yourPoints=''
           var pickCol='#CB1E31'

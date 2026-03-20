@@ -69,7 +69,7 @@ class events extends Component {
   
   await  userInfoDb.once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
-      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc?.split(':')});this.getUfcItems('ramUfc');console.log('is there ufc',theInfo.ramUfc)}
+      if(theInfo.ramUfc!==false){this.setState({eventRamUfc:true,ufcSubHeadings:theInfo.ramUfc?.split(':')});this.getUfcItems('ramUfc');//console.log('is there ufc',theInfo.ramUfc)}
       if(theInfo.marchMadness===true){this.setState({eventMarchMadness:true}),this.getNflMarchMadnessItems('marchMadness','marchMadnessArray')}
       if(theInfo.nfl===true){this.setState({eventNfl:true}),this.getNflMarchMadnessItems('nfl','nflArray')}
       
@@ -79,15 +79,15 @@ getUfcItems=async(name)=>{
     var userInfoDb=firebase.database().ref('/activeEvents/').child(name)
     
     userInfoDb.once('value',dataSnapshot=>{
-      console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var mainCardCount=dataSnapshot.child('mainCard').numChildren()
       var prelimsCount=dataSnapshot.child('prelims').numChildren()
       var theInfo=dataSnapshot.val()
-      console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if(theInfo.mainCard){
         var array1 = []
-        console.log('iko maincarddddd',theInfo.mainCard)
+        //console.log('iko maincarddddd',theInfo.mainCard)
         var i=0
         for (var key in theInfo.mainCard) {
           i++
@@ -95,13 +95,13 @@ getUfcItems=async(name)=>{
          var array2={theId:key,...theData}
          array1.push(array2)
          if(i===mainCardCount){
-          console.log('whole maincard Array',array1)
+          //console.log('whole maincard Array',array1)
           this.setState({ramUfcMaincardArray:array1})
           this.setState({theItems:array1})
          }}}
       if(theInfo.prelims){
         var array1 = []
-        console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i=0
         for (var key in theInfo.prelims) {
           i++
@@ -109,13 +109,13 @@ getUfcItems=async(name)=>{
          var array2={theId:key,...theData}
          array1.push(array2)
          if(i===prelimsCount){
-          console.log('whole prelimms Array',array1)
+          //console.log('whole prelimms Array',array1)
           this.setState({ramUfcPrelimsArray:array1})
          }
         }
         //prelimsArray
       }else{
-        console.log('hakuna prelimsssssss')
+        //console.log('hakuna prelimsssssss')
       }
     })
   }
@@ -124,10 +124,10 @@ getUfcItems=async(name)=>{
     userInfoDb.once('value',dataSnapshot=>{
       var count=dataSnapshot.numChildren()
       var theInfo=dataSnapshot.val()
-      console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if(theInfo){
         var array1 = []
-        console.log('iko maincarddddd',theInfo)
+        //console.log('iko maincarddddd',theInfo)
         var i=0
         for (var key in theInfo) {
           i++
@@ -135,16 +135,16 @@ getUfcItems=async(name)=>{
          var array2={theId:key,...theData}
          array1.push(array2)
          if(i===count){
-          console.log('whole maincard Array',array1)
+          //console.log('whole maincard Array',array1)
           this.setState({[theArr]:array1})
          }}}
     })
   }
   getUserInfo=async(userId)=>{
-    console.log('proofile photohhhhhhhhhhhhhhh',userId)
+    //console.log('proofile photohhhhhhhhhhhhhhh',userId)
     var photoRefDb=firebase.database().ref('/users/').child(userId).child('profilePhoto')
     await  photoRefDb.once('value',dataSnapshot=>{
-       console.log('proofile photo',dataSnapshot.val())
+       //console.log('proofile photo',dataSnapshot.val())
        if (dataSnapshot.val()) {
          this.setState({profilePhoto:dataSnapshot.val()})
        }
@@ -152,10 +152,10 @@ getUfcItems=async(name)=>{
     var userInfoDb=firebase.database().ref('/users/').child(userId).child("activeEvents")
     await  userInfoDb.once('value',dataSnapshot=>{
         var theInfo=dataSnapshot.val()
-        console.log('the games info',theInfo)
+        //console.log('the games info',theInfo)
         this.setState({theRamUfc:theInfo.ramUfc,theMarchMadness:theInfo.marchMadness,theNfl:theInfo.nfl,theFifa:theInfo.fifa})
         if(theInfo.ramUfc!=='selected'&&theInfo.marchMadness!=='selected'&&theInfo.nfl!=='selected'){
-          console.log('hakuna kitu inadonjo')
+          //console.log('hakuna kitu inadonjo')
           this.getGamesInfo()
         }else{
           this.setState({dataAvailable:true,clickHere1:'CLICK HERE TO EDIT YOUR PICKS',clickHere2:'CLICK HERE TO EDIT THE GAME'})

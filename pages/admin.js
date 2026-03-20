@@ -48,7 +48,7 @@ class leaderboard extends Component {
       var theItem={name:theD.name,phone:theD.phoneNo,email:theD.email,created:theD.created}
       theUsers.push(theItem)
       if(theCount===i){
-        console.log('the users',theUsers)
+        //console.log('the users',theUsers)
         var sortedArr=theUsers.sort(function(a, b){return b.created - a.created});
         this.setState({theUsers:sortedArr})
       }

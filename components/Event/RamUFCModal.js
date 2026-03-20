@@ -28,7 +28,7 @@ class NCAAModal extends Component {
       var firstMatchTime =  Math.min(...incomingData.map(item => item.timeInMillis));
       var lastMatchTime =  Math.max(...incomingData.map(item => item.timeInMillis));
    
-      console.log('incomingData 325698',this.props.title,this.props.theEventId,firstMatchTime,lastMatchTime,incomingData)
+      //console.log('incomingData 325698',this.props.title,this.props.theEventId,firstMatchTime,lastMatchTime,incomingData)
         var i=0
         incomingData.map((item,index)=>{
           i++
@@ -36,7 +36,7 @@ class NCAAModal extends Component {
         if(incomingData.length===i){
           this.setState({matchesArr,firstMatchTime,lastMatchTime})
           matchesArr=incomingData
-          console.log('matchesArr ONCOMING',matchesArr)
+          //console.log('matchesArr ONCOMING',matchesArr)
         
         }
       })
@@ -49,7 +49,7 @@ class NCAAModal extends Component {
   inputChange = async (e, index) => {
     this.setState({isItSubmit:false})
     var value = e.target.value
-    console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
    
     matchesArr[index][e.target.id] = value
    // matchesArr[index]['player1'] = 'N/A'
@@ -57,7 +57,7 @@ class NCAAModal extends Component {
    // matchesArr[index]['p1Photo'] = 'N/A'
    // matchesArr[index]['p2Photo'] = 'N/A'
       await this.setState({ matchesArr })
-      console.log("matchesArr", matchesArr)
+      //console.log("matchesArr", matchesArr)
     
 
 
@@ -105,12 +105,12 @@ class NCAAModal extends Component {
     })
   }
   sendToDatabase=()=>{
-    console.log('this.state.mainCardArr',this.state.mainCardArr,JSON.stringify(this.state.mainCardArr).length)
-    console.log('this.state.prelimsArr',this.state.prelimsArr,JSON.stringify(this.state.prelimsArr).length)
-    console.log('this.state.earlyPrelimsArr',this.state.earlyPrelimsArr,JSON.stringify(this.state.earlyPrelimsArr).length)
+    //console.log('this.state.mainCardArr',this.state.mainCardArr,JSON.stringify(this.state.mainCardArr).length)
+    //console.log('this.state.prelimsArr',this.state.prelimsArr,JSON.stringify(this.state.prelimsArr).length)
+    //console.log('this.state.earlyPrelimsArr',this.state.earlyPrelimsArr,JSON.stringify(this.state.earlyPrelimsArr).length)
     if(this.state.isItSubmit){
     var ufcMatchId=this.props.theEventId
-     console.log('ufcMatchId',ufcMatchId)
+     //console.log('ufcMatchId',ufcMatchId)
     //return
     var eventTitle=this.props.title
     var startTime=dayjs(this.state.firstMatchTime).format('MMM D, YYYY h:mm A')
@@ -125,7 +125,7 @@ class NCAAModal extends Component {
      //mainCardShortArr prelimsShortArr earlyPrelimsShortArr
       if(JSON.stringify(this.state.mainCardArr).length>10){
         this.showProgressBar()
-        console.log('main card ikoooooooo',this.state.mainCardArr.length,this.state.mainCardArr)
+        //console.log('main card ikoooooooo',this.state.mainCardArr.length,this.state.mainCardArr)
         //return
         activeEventsDb.child('mainCard').set(this.state.mainCardArr)
         activeEventsDb.child('mainCardShort').set(this.state.mainCardShortArr)
@@ -141,13 +141,13 @@ class NCAAModal extends Component {
       }
       //return
       if(JSON.stringify(this.state.prelimsArr).length>10){
-        console.log('prelimsArr card ikoooooooo',this.state.prelimsArr.length,this.state.prelimsArr)
+        //console.log('prelimsArr card ikoooooooo',this.state.prelimsArr.length,this.state.prelimsArr)
         activeEventsDb.child('prelims').set(this.state.prelimsArr)
         activeEventsDb.child('prelimsShort').set(this.state.prelimsShortArr)
         activeEventsDb.child('/matchDetails/prelims/').set(true)
       }
       if(JSON.stringify(this.state.earlyPrelimsArr).length>10){
-        console.log('earlyPrelimsArr card ikoooooooo',this.state.earlyPrelimsArr.length,this.state.earlyPrelimsArr)
+        //console.log('earlyPrelimsArr card ikoooooooo',this.state.earlyPrelimsArr.length,this.state.earlyPrelimsArr)
         activeEventsDb.child('earlyPrelims').set(this.state.earlyPrelimsArr)
         activeEventsDb.child('earlyPrelimsShort').set(this.state.earlyPrelimsShortArr)
         activeEventsDb.child('/matchDetails/earlyPrelims/').set(true)
@@ -158,7 +158,7 @@ class NCAAModal extends Component {
   }
   sendToFirebase=async()=>{
     this.showProgressBar()
-    console.log('at sendToFirebase',this.state.currentSelection)
+    //console.log('at sendToFirebase',this.state.currentSelection)
     //todo finish here and odds update on onclick
     return
     if(this.state.currentSelection==='wildCard'){}
@@ -176,7 +176,7 @@ class NCAAModal extends Component {
     var eventKey = 'NFLPlayoffs-'+ new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NFL/' + eventKey + '/')
     var eventsIdDb = firebase.database().ref('/theEvents/')
-    console.log('combined items',allItems.length, allItems)
+    //console.log('combined items',allItems.length, allItems)
     allItems.map((item,index) => {
       v++
       if(item.p1Photo===''){allItems[index]['p1Photo']='N/A'}
@@ -187,7 +187,7 @@ class NCAAModal extends Component {
       if(item.player2===''){allItems[index]['player2']='N/A'}
       if(item.player1===''){allItems[index]['player1NickName']='N/A'}
       if(item.player2===''){allItems[index]['player2NickName']='N/A'}
-      console.log('matchType',item.matchType)
+      //console.log('matchType',item.matchType)
       if (item.matchType === 'NFL Wild Card Round') {
         toDbWildCardArr[item.id] = item
       } 
@@ -258,10 +258,10 @@ class NCAAModal extends Component {
         if (i === theItems.length) {
           this.setState({matchesArr:theItems,isItSubmit:true})
           this.setState({mainCardArr,mainCardShortArr,prelimsArr,prelimsShortArr,earlyPrelimsArr,earlyPrelimsShortArr})
-           console.log('to daaatabase 001',mainCardArr,mainCardShortArr)
-           console.log('to daaatabase 002',prelimsArr,prelimsShortArr)
-           console.log('to daaatabase 003',earlyPrelimsArr,earlyPrelimsShortArr)
-           console.log('to daaatabase 004',theItems,this.state.matchesArr)
+           //console.log('to daaatabase 001',mainCardArr,mainCardShortArr)
+           //console.log('to daaatabase 002',prelimsArr,prelimsShortArr)
+           //console.log('to daaatabase 003',earlyPrelimsArr,earlyPrelimsShortArr)
+           //console.log('to daaatabase 004',theItems,this.state.matchesArr)
           //this.getOddsApiData(theItems,theState)
         }
       })
@@ -269,7 +269,7 @@ class NCAAModal extends Component {
     chooseType=(type,index)=>{
     matchesArr[index]['type']=type
     this.setState({matchesArr,isItSubmit:false})
-    console.log('the chosen',matchesArr)
+    //console.log('the chosen',matchesArr)
   }
   itemComponent = (compItems,title) => {
   //console.log('compItems',compItems)

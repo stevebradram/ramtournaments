@@ -49,7 +49,7 @@ class Chats extends Component {
   checkAdminChats = (myUid) => {
     var adminChatsRef = firebase.database().ref('/messaging/adminChats/')
     var adminLastSeenChatsRef = firebase.database().ref('/messaging/adminChatLastSeen/'+myUid+'/')
-    // console..log('my chat id zzzzz', myUid)
+    //console.log('my chat id zzzzz', myUid)
     adminChatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         this.setState({ adminChatsItem: dataSnapshot.val() })
@@ -57,7 +57,7 @@ class Chats extends Component {
          if (dataSnapshot.exists()) {
           this.setState({adminChatLastSeen:dataSnapshot.val()})
          }})
-        // console..log('rrrrrrrrrr',dataSnapshot.val())
+        //console.log('rrrrrrrrrr',dataSnapshot.val())
       }
 
     })
@@ -66,10 +66,10 @@ class Chats extends Component {
     var chatsRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/')
     var userRef = firebase.database().ref('/users/')
     var theChats = []
-    // console..log('my chat id', myUid)
+    //console.log('my chat id', myUid)
     chatsRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-        //// console..log('1 exiiiiiists',dataSnapshot.val())
+        ////console.log('1 exiiiiiists',dataSnapshot.val())
         var theNo = dataSnapshot.numChildren(), i = 0
 
         // this.checkLastSeenChat(mesoId1, this.state.otheUserId)
@@ -78,7 +78,7 @@ class Chats extends Component {
           var theData = data.val()
           theData['id'] = data.key
           var otherUserID = data.val().otherUserID
-          // console..log('my otherUserID id', otherUserID)
+          //console.log('my otherUserID id', otherUserID)
           userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
             var profilePhoto = dataSnapshot.val().profilePhoto
             var userName = dataSnapshot.val().name
@@ -92,11 +92,11 @@ class Chats extends Component {
             if (theNo === i) {
               let objMax = ''
               if (theChats.length) { objMax = theChats.reduce((max, curren) => max.time > curren.time ? max : curren); }
-              //// console..log('objMax',objMax,objMax['id'])
-              // console..log('theChats1232323', theChats)
+              ////console.log('objMax',objMax,objMax['id'])
+              //console.log('theChats1232323', theChats)
               // return
               this.setState({ areChatsAvailable: true, theChatsArray: theChats, lastMesoId: objMax['id'] }, () => {
-                //// console..log('allChats', theChats)
+                ////console.log('allChats', theChats)
                 // this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
                 //this.realTimeUpdate(mesoId1)
               })
@@ -110,8 +110,9 @@ class Chats extends Component {
     })
   }
   openMessages = (item) => {
-    // console..log('clicked!', item)
-    var theItem = { uid: item.otherUserID, acronym: item.acronym, profilePhoto: item.profilePhoto, userName: item.userName }
+     //console.log('clicked!', item)
+     //return
+    var theItem = { uid: item.otherUserID, acronym: item.acronym, profilePhoto: item.profilePhoto, userName: item.userName, senderID: item.senderID }
     this.props.onClick('fromChats', 'chatId', theItem)
   }
     openAdminMessages=() => {
@@ -119,11 +120,11 @@ class Chats extends Component {
     this.props.onClick('fromChatsToAdmin','openAdminMessages', 'chatId')
   }
   openFriends = () => {
-    // console..log('clicked!')
+    //console.log('clicked!')
     this.props.onClick('fromChats', 'openFriends', 'N/A')
   }
   closeMessenger = () => {
-    // console..log('clicked!')
+    //console.log('clicked!')
     this.props.onClick('fromChats', 'close', 'N/A')
   }
 
@@ -168,7 +169,9 @@ class Chats extends Component {
 
         {this.state.areChatsAvailable ? <div className={styles.chatsCont}>
           {this.state.theChatsArray.map((item, index) => {
-            const messageRead = item.lastChatSeen ? item.lastChatSeen > item.time : false;
+            var messageRead =false;
+            if(item.senderID===this.state.myUserId){messageRead=true}
+            else{if(item.lastChatSeen&&item.lastChatSeen>item.time){messageRead=true}}
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.openMessages(item)}>
                 <div className={styles.imgDiv}>

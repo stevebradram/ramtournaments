@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from "./Messages.module.scss";
+import styles from "./AdminMessages.module.scss";
 import Image from 'next/image'
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import { HiArrowNarrowLeft } from "react-icons/hi";
@@ -74,7 +74,7 @@ class Messages extends Component {
             if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             var lastMesoId=objMax['id']
-            console.log('theMessages1',theMessages)
+            //console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()
             })
@@ -83,7 +83,7 @@ class Messages extends Component {
 if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             var lastMesoId=objMax['id']
-            console.log('theMessages1',theMessages)
+            //console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()})}
            } 

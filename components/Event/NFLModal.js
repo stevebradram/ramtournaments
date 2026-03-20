@@ -92,7 +92,7 @@ class NCAAModal extends Component {
    sortOddsJson=async(theOddsJson,idStart,menu,incomingData)=>{
    
     try {
-      ////console.log('theOddsJson',theOddsJson)
+      //console.log('theOddsJson',theOddsJson)
       //return
       var jCount=0
     theOddsJson.map((item1,index)=>{
@@ -104,25 +104,25 @@ class NCAAModal extends Component {
             if(item2.key==='draftkings'){
                
                 draftkingsMarket=item2.markets
-                ////console.log('draftkings markets',item2.markets)
-                ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+                //console.log('draftkings markets',item2.markets)
+                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
                 draftkingsMarket.map((item3)=>{
-                    ////console.log('draftkingsMarket 006',item3.outcomes)
+                    //console.log('draftkingsMarket 006',item3.outcomes)
                    const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                      theOddsJson[index].draftkingsOdds=obj
                 })
             }
            
             if(item1.bookmakers.length===i){
-                ////console.log('new array',theOddsJson)
+                //console.log('new array',theOddsJson)
                
                 var m=0
                 theOddsJson.map((item12,index)=>{
                     m++
-                    ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                    //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
                     var awayPoints=0,homePoints=0
                     if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                        ////console.log('shit is undefined')
+                        //console.log('shit is undefined')
                     }else{
                         var homeFighterName=item12.home_team
                         var awayFighterName=item12.away_team
@@ -136,7 +136,7 @@ class NCAAModal extends Component {
           if(awayPoints<-10000){aTPointsNum=1.01}
           if(homePoints>12620){hTPointsNum=1247.20}
           if(awayPoints>12620){aTPointsNum=1247.20}
-          ////console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
+          //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
          
           if(homePoints<=101&&homePoints>=-101){hTPointsNum=2.03}
           if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
@@ -522,25 +522,25 @@ class NCAAModal extends Component {
            if(item2.key==='draftkings'){
               
                draftkingsMarket=item2.markets
-               ////console.log('draftkings markets',item2.markets)
-               ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+               //console.log('draftkings markets',item2.markets)
+               //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
                draftkingsMarket.map((item3)=>{
-                   ////console.log('draftkingsMarket 006',item3.outcomes)
+                   //console.log('draftkingsMarket 006',item3.outcomes)
                   const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                     theOddsJson[index].draftkingsOdds=obj
                })
            }
           
            if(item1.bookmakers.length===i){
-               ////console.log('new array',theOddsJson)
+               //console.log('new array',theOddsJson)
               
                var m=0
                theOddsJson.map((item12,index)=>{
                    m++
-                   ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                   //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
                    var awayPoints=0,homePoints=0
                    if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                       ////console.log('shit is undefined')
+                       //console.log('shit is undefined')
                    }else{
                        var homeFighterName=item12.home_team
                        var awayFighterName=item12.away_team
@@ -600,7 +600,7 @@ class NCAAModal extends Component {
        })
    })
  } catch (error) {
-   //console.log('ERROR OCURRED AT SORTING ODDS', error) f059e49c28b51da7b69e03dc1122338b
+   //console.log('ERROR OCURRED AT SORTING ODDS', error) 
  }
  }
   getOddsApiData2 = async (theArr) => {
@@ -712,7 +712,7 @@ class NCAAModal extends Component {
   getLogos = async (theArr) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    ////console.log(response.data);
+    //console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
@@ -723,9 +723,9 @@ class NCAAModal extends Component {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            ////console.log('the teams',theItem)
-            ////console.log('the team name',theItem['displayName'])
-            // //console.log('the team logos',theItem['logos'][0]['href'])
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -738,7 +738,7 @@ class NCAAModal extends Component {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // //console.log('item1.player1',item1.player1)
+                  //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName
@@ -771,7 +771,7 @@ class NCAAModal extends Component {
   getLogos2 = async (theArr,menu,incomingData) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    ////console.log(response.data);
+    //console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
@@ -782,9 +782,9 @@ class NCAAModal extends Component {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            ////console.log('the teams',theItem)
-            ////console.log('the team name',theItem['displayName'])
-            // //console.log('the team logos',theItem['logos'][0]['href'])
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -797,7 +797,7 @@ class NCAAModal extends Component {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // //console.log('item1.player1',item1.player1)
+                  //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName

@@ -18,13 +18,13 @@ class NCAAModal extends Component {
   componentDidMount=()=>{
     firstRoundEdit=[],quarterFinalsEdit=[],semiFinalsEdit=[],finalEdit=[]
     var eventKey='NCAAF_'+new Date().getFullYear()+'-'+(new Date().getFullYear()+1)
-    console.log('the event key',eventKey)
-    console.log('the info',this.props.itemsToModal,this.props.eventToModal,this.props.theEventKey)
+    //console.log('the event key',eventKey)
+    //console.log('the info',this.props.itemsToModal,this.props.eventToModal,this.props.theEventKey)
     //var incomingData=[...this.props.itemsToModal]
     var incomingData = this.props.itemsToModal.map(item => JSON.parse(JSON.stringify(item)));
     //return
-    console.log('incomingData',incomingData)
-    console.log('the info',this.props.itemsToModal,this.props.eventToModal,this.props.theEventKey)
+    //console.log('incomingData',incomingData)
+    //console.log('the info',this.props.itemsToModal,this.props.eventToModal,this.props.theEventKey)
     //return
     if(incomingData.length>0){
       firstRoundEdit=[],quarterFinalsEdit=[],semiFinalsEdit=[],finalEdit=[]
@@ -35,7 +35,7 @@ class NCAAModal extends Component {
       incomingData[index]['bet']=''
       firstMatchTime.push(item.timeInMillis)
         if(item.player1==='N/A'){
-        console.log('item.player1NickName samooooo')
+        //console.log('item.player1NickName samooooo')
         incomingData[index]['commenceTime']=''
         incomingData[index]['timeInMillis']=''
         incomingData[index]['time']=''
@@ -51,7 +51,7 @@ class NCAAModal extends Component {
           if(this.state.currentSelection==='quarterFinals'){quarterFinalsEdit=incomingData,this.setState({quarterFinalsEdit})}
           if(this.state.currentSelection==='semiFinals'){semiFinalsEdit=incomingData,this.setState({semiFinalsEdit})}
           if(this.state.currentSelection==='finals'){finalEdit=incomingData,this.setState({finalEdit})}
-          console.log('modal timeeeeeeee',firstTime,firstRoundEdit)
+          //console.log('modal timeeeeeeee',firstTime,firstRoundEdit)
         }
       })
     }
@@ -62,27 +62,27 @@ class NCAAModal extends Component {
        }
        inputChange = async (e,index,type) => {
         var value = e.target.value
-        console.log('theId', e.target.id)
+        //console.log('theId', e.target.id)
         //first round quarter finals semi finals Finals
         if(type==='first round'){
           firstRoundEdit[index][e.target.id]=value
           await this.setState({firstRoundEdit})
-          console.log("firstRoundEdit",firstRoundEdit)
+          //console.log("firstRoundEdit",firstRoundEdit)
         }
         if(type==='quarter finals'){
           quarterFinalsEdit[index][e.target.id]=value
           await this.setState({quarterFinalsEdit})
-          console.log("quarterFinalsEdit",quarterFinalsEdit)
+          //console.log("quarterFinalsEdit",quarterFinalsEdit)
         }
         if(type==='semi finals'){
           semiFinalsEdit[index][e.target.id]=value
           await this.setState({semiFinalsEdit})
-          console.log("semiFinalsEdit",semiFinalsEdit)
+          //console.log("semiFinalsEdit",semiFinalsEdit)
         }
         if(type==='Finals'){
           finalEdit[index][e.target.id]=value
           await this.setState({finalEdit})
-          console.log("finalEdit",finalEdit)
+          //console.log("finalEdit",finalEdit)
         }
        
        }
@@ -117,7 +117,7 @@ class NCAAModal extends Component {
       }
       submitDetails = (theItems,theState) => {
         var i = 0, j = 0, k = 0, l = 0
-        console.log('theItems',theItems)
+        //console.log('theItems',theItems)
         var teamsArr=[]
         var time='2025-03-20T00:00'
         
@@ -142,14 +142,14 @@ class NCAAModal extends Component {
 
           
           if(theItems.length===j){
-            console.log('theItems jjjjjjj',theItems)
+            //console.log('theItems jjjjjjj',theItems)
             this.setState({[theState]:theItems})
         var currentYear=new Date().getFullYear()
         var apiFirebaseRef = firebase.database().ref('/apis/NCAAFTeams/'+currentYear+'/')
         apiFirebaseRef.once('value', dataSnapshot => {
           if(dataSnapshot.exists()){
             var theCount=dataSnapshot.numChildren(),i=0
-            console.log('the teams data available')
+            //console.log('the teams data available')
             dataSnapshot.forEach((data,index) => {
               i++
               teamsArr.push(data.val())
@@ -159,7 +159,7 @@ class NCAAModal extends Component {
               }
             })
           }else{
-            console.log('the teams data nooot available')
+            //console.log('the teams data nooot available')
             var oddsApi = "https://api.sportsdata.io/v3/cfb/scores/json/teams?key=f691242b217547ff9bfe4354f59f0fc1"
            var firebaseItem={}
             axios.get(oddsApi)
@@ -175,7 +175,7 @@ class NCAAModal extends Component {
                   teamsArr.push(theItem)}
                   if(j===resultsArr.length){
                     apiFirebaseRef.update(firebaseItem)
-                    console.log('final arrr 222222',teamsArr)
+                    //console.log('final arrr 222222',teamsArr)
                     this.goToTeamsDataApi(theItems,teamsArr,theState)
                   }
               })
@@ -203,7 +203,7 @@ class NCAAModal extends Component {
                 }
               }) 
               if(teamsArr.length===index+1){
-                console.log('finished theArr',theArr)
+                //console.log('finished theArr',theArr)
                 this.setState({[stateEdit]:theArr})
                 var k=0
                 theArr.map((item, index) => {
@@ -215,7 +215,7 @@ class NCAAModal extends Component {
                  if(theArr.length===k){
                   this.setState({isItSubmit:true})
                   this.sortOddsJson(theArr,stateEdit)
-                  console.log('tumemalizaaaaaaaaaaa')
+                  //console.log('tumemalizaaaaaaaaaaa')
                  }
                 })
               }
@@ -230,7 +230,7 @@ class NCAAModal extends Component {
        var theOddsJson=theNCAAFOdds
        var firstMatchTime=[]
        try {
-         console.log('theOddsJson',theOddsJson)
+         //console.log('theOddsJson',theOddsJson)
          var jCount=0
        theOddsJson.map((item1,index)=>{
            var i=0,newOddsJson=[]
@@ -278,7 +278,7 @@ class NCAAModal extends Component {
              if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
      
      
-             console.log(item1.id,'hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
+             //console.log(item1.id,'hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
      
                    var matchTime= new Date(item12.commence_time);
                    var newItem={player2:item12.away_team,player1:item12.home_team,apiId:item12.id,commenceTime:item12.commence_time,timeInMillis:matchTime.getTime(),
@@ -289,7 +289,7 @@ class NCAAModal extends Component {
                    })
                    if(m===theOddsJson.length){
                      //this.setState({theNewArr:newOddsJson})
-                     console.log('new array laaast',newOddsJson)
+                     //console.log('new array laaast',newOddsJson)
                      theArr.map((item,index)=>{
                        newOddsJson.map((item2)=>{
      
@@ -306,7 +306,7 @@ class NCAAModal extends Component {
                        if(theArr.length===index+1){
                          //var firstTime =  Math.min(...firstMatchTime.map(item => item));
                          this.setState({[stateEdit]:theArr})
-                         console.log('malizaaaaa 000024',theArr)
+                         //console.log('malizaaaaa 000024',theArr)
                        }
                      })
                      
@@ -315,7 +315,7 @@ class NCAAModal extends Component {
            })
        })
      } catch (error) {
-       console.log('ERROR OCURRED AT SORTING ODDS', error)
+       //console.log('ERROR OCURRED AT SORTING ODDS', error)
      }
      }
      sendToDatabase=()=>{
@@ -355,16 +355,16 @@ class NCAAModal extends Component {
          var eventIdsLink ='/eventsIds/'+eventKey+'/'
          var eventIdsLink2 ='/NCAAF/eventIds/'+eventKey+'/'
          var dataLink ='/NCAAF/'+eventKey+'/'+this.state.currentSelection//1737147600000
-         console.log('combined items',theArr.length, theArr)//1737235800000
+         //console.log('combined items',theArr.length, theArr)//1737235800000
          var eventIdsEdit = {
         [editTime]:minTime,currentSelection:this.state.currentSelection,oddsTimeUpdate:new Date().getTime()}
          theArr.map((item,index) => {
            v++
            delete theArr[index]['error']
-           console.log('matchType',item.matchType)
+           //console.log('matchType',item.matchType)
            toDbArr[item.id] = item
            if (theArr.length === v) {
-            console.log('toDbArr',eventIdsEdit,toDbArr)
+            //console.log('toDbArr',eventIdsEdit,toDbArr)
              generalDb.child(eventIdsLink).update(eventIdsEdit)
              generalDb.child(eventIdsLink2).update(eventIdsEdit)
              generalDb.child(dataLink).update(toDbArr,(error) => {

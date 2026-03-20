@@ -2933,12 +2933,12 @@ class myJason extends Component {
        
       
         //1733601600000
-       // console.log('oddArr5', oddArr5["85"])
-       // console.log('theRamOdds', Number(theRamOdds["12614"]))
+       //console.log('oddArr5', oddArr5["85"])
+       //console.log('theRamOdds', Number(theRamOdds["12614"]))
             //var item58=-10001
-           // if(item58>-10000){console.log('greater than 11111',item58)}
-           // if(item58>12620){console.log('greater than 22222',item58)}
-            //if(item58<100&&item58<-100){console.log('greater than 33333',item58)}
+           // if(item58>-10000){//console.log('greater than 11111',item58)}
+           // if(item58>12620){//console.log('greater than 22222',item58)}
+            //if(item58<100&&item58<-100){//console.log('greater than 33333',item58)}
       this.sortOddsJson(theOddsJson)
     }
      pick = (obj, arr) =>
@@ -2954,14 +2954,14 @@ class myJason extends Component {
             var subDifference=matchMillis+292200000
             //assignment check when odds array is empty
    /* if(f1Name!==item2.awayTeam&&f2Name!==item2.homeTeam){
-        console.log('mwanzooooo',f1Name,f2Name,item2.homeTeam,item2.awayTeam)
+        //console.log('mwanzooooo',f1Name,f2Name,item2.homeTeam,item2.awayTeam)
     theFightsJson[index]['p2Points']='N/A'
     theFightsJson[index]['p1Points']='N/A'
     theFightsJson[index]['commenceTime']=matchMillis
     theFightsJson[index]['timeInMillis']=matchMillis
         }*/
        if(f1Name===item2.homeTeam||f2Name===item2.awayTeam){
-            console.log('allName',allName)
+            //console.log('allName',allName)
             var hTPoints=item2.homeTeamPoints+''
             var aTPoints=item2.awayTeamPoints+''
             var hTPointsNum=Number(theRamOdds[hTPoints])
@@ -2981,10 +2981,10 @@ class myJason extends Component {
             if(item2.awayTeamPoints<100&&item2.awayTeamPoints<-100){}*/
             
 
-           // console.log('item2.homeTeamPoints',hTPoints,hTPointsNum)
-           // console.log('item2.awayTeamPoints',aTPoints,aTPointsNum)
+           //console.log('item2.homeTeamPoints',hTPoints,hTPointsNum)
+           //console.log('item2.awayTeamPoints',aTPoints,aTPointsNum)
             //Number(theRamOdds["12614"])
-            console.log('item2.timeInMillis',item2)
+            //console.log('item2.timeInMillis',item2)
             theFightsJson[index]['p1Points']=hTPointsNum
             theFightsJson[index]['p2Points']=aTPointsNum
             theFightsJson[index]['commenceTime']=item2.commenceTime
@@ -2993,7 +2993,7 @@ class myJason extends Component {
             if(f1Name===item2.awayTeam||f2Name===item2.homeTeam){
             
                 if(subDifference>item2.timeInMillis){
-                    console.log('item2.timeInMillis',item2)
+                    //console.log('item2.timeInMillis',item2)
                     var hTPoints=item2.homeTeamPoints+''
                     var aTPoints=item2.awayTeamPoints+''
                     var hTPointsNum=Number(theRamOdds[hTPoints])
@@ -3009,8 +3009,8 @@ class myJason extends Component {
                     theFightsJson[index]['p1Points']=aTPointsNum
                     theFightsJson[index]['commenceTime']=item2.commenceTime
                     theFightsJson[index]['timeInMillis']=item2.timeInMillis
-               // console.log('hainaaaaaa',f1Name,item2.homeTeam,item2.awayTeam)
-               // console.log('the fighters',v,f1Name,f2Name)
+               //console.log('hainaaaaaa',f1Name,item2.homeTeam,item2.awayTeam)
+               //console.log('the fighters',v,f1Name,f2Name)
                 }
             }
         }
@@ -3019,15 +3019,15 @@ class myJason extends Component {
        var firebaseArr=[]
        if(theFightsJson.length===v){
         var firstMatchTime = Math.min(...theFightsJson.map(item => item.timeInMillis));
-        console.log('firstMatchTime',firstMatchTime)
-        console.log('fights array 004',theFightsJson)
+        //console.log('firstMatchTime',firstMatchTime)
+        //console.log('fights array 004',theFightsJson)
        
         var e=0
         theFightsJson.map((item22)=>{
             e++
             firebaseArr[item22.id]=item22
             if(e===theFightsJson.length){
-                console.log('firebase Arr',firebaseArr)
+                //console.log('firebase Arr',firebaseArr)
             }})
     }
       })
@@ -3074,8 +3074,8 @@ class myJason extends Component {
                     newOddsJson.push(newItem)
                     })
                     /* if(m===theOddsJson.length){
-                        console.log('new array oldd',theOddsJson)
-                        console.log('new array laaast',newOddsJson)
+                        //console.log('new array oldd',theOddsJson)
+                        //console.log('new array laaast',newOddsJson)
                         this.sortTheArrays(newOddsJson)
                     } */
                     
@@ -3084,9 +3084,9 @@ class myJason extends Component {
             
             if(oddsCount===theOddsJson.length){
                 reorganisedOddsArray=newOddsJson
-                console.log('new array oldd',theOddsJson)
-                console.log('new array laaast',newOddsJson)
-                console.log('new reorganisedOddsArray',reorganisedOddsArray)
+                //console.log('new array oldd',theOddsJson)
+                //console.log('new array laaast',newOddsJson)
+                //console.log('new reorganisedOddsArray',reorganisedOddsArray)
                 this.sortTheArrays(newOddsJson)
             } 
            
@@ -3098,7 +3098,7 @@ class myJason extends Component {
        var theWord="Don't Miss A Moment Of UFC 310 Pantoja vs Asakura, Live From T-Mobile Arena In Las Vegas, Nevada On December 7, 2024"
         theWord=theWord.trim()?.split(" ").slice(-3).join('-').replace(',','')
         var dateObj = new Date()
-        console.log('theWord',dateObj.toLocaleString())
+        //console.log('theWord',dateObj.toLocaleString())
 
         /*var matchTime ='Sun, Dec 15 / 5:00 AM SAST'
         var matchTime2 ='December-14-2024'
@@ -3106,8 +3106,8 @@ class myJason extends Component {
         matchTime=matchTime?.split(' ')
         matchTime=matchTime[1]+'-'+matchTime[2]+'-'+year+', '+matchTime[4]+' '+matchTime[5]
         var timeObj = new Date(matchTime).getTime(); 
-        console.log('timeObj',timeObj)
-        console.log('the dateeee',matchTime)*/
+        //console.log('timeObj',timeObj)
+        //console.log('the dateeee',matchTime)*/
 
        /* var day=theWord[1].replace(',',''),month=theWord[0],year=theWord[2]
         //var month=theWord[0]
@@ -3115,8 +3115,8 @@ class myJason extends Component {
         var theDate=day+'-'+month+'-'+year
         var dateObj = new Date(theDate); 
         var theMillis = dateObj.getTime();
-        console.log('theWorddddddddddddddd',theDate)
-        console.log('the milllis',theMillis)*/
+        //console.log('theWorddddddddddddddd',theDate)
+        //console.log('the milllis',theMillis)*/
     return (
       <div>myJason</div>
     )

@@ -31,13 +31,13 @@ class Messages extends Component {
   }
   state = {
     theMessage: '', incomingData: [], profilePhoto: '', userName: '', acronym: '', lastSeen: '', myUserId: '', isLogged: '', otheUserId: '', areMessagesAvailable: '', theMessageId: '', theMessagesArray: [], lastMesoId: '', theLastSeenChat: 0,
-    hasInitializedFirebase: true, areThereMessages: false, isWindowInFocus: true, otherUserLastSeen: 'Offline', isFirstTime: '', myMesoId: '', otherUserMesoId: ''
+    hasInitializedFirebase: true, areThereMessages: false, isWindowInFocus: true, otherUserLastSeen: 'Offline', isFirstTime: '', myMesoId: '', otherUserMesoId: '', senderID: ''
   }
   componentDidMount = () => {
     this.scrollToBottom()
-   // console.log('theData rrrrrrrrra', this.props.theData)
+    //console.log('theData rrrrrrrrra', this.props.theData)
     var theData = this.props.theData
-  //  console.log('theData 365214', this.props.from, theData)
+    //console.log('theData 365214', this.props.from, theData)
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
     }
@@ -47,18 +47,19 @@ class Messages extends Component {
     this.setState({ theData: this.props.theData })
     this.checkAuth()
     socket.on('new_message', (payload, callback) => {
-      console.group('new mesoooooooooooooo',payload)
-      this.upadateLastSeenChat(this.state.otherUserMesoId, this.state.otheUserId)
+      //console.log('new mesoooooooooooooo', payload)
+       this.upadateLastSeenChat(this.state.theMessageId, this.state.myUserId)
       this.setState(prevState => ({
-                theMessagesArray: [...prevState.theMessagesArray, payload.message],
-                lastMesoId: payload.mesoId,
-                areMessagesAvailable: true
-            }));
+        theMessagesArray: [...prevState.theMessagesArray, payload.message],
+        lastMesoId: payload.mesoId,
+        areMessagesAvailable: true
+      }));
       if (typeof callback === 'function') {
         callback({ status: 'received' });
       }
     });
     socket.on('message_status_update', (data) => {
+      //console.log('message_status_update', data)
       this.setState({ theLastSeenChat: new Date().getTime() })
       this.upadateLastSeenChat(this.state.theMessageId, this.state.myUserId)
     });
@@ -71,15 +72,25 @@ class Messages extends Component {
         if (data.status === 'offline') {
           this.setState({ otherUserLastSeen: new Date().getTime() })
         } else if (data.status === 'viewing_chat') {
+          var chatNotRef = firebase.database().ref('/messaging/notifications/')
           this.setState({ otherUserLastSeen: 'Online' })
           this.setState({ theLastSeenChat: new Date().getTime() })
           var myUidKey = this.state.myUserId.slice(-10);
           var otherUidKey = this.state.otheUserId.slice(-10);
           var mesoId = myUidKey + otherUidKey
-          var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + mesoId +'/')
-          chatRef.once('value', dataSnapshot => {
-            if (dataSnapshot.exists()) { chatRef.child('lastChatSeen').set(new Date().getTime()) }
-          })
+          var otherUserMesoId = otherUidKey + myUidKey
+          var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + mesoId + '/')
+          chatRef.child('lastChatSeen').set(new Date().getTime())
+          chatNotRef.child(this.state.otheUserId).child(otherUserMesoId).set(null)
+          chatNotRef.child(this.state.otheUserId).child('allNots').set(new Date().getTime())
+          /*chatRef.once('value', dataSnapshot => {
+            if (dataSnapshot.exists()) { 
+              //if(this.props.senderID!==this.state.myUserId){chatRef.child('lastChatSeen').set(new Date().getTime())} 
+              //console.log('going to post shit 111')
+              chatRef.child('lastChatSeen').set(new Date().getTime()) 
+              chatNotRef.child(this.state.otheUserId).child(otherUserMesoId).set(null)
+            }
+          })*/
         }
       }
     });
@@ -168,7 +179,9 @@ class Messages extends Component {
           if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] }, () => {
-              this.upadateLastSeenChat(mesoId2, this.state.otheUserId)
+              //console.log('going to post shit 222', this.props.theData.senderID, this.state.myUserId, mesoId2)
+              this.deleteNots()
+              if (this.props.theData.senderID !== this.state.myUserId) { this.upadateLastSeenChat(mesoId2, this.state.otheUserId) }
             })
           }
         })
@@ -177,9 +190,34 @@ class Messages extends Component {
   }
   upadateLastSeenChat = (messageId, otherUserId) => {
     var chatRef = firebase.database().ref('/messaging/lastChats/' + otherUserId + '/' + messageId + '/lastChatSeen/')
-    chatRef.once('value', dataSnapshot => {
-      if (dataSnapshot.exists()) { chatRef.set(new Date().getTime()) }
-    })
+   // var chatNotRef = firebase.database().ref('/messaging/notifications/')
+    chatRef.set(new Date().getTime())
+    this.deleteNots()
+   // chatNotRef.child(otherUserId).child(messageId).set(null)
+   // chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
+    /* chatRef.once('value', dataSnapshot => {
+       if (dataSnapshot.exists()) { 
+         chatRef.set(new Date().getTime()) 
+         chatNotRef.child(otherUserId).child(messageId).set(null)
+         chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
+       }
+     })*/
+  }
+    deleteNots = () => {
+    var myUidKey = this.state.myUserId.slice(-10);
+    var otherUidKey = this.state.otheUserId.slice(-10);
+    var messageId = myUidKey + otherUidKey
+    //console.log('messageId gggggg',messageId)
+    var chatNotRef = firebase.database().ref('/messaging/notifications/')
+    chatNotRef.child(this.state.myUserId).child('messages').child(messageId).set(null)
+    chatNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
+    /* chatRef.once('value', dataSnapshot => {
+       if (dataSnapshot.exists()) { 
+         chatRef.set(new Date().getTime()) 
+         chatNotRef.child(otherUserId).child(messageId).set(null)
+         chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
+       }
+     })*/
   }
   checkOnline = (userId) => {
     var amOnline = firebase.database().ref(".info/connected")
@@ -197,50 +235,10 @@ class Messages extends Component {
       this.setState({ theLastSeenChat: dataSnapshot.val() })
     })
   }
-  updateMessages = () => {
-    var messageRef = firebase.database().ref('/messaging/messages/' + this.state.myUserId + '/' + this.state.theMessageId).orderByKey().startAfter(this.state.lastMesoId);
-    var theMessages = [...this.state.theMessagesArray], updateMessages = []
-    messageRef.once('value', dataSnapshot => {
-      if (dataSnapshot.exists()) {
-        var theNo = dataSnapshot.numChildren(), i = 0
-        dataSnapshot.forEach((data) => {
-          i++
-          var theData = data.val()
-          theData['id'] = data.key
-          theMessages.push(theData)
-          updateMessages.push(theData)
-          if (theNo === i) {
-            let objMax = updateMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-            this.upadateLastSeenChat(this.state.theMessageId, this.state.otheUserId)
-            this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] })
-          }
-        })
-      }
-    })
-  }
-  realTimeUpdate = async (messageId) => {
-    var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + messageId + '/time')
-    if (messageId === null || messageId.length < 4) return
-    if (this.state.hasInitializedFirebase === false) return
-    await chatRef.on('value', snapshot => {
-      this.updateMessages()
-      this.hasInitializedFirebase()
-    })
-  }
-  realTimeLastChatUpdate = async (messageId) => {
-    var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.otheUserId + '/' + messageId)
-    if (messageId === null || messageId.length < 4) return
-    await chatRef.on('value', snapshot => {
-      this.updateMessages()
-    })
-  }
-  hasInitializedFirebase = () => {
-    this.setState({ hasInitializedFirebase: false })
-    this.timerHandle = setTimeout(() => this.setState({ hasInitializedFirebase: true }), 1000)
-  }
   sendMessage = () => {
     var messageRef = firebase.database().ref('/messaging/messages/')
     var chatRef = firebase.database().ref('/messaging/lastChats/')
+    var chatNotRef = firebase.database().ref('/messaging/notifications/')
     var theKey = chatRef.push().key
     var myUidKey = this.state.myUserId.slice(-10);
     var otherUidKey = this.state.otheUserId.slice(-10);
@@ -255,6 +253,8 @@ class Messages extends Component {
       messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
       messageRef.child(this.state.otheUserId).child(otherUserMesoId).child(theKey).set(theMessage)
       chatRef.child(this.state.myUserId).child(mesoId).update(myChat)
+      chatNotRef.child(this.state.otheUserId).child('messages').child(otherUserMesoId).set(new Date().getTime())
+      chatNotRef.child(this.state.otheUserId).child('allNots').set(new Date().getTime())
       chatRef.child(this.state.otheUserId).child(otherUserMesoId).update(otherUserChat, (error) => {
         if (error) { this.notify('Error sending message') }
         else {
@@ -306,9 +306,9 @@ class Messages extends Component {
                 return (
                   <div key={index}>
                     {showTime ? <div className={styles.postTimeDiv}><p className={styles.postP}>{postDate}</p></div> : null}
-                    {item.senderID !== this.state.myUserId ? <div className={styles.chatItenDiv}><div className={styles.imgDiv}>
+                    {item.senderID !== this.state.myUserId ? <div className={styles.chatItenDiv}>{/*<div className={styles.imgDiv}>
                       <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={30} width={30} objectFit='fit' />
-                    </div>
+                    </div>*/}
                       <div className={styles.theMessageDiv}>
                         {item.status === 'picks' ? <MessagesGames status='otherUser' myPicks={item.thePicks} pickDetails={item.pickDetails} /> : null}
                         <p className={styles.mesoP}>{item.message}</p>
@@ -320,15 +320,15 @@ class Messages extends Component {
                         <div className={styles.chatItenDiv2}>
                           <div className={styles.theMessageDiv2}>
                             {item.status === 'picks' ? <MessagesGames status='me' myPicks={item.thePicks} pickDetails={item.pickDetails} /> : null}
-                            <p className={styles.mesoP} style={{ marginRight: item.message.length <= 3 ? 30 : null }}>{item.message}</p>
+                            <p className={styles.mesoP} style={{ marginRight: item.message.length <= 3 ? 30 : null, color: '#fff' }}>{item.message}</p>
                             <div className={styles.timeDiv2}>
                               <p className={styles.timeP2}>{theMessageTime}</p>
                               <IoCheckmarkDoneSharp color={isItSeen ? '#df5959ff' : null} />
                             </div>
                           </div>
-                          <div className={styles.imgDiv2}>
+                          {/*<div className={styles.imgDiv2}>
                             <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={30} width={30} objectFit='fit' />
-                          </div>
+                          </div>*/}
                         </div></div>}
                   </div>)
               })}

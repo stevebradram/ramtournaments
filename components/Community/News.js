@@ -29,14 +29,14 @@ class News extends Component {
                 const video= data.val().video
                 const thumbnail= data.val().thumbnail
                 const id =  data.val().id
-                console.log("thumbnail", thumbnail)
+                //console.log("thumbnail", thumbnail)
                 array1={
                     name: name, video: video, id:id, title:title, thumbnail:thumbnail
                 }
                 array2.push(array1)
                 if(theCount===i){
                   array2=array2.sort(function(a, b){return b.id - a.id})
-                  console.log('rrrrra',array2)
+                  //console.log('rrrrra',array2)
                   this.setState({
                     videoArray:array2
                    })
@@ -44,13 +44,13 @@ class News extends Component {
 
             })
           })
-          console.log('items', array2)
+          //console.log('items', array2)
         } catch (error) {
           
         }
       }
       startvideo=(id)=>{
-        console.log("id", id)
+        //console.log("id", id)
         this.setState({
             currentId:id
         })

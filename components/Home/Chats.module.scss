@@ -17,10 +17,7 @@ $blackish:#292f51;
     right:0;top: 0;
     margin: 100px 80px 100px 80px;
 }
-.container h2{
-   // margin: 10px 5px 10px 15px;
-    //border-bottom: 1px solid #eee;
-   // padding: 5px 5px 5px 1px;
+.headerDiv h2{
     color: $blackish;
     font-size: 20px;
 }
@@ -178,4 +175,23 @@ $blackish:#292f51;
     font-weight: 500;
     color: $blackish;
     font-style: italic;
+}
+@media all and (max-width: 450px) {
+.container{
+    height: 100vh;
+    width: 100%;
+    border-radius: 0px;
+    margin: 0px 0px 0px 0px;
+}
+.headerDiv{
+    height: 70px;
+    font-size: 50px;
+}
+.headerDiv h2{
+    color: $blackish;
+    font-size: 24px;
+}
+.backIc{
+    font-size: 28px;
+}
 }

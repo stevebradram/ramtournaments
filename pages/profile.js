@@ -17,12 +17,12 @@ class profile extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 userId = user.uid
-                console.log('the idddd', userId)
+                //console.log('the idddd', userId)
                 if (user.uid === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3' || user.uid === 'zZTNto5p3XVSLYeovAwWXHjvkN43' || user.uid === 'vKBbDsyLvqZQR1UR39XIJQPwwgq1' || user.uid === 'qXeqfrI5VNV7bPMkrzl0QsySmoi2') {
                     this.setState({ isAdmin: true })
                     var theRef = 'users/' + userId + '/userData/'
                     flocksDataRef.child(theRef).once('value', dataSnapshot => {
-                        console.log('dataSnapshot', dataSnapshot.val())
+                        //console.log('dataSnapshot', dataSnapshot.val())
                         this.setState({ name: dataSnapshot.val().name, email: dataSnapshot.val().email,phoneNo: dataSnapshot.val().phoneNo })
                     })
                 }
@@ -34,7 +34,7 @@ class profile extends Component {
         firebase.auth().signOut().then(()=>{
             this.showProgressBar()
         },(error)=>{
-            console.error('Sign Out Error', error);
+            //console.error('Sign Out Error', error);
         });
     }
     showProgressBar = () => {
@@ -59,7 +59,7 @@ class profile extends Component {
         var theQuery = {id:'123456',name: 'John Doe Mall', category: 'Malls',Location:'Nairobi'};
         //theQuery = JSON.stringify(theQuery);
         const response = await axios.post(apiEndpoint, theQuery);
-        console.log('response',response.data.message)
+        //console.log('response',response.data.message)
         return
     }*/
     render() {

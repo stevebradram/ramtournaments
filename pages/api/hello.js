@@ -11,18 +11,18 @@ export default  async (req, res)=>{
    var firstEventTime=splitQuery[splitQuery.length-2]
    var lastEventTime=splitQuery[splitQuery.length-1]
   //dbRef='/'+dbRef+'/'
-  console.log('on dbRef',dbRef)
-  console.log('ufcMatchId',ufcMatchId)
-  console.log('on query',query)
-  console.log('matchTypesNo',matchTypesNo)
-  console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
+  //console.log('on dbRef',dbRef)
+  //console.log('ufcMatchId',ufcMatchId)
+  //console.log('on query',query)
+  //console.log('matchTypesNo',matchTypesNo)
+  //console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
  
 
  var oddsApi="https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
- console.log(oddsApi)
+ //console.log(oddsApi)
  const response = await axios.get(oddsApi)
  var theOddsJson=response.data
- console.log('theOddsJson',theOddsJson)
+ //console.log('theOddsJson',theOddsJson)
  //sortOddsJson2(theOddsJson)
  
   res.status(200).json({ name: "John Doe" });

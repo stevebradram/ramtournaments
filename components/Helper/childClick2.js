@@ -3,12 +3,12 @@ import React, { Component } from 'react'
 class Child extends Component {
   // This is the method we want to trigger from the parent
   runCustomLogic = () => {
-    console.log("Child logic triggered from parent!");
+    //console.log("Child logic triggered from parent!");
     alert("Child method executed!");
   };
 
   componentDidMount() {
-    console.log("Child mounted automatically.");
+    //console.log("Child mounted automatically.");
   }
 
   render() {

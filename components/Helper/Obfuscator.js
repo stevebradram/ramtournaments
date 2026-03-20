@@ -39,7 +39,7 @@ export const Obfuscator = {
 
             return `${p1}${p2}${p3}${p4}`;
         } catch (e) {
-            console.error("Unmask error:", e);
+            //console.error("Unmask error:", e);
             return "";
         }
     },

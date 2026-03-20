@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import styles from './NavBar.module.scss'
-import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose,MdPersonAddAlt  } from "react-icons/md";
+import { MdFlight, MdCardTravel, MdFlightTakeoff, MdClose, MdPersonAddAlt } from "react-icons/md";
 import { FaSearch, FaHome, FaCarAlt, FaFacebook, FaInstagram, FaTwitterSquare, FaYoutubeSquare, FaBars } from "react-icons/fa";
 import { IoPersonCircle } from "react-icons/io5";
 import { AiFillMessage } from "react-icons/ai";
 import { IoMdPersonAdd } from "react-icons/io";
 import { BiMessageRoundedDots } from "react-icons/bi";
+import { BsPersonFillAdd } from "react-icons/bs";
 import Router, { withRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,11 +25,11 @@ import firebase from '../FirebaseClient'
 import CreateLeagueModal from './CreateLeagueModal'
 import Countdown from 'react-countdown';
 import { TypeAnimation } from 'react-type-animation';
-const Messages = dynamic(() => import('../Home/Messages'), { 
+const Messages = dynamic(() => import('../Home/Messages'), {
   ssr: false,
   loading: () => <p>Loading Chat...</p> // Optional loading state
 });
-const AdminMessages = dynamic(() => import('../Home/AdminMessages'), { 
+const AdminMessages = dynamic(() => import('../Home/AdminMessages'), {
   ssr: false,
   loading: () => <p>Loading Chat...</p> // Optional loading state
 });
@@ -41,19 +42,19 @@ class NavBar extends Component {
       openLogInModal: false,
       isLogged: false,
       progress: false,
-      count:0,
-      createLeagueModal:false,
-      showEventCreator:true,
-      theCount:0,
-      isAdmin:false,
-      countdownStart:1741960288732,
-      countdownStop:1742487300000,
-      theNotification:'',
-      showChats:false,
-      showMessages:false,
-      showAdminMessages:false,
-      showFriends:false,
-      theData:'',from:'',count2:0,showAddFriends:false
+      count: 0,
+      createLeagueModal: false,
+      showEventCreator: true,
+      theCount: 0,
+      isAdmin: false,myUserId:'',
+      countdownStart: 1741960288732,
+      countdownStop: 1742487300000,
+      theNotification: '',
+      showChats: false,
+      showMessages: false,
+      showAdminMessages: false,
+      showFriends: false, showMessageNot: false, showFriendsNot: false,
+      theData: '', from: '', count2: 0, showAddFriends: false
     }
   }
   onScroll = () => {
@@ -68,84 +69,100 @@ class NavBar extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.onScroll, false);
     this.checkAuth()
-    
-    console.log('the time 001',new Date().getTime())
-    console.log('the time 0025999',new Date('2025-01-26T20:00:00Z').getTime())
+
+    //console.log('the time 001', new Date().getTime())
+    //console.log('the time 0025999', new Date('2025-01-26T20:00:00Z').getTime())
 
     var linkInfo = window.location.href?.split("/");
-    linkInfo=linkInfo.pop()
-    if(linkInfo.length>15){this.setState({showEventCreator:false})}
-    console.log('linkInfo naaav',linkInfo)
+    linkInfo = linkInfo.pop()
+    if (linkInfo.length > 15) { this.setState({ showEventCreator: false }) }
+    //console.log('linkInfo naaav', linkInfo)
     this.getData()
   }
 
-  getData=()=>{
+  getData = () => {
     var messageRef = firebase.database().ref('/notifications/message/')
     messageRef.once('value', dataSnapshot => {
-    this.setState({theNotification:dataSnapshot.val()})
-    console.log('theNotification',dataSnapshot.val())
+      this.setState({ theNotification: dataSnapshot.val() })
+      //console.log('theNotification', dataSnapshot.val())
+
     })
   }
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onScroll, false);
-    // window.removeAllListeners("scroll");
+    if (this.state.myUserId) {
+    var allNotsRef = firebase.database().ref('/messaging/notifications/'+this.state.myUserId+ '/allNots/')
+    allNotsRef.off();}
   }
-  getUserInfo=(id)=>{
-    var userInfoDb=firebase.database().ref('/users/'+id)
-    userInfoDb.once('value',dataSnapshot=>{
-      var theUserInfo=dataSnapshot.val()
-      var flockName=theUserInfo.flockName
-      var profilePhoto=theUserInfo.profilePhoto
-      if(!flockName){localStorage.set('ramDetails', 'false')}
-      else{localStorage.set('ramDetails', 'true')}
-      if(profilePhoto){localStorage.set('profilePhoto', profilePhoto)}
-      else{localStorage.set('profilePhoto', 'false')}
-      console.log('flockName',flockName)
-      var teamName=theUserInfo.teamName
-      var fullName=theUserInfo.name
-      var userDetails=flockName+'::::'+teamName+'::::'+fullName
+  getUserInfo = (id) => {
+    var userInfoDb = firebase.database().ref('/users/' + id)
+    userInfoDb.once('value', dataSnapshot => {
+      var theUserInfo = dataSnapshot.val()
+      var flockName = theUserInfo.flockName
+      var profilePhoto = theUserInfo.profilePhoto
+      if (!flockName) { localStorage.set('ramDetails', 'false') }
+      else { localStorage.set('ramDetails', 'true') }
+      if (profilePhoto) { localStorage.set('profilePhoto', profilePhoto) }
+      else { localStorage.set('profilePhoto', 'false') }
+      //console.log('flockName', flockName)
+      var teamName = theUserInfo.teamName
+      var fullName = theUserInfo.name
+      var userDetails = flockName + '::::' + teamName + '::::' + fullName
       localStorage.set('userDetails', userDetails);
-     console.log('dataSnapshot',theUserInfo)
+      //console.log('dataSnapshot', theUserInfo)
     })
   }
   checkAuth = () => {
     var isLogged = localStorage.get('loggedIn');
-    if (isLogged === 'true') { this.setState({ isLogged: true,openLogInModal:false }) }
+    if (isLogged === 'true') { this.setState({ isLogged: true, openLogInModal: false }) }
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        var userId=user.uid
-        var emailVerified=user.emailVerified
+        var userId = user.uid
+        var emailVerified = user.emailVerified
         this.getUserInfo(userId)
-        console.log('the user info',user)
-         this.setState({isAdmin:true})
-        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
-          this.setState({isAdmin:true})
-         }
-        this.setState({ isLogged: true,openLogInModal:false })
+        //console.log('the user info', user)
+        this.setState({ isAdmin: true,myUserId:userId})
+        if (user.uid === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3' || user.uid === 'zZTNto5p3XVSLYeovAwWXHjvkN43' || user.uid === 'vKBbDsyLvqZQR1UR39XIJQPwwgq1' || user.uid === 'qXeqfrI5VNV7bPMkrzl0QsySmoi2') {
+          this.setState({ isAdmin: true })
+        }
+        this.setState({ isLogged: true, openLogInModal: false })
         localStorage.set('loggedIn', 'true');
         localStorage.set('userId', userId);
-        if(emailVerified===true){localStorage.set('emailVerified', 'true');}
-        else{localStorage.set('emailVerified', 'false');}
-        var userRef = firebase.database().ref('/users/'+userId+'/userData/lastSeen')
+        if (emailVerified === true) { localStorage.set('emailVerified', 'true'); }
+        else { localStorage.set('emailVerified', 'false'); }
+        var userRef = firebase.database().ref('/users/' + userId + '/userData/lastSeen')
         userRef.set(new Date().getTime())
+        var chatNotRef = firebase.database().ref('/messaging/notifications/' + userId + '/messages/')
+        var friendsNotRef = firebase.database().ref('/messaging/notifications/' + userId + '/friends/')
+        var allNotsRef = firebase.database().ref('/messaging/notifications/' + userId + '/allNots/')
+        chatNotRef.once('value', dataSnapshot => { if (dataSnapshot.exists()) { this.setState({ showMessageNot: true }) } })
+        friendsNotRef.once('value', dataSnapshot => { if (dataSnapshot.exists()){this.setStat}})
       } else {
         this.setState({ isLogged: false })
         localStorage.set('loggedIn', 'false');
       }
     })
   }
+  checkNotifications = () => {
+    var chatNotRef = firebase.database().ref('/messaging/notifications/' + this.state.myUserId + '/messages/')
+    var friendsNotRef = firebase.database().ref('/messaging/notifications/' + this.state.myUserId + '/friends/')
+    chatNotRef.once('value', dataSnapshot =>{if (dataSnapshot.exists()){this.setState({ showMessageNot: true})}else{this.setState({showMessageNot:false})}})
+    friendsNotRef.once('value', dataSnapshot =>{if(dataSnapshot.exists()){this.setState({showFriendsNot:true})}else{this.setState({showFriendsNot:false})}})
+
+  }
   signOut = async () => {
-    this.setState({progress:true})
-    firebase.auth().signOut().then(()=>{
-      console.log('Signed Out');
+    this.setState({ progress: true })
+    firebase.auth().signOut().then(() => {
+      //console.log('Signed Out');
       localStorage.set('loggedIn', 'false');
-      this.setState({progress:false})
+      this.setState({ progress: false })
       Router.push('/')
-    }, function(error) {
-      this.setState({progress:false})
-      console.error('Sign Out Error', error);
-    });}
+    }, function (error) {
+      this.setState({ progress: false })
+      //console.error('Sign Out Error', error);
+    });
+  }
   searchChange = (event) => {
     this.setState({
       queryName: event.target.value
@@ -192,46 +209,47 @@ class NavBar extends Component {
   };
   /* handleChildClick = () => {
     this.setState({openLogInModal:false})
-    console.log('openLogInModal')
+    //console.log('openLogInModal')
   };*/
   handleChildClick = (title) => {
-    console.log('aziiiza')
-    this.setState({ count: this.state.count + 1});
-    if(title==='closeLogInModal'){
-    this.setState({openLogInModal: false})
+    //console.log('aziiiza')
+    this.setState({ count: this.state.count + 1 });
+    if (title === 'closeLogInModal') {
+      this.setState({ openLogInModal: false })
     }
-    if(title==='closeLeagueModal'){
-      this.setState({createLeagueModal:false})
+    if (title === 'closeLeagueModal') {
+      this.setState({ createLeagueModal: false })
     }
-    
+
   };
-    handleChatsClick = (from,text,theData) => {
-      this.setState({showAdminMessages:false,showMessages:false,showChats:false,showFriends:false})
-      console.log('theMeso',from,text)
-     // return
-     this.setState({from})
-       this.setState({ theCount: this.state.theCount + 1});
-      if(from==='fromChats'){
-        if(text==='close'){this.setState({ showMessages:false,showChats:false});}
-        else if(text==='openFriends'){this.setState({ showMessages:false,showChats:false,showFriends:true});}
-        else{this.setState({ showMessages:true,showChats:false,theData});}
-      }
-       if(from==='fromChatsToAdmin'){
-       // openAdminMessages
-        if(text==='close'){this.setState({ showAdminMessages:false,showChats:false});}
-        else{
-          console.log('goiing to admiiiiiiiiiiiiiiin')
-          this.setState({ showAdminMessages:true,showChats:false,theData});}
-      }
-       if(from==='fromFriends'){
-        if(text==='close'){this.setState({ showMessages:false,showChats:true,showFriends:false});}
-        else{this.setState({ showMessages:true,showChats:false,showFriends:false,theData});}
-      }
-      if(from==='fromMessages'){
-        this.setState({ showMessages:false,showChats:true});
-      }
-      if(from==='fromAddFriends'){this.setState({ showMessages:false,showChats:false,showFriends:false,showAddFriends:false});}
+  handleChatsClick = (from, text, theData) => {
+    this.setState({ showAdminMessages: false, showMessages: false, showChats: false, showFriends: false })
+    //console.log('theMeso', from, text)
+    // return
+    this.setState({ from })
+    this.setState({ theCount: this.state.theCount + 1 });
+    if (from === 'fromChats') {
+      if (text === 'close') { this.setState({ showMessages: false, showChats: false }); }
+      else if (text === 'openFriends') { this.setState({ showMessages: false, showChats: false, showFriends: true }); }
+      else { this.setState({ showMessages: true, showChats: false, theData }); }
     }
+    if (from === 'fromChatsToAdmin') {
+      // openAdminMessages
+      if (text === 'close') { this.setState({ showAdminMessages: false, showChats: false }); }
+      else {
+        //console.log('goiing to admiiiiiiiiiiiiiiin')
+        this.setState({ showAdminMessages: true, showChats: false, theData });
+      }
+    }
+    if (from === 'fromFriends') {
+      if (text === 'close') { this.setState({ showMessages: false, showChats: true, showFriends: false }); }
+      else { this.setState({ showMessages: true, showChats: false, showFriends: false, theData }); }
+    }
+    if (from === 'fromMessages') {
+      this.setState({ showMessages: false, showChats: true });
+    }
+    if (from === 'fromAddFriends') { this.setState({ showMessages: false, showChats: false, showFriends: false, showAddFriends: false }); }
+  }
   theTypeAnimation = (text1, text2) => {
     return (
       <TypeAnimation
@@ -249,7 +267,7 @@ class NavBar extends Component {
     )
   }
   render() {
-    var theNotification=this.state.theNotification
+    var theNotification = this.state.theNotification
     return (
       <>
         <div className={styles.navDiv} id={styles.navDiv}>
@@ -289,22 +307,22 @@ class NavBar extends Component {
                 </div>
               </div>
               <div className={styles.logDiv}>
-                 {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({showAddFriends:true,showMessages:false,showChats:false})}>
-                <div className={styles.logDmesoDiv2}>
-                  <p>1</p>
-                 <MdPersonAddAlt   className={styles.mesoIc}/>
-                </div></div> :null}
-               {this.state.isAdmin?<div className={styles.logDmesoDiv} onClick={()=>this.setState({showMessages:false,showChats:true})}>
-                <div className={styles.logDmesoDiv2}>
-                  <p>1</p>
-                 <BiMessageRoundedDots className={styles.mesoIc}/>
-                </div></div> :null}
-                <div className={styles.logDmesoDiv2} style={{marginRight:10,cursor:'pointer'}} onClick={()=>Router.push('/profile')}>
-                 <IoPersonCircle size={40}  className={styles.mesoIc} style={{color:'#9f9fb6ff'}}/>
+                 <div className={styles.logDmesoDiv} onClick={() => this.setState({ showAddFriends: true, showMessages: false, showChats: false })}>
+                  <div className={styles.logDmesoDiv2}>
+                    {this.state.showFriendsNot ? <p>1</p> : null}
+                    <BsPersonFillAdd size={24} className={styles.mesoIc} />
+                  </div></div>
+                  <div className={styles.logDmesoDiv} onClick={() => this.setState({ showMessages: false, showChats: true })}>
+                  <div className={styles.logDmesoDiv2}>
+                    {this.state.showMessageNot ? <p>1</p> : null}
+                    <AiFillMessage className={styles.mesoIc} />
+                  </div></div>
+                <div className={styles.logDmesoDiv2} style={{ marginRight: 10, cursor: 'pointer' }} onClick={() => Router.push('/profile')}>
+                  <IoPersonCircle size={40} className={styles.mesoIc} style={{ color: '#9f9fb6ff' }} />
                 </div>
                 {/*<Link href="/" className={styles.talkDiv}>LOG IN</Link>
                 <Link href="/" className={styles.talkDiv1}>SIGN UP</Link>*/}
-                {this.state.isLogged ? <button className={styles.logOutBtn} onClick={() =>this.signOut()}>LOG OUT</button> :
+                {this.state.isLogged ? <button className={styles.logOutBtn} onClick={() => this.signOut()}>LOG OUT</button> :
                   <button className={styles.talkDiv1} onClick={() => this.setState({ openLogInModal: !this.state.openLogInModal })}>LOG IN</button>}
               </div>
 
@@ -320,20 +338,20 @@ class NavBar extends Component {
             <Link href="/" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>HOME</Link>
             {/*<Link href="/about" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>ABOUT US</Link>*/}
             <Link href="/events" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>EVENT SCORES</Link>
-           {/*} <Link href="/leaderboard" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>LEADERBOARD</Link>*/}
+            {/*} <Link href="/leaderboard" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>LEADERBOARD</Link>*/}
             <Link href="/community" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>COMMUNITY</Link>
             {/*<Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv2}>LOG IN</Link>
                 <Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv3}>SIGN UP</Link>*/}
-            
-            {this.state.isLogged ?<Link href="/"  onClick={() =>this.signOut()}  className={styles.logOutL}>LOG OUT</Link>:
-            <Link href="/" onClick={() =>this.setState({ openLogInModal: !this.state.openLogInModal })} className={styles.talkDiv3}>LOG IN</Link>}
-          
+
+            {this.state.isLogged ? <Link href="/" onClick={() => this.signOut()} className={styles.logOutL}>LOG OUT</Link> :
+              <Link href="/" onClick={() => this.setState({ openLogInModal: !this.state.openLogInModal })} className={styles.talkDiv3}>LOG IN</Link>}
+
           </div> : null}
           <ToastContainer />
-           {this.state.isLogged&&this.state.showEventCreator?<div className={styles.flockDiv} >
-           <div className={styles.flockDiv1} >
-            <p className={styles.flockDivP1} onClick={()=>this.setState({createLeagueModal:true})}>Create Flock & invite your friends</p>
-            {/*<p className={styles.flockDivP2}>Invite Your Friends</p>*/} 
+          {this.state.isLogged && this.state.showEventCreator ? <div className={styles.flockDiv} >
+            <div className={styles.flockDiv1} >
+              <p className={styles.flockDivP1} onClick={() => this.setState({ createLeagueModal: true })}>Create Flock & invite your friends</p>
+              {/*<p className={styles.flockDivP2}>Invite Your Friends</p>*/}
             </div>
             <div className={styles.flockDiv2}>
               {/*<p>UFC Summer Series…starting on May 10th for 3 events in May and June!</p>*/}
@@ -350,23 +368,23 @@ class NavBar extends Component {
       className={styles.typeP}
       repeat={Infinity}
     />*/}
-    {theNotification.length>1?this.theTypeAnimation('Events News:', theNotification):null}
+              {theNotification.length > 1 ? this.theTypeAnimation('Events News:', theNotification) : null}
             </div>
-           </div>:null}
-           
-           {new Date().getTime()>this.state.countdownStart&&new Date().getTime()<this.state.countdownStop?<div className={styles.flockDiv} style={{backgroundColor:'#fff'}}><div className={styles.theCountDiv}><p>March Madness Countdown</p><Countdown date={this.state.countdownStop} className={styles.theCount} /></div></div>:null}
-           
+          </div> : null}
+
+          {new Date().getTime() > this.state.countdownStart && new Date().getTime() < this.state.countdownStop ? <div className={styles.flockDiv} style={{ backgroundColor: '#fff' }}><div className={styles.theCountDiv}><p>March Madness Countdown</p><Countdown date={this.state.countdownStop} className={styles.theCount} /></div></div> : null}
+
         </div>
         {this.state.openLogInModal ? <div className={styles.logInModal} onClick={() => this.setState({ openLogInModal: false })}>
-          <LogIn onClick={()=>this.handleChildClick}/>
+          <LogIn onClick={() => this.handleChildClick} />
         </div> : null}
         {this.state.progress ? <ProgressBar message='Logging Out' /> : null}
-        {this.state.isLogged&&this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick}/></div> : null}
-        {this.state.isLogged&&this.state.showChats?<div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
-        {this.state.isLogged&&this.state.showMessages?<div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><Messages onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from}/></div>:null}
-         {this.state.isLogged&&this.state.showAdminMessages?<div className={styles.chatModal} onClick={() => this.setState({ showAdminMessages: false })}><AdminMessages onClick={this.handleChatsClick}/></div>:null}
-          {this.state.isLogged&&this.state.showFriends?<div className={styles.chatModal} onClick={() => this.setState({ showFriends: false })}><Friends onClick={this.handleChatsClick}/></div>:null}
-          {this.state.isLogged&&this.state.showAddFriends?<div className={styles.chatModal} onClick={() => this.setState({ showAddFriends: false })}><AddFriends onClick={this.handleChatsClick}/></div>:null}
+        {this.state.isLogged && this.state.createLeagueModal ? <div className={styles.createLeagueModal} onClick={e => e.currentTarget === e.target && this.setState({ createLeagueModal: false })} ><CreateLeagueModal onClick={this.handleChildClick} /></div> : null}
+        {this.state.isLogged && this.state.showChats ? <div className={styles.chatModal} onClick={() => this.setState({ showChats: false })}><Chats onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from} /></div> : null}
+        {this.state.isLogged && this.state.showMessages ? <div className={styles.chatModal} onClick={() => this.setState({ showMessages: false })}><Messages onClick={this.handleChatsClick} theData={this.state.theData} from={this.state.from} /></div> : null}
+        {this.state.isLogged && this.state.showAdminMessages ? <div className={styles.chatModal} onClick={() => this.setState({ showAdminMessages: false })}><AdminMessages onClick={this.handleChatsClick} /></div> : null}
+        {this.state.isLogged && this.state.showFriends ? <div className={styles.chatModal} onClick={() => this.setState({ showFriends: false })}><Friends onClick={this.handleChatsClick} /></div> : null}
+        {this.state.isLogged && this.state.showAddFriends ? <div className={styles.chatModal} onClick={() => this.setState({ showAddFriends: false })}><AddFriends onClick={this.handleChatsClick} /></div> : null}
       </>
     )
   }

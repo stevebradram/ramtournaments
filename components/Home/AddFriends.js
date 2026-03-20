@@ -7,7 +7,6 @@ import { AiFillMessage } from "react-icons/ai";
 import firebase from '../FirebaseClient'
 import { Obfuscator } from '../Helper/Obfuscator';
 import { ToastContainer, toast } from 'react-toastify';
-var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 class Friends extends Component {
   state = {friendsListArr: [],friendsListAvailable:false, myUserId: '', isLogged: '',showAddFrienModal:false,email:'',emailErr:''}
 
@@ -20,7 +19,7 @@ class Friends extends Component {
       if (user) {
         var userId = user.uid
         var safeId = Obfuscator.mask(userId);
-        console.log('myyyyyyyyyyyyyyyyyyy user id',safeId, userId)
+        //console.log('myyyyyyyyyyyyyyyyyyy user id',safeId, userId)
         this.setState({ myUserId: userId, isLogged: true })
         this.getData(userId)
       } else {
@@ -41,8 +40,8 @@ class Friends extends Component {
          //var realID = Obfuscator.unmask(safeId);
          var safeEmail = Obfuscator.maskEmailForKey(theEM);
          //var realEmail = Obfuscator.unmaskEmailFromKey(safeEmail);
-        // console.log('safe details',safeId,safeEmail)
-        // console.log('myyyyyyyyyyyyyyyyyyy email',safeEmail,realEmail)
+        //console.log('safe details',safeId,safeEmail)
+        //console.log('myyyyyyyyyyyyyyyyyyy email',safeEmail,realEmail)
          // uid=this.maskUID(uid)
           //var safeId = Obfuscator.mask(data.key);
           //var theMail=data.val().userData.email
@@ -53,15 +52,15 @@ class Friends extends Component {
           //var item={[safeEmail]:safeId}
           emailsList[safeEmail]=safeId
           if(theNo===i){
-            console.log('the cont',emailsList.length,theNo)
-            console.log('alllllllllll',emailsList)
+            //console.log('the cont',emailsList.length,theNo)
+            //console.log('alllllllllll',emailsList)
             emailsRef.update(emailsList)
           }
         })
       })
       }
   getData = (userId) => {
-    console.log('userId', userId)
+    //console.log('userId', userId)
     var safeId = Obfuscator.mask(userId);
     var messageRef = firebase.database().ref('/messaging/friendRequests/' + safeId)
     var userRef = firebase.database().ref('/users/')
@@ -88,12 +87,12 @@ class Friends extends Component {
           else { friendsList['profilePhoto'] = 'N/A' }
           friendsListArr.push(friendsList)
           if (theNo === i) {
-            console.log('friendsListArr', friendsListArr)
+            //console.log('friendsListArr', friendsListArr)
             this.setState({ friendsListArr,friendsListAvailable:true})
           }
         })
         
-        console.log('the uid', theUserId)
+        //console.log('the uid', theUserId)
       })
     }else{
 
@@ -113,7 +112,7 @@ class Friends extends Component {
     });
   }
   closeMessenger = () => {
-    console.log('clicked!')
+    //console.log('clicked!')
     this.props.onClick('fromAddFriends', 'close', 'N/A')
   }
   doNothing = (event) => {
@@ -125,9 +124,10 @@ class Friends extends Component {
   }
   acceptFriendRequest=(item)=>{
      var otherUserId=item.uid
-    console.log('iteeeeem',otherUserId,this.state.myUserId,item,this.state.friendsListArr)
+    //console.log('iteeeeem',otherUserId,this.state.myUserId,item,this.state.friendsListArr)
      var friendsRef = firebase.database().ref('/messaging/friends/')
      var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
+     var friendsNotRef = firebase.database().ref('/messaging/notifications/')
      friendsRef.child(this.state.myUserId).child(otherUserId).set(new Date().getTime())
      friendsRef.child(otherUserId).child(this.state.myUserId).set(new Date().getTime())
      var safeId = Obfuscator.mask(this.state.myUserId);
@@ -135,7 +135,8 @@ class Friends extends Component {
      friendRequestRef.child(safeId).child(otherUserSafeId).set(null,(error) => {
         if (error) { this.notify('An error occured') }
         else {
-         this.notify('Friend added successfully')
+         friendsNotRef.child(this.state.myUserId).child('friends').set(null)
+         friendsNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
          const friendsListArr = this.state.friendsListArr.filter(item => item.uid !== otherUserId);
          this.setState({friendsListArr})
         }})
@@ -143,7 +144,8 @@ class Friends extends Component {
   submitRequest=()=>{
      var emailsRef = firebase.database().ref('/emails/')
      var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
-  var validate = this.validateEmail(this.state.email)
+     var friendsNotRef = firebase.database().ref('/messaging/notifications/')
+     var validate = this.validateEmail(this.state.email)
         if(validate===false){
         this.setState({emailErr:'Please enter a valid email'})
         }else{
@@ -151,9 +153,12 @@ class Friends extends Component {
           emailsRef.child(safeEmail).once('value', dataSnapshot => {
             if(dataSnapshot.exists()){
               var theUid=dataSnapshot.val()
+              var otherUesrIdDeobfs=Obfuscator.unmask(theUid);
               var safeId = Obfuscator.mask(this.state.myUserId);
-              console.log('friend reqqqqq',theUid,safeId)
+              //console.log('friend reqqqqq',theUid,safeId)
               friendRequestRef.child(theUid).child(safeId).set(new Date().getTime())
+              friendsNotRef.child(otherUesrIdDeobfs).child('friends').child(this.state.myUserId).set(new Date().getTime())
+              friendsNotRef.child(otherUesrIdDeobfs).child('allNots').set(new Date().getTime())
               this.notify('Friend request send successfully')
               this.setState({emailErr:'',showAddFrienModal:false})
             }
@@ -193,18 +198,18 @@ class Friends extends Component {
         <div className={styles.chatsCont}>
           {this.state.friendsListAvailable?this.state.friendsListArr.map((item, index) => {
             var theNo = index + 1
-            console.log('is even', this.oddOrEven(theNo))
+            //console.log('is even', this.oddOrEven(theNo))
             var isEvenOdd = this.oddOrEven(theNo)
             //4fabcf
             return (
               <div className={styles.chatItenDiv} key={index} onClick={() => this.acceptFriendRequest(item)}>
                 <div className={styles.imgDiv} style={{ backgroundColor: isEvenOdd === 'even' ? '#4fabcf' : '#5d6779' }}>
-                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={theImg} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
+                  {item.profilePhoto !== 'N/A' ? <Image className={styles.theImg} src={item.profilePhoto} alt={'RAM User'} height={50} width={50} objectFit='fit' /> :
                     <p className={styles.acroP}>{item.acronym}</p>}
                 </div>
                 <div>
                   <div className={styles.nameDiv}>
-                    <p className={styles.nameP}>{item.userName ? item.userName : 'John Keem'}</p>
+                    <p className={styles.nameP}>{item.userName}</p>
                   </div>
                   <p className={styles.mesoP}>Click to add friend</p>
                     <div className={styles.addChat}>

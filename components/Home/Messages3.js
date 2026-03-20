@@ -17,13 +17,13 @@ const Messages3 = () => {
     useEffect(()=>{
       //joinRoom()
 /*socket.on("receive_message",(data)=>{
-    console.log('rrrrrrrrrr 000000',new Date(),data.message,data.socketId)
+    //console.log('rrrrrrrrrr 000000',new Date(),data.message,data.socketId)
   //alert(data.message)
  })*/
   socket.emit('identify', '123456');
 
     socket.on('new_message', (payload) => {
-      console.log("New message received:", payload);
+      //console.log("New message received:", payload);
       setInbox((prev) => [...prev, payload]);
     });
 
@@ -32,15 +32,15 @@ const Messages3 = () => {
     };
     },['123456'])
     const joinRoom=()=>{
-       console.log('room joining')
+       //console.log('room joining')
       setSocketId(new Date().getTime())
-      console.log('socketId',socketId)
+      //console.log('socketId',socketId)
       if(socketId!==""){
       socket.emit("join_room",socketId)
     }
     }
     const sendMessage=()=>{
-      console.log('rrrrrrrrrr 22222')
+      //console.log('rrrrrrrrrr 22222')
       //this.notify("Can't send a message at the moment")
      // socket.emit("send_message",{message:message})
      socket.emit('send_private_message', {
@@ -56,7 +56,7 @@ const Messages3 = () => {
    const inputChange = async (e) => {
             var value = e.target.value
             setMessage(e.target.value)
-            console.log('theId', e.target.value)
+            //console.log('theId', e.target.value)
             //await this.setState({[e.target.id]: value})
   }
     return (

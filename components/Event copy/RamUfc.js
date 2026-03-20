@@ -30,20 +30,20 @@ class RamUfc extends Component {
   
   }
       checkForOddsUpdate=async () => {
-        console.log('checking daaaaaaaaaaata 111')
+        //console.log('checking daaaaaaaaaaata 111')
       try {
         var theLink='theEvents::ramUfc::'+this.state.theEventKey
        
         var theQuery=encodeURIComponent(theLink) 
-        console.log('checking daaaaaaaaaaata 222',theQuery)
+        //console.log('checking daaaaaaaaaaata 222',theQuery)
         await axios.get("http://localhost:4000/updateUfcOdds?term="+theQuery)
           .then((res) => {
             var theItems = res.data.result
-            console.log('theItems',theItems)
+            //console.log('theItems',theItems)
             
           })
           } catch (error) {
-            console.log('error',error)
+            //console.log('error',error)
           }
       }
   getRanking = async() => {
@@ -87,7 +87,7 @@ class RamUfc extends Component {
                   var theWinner=eventVal['winner']
                   var p1Points=eventVal['p1Points']
                   var p2Points=eventVal['p2Points']
-                 // console.log('theWinner',eventsArr.length)
+                 //console.log('theWinner',eventsArr.length)
                   //console.log('p1Points',p1Points)
                   //console.log('p2Points',p2Points)
                   if(key===key2){
@@ -115,14 +115,14 @@ class RamUfc extends Component {
                   theItem[userId]=pointsSum
                   //sumtotalArr.push(theItem)
                   sumtotalArr[userId]=pointsSum
-                  console.log('userArr 2222',theItem)
+                  //console.log('userArr 2222',theItem)
                  
                 }
               }
               if(betsCount===i){
-                console.log('sumtotalArr',sumtotalArr)
+                //console.log('sumtotalArr',sumtotalArr)
                 scoreBoardDb.set(sumtotalArr)
-                console.log('hureeeeeeeeeeeeeeeeeeeeeee')
+                //console.log('hureeeeeeeeeeeeeeeeeeeeeee')
               }
             })
           })
@@ -279,7 +279,7 @@ getUfcMatches=async(userId)=>{
         this.setState({ramUfcEarlyPrelimsArray:array1,allMatches:[...array1]})
         //var matches={[this.state.theEventKey+'ramUfcEarlyPrelimsArray']:array1}
         //allMatches.push(matches)
-        ////console.log('allMatchesssssssssss',allMatches)
+        //console.log('allMatchesssssssssss',allMatches)
        }
       }
     }else{
@@ -469,7 +469,7 @@ getUfcItems=async(name)=>{
       if(event==='marchMadness'){selectedMarchMadnesArray=theInfo}
       if(event==='nfl'){selectedNflArray=theInfo}
       //hapa ndo nimefika
-      ////console.log('the event eventSelection',theInfo.eventSelection) 
+      //console.log('the event eventSelection',theInfo.eventSelection) 
       var currentRank=''
       if(theInfo.currentRank===false){currentRank='N/A'}else{currentRank=theInfo.currentRank}
       this.setState({flockName:theInfo.flockName,teamName:theInfo.teamName,currentScore:theInfo.currentScore,
@@ -482,15 +482,15 @@ getUfcItems=async(name)=>{
   
       this.setState({theRamUfc:theRamUfc,theMarchMadness,theNfl,theFifa})
     this.setState({ theRamUfc: theRamUfc }, () => {
-      ////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
+      //console.log('theRamUfc 99999999999999',this.state.theRamUfc);
     }); 
-    ////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
+    //console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
     var userInfoDb=firebase.database().ref('/users/'+userId).child('upcomingEvents')
     if(theRamUfc==='selected'){
       this.setState({dataAvailable:true,clickHere1:'CLICK HERE TO EDIT YOUR PICKS',clickHere2:'CLICK HERE TO EDIT THE GAME'})
     userInfoDb.child('ramUfc').once('value',dataSnapshot=>{
       var theInfo=dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo.eventSelection) 
+      //console.log('the event eventSelection',theInfo.eventSelection) 
       var currentRank=''
       if(theInfo.currentRank===false){currentRank='N/A'}else{currentRank=theInfo.currentRank}
       this.setState({flockName:theInfo.flockName,teamName:theInfo.teamName,currentScore:theInfo.currentScore,
@@ -505,26 +505,26 @@ getUfcItems=async(name)=>{
     var i=0, theAmount=[]
    theItems.map((item,index)=>{
     var amount=0
-    ////console.log('kufinish kumalo 1')
+    //console.log('kufinish kumalo 1')
     i++
     if(item.status1==='played'){
-      ////console.log('kufinish kumalo 2',item.bet,item.winner)
+      //console.log('kufinish kumalo 2',item.bet,item.winner)
       if(item.bet==='player1'&&item.winner==='player1'){
         amount=Number(item.p1Points)
         theAmount.push(amount)
-        ////console.log('kufinish kumalo 3')
+        //console.log('kufinish kumalo 3')
       }
       if(item.bet==='player2'&&item.winner==='player2'){
         amount=Number(item.p2Points)
         theAmount.push(amount)
-        ////console.log('kufinish kumalo 4')
+        //console.log('kufinish kumalo 4')
       }
      
-      ////console.log('kufinish kumalo 4B',i,theItems.length)
+      //console.log('kufinish kumalo 4B',i,theItems.length)
       if(i===theItems.length){
-        ////console.log('kufinish kumalo 5')
+        //console.log('kufinish kumalo 5')
         const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-        ////console.log('the current Score',sum)
+        //console.log('the current Score',sum)
         this.setState({currentScore:sum.toFixed(2)})
       }
     }
@@ -534,7 +534,7 @@ getUfcItems=async(name)=>{
 
   hideModal = () => {
     this.setState({opendetailsModal:false})
-    ////console.log('Button clicked!');
+    //console.log('Button clicked!');
   };
   openTheModal= () => {
     if(this.state.userLoggedIn===true){

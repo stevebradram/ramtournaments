@@ -21,18 +21,18 @@ class DetailsModal extends Component {
   }
   inputChange = async (e) => {
     var value = e.target.value
-    console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
     value=value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s\s+/g, ' ');
     await this.setState({[e.target.id]: value})
       if (e.target.id ==='flockName'){
-        console.log('hapa tu',e.target.id)
+        //console.log('hapa tu',e.target.id)
         if (this.state.flockName.length>=3){this.setState({flockNameErr:''})}
       }
   }
   checkAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
      if (user) {
-      console.log('userrrrrrrr',user)
+      //console.log('userrrrrrrr',user)
        var userId=user.uid
        this.getUserDetails(userId)
        this.setState({userId})
@@ -48,11 +48,11 @@ class DetailsModal extends Component {
    var creatorEmail=dataSnapshot.val().email
    var creatorPhoneNo=dataSnapshot.val().phoneNo
    this.setState({creatorName,creatorEmail,creatorPhoneNo})
-   console.log('creatorName',creatorName)
+   //console.log('creatorName',creatorName)
   })
  }
  checkEvents=()=>{
-  console.log('theEventsArr 0001')
+  //console.log('theEventsArr 0001')
   if(this.state.eventsArrModal===true){this.setState({eventsArrModal:false});return}
   var eventsDbRef =firebase.database().ref('/theEvents/eventsIds/')
   var currentTimeInMillis=new Date().getTime()
@@ -74,7 +74,7 @@ class DetailsModal extends Component {
       }
     }
     if(count===i){
-      console.log('theEventsArr',theEventsArr,theEventsArr.length)
+      //console.log('theEventsArr',theEventsArr,theEventsArr.length)
       //eventsArrModal
     }
     })
@@ -84,13 +84,13 @@ class DetailsModal extends Component {
   return str.match(new RegExp('.{1,' + length + '}', 'g'));
 }
   submitDetails=()=>{
-    console.log('sport type',this.state.sportType)
+    //console.log('sport type',this.state.sportType)
     
     //return
     var theSplitNo=Math.ceil(this.state.userId.length/4)
     var userIdChunk=this.chunkString(this.state.userId,theSplitNo)
     var userIdLink=userIdChunk[2]+userIdChunk[0]+userIdChunk[1]+userIdChunk[3]
-    console.log('chunkString',this.chunkString(this.state.userId,theSplitNo),userIdLink)
+    //console.log('chunkString',this.chunkString(this.state.userId,theSplitNo),userIdLink)
     this.showProgressBar(3000)
     if (navigator.onLine===false) {
       this.notify('No internet! please check your internet connection')
@@ -99,8 +99,8 @@ class DetailsModal extends Component {
     if (!this.state.buttonClick) return
     this.buttonClickStat(2000)
     if(!this.state.userId)return
-    console.log('looooooooobo 111')
-    console.log('looooooooobo',this.state.leagueName.length,this.state.flockName.length)
+    //console.log('looooooooobo 111')
+    //console.log('looooooooobo',this.state.leagueName.length,this.state.flockName.length)
     var uniqueFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId+'/unique')
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId)
     var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.leagueId+'/admin')
@@ -127,7 +127,7 @@ class DetailsModal extends Component {
       generalDb.child('users/'+this.state.userId+'/flockData/flockNames/'+this.state.leagueId)
       .once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {
-          console.log('the flock data exists',dataSnapshot.val().creator)
+          //console.log('the flock data exists',dataSnapshot.val().creator)
         var theData=dataSnapshot.val()
         var creator=theData.creator
         if(creator===this.state.userId){
@@ -208,7 +208,7 @@ class DetailsModal extends Component {
         if (!error){
           
           this.setState({theLink,createdEvent:true})
-          console.log('theLink',this.state.leagueId,theLink)
+          //console.log('theLink',this.state.leagueId,theLink)
           this.notify('Event Created Succesfully')
           //this.props.onClick('closeLeagueModal')
         }

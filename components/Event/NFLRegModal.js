@@ -29,7 +29,7 @@ class NCAAModal extends Component {
     if (this.props.eventToNFLModal === 'week2Round') { lastPostTime = localStorage.get('week2RoundEditTime'), theItems = localStorage.get('week2RoundEdit') }
     if (this.props.eventToNFLModal === 'week3Round') { lastPostTime = localStorage.get('week3RoundEditTime'), theItems = localStorage.get('week3RoundEdit') }
     if (this.props.eventToNFLModal === 'week4Round') { lastPostTime = localStorage.get('week4RoundEditTime'), theItems = localStorage.get('week4RoundEdit') }
-    ////console.log('lastPostTime',lastPostTime)
+    //console.log('lastPostTime',lastPostTime)
     //return
     if (!lastPostTime || lastPostTime === null || lastPostTime === undefined) {
       incomingData = this.props.itemsToNFLModal.map(item => JSON.parse(JSON.stringify(item)));
@@ -53,7 +53,7 @@ class NCAAModal extends Component {
     //return
     //console.log('incomingData 96969696',incomingData)
     //return
-    ////console.log('the info',this.props.itemsToNFLModal,this.props.eventToNFLModal,this.props.theEventKey)
+    //console.log('the info',this.props.itemsToNFLModal,this.props.eventToNFLModal,this.props.theEventKey)
     /* //console.log('this.props.itemsToNFLModal',this.props.itemsToNFLModal)
      //console.log('this.props.eventToNFLModal',this.props.eventToNFLModal)
      //console.log('this.props.theEventKey',this.props.theEventKey)
@@ -83,7 +83,7 @@ class NCAAModal extends Component {
           if (this.state.currentSelection === 'week2Round') { week2RoundEdit = incomingData, this.setState({ week2RoundEdit }) }
           if (this.state.currentSelection === 'week3Round') { week3RoundEdit = incomingData, this.setState({ week3RoundEdit }) }
           if (this.state.currentSelection === 'week4Round') { week4RoundEdit = incomingData, this.setState({ week4RoundEdit }) }
-          // console.log('modal timeeeeeeee',firstTime,incomingData)
+          //console.log('modal timeeeeeeee',firstTime,incomingData)
           //if(this.props.eventAlreadyFilled===true){this.setState({isItSubmit:true})}
         }
       })
@@ -132,7 +132,7 @@ class NCAAModal extends Component {
    sortOddsJson=async(theOddsJson,idStart,menu,incomingData)=>{
    
     try {
-      ////console.log('theOddsJson',theOddsJson)
+      //console.log('theOddsJson',theOddsJson)
       //return
       var jCount=0
     theOddsJson.map((item1,index)=>{
@@ -144,25 +144,25 @@ class NCAAModal extends Component {
             if(item2.key==='draftkings'){
                
                 draftkingsMarket=item2.markets
-                ////console.log('draftkings markets',item2.markets)
-                ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+                //console.log('draftkings markets',item2.markets)
+                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
                 draftkingsMarket.map((item3)=>{
-                    ////console.log('draftkingsMarket 006',item3.outcomes)
+                    //console.log('draftkingsMarket 006',item3.outcomes)
                    const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
                      theOddsJson[index].draftkingsOdds=obj
                 })
             }
            
             if(item1.bookmakers.length===i){
-                ////console.log('new array',theOddsJson)
+                //console.log('new array',theOddsJson)
                
                 var m=0
                 theOddsJson.map((item12,index)=>{
                     m++
-                    ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+                    //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
                     var awayPoints=0,homePoints=0
                     if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                        ////console.log('shit is undefined')
+                        //console.log('shit is undefined')
                     }else{
                         var homeFighterName=item12.home_team
                         var awayFighterName=item12.away_team
@@ -176,7 +176,7 @@ class NCAAModal extends Component {
           if(awayPoints<-10000){aTPointsNum=1.01}
           if(homePoints>12620){hTPointsNum=1247.20}
           if(awayPoints>12620){aTPointsNum=1247.20}
-          ////console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
+          //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
          
           if(homePoints<=101&&homePoints>=-101){hTPointsNum=2.03}
           if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
@@ -376,9 +376,9 @@ class NCAAModal extends Component {
           //console.log('matchType',item.matchType)
           toDbArr[item.id] = item
           if (theArr.length === v) {
-            console.log('dataLink', dataLink)
-            console.log('toDbArr', toDbArr)
-            console.log('eventIdsEdit', eventIdsEdit)
+            //console.log('dataLink', dataLink)
+            //console.log('toDbArr', toDbArr)
+            //console.log('eventIdsEdit', eventIdsEdit)
            // return
             generalDb.child(eventIdsLink).update(eventIdsEdit)
             generalDb.child(eventIdsLink2).update(eventIdsEdit)
@@ -406,10 +406,10 @@ class NCAAModal extends Component {
         i++
         var theId = data.key
         var player1 = data.val().player1
-        console.log('player1', theId, player1)
+        //console.log('player1', theId, player1)
         if (player1 === 'N/A') {
           editDb.child(theId).set(null)
-          console.log('this is nullllll',theId)
+          //console.log('this is nullllll',theId)
         }
         if (i === gamesCount) {
           this.notify('Data uploaded successfully')
@@ -518,25 +518,25 @@ class NCAAModal extends Component {
           if (item2.key === 'draftkings') {
 
             draftkingsMarket = item2.markets
-            ////console.log('draftkings markets',item2.markets)
-            ////console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
+            //console.log('draftkings markets',item2.markets)
+            //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
             draftkingsMarket.map((item3) => {
-              ////console.log('draftkingsMarket 006',item3.outcomes)
+              //console.log('draftkingsMarket 006',item3.outcomes)
               const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
               theOddsJson[index].draftkingsOdds = obj
             })
           }
 
           if (item1.bookmakers.length === i) {
-            ////console.log('new array',theOddsJson)
+            //console.log('new array',theOddsJson)
 
             var m = 0
             theOddsJson.map((item12, index) => {
               m++
-              ////console.log('item12.draftkingsOdds',item12.draftkingsOdds)
+              //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
               var awayPoints = 0, homePoints = 0
               if (item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0) {
-                ////console.log('shit is undefined')
+                //console.log('shit is undefined')
               } else {
                 var homeFighterName = item12.home_team
                 var awayFighterName = item12.away_team
@@ -709,7 +709,7 @@ class NCAAModal extends Component {
   getLogos = async (theArr) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    ////console.log(response.data);
+    //console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
@@ -720,9 +720,9 @@ class NCAAModal extends Component {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            ////console.log('the teams',theItem)
-            ////console.log('the team name',theItem['displayName'])
-            // //console.log('the team logos',theItem['logos'][0]['href'])
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -735,7 +735,7 @@ class NCAAModal extends Component {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // //console.log('item1.player1',item1.player1)
+                  //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName
@@ -770,7 +770,7 @@ class NCAAModal extends Component {
   getLogos2 = async (theArr, menu, incomingData) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);
-    ////console.log(response.data);
+    //console.log(response.data);
     var smallResultsArr = []
     axios.get(logosUrl)
       .then((res) => {
@@ -781,9 +781,9 @@ class NCAAModal extends Component {
           var theTeams = item['leagues'][index]['teams']
           theTeams.map((item, index) => {
             var theItem = item.team
-            ////console.log('the teams',theItem)
-            ////console.log('the team name',theItem['displayName'])
-            // //console.log('the team logos',theItem['logos'][0]['href'])
+            //console.log('the teams',theItem)
+            //console.log('the team name',theItem['displayName'])
+            //console.log('the team logos',theItem['logos'][0]['href'])
             var myItems = {}
             myItems['name'] = theItem['displayName']
             myItems['logo'] = theItem['logos'][0]['href']
@@ -796,7 +796,7 @@ class NCAAModal extends Component {
 
                 //return
                 smallResultsArr.map((item2) => {
-                  // //console.log('item1.player1',item1.player1)
+                  //console.log('item1.player1',item1.player1)
                   if (item1.player1 === item2.name) {
                     theArr[index]['p1Photo'] = item2.logo
                     theArr[index]['player1NickName'] = item2.nickName

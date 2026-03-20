@@ -126,7 +126,7 @@ class MarchMadness extends Component {
   inputChange = async (e) => {
 
     var value = e.target.value
-    console.log('valueee', value)
+    //console.log('valueee', value)
     await this.setState({ [e.target.id]: value })
     if (this.state.round1.length >= 3) { this.setState({ round1Err: '' }) }
     if (this.state.round2.length >= 3) { this.setState({ round2Err: '' }) }
@@ -163,7 +163,7 @@ class MarchMadness extends Component {
     await gamesInfo.once('value', dataSnapshot => {
       if (!dataSnapshot.exists()) {
         this.setState({ noEventToShow: true });
-        console.log('no event to shooooooooooooooow')
+        //console.log('no event to shooooooooooooooow')
       }
       else {
         this.setState({ noEventToShow: false })
@@ -214,7 +214,7 @@ class MarchMadness extends Component {
           this.setState({ allEvents: allGames, theEventTitle, theEventKey, theEventTime, currentSelection, currentRound, theMenu, expired, endTime, theTime, stopRound1Edit, stopRound2Edit, stopFinalEdit, stopFinal4Edit, stopSweet16Edit, stopElite8Edit, eventYear }, () => {
             this.getNCAABMatches()
             this.checkLink(userId)
-            console.log('currentSelection', this.state.stopRound1Edit, this.state.stopRound2Edit, this.state.stopFinalEdit)
+            //console.log('currentSelection', this.state.stopRound1Edit, this.state.stopRound2Edit, this.state.stopFinalEdit)
           })
         })
       }
@@ -223,7 +223,7 @@ class MarchMadness extends Component {
   checkLink = async (userId) => {
     var flocksDataRef = firebase.database().ref('users/').child(userId + '/flockData/flockNames/' + this.state.theEventKey + '/link')
     flocksDataRef.once('value', dataSnapshot => {
-      console.log('flocksDataRef the key', dataSnapshot.val())
+      //console.log('flocksDataRef the key', dataSnapshot.val())
       if (dataSnapshot.exists()) {
         this.setState({ theLink: dataSnapshot.val() })
       } else {
@@ -240,17 +240,17 @@ class MarchMadness extends Component {
     var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/NCAAB/')
     var currentEventUserInfo = '', finalRoundScore = 0
     await selectedMatchesKeyDb.once('value', dataSnapshot => {
-      //////console.log('the key',dataSnapshot.val())
+      //console.log('the key',dataSnapshot.val())
       if (!dataSnapshot.val()) return
       photoRefDb.once('value', dataSnapshot => {
-        //////console.log('proofile photo',dataSnapshot.val())
+        //console.log('proofile photo',dataSnapshot.val())
         if (dataSnapshot.val()) {
           this.setState({ profilePhoto: dataSnapshot.val() })
         }
       })
       userInfoDb.once('value', dataSnapshot => {
         if (!dataSnapshot.val()) return
-        console.log('the type user 0000000000000', dataSnapshot.val())
+        //console.log('the type user 0000000000000', dataSnapshot.val())
         if (dataSnapshot.val()) {
           var theInfo = dataSnapshot.val()
           currentEventUserInfo = dataSnapshot.val()
@@ -296,7 +296,7 @@ class MarchMadness extends Component {
         if (round2Exists) {
           var i = 0
           round2Arr = theData.round2
-          // console.log('round 14 item',round2Count,round2Arr)
+          //console.log('round 14 item',round2Count,round2Arr)
           for (var key in round2Arr) {
             i++
             var theId = key
@@ -316,7 +316,7 @@ class MarchMadness extends Component {
         if (sweet16Exists) {
           var i = 0
           sweet16Arr = theData.sweet16
-          // console.log('round 14 item',round2Count,round2Arr)
+          //console.log('round 14 item',round2Count,round2Arr)
           for (var key in sweet16Arr) {
             i++
             var theId = key
@@ -328,7 +328,7 @@ class MarchMadness extends Component {
             })
             if (sweet16Count === i) {
               this.setState({ sweet16Arr: this.state.sweet16Arr })
-              console.log('sweet16Count ', this.state.sweet16Arr)
+              //console.log('sweet16Count ', this.state.sweet16Arr)
             }
           }
         }
@@ -336,7 +336,7 @@ class MarchMadness extends Component {
         if (elite8Exists) {
           var i = 0
           elite8Arr = theData.elite8
-          // console.log('round 14 item',round2Count,round2Arr)
+          //console.log('round 14 item',round2Count,round2Arr)
           for (var key in elite8Arr) {
             i++
             var theId = key
@@ -348,17 +348,17 @@ class MarchMadness extends Component {
             })
             if (elite8Count === i) {
               this.setState({ elite8Arr: this.state.elite8Arr })
-              console.log('elite8Arr ', this.state.elite8Arr)
+              //console.log('elite8Arr ', this.state.elite8Arr)
             }
           }
         } else {
-          console.log('elite 8 not existing')
+          //console.log('elite 8 not existing')
         }
         var final4Exists = dataSnapshot.child('final4').exists()
         if (final4Exists) {
           var i = 0
           final4Arr = theData.final4
-          // console.log('round 14 item',round2Count,round2Arr)
+          //console.log('round 14 item',round2Count,round2Arr)
           for (var key in final4Arr) {
             i++
             var theId = key
@@ -370,7 +370,7 @@ class MarchMadness extends Component {
             })
             if (final4Count === i) {
               this.setState({ final4Arr: this.state.final4Arr })
-              console.log('final4Arr ', this.state.final4Arr)
+              //console.log('final4Arr ', this.state.final4Arr)
             }
           }
         }
@@ -379,7 +379,7 @@ class MarchMadness extends Component {
         if (finalRoundExists) {
           var i = 0
           finalRoundArr = theData.finalRound
-          // console.log('round 14 item',round2Count,round2Arr)
+          //console.log('round 14 item',round2Count,round2Arr)
           for (var key in finalRoundArr) {
             i++
             var theId = key
@@ -391,7 +391,7 @@ class MarchMadness extends Component {
             })
             if (final4Count === i) {
               this.setState({ finalArr: this.state.finalArr })
-              console.log('finalRoundArr ', this.state.finalArr)
+              //console.log('finalRoundArr ', this.state.finalArr)
             }
           }
         }
@@ -399,14 +399,14 @@ class MarchMadness extends Component {
 
         var finalRoundExists = dataSnapshot.child('finalRound').exists()
         if (finalRoundExists) { finalRoundArr = theData.finalRound }
-        console.log('round1Exists', round1Exists)
-        console.log('round1 data', theData.round1)
+        //console.log('round1Exists', round1Exists)
+        //console.log('round1 data', theData.round1)
       })
 
       return
       var thetrrrr = ''
-      ////console.log('this.state.currentSelection', this.state.currentSelection)
-      // //console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
+      //console.log('this.state.currentSelection', this.state.currentSelection)
+      //console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
       if (selection === 'wildCard') {
         thetrrrr = this.state.allRound1MatchesArr
       }
@@ -423,8 +423,8 @@ class MarchMadness extends Component {
       //var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
 
       userBetsDb.once('value', dataSnapshot => {
-        //////console.log('the bets data',dataSnapshot.val())
-        //////console.log('this.state.theItems',this.state.theItems)
+        //console.log('the bets data',dataSnapshot.val())
+        //console.log('this.state.theItems',this.state.theItems)
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
         //console.log('selection',selection,'itemsCount',itemsCount)
@@ -436,32 +436,32 @@ class MarchMadness extends Component {
         if (selection === 'divisionalRound' && itemsCount < 10) return
         if (selection === 'conferenceChampionship' && itemsCount < 12) return
         if (selection === 'superBowl' && itemsCount < 13) return
-        console.log('MEGA count', selection, itemsCount)
+        //console.log('MEGA count', selection, itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
           i++
-          //  //console.log('thank DAATA',selection,data.val())
+          //console.log('thank DAATA',selection,data.val())
           thetrrrr.map((item) => {
-            //////console.log('thank you sir',item.winner)
+            //console.log('thank you sir',item.winner)
             if (item.id === data.key) {
-              ////console.log('thank you sir')
+              //console.log('thank you sir')
               item['bet'] = data.val()
               if (item.status1 === 'played') {
 
-                //////console.log('item.winner',item.winner)
-                //////console.log('my beeeeet',data.val())
-                //////console.log('item.p1Points',item.p1Points)
-                //////console.log('item.p2Points',item.p2Points)
+                //console.log('item.winner',item.winner)
+                //console.log('my beeeeet',data.val())
+                //console.log('item.p1Points',item.p1Points)
+                //console.log('item.p2Points',item.p2Points)
                 if (item.winner === 'player1' && data.val() === 'player1') { currentScore.push(item.p1Points); thePoints.push(item.p1Points); }
                 if (item.winner === 'player2' && data.val() === 'player2') { currentScore.push(item.p2Points); thePoints.push(item.p2Points); }
-                //////console.log('p1 pointsss',currentScore)
+                //console.log('p1 pointsss',currentScore)
 
               } else {
                 if (data.val() === 'player1') {
-                  thePoints.push(item.p1Points);//////console.log('the points',item.p1Points)
+                  thePoints.push(item.p1Points);//console.log('the points',item.p1Points)
                 }
                 if (data.val() === 'player2') {
-                  thePoints.push(item.p2Points);//////console.log('the points',item.p2Points)
+                  thePoints.push(item.p2Points);//console.log('the points',item.p2Points)
                 }
               }
             }
@@ -479,7 +479,7 @@ class MarchMadness extends Component {
   getNCAABMatches = () => {
     var round1EastArr = [], round1WestArr = [], round1SouthArr = [], round1midWestArr = [], allMatches = []
     this.setState({ eastRound1Arr: [], eastRound2Arr: [], eastSweet16Arr: [], eastElite8Arr: [], dataAvailable: false, currentEventUserInfo: {} })
-    console.log('this.state.theEventKey', this.state.theEventKey, this.state.currentRound)
+    //console.log('this.state.theEventKey', this.state.theEventKey, this.state.currentRound)
     //return
     var matchesRef = firebase.database().ref('/theEvents/NCAAB/').child(this.state.theEventKey + '/' + 'round1')
     matchesRef.once('value', dataSnapshot => {
@@ -505,7 +505,7 @@ class MarchMadness extends Component {
           var combinedArr = [round1EastArr, round1WestArr, round1SouthArr, round1midWestArr]
           allMatches = Array.prototype.concat(...combinedArr);
           //allMatches=[...round1EastArr]
-          // console.log('allMatches 55555555',allMatches)
+          //console.log('allMatches 55555555',allMatches)
           this.setState({
             round1EastArr: round1EastArr, round1WestArr: round1WestArr, round1SouthArr: round1SouthArr,
             round1midWestArr: round1midWestArr, oldRound1Array: allMatches,
@@ -550,7 +550,7 @@ class MarchMadness extends Component {
         }
         allMatches.push(data.val())
         if (theCount === i) {
-          console.log('allMatches round 2', allMatches)
+          //console.log('allMatches round 2', allMatches)
           this.setState({
             round2EastArr: round2EastArr, round2WestArr: round2WestArr, round2SouthArr: round2SouthArr,
             round2midWestArr: round2midWestArr, allRound2MatchesArr: [...round2EastArr, ...round2WestArr, ...round2SouthArr, ...round2midWestArr]
@@ -585,7 +585,7 @@ class MarchMadness extends Component {
         allMatches.push(theData)
         if (sweet16Count === i) {
           this.setState({ sweet16Arr: sweet16Arr })
-          console.log('sweet16Arr', sweet16Arr)
+          //console.log('sweet16Arr', sweet16Arr)
         }
       }
       for (var key in elite8) {
@@ -595,7 +595,7 @@ class MarchMadness extends Component {
         allMatches.push(theData)
         if (elite8Count === g) {
           this.setState({ elite8Arr: elite8Arr })
-          console.log('round2Arr', elite8Arr)
+          //console.log('round2Arr', elite8Arr)
         }
       }
       for (var key in final4) {
@@ -605,7 +605,7 @@ class MarchMadness extends Component {
         allMatches.push(theData)
         if (final4Count === h) {
           this.setState({ final4Arr: final4Arr })
-          console.log('final4Arr', final4Arr)
+          //console.log('final4Arr', final4Arr)
         }
       }
       for (var key in final) {
@@ -615,7 +615,7 @@ class MarchMadness extends Component {
         allMatches.push(theData)
         if (finalCount === j) {
           this.setState({ finalArr: finalArr, allRoundFinalArr: allMatches })
-          console.log('finalArr 001000', finalArr)
+          //console.log('finalArr 001000', finalArr)
           if (this.state.currentRound === 'finalRound') {
             this.setState({ currentItems: sweet16Arr })
           }
@@ -646,7 +646,7 @@ class MarchMadness extends Component {
   }
   createEvent = (eventKey, theYear) => {
     var round1Arr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
-    console.log('round1 length', round1.length)
+    //console.log('round1 length', round1.length)
     var eventTitle = 'March Madness ' + theYear
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
 
@@ -683,7 +683,7 @@ class MarchMadness extends Component {
           if (team2Seed === item2.seed) { round1[index]['p2Points'] = item2.val }
         })
         if (round1.length === index + 1) {
-          console.log('round1Arr 1111', round1Arr)
+          //console.log('round1Arr 1111', round1Arr)
           generalDb.child('/round1/').update(round1Arr)
         }
       })
@@ -816,7 +816,7 @@ class MarchMadness extends Component {
   /*createEvent2 = () => {
     var round1Arr={},round1EastArr = {},round1WestArr = {},round1SouthArr = {},round1MidWestArr = {}, round2Arr = {}, sweet16Arr = {}, elite8Arr = {}, final4Arr = {}, finalArr = {}
 
-    console.log('round1 length', round1.length)
+    //console.log('round1 length', round1.length)
     var eventKey = 'marchMadness' + new Date().getFullYear()
     var eventTitle = 'March Madness' + new Date().getFullYear()
     var generalDb = firebase.database().ref('/theEvents/NCAAB/' + eventKey)
@@ -849,7 +849,7 @@ class MarchMadness extends Component {
         if (round1.length === index + 1) {
           var combinedArr=[round1EastArr,round1WestArr,round1SouthArr,round1MidWestArr]
           const newArr = Array.prototype.concat(...combinedArr);
-          console.log('combinedArr',newArr)
+          //console.log('combinedArr',newArr)
           return
           var round1Ref=firebase.database().ref('/theEvents/NCAAB/' + eventKey+'/round1')
           round1Ref.child('/west/').update(round1Arr)
@@ -1000,7 +1000,7 @@ class MarchMadness extends Component {
     this.setState({ theSubMenu: type })
   }
   getCurrentRound = (round) => {
-    console.log('roundddd 5656565', round)
+    //console.log('roundddd 5656565', round)
     this.setState({ currentRound: round })
     if (round === 'round1') {
       this.setState({ currentItems: this.state.round1EastArr, theSubMenu: 'round1', theMenu: 'east' })
@@ -1054,7 +1054,7 @@ class MarchMadness extends Component {
       }
     }
     var i = 0, pointMissing = false
-    console.log('this.state.theItems', itemToModals)
+    //console.log('this.state.theItems', itemToModals)
     await itemToModals.map((item, index) => {
       i++
       //console.log('item.p1Points',item.p1Points)
@@ -1066,7 +1066,7 @@ class MarchMadness extends Component {
           this.notify('Event points not yet populated')
         } else {
           this.openTheModal2(stopEdit)
-          console.log('itemToModals', itemToModals)
+          //console.log('itemToModals', itemToModals)
           this.setState({ itemToModals, modalTitle })
         }
       }
@@ -1129,7 +1129,7 @@ class MarchMadness extends Component {
       if (currentSelection === 'elite8' && stopElite8Edit !== 'N/A' && time > (stopElite8Edit + 3600000)) { currentSelection = 'final4' }
       if (currentSelection === 'final4' && stopFinal4Edit !== 'N/A' && time > (stopFinal4Edit + 3600000)) { currentSelection = 'finalRound' }
 
-      console.log('currentSelection', currentSelection, time, stopRound1Edit)
+      //console.log('currentSelection', currentSelection, time, stopRound1Edit)
       //return
       //return
       if (currentSelection === 'round1') {
@@ -1226,7 +1226,7 @@ class MarchMadness extends Component {
   }
   handleChildClick = (title, items) => {
     this.setState({ count: this.state.count + 1, marchMadnessModal: false, [title]: items });
-    console.log('azeeza', items)
+    //console.log('azeeza', items)
   };
   checkForOddsUpdate = () => {
     this.notify('Not available at the moment'); return
@@ -1259,7 +1259,7 @@ class MarchMadness extends Component {
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
       this.setState({ allRound1MatchesArr: theItems })
-      console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
     if (this.state.currentRound === 'round2') {
       var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
@@ -1267,7 +1267,7 @@ class MarchMadness extends Component {
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
       this.setState({ allRound2MatchesArr: theItems })
-      console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
     if (this.state.currentRound === 'finalRound') {
       var theItems = [], stateName = ''
@@ -1280,7 +1280,7 @@ class MarchMadness extends Component {
       delete theItems[index2]['chosenWinner']
       delete theItems[index2]['showChooseWinner']
       this.setState({ [stateName]: theItems })
-      console.log('this.state.currentItems 001', theItems)
+      //console.log('this.state.currentItems 001', theItems)
     }
   }
   pickWinner = (id, winner, time) => {
@@ -1299,10 +1299,10 @@ class MarchMadness extends Component {
       var theItems = this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound1MatchesArr: theItems })
-      console.log('this.state.currentItems 002', theItems)
+      //console.log('this.state.currentItems 002', theItems)
     }
     if (this.state.currentSelection === 'round2') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.allRound2MatchesArr
@@ -1321,7 +1321,7 @@ class MarchMadness extends Component {
       this.setState({ allRound2MatchesArr: theItems })
     }
     if (this.state.currentSelection === 'sweet16') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.sweet16Arr
@@ -1338,10 +1338,10 @@ class MarchMadness extends Component {
       var theItems = this.state.sweet16Arr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ sweet16Arr: theItems })
-      console.log('theItems', theItems)
+      //console.log('theItems', theItems)
     }
     if (this.state.currentSelection === 'elite8') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.elite8Arr
@@ -1358,10 +1358,10 @@ class MarchMadness extends Component {
       var theItems = this.state.elite8Arr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ elite8Arr: theItems })
-      console.log('theItems', theItems)
+      //console.log('theItems', theItems)
     }
     if (this.state.currentSelection === 'final4') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.final4Arr
@@ -1378,10 +1378,10 @@ class MarchMadness extends Component {
       var theItems = this.state.final4Arr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ final4Arr: theItems })
-      console.log('iteeeems final4Arr', theItems)
+      //console.log('iteeeems final4Arr', theItems)
     }
     if (this.state.currentSelection === 'finalRound') {
-      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.finalArr
@@ -1397,7 +1397,7 @@ class MarchMadness extends Component {
       var theItems = this.state.finalArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ finalArr: theItems })
-      console.log('iteeeems finalArr', theItems)
+      //console.log('iteeeems finalArr', theItems)
     }
   }
   chosenWinner = (id, winner) => {
@@ -1408,47 +1408,47 @@ class MarchMadness extends Component {
       theItems[index2]['status1'] = 'played'
       // theItems[index2]['isItPlayed']='played'
       this.setState({ allRound1MatchesArr: theItems })
-      console.log('this.state.currentItems 008', theItems)
+      //console.log('this.state.currentItems 008', theItems)
     }
     if (this.state.currentSelection === 'round2') {
       var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.allRound2MatchesArr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
     }
     if (this.state.currentSelection === 'sweet16') {
       var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.sweet16Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
     }
     if (this.state.currentSelection === 'elite8') {
       var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.elite8Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      console.log('this.state.currentItems 009', theItems)
+      //console.log('this.state.currentItems 009', theItems)
     }
     if (this.state.currentSelection === 'final4') {
       var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.final4Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      console.log('this.state.currentItems 010', theItems)
+      //console.log('this.state.currentItems 010', theItems)
     }
     if (this.state.currentSelection === 'finalRound') {
       var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.finalArr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      console.log('this.state.currentItems 010', theItems)
+      //console.log('this.state.currentItems 010', theItems)
     }
 
   }
   submitWinner = (id, winner) => {
-    console.log('haaaaaaaaaaaapa 000000')
+    //console.log('haaaaaaaaaaaapa 000000')
     if (this.state.currentSelection === 'round1') {
       var index = this.state.allRound1MatchesArr.map(function (x) { return x.id; }).indexOf(id);
       if (winner !== 'player1' && winner !== 'player2') {
@@ -1502,7 +1502,7 @@ class MarchMadness extends Component {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
-      console.log('haaaaaaaaaaaapa 2222', index, winner)
+      //console.log('haaaaaaaaaaaapa 2222', index, winner)
 
       if (this.state.currentSelection === 'round1') {
 
@@ -1512,7 +1512,7 @@ class MarchMadness extends Component {
         delete theRound1Arr[index]['showChooseWinner']
         this.setState({ allRound1MatchesArr: theRound1Arr })
         this.state.allRound1MatchesArr.map((item, index) => {
-          console.log('shortArr', shortArr)
+          //console.log('shortArr', shortArr)
           shortArr['p1Points'] = item.p1Points
           shortArr['p2Points'] = item.p2Points
           shortArr['winner'] = item.winner
@@ -1533,9 +1533,9 @@ class MarchMadness extends Component {
         var theLink = 'theEvents::NCAAB::' + this.state.theEventKey + '::' + this.state.currentSelection + '::' + scoreName + '::' + theItems
         if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
         var theQuery = encodeURIComponent(theLink)
-        console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
-        console.log('theLink', theLink, theItems)
-        console.log('this.state.shortArr 006', shortArr)
+        //console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
+        //console.log('theLink', theLink, theItems)
+        //console.log('this.state.shortArr 006', shortArr)
         await axios.get("https://theramtournament.com/getMarchMadnessResults?term=" + theQuery)
           //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
           .then((res) => {
@@ -1562,7 +1562,7 @@ class MarchMadness extends Component {
         this.checkForFinalRoundOutcome(index, winner, this.state.finalArr, 'finalArr')
       }
     } catch (error) {
-      ////console.log('error',error)
+      //console.log('error',error)
     }
 
   }
@@ -1572,14 +1572,14 @@ class MarchMadness extends Component {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
-      console.log('haaaaaaaaaaaapa 2222 round 2', index, winner)
+      //console.log('haaaaaaaaaaaapa 2222 round 2', index, winner)
       var theRound2Arr = this.state.allRound2MatchesArr
       theRound2Arr[index]['winner'] = winner
       delete theRound2Arr[index]['chosenWinner']
       delete theRound2Arr[index]['showChooseWinner']
       this.setState({ allRound2MatchesArr: theRound2Arr })
       this.state.allRound2MatchesArr.map((item, index) => {
-        console.log('shortArr', shortArr)
+        //console.log('shortArr', shortArr)
         shortArr['p1Points'] = item.p1Points
         shortArr['p2Points'] = item.p2Points
         shortArr['winner'] = item.winner
@@ -1600,9 +1600,9 @@ class MarchMadness extends Component {
       var theLink = 'theEvents::NCAAB::' + this.state.theEventKey + '::' + this.state.currentSelection + '::' + scoreName + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
-      console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
-      console.log('theLink', theLink, theItems)
-      console.log('this.state.shortArr 006', shortArr)
+      //console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
+      //console.log('theLink', theLink, theItems)
+      //console.log('this.state.shortArr 006', shortArr)
 
       await axios.get("https://theramtournament.com/getMarchMadnessResults?term=" + theQuery)
         //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
@@ -1614,20 +1614,20 @@ class MarchMadness extends Component {
           }
         })
     } catch (error) {
-      ////console.log('error',error)
+      //console.log('error',error)
     }
   }
   checkForFinalRoundOutcome = async (index, winner, items, name) => {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
-      console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
+      //console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
       items[index]['winner'] = winner
       delete items[index]['chosenWinner']
       delete items[index]['showChooseWinner']
       this.setState({ [name]: items })
       items.map((item, index) => {
-        console.log('shortArr', shortArr)
+        //console.log('shortArr', shortArr)
         shortArr['p1Points'] = item.p1Points
         shortArr['p2Points'] = item.p2Points
         shortArr['winner'] = item.winner
@@ -1649,9 +1649,9 @@ class MarchMadness extends Component {
       var theLink = 'theEvents::NCAAB::' + this.state.theEventKey + '::' + this.state.currentSelection + '::' + scoreName + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
-      console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
-      console.log('theLink', theLink, theItems)
-      console.log('this.state.shortArr 006', shortArr)
+      //console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)
+      //console.log('theLink', theLink, theItems)
+      //console.log('this.state.shortArr 006', shortArr)
       //return
       await axios.get("https://theramtournament.com/getMarchMadnessResults?term=" + theQuery)
         //await axios.get("http://localhost:4000/getMarchMadnessResults?term="+theQuery)
@@ -1663,11 +1663,11 @@ class MarchMadness extends Component {
           }
         })
     } catch (error) {
-      ////console.log('error',error)
+      //console.log('error',error)
     }
   }
   checkMatchPicked = () => {
-    console.log('the details rrrrr', 'NCAAB', this.state.theEventKey, this.state.selectedPick)
+    //console.log('the details rrrrr', 'NCAAB', this.state.theEventKey, this.state.selectedPick)
     var thePick = ''
     if (this.state.selectedPick === 'round1' || this.state.selectedPick === 'round2') {
       thePick = this.state.selectedPick
@@ -1685,7 +1685,7 @@ class MarchMadness extends Component {
             var item ={ id: data.key, bet: data.val() }
             theItems.push(item)
             if (count === i) {
-              console.log('the details theItems 1', theItems)
+              //console.log('the details theItems 1', theItems)
               var k = 0, theItems2 = []
               var gamesInfo = firebase.database().ref('/theEvents/NCAAB/' + this.state.theEventKey + '/' + thePick + '/')
               gamesInfo.once('value', dataSnapshot => {
@@ -1697,10 +1697,10 @@ class MarchMadness extends Component {
                   var item ={ id: data.key, player1: data.val().player1, player2: data.val().player2, p1Points: data.val().p1Points, p2Points: data.val().p2Points, place: place }
                   theItems2.push(item)
                   if (gamesCount === k) {
-                    console.log('the details theItems 2', theItems, theItems2)
+                    //console.log('the details theItems 2', theItems, theItems2)
                     var toMessageArray = this.mergeById(theItems, theItems2)
                     this.setState({toMessageArray,showFriends:true,openShareMatchesModal:false})
-                    console.log('combined2',this.state.currentEventUserInfo['teamName'],this.state.currentEventUserInfo['flockName'],this.state.selectedPickTitle,toMessageArray)
+                    //console.log('combined2',this.state.currentEventUserInfo['teamName'],this.state.currentEventUserInfo['flockName'],this.state.selectedPickTitle,toMessageArray)
                   }
                 })
               })
@@ -1734,7 +1734,7 @@ class MarchMadness extends Component {
     return Array.from(map.values());
   }
       handleChatsClick = (from,text,theData) => {
-      console.log('theMeso',from,text,theData)
+      //console.log('theMeso',from,text,theData)
       this.setState({ theCount: this.state.theCount + 1,theData})
       if(from==='fromFriends'){if(text==='close'){this.setState({showMessagesPage:false,showFriends:false})}else{this.setState({showMessagesPage:true,showFriends:false})}}
       if(from==='fromMessages'){this.setState({showMessagesPage:false,showFriends:false})}
@@ -1758,7 +1758,7 @@ class MarchMadness extends Component {
     var title1 = ''
     var currentRank = ''//this.state.currentEventUserInfo[this.state.currentSelection+'Rank']
 
-    console.log('this.state.currentEventUserInfo 254', this.state.currentSelection, this.state.currentEventUserInfo[this.state.currentSelection + 'Rank'], this.state.currentSelection, this.state.currentEventUserInfo)
+    //console.log('this.state.currentEventUserInfo 254', this.state.currentSelection, this.state.currentEventUserInfo[this.state.currentSelection + 'Rank'], this.state.currentSelection, this.state.currentEventUserInfo)
     var currentBPS = '', theCurrentScore = ''
     if (this.state.currentRound === 'finalRound') {
       currentBPS = this.state.currentEventUserInfo[this.state.theMenu + 'BPS']
@@ -1776,7 +1776,7 @@ class MarchMadness extends Component {
       else { currentRank = this.state.currentEventUserInfo[this.state.currentRound + 'Rank'] }
     }
 
-    console.log('this.state.currentEventUserInfo', currentBPS, this.state.currentEventUserInfo)
+    //console.log('this.state.currentEventUserInfo', currentBPS, this.state.currentEventUserInfo)
     //
     if (this.state.theMenu === 'east') { title1 = 'East' }
     if (this.state.theMenu === 'west') { title1 = 'West' }
@@ -1843,10 +1843,10 @@ class MarchMadness extends Component {
                 <p>Flock Invite Link</p>
                 <FaRegCopy />
               </div> : null}
-              {this.state.isAdmin?<div className={style.sharePicksDiv} onClick={() => this.setState({ openShareMatchesModal: true })}>
+              <div className={style.sharePicksDiv} onClick={() => this.setState({ openShareMatchesModal: true })}>
                 <p>Share Picks With Friends</p>
                 <MdOutlineShare />
-              </div>:null}</div>
+              </div></div>
             <div className={style.picksDiv} onClick={() => this.openTheModal()}>
               {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
               {this.state.dataAvailable ?

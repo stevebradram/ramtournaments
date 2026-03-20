@@ -37,10 +37,10 @@ class RamUfc extends Component {
     showConfirmModal: false, confirmMessage: '', confirmModalType: '', isAdmin: false, allUFCMatches: [], sportsApiData: [], showUFCModal: false, theUfcTItleTomodal: '', theEventId: ''
   }
   componentDidMount = () => {
-    ////console.log('on raaaaaaaaaaaaam ufc')
+    //console.log('on raaaaaaaaaaaaam ufc')
     this.checkAuth()
     this.showReel()
-    // //console.log('dddddd',new Date('2025-01-19T05:30:00Z').getTime())
+    //console.log('dddddd',new Date('2025-01-19T05:30:00Z').getTime())
 
    
     //this.checkForOddsUpdate()
@@ -85,17 +85,17 @@ class RamUfc extends Component {
                 var avScore = sumScores / j
                 avScore = Number(avScore.toFixed(2))
                 var sumScores2 = Number(sumScores.toFixed(2))
-                console.log('the total', theKey, theTotal, j, sumScores2, avScore)
+                //console.log('the total', theKey, theTotal, j, sumScores2, avScore)
                 var flockScoreToDb = { avScore: avScore, score: sumScores2, membersNo: j }
                 flockScoreRef3.child(theKey).update(flockScoreToDb)
-                console.log('flockScoreToDb', flockScoreToDb)
+                //console.log('flockScoreToDb', flockScoreToDb)
               }
             }
           })
 
         })
         if (theCount1 === i) {
-          console.log('nime finish kumalo', i, theCount1)
+          //console.log('nime finish kumalo', i, theCount1)
         }
       })
 
@@ -135,7 +135,7 @@ class RamUfc extends Component {
     }
   }
   getTimeUfcOdds = async (theEventKey, matchTypesNo) => {
-    console.log('haaaapa22222')
+    //console.log('haaaapa22222')
     //return
     var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time/')
     timeInfoDb.once('value', dataSnapshot => {
@@ -162,7 +162,7 @@ class RamUfc extends Component {
     })
   }
   checkForAllResults = async () => {
-    /*console.log('this.state.UFCLinkInput', this.state.UFCLinkInput)
+    /*//console.log('this.state.UFCLinkInput', this.state.UFCLinkInput)
     if (this.state.UFCLinkInput.length < 1) {
       this.notify('The Link input must be properly filled')
       return
@@ -173,7 +173,7 @@ class RamUfc extends Component {
 
     //console.log('starts with that shit')
     //var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
-    // console.log('theQuery',this.state.UFCLinkInput)
+    //console.log('theQuery',this.state.UFCLinkInput)
 
     this.showProgressBar3()
     var sportsApiData = [],theOddsMatches=[]
@@ -182,9 +182,9 @@ class RamUfc extends Component {
     var theOutcome = sportDataWinners//response.data//sportDataWinners
     var allMatches = [...this.state.ramUfcMaincardArray, ...this.state.ramUfcPrelimsArray, ...this.state.ramUfcEarlyPrelimsArray]
     var i = 0
-    console.log('theOutcome rrrr', theOutcome)
-    /*console.log('the name', theOutcome.ShortName)
-    console.log('the length', theOutcome['Fights'].length)
+    //console.log('theOutcome rrrr', theOutcome)
+    /*//console.log('the name', theOutcome.ShortName)
+    //console.log('the length', theOutcome['Fights'].length)
     var theTitle = theOutcome.ShortName
     var theDay = theOutcome.Day
     var millis = new Date(theDay).getTime()
@@ -208,7 +208,7 @@ class RamUfc extends Component {
       var theData = {theWinner:theWinner, status1:status1,fightId:FightId}
       sportsApiData.push(theData)
       if (theOutcome['Fights'].length === i) {
-        console.log('the Winners Data', sportsApiData)
+        //console.log('the Winners Data', sportsApiData)
         allMatches.map((item1,index)=>{
           sportsApiData.map((item2)=>{
             if(item2.fightId+''===item1.fightId+''){
@@ -226,7 +226,7 @@ class RamUfc extends Component {
            
           })
           if(allMatches.length===index+1){
-            console.log('finisheddddd',allMatches)
+            //console.log('finisheddddd',allMatches)
             this.setState({showConfirmModal:false})
             this.showProgressBar2()
             this.checkForAllRoundOutcome(allMatches)
@@ -236,7 +236,7 @@ class RamUfc extends Component {
     })
   }
   checkForAllRoundOutcome = async (items) => {
-    console.log('checkForAllRoundOutcome ndaniiii',this.state.theEventKey,items.length,items)
+    //console.log('checkForAllRoundOutcome ndaniiii',this.state.theEventKey,items.length,items)
     try {
       var shortArr=[]
       items.map((item, index) => {
@@ -246,16 +246,16 @@ class RamUfc extends Component {
         }
         shortArr.push(theItem)
       })
-      console.log('theEventKey',this.state.theEventKey,items.length)
+      //console.log('theEventKey',this.state.theEventKey,items.length)
       if (this.state.theEventKey === '', items.length < 1) return
       if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
       let theItems = JSON.stringify(shortArr);
       var theLink = 'theEvents::ramUfc::' + this.state.theEventKey + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
-      console.log('001', this.state.theEventKey, theItems)
-      console.log('theLink', theLink, theItems)
-      console.log('this.state.shortArr 006', shortArr)
+      //console.log('001', this.state.theEventKey, theItems)
+      //console.log('theLink', theLink, theItems)
+      //console.log('this.state.shortArr 006', shortArr)
       //return
       await axios.get("https://theramtournament.com/getSingleUFCResults?term=" + theQuery)
         //await axios.get("http://localhost:4000/getSingleUFCResults?term="+theQuery)
@@ -267,11 +267,11 @@ class RamUfc extends Component {
           }
         })
     } catch (error) {
-      ////console.log('error',error)
+      //console.log('error',error)
     }
   }
   checkForNewEvents = async () => {
-    console.log('this.state.UFCLinkInput', this.state.UFCLinkInput)
+    //console.log('this.state.UFCLinkInput', this.state.UFCLinkInput)
     if (this.state.UFCLinkInput.length < 1) {
       this.notify('The Link input must be properly filled')
       return
@@ -282,7 +282,7 @@ class RamUfc extends Component {
 
       //console.log('starts with that shit')
       //var theQuery=encodeURIComponent(this.state.UFCLinkInput) 
-      // console.log('theQuery',this.state.UFCLinkInput)
+      //console.log('theQuery',this.state.UFCLinkInput)
 
       this.showProgressBar3()
       var sportsApiData = []
@@ -291,14 +291,14 @@ class RamUfc extends Component {
         .then((res) => {
           var theOutcome = res.data
          /* theOutcome['Fights'].map((item, index) => {
-            console.log('index',index,theOutcome['Fights'].length)
+            //console.log('index',index,theOutcome['Fights'].length)
           })
           return*/
           var i = 0
-          console.log('theOutcome rrrr', theOutcome)
-          console.log('the name', theOutcome.ShortName)
-          console.log('the length', theOutcome['Fights'].length)
-          console.log('the items', theOutcome['Fights'])
+          //console.log('theOutcome rrrr', theOutcome)
+          //console.log('the name', theOutcome.ShortName)
+          //console.log('the length', theOutcome['Fights'].length)
+          //console.log('the items', theOutcome['Fights'])
           var theTitle = theOutcome.ShortName
           var theDay = theOutcome.Day
           var millis = new Date(theDay).getTime()
@@ -307,12 +307,12 @@ class RamUfc extends Component {
           theEventId = theEventId.replace(/ /g, '-').replace(/,/g, '').toLowerCase();
           this.setState({ theUfcTItleTomodal: theTitle, theEventId: theEventId })
           theOutcome['Fights'].map((item, index) => {
-           // console.log('index 001',index,theOutcome['Fights'].length)
+           //console.log('index 001',index,theOutcome['Fights'].length)
             //return
             i++
-           // console.log('index rrrrr',item.Fighters[0])
+           //console.log('index rrrrr',item.Fighters[0])
             if(item.Fighters[0]){
-             // console.log('has stuff',item.Fighters[0])
+             //console.log('has stuff',item.Fighters[0])
              var FightId = item.FightId
             var plDet = item.Fighters[0]
             var p2Det = item.Fighters[1]
@@ -323,7 +323,7 @@ class RamUfc extends Component {
 
             var p1Record = plDet['PreFightWins'] + '-' + plDet['PreFightDraws'] + '-' + plDet['PreFightLosses']
             var p2Record = p2Det['PreFightWins'] + '-' + p2Det['PreFightDraws'] + '-' + p2Det['PreFightLosses']
-           // console.log('index',index,theOutcome['Fights'].length)
+           //console.log('index',index,theOutcome['Fights'].length)
            // return
            player1Name=player1Name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             player2Name=player2Name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -334,17 +334,17 @@ class RamUfc extends Component {
               p1Photo: '', p2Photo: '', fightId: FightId
             }
             sportsApiData.push(theData)
-           // console.log('sportsApiData',sportsApiData)
+           //console.log('sportsApiData',sportsApiData)
 
-           /* console.log('player 001', plDet['FirstName'])
-            console.log('player 002', p2Det['FirstName'])
+           /* //console.log('player 001', plDet['FirstName'])
+            //console.log('player 002', p2Det['FirstName'])
 
-            console.log('player 1', item.Fighters[0]['FirstName'])
-            console.log('player 2', item.Fighters[1]['LastName'])
-            console.log('the sum', theOutcome['Fights'].length, i)*/
-           // console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
+            //console.log('player 1', item.Fighters[0]['FirstName'])
+            //console.log('player 2', item.Fighters[1]['LastName'])
+            //console.log('the sum', theOutcome['Fights'].length, i)*/
+           //console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
             }else{
-              console.log('is undefined',item.Fighters[0])
+              //console.log('is undefined',item.Fighters[0])
             }
            /* var FightId = item.FightId
             var plDet = item.Fighters[0]
@@ -356,7 +356,7 @@ class RamUfc extends Component {
 
             var p1Record = plDet['PreFightWins'] + '-' + plDet['PreFightDraws'] + '-' + plDet['PreFightLosses']
             var p2Record = p2Det['PreFightWins'] + '-' + p2Det['PreFightDraws'] + '-' + p2Det['PreFightLosses']
-           // console.log('index',index,theOutcome['Fights'].length)
+           //console.log('index',index,theOutcome['Fights'].length)
            // return
             var theData = {
               fighter1Name: player1Name, fighter2Name: player2Name, p1Rec: p1Record, p2Rec: p2Record,
@@ -365,18 +365,18 @@ class RamUfc extends Component {
               p1Photo: '', p2Photo: '', fightId: FightId
             }
             sportsApiData.push(theData)*/
-           // console.log('sportsApiData',sportsApiData)
+           //console.log('sportsApiData',sportsApiData)
 
-           /* console.log('player 001', plDet['FirstName'])
-            console.log('player 002', p2Det['FirstName'])
+           /* //console.log('player 001', plDet['FirstName'])
+            //console.log('player 002', p2Det['FirstName'])
 
-            console.log('player 1', item.Fighters[0]['FirstName'])
-            console.log('player 2', item.Fighters[1]['LastName'])
-            console.log('the sum', theOutcome['Fights'].length, i)*/
-           // console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
+            //console.log('player 1', item.Fighters[0]['FirstName'])
+            //console.log('player 2', item.Fighters[1]['LastName'])
+            //console.log('the sum', theOutcome['Fights'].length, i)*/
+           //console.log('the sum 225', theOutcome['Fights'].length, 'indexx', index)
            
             if (theOutcome['Fights'].length === i) {
-              console.log('sportsApiData 2222 kumalo', sportsApiData)
+              //console.log('sportsApiData 2222 kumalo', sportsApiData)
               
 
               var theLink = ' https://api.sportsdata.io/v3/mma/scores/json/FightersBasic?key=a7bc3fc549e0431885995727ce67d025'
@@ -389,13 +389,13 @@ class RamUfc extends Component {
                     sportsApiData.map((item2, index) => {
                       if (item.FighterId === item2.fighter1Id || item.FighterId === item2.fighter2Id) {
                         sportsApiData[index]['match'] = item.WeightClass
-                       // console.log('last arrr', sportsApiData)
+                       //console.log('last arrr', sportsApiData)
                       }
 
                     })
                   })
                   if (theOutcome.length === j) {
-                    console.log('last arrr jhjhjh kkkkk', sportsApiData)
+                    //console.log('last arrr jhjhjh kkkkk', sportsApiData)
                     this.sortOddsJson(sportsApiData, theEventId)
                   }
                 })
@@ -412,7 +412,7 @@ class RamUfc extends Component {
            var theOutcome = res.data
            if(theOutcome.includes('UFC Matches Populated successfully')){
              theOutcome=theOutcome?.split('::')
-             console.log('theOutcome',theOutcome)
+             //console.log('theOutcome',theOutcome)
              this.notify(theOutcome[0])
              var howManyExist=theOutcome[1]
              var eventKey=theOutcome[2]
@@ -439,7 +439,7 @@ class RamUfc extends Component {
       var oddsApi = "https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
       const response = await axios.get(oddsApi)
       var theOddsJson = response.data
-      console.log('theOddsJson 63636363', theOddsJson)
+      //console.log('theOddsJson 63636363', theOddsJson)
       //return
       var jCount = 0
       theOddsJson.map((item1, index) => {
@@ -486,13 +486,13 @@ class RamUfc extends Component {
         })
         if (jCount === theOddsJson.length) {
           //reorganisedOddsArray = newOddsJson
-          console.log('new array oldd', theOddsJson)
-          console.log('new array laaast', newOddsJson)
+          //console.log('new array oldd', theOddsJson)
+          //console.log('new array laaast', newOddsJson)
           this.sortBothArrays(sportsApiData, newOddsJson, theEventId)
         }
       })
     } catch (error) {
-      console.log('ERROR OCURRED AT SORTING ODDS', error)
+      //console.log('ERROR OCURRED AT SORTING ODDS', error)
     }
   }
   // sortBothArrays = async (theFightsJson, sportType, fightType, eventsArr, ufcMatchId, matchId2, howManyExist, res) => {
@@ -521,7 +521,7 @@ class RamUfc extends Component {
           var fullName2B = item2.awayTeam?.split(' ')[1] + item2.awayTeam?.split(' ')[0]
           //if ((p1Name===item1.p1Name2||p1Name===item1.p2Name2)||(p2Name===item1.p2Name2||p2Name===item1.p2Name2))
           if ((p1Name.includes(item1.p1Name2) || p1Name.includes(item1.p1Name3)) && (p2Name.includes(item1.p2Name2) || p2Name.includes(item1.p2Name3))) {
-            console.log('allName', allName)
+            //console.log('allName', allName)
             //k++
             var hTPoints = item2.homeTeamPoints + ''
             var aTPoints = item2.awayTeamPoints + ''
@@ -582,31 +582,31 @@ class RamUfc extends Component {
         })
       })
       if (theFightsJson.length === v) {
-        // console.log('fights array 004', fightType, theFightsJson)
+        //console.log('fights array 004', fightType, theFightsJson)
         //var firstMatchTime = await Math.min(...theFights.map(item => item.timeInMillis));
         var firstMatchTime = Math.min(...firstMatchArr.map(item => item));
         var startTime = firstMatchTime + 86400000
-        console.log('theFights Arr', theFights)
+        //console.log('theFights Arr', theFights)
         theFights.map((item, index) => {
-          console.log('theFights item.timeInMillis', item.timeInMillis, startTime)
+          //console.log('theFights item.timeInMillis', item.timeInMillis, startTime)
           if (item.timeInMillis < startTime) {
-            console.log('trueeee', item)
+            //console.log('trueeee', item)
             if (item.apiId !== '') {
               theFinalFightsArr.push(item)
-              console.log('kamalizaaaaaa', theFinalFightsArr)
+              //console.log('kamalizaaaaaa', theFinalFightsArr)
             } else {
-              console.log('bado kamalizaaaaaaa', item)
+              //console.log('bado kamalizaaaaaaa', item)
             }
           } else {
-            console.log('falseeeee', item)
+            //console.log('falseeeee', item)
           }
           //console.log('theFightsJson.length',theFightsJson.length,index)
           if (theFights.length === index + 1) {
             var theRef = firebase.database().ref('/triallls/')
             theRef.set(theFinalFightsArr)
             //theEventId
-           // console.log('kamalizaaaaaa theEventId', theEventId)
-          //  console.log('kamalizaaaaaa 223232323', theFinalFightsArr)
+           //console.log('kamalizaaaaaa theEventId', theEventId)
+          //console.log('kamalizaaaaaa 223232323', theFinalFightsArr)
             const ids = theFinalFightsArr.map(({ id }) => id);
             const filtered = theFinalFightsArr.filter(({ id }, index) => !ids.includes(id, index + 1));
             this.setState({ sportsApiData: filtered, showUFCModal: true })
@@ -616,7 +616,7 @@ class RamUfc extends Component {
 
       }
     } catch (error) {
-      console.log('ERROR OCURRED AT SORTING BOTH ARRAYS', error)
+      //console.log('ERROR OCURRED AT SORTING BOTH ARRAYS', error)
     }
   }  
   checkAuth = () => {
@@ -645,7 +645,7 @@ class RamUfc extends Component {
     var userInfoDb = firebase.database().ref('/theEvents/eventsIds')
     var upcomingGames = [], pastGames = [], allGames = []
     var nowDate = await new Date().getTime()
-    ////console.log('nowDate',nowDate)
+    //console.log('nowDate',nowDate)
     await userInfoDb.once('value', dataSnapshot => {
       var theCount = dataSnapshot.numChildren()
       var i = 0
@@ -669,7 +669,7 @@ class RamUfc extends Component {
 
         var theItem = ''
         //allGames.push(theItem)
-        ////console.log('key',key,'value',time,dataSnapshot.size)
+        //console.log('key',key,'value',time,dataSnapshot.size)
         if (sportType === 'ramUfc') {
           /*if(nowDate>time){
             pastG={id:key,time:time,title:title}
@@ -683,12 +683,12 @@ class RamUfc extends Component {
           allGames.push(theItem)
         }
         if (theCount === i) {
-          console.log('data.val() 555555', allGames)
+          //console.log('data.val() 555555', allGames)
           //return
           var theEventTitle = '', theEventKey = '', sportType = '', theTime = '', endTime = 0
           if (allGames.length > 0) {
             allGames = allGames.sort(function (a, b) { return b.time - a.time });
-            // //console.log('teeeeeee',allGames)
+            //console.log('teeeeeee',allGames)
             theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime'],
               getEventsTimeUpdate = allGames[0]['getEventsTimeUpdate'], oddsTimeUpdate = allGames[0]['oddsTimeUpdate'], fetchResultsTimeUpdate = allGames[0]['fetchResultsTimeUpdate']
             this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, endTime, getEventsTimeUpdate, oddsTimeUpdate, fetchResultsTimeUpdate }, () => {
@@ -709,7 +709,7 @@ class RamUfc extends Component {
     userInfoDb.once('value', dataSnapshot => {
       //console.log('children count',dataSnapshot.numChildren());
       var dataCount = dataSnapshot.numChildren()
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var mainCardCount = dataSnapshot.child('mainCard').numChildren()
       var prelimsCount = dataSnapshot.child('prelims').numChildren()
       var earlyPrelimsCount = dataSnapshot.child('earlyPrelims').numChildren()
@@ -720,7 +720,7 @@ class RamUfc extends Component {
       //console.log('the event mainCardCount 323232',mainCardCount) 
       if (theInfo.mainCard) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo.mainCard)
+        //console.log('iko maincarddddd',theInfo.mainCard)
         var i = 0
         for (var key in theInfo.mainCard) {
           i++
@@ -738,7 +738,7 @@ class RamUfc extends Component {
       }
       if (theInfo.prelims) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.prelims) {
           i++
@@ -747,21 +747,21 @@ class RamUfc extends Component {
           array1.push(array2)
           allMatches.push(array2)
           if (i === prelimsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //console.log('whole prelimms Array',array1)
             this.setState({ ramUfcPrelimsArray: array1 })
 
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //console.log('hakuna prelimsssssss')
         if (this.state.userId.length < 3) return
 
         this.getMatchesInfo(this.state.userId, allMatches)
       }
       if (theInfo.earlyPrelims) {
         var array1 = []
-        ////console.log('iko earlyPrelims')
+        //console.log('iko earlyPrelims')
         var i = 0
         for (var key in theInfo.earlyPrelims) {
           i++
@@ -770,7 +770,7 @@ class RamUfc extends Component {
           array1.push(array2)
           allMatches.push(array2)
           if (i === earlyPrelimsCount) {
-            ////console.log('whole early prelimms Array',array1)
+            //console.log('whole early prelimms Array',array1)
             //allMatches.push(array1)
             this.setState({ ramUfcEarlyPrelimsArray: array1 })
             if (this.state.userId.length < 3) return
@@ -783,17 +783,17 @@ class RamUfc extends Component {
         if (this.state.userId.length < 3) return
         //allMatches=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...allMatches=[...this.state.ramUfcMaincardArray]]
         this.getMatchesInfo(this.state.userId, allMatches)
-        ////console.log('hakuna early prelimsssssss')
+        //console.log('hakuna early prelimsssssss')
       }
     })
-    ////console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
+    //console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
 
 
 
 
   }
   getMatchesInfo = async (userId, allMatches) => {
-    ////console.log('allMatches',userId,this.state.theEventKey,allMatches)
+    //console.log('allMatches',userId,this.state.theEventKey,allMatches)
 
     var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/ramUfc/" + this.state.theEventKey + '/')
     var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
@@ -804,7 +804,7 @@ class RamUfc extends Component {
     var trialDb = firebase.database().ref('/triaaaaaal/')
     var currentEventUserInfo = ''
     flocksDataRef.once('value', dataSnapshot => {
-      console.log('flocksDataRef the key', dataSnapshot.val())
+      //console.log('flocksDataRef the key', dataSnapshot.val())
       if (dataSnapshot.exists()) {
         this.setState({ theLink: dataSnapshot.val() })
       } else {
@@ -816,38 +816,38 @@ class RamUfc extends Component {
       if (!dataSnapshot.val()) return
 
       photoRefDb.once('value', dataSnapshot => {
-        ////console.log('proofile photo',dataSnapshot.val())
+        //console.log('proofile photo',dataSnapshot.val())
         if (dataSnapshot.val()) {
           this.setState({ profilePhoto: dataSnapshot.val() })
         }
       })
       userInfoDb.once('value', dataSnapshot => {
         if (!dataSnapshot.val()) return
-        ////console.log('the type user info',dataSnapshot.val())
+        //console.log('the type user info',dataSnapshot.val())
         if (dataSnapshot.val()) {
           var theInfo = dataSnapshot.val()
           this.setState({ currentEventUserInfo: theInfo, currentRank: theInfo.currentRank })
           currentEventUserInfo = dataSnapshot.val()
-          ////console.log('currentEventUserInfo',currentEventUserInfo)
+          //console.log('currentEventUserInfo',currentEventUserInfo)
 
         }
       })
       var thetrrrr = [...this.state.ramUfcMaincardArray, ...this.state.ramUfcPrelimsArray, ...this.state.ramUfcEarlyPrelimsArray]
-      ////console.log('thetrrrr',thetrrrr)
+      //console.log('thetrrrr',thetrrrr)
       userBetsDb.once('value', dataSnapshot => {
-        ////console.log('the bets data',dataSnapshot.val())
-        ////console.log('this.state.theItems',this.state.theItems)
+        //console.log('the bets data',dataSnapshot.val())
+        //console.log('this.state.theItems',this.state.theItems)
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
-        ////console.log('it count',itemsCount)
+        //console.log('it count',itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
           i++
           thetrrrr.map((item) => {
-            ////console.log('thetrrrr item',item)
-            ////console.log('thedb item',data.val())
+            //console.log('thetrrrr item',item)
+            //console.log('thedb item',data.val())
             if (item.id === data.key) {
-              ////console.log('thank you sir')
+              //console.log('thank you sir')
               item['bet'] = data.val()
               if (item.status1 === 'played') {
                 if (item.winner === 'player1' && data.val() === 'player1') { currentScore.push(item.p1Points); thePoints.push(item.p1Points) }
@@ -868,9 +868,9 @@ class RamUfc extends Component {
             if (this.state.theMenu === 'mainCard') { this.setState({ ramUfcMaincardArray: this.state.theItems }) }
             if (this.state.theMenu === 'prelimms') { this.setState({ ramUfcPrelimsArray: this.state.theItems }) }
             if (this.state.theMenu === 'earlyPrelims') { this.setState({ ramUfcEarlyPrelimsArray: this.state.theItems }) }
-            ////console.log('this.state.theItems',this.state.theItems)
-            ////console.log('thePointsssss',thePoints)
-            ////console.log('currentScore',currentScore.length)
+            //console.log('this.state.theItems',this.state.theItems)
+            //console.log('thePointsssss',thePoints)
+            //console.log('currentScore',currentScore.length)
             return
             var pointsSum = thePoints.reduce((partialSum, a) => partialSum + a, 0);
             pointsSum = pointsSum.toFixed(2)
@@ -879,13 +879,13 @@ class RamUfc extends Component {
             gamesDataRef.child(this.state.theEventKey + '/details/bestPossibleScore/').set(pointsSum)
             currentEventUserInfo['bestPossibleScore'] = pointsSum
             this.setState({ currentEventUserInfo })
-            ////console.log('currentScore 555555',currentScore)
+            //console.log('currentScore 555555',currentScore)
             if (currentScore.length > 0) {
               var scoreSum = currentScore.reduce((partialSum, a) => partialSum + a, 0);
               scoreSum = scoreSum.toFixed(2)
               currentEventUserInfo['currentScore'] = scoreSum
               this.setState({ currentEventUserInfo })
-              ////console.log('scoreSum55555555',scoreSum)
+              //console.log('scoreSum55555555',scoreSum)
               userInfoDb.child('/currentScore/').set(scoreSum)
             }
           }
@@ -933,15 +933,15 @@ class RamUfc extends Component {
     var userInfoDb = firebase.database().ref('/activeEvents/').child(name)
 
     userInfoDb.once('value', dataSnapshot => {
-      ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var mainCardCount = dataSnapshot.child('mainCard').numChildren()
       var prelimsCount = dataSnapshot.child('prelims').numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if (theInfo.mainCard) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo.mainCard)
+        //console.log('iko maincarddddd',theInfo.mainCard)
         var i = 0
         for (var key in theInfo.mainCard) {
           i++
@@ -949,7 +949,7 @@ class RamUfc extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === mainCardCount) {
-            ////console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ ramUfcMaincardArray: array1 })
             this.setState({ theItems: array1 })
           }
@@ -957,7 +957,7 @@ class RamUfc extends Component {
       }
       if (theInfo.prelims) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.prelims) {
           i++
@@ -965,13 +965,13 @@ class RamUfc extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === prelimsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //console.log('whole prelimms Array',array1)
             this.setState({ ramUfcPrelimsArray: array1 })
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //console.log('hakuna prelimsssssss')
       }
     })
   }
@@ -980,10 +980,10 @@ class RamUfc extends Component {
     userInfoDb.once('value', dataSnapshot => {
       var count = dataSnapshot.numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if (theInfo) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo)
+        //console.log('iko maincarddddd',theInfo)
         var i = 0
         for (var key in theInfo) {
           i++
@@ -991,7 +991,7 @@ class RamUfc extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === count) {
-            ////console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ [theArr]: array1 })
           }
         }
@@ -1007,7 +1007,7 @@ class RamUfc extends Component {
       if (event === 'marchMadness') { selectedMarchMadnesArray = theInfo }
       if (event === 'nfl') { selectedNflArray = theInfo }
       //hapa ndo nimefika
-      //////console.log('the event eventSelection',theInfo.eventSelection) 
+      //console.log('the event eventSelection',theInfo.eventSelection) 
       var currentRank = ''
       if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
       this.setState({
@@ -1021,15 +1021,15 @@ class RamUfc extends Component {
 
     this.setState({ theRamUfc: theRamUfc, theMarchMadness, theNfl, theFifa })
     this.setState({ theRamUfc: theRamUfc }, () => {
-      //////console.log('theRamUfc 99999999999999',this.state.theRamUfc);
+      //console.log('theRamUfc 99999999999999',this.state.theRamUfc);
     });
-    //////console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
+    //console.log('this.state.theRamUfc 2525',this.state.theRamUfc)
     var userInfoDb = firebase.database().ref('/users/' + userId).child('upcomingEvents')
     if (theRamUfc === 'selected') {
       this.setState({ dataAvailable: true, clickHere1: 'CLICK HERE TO EDIT YOUR PICKS', clickHere2: 'CLICK HERE TO EDIT THE GAME' })
       userInfoDb.child('ramUfc').once('value', dataSnapshot => {
         var theInfo = dataSnapshot.val()
-        //////console.log('the event eventSelection',theInfo.eventSelection) 
+        //console.log('the event eventSelection',theInfo.eventSelection) 
         var currentRank = ''
         if (theInfo.currentRank === false) { currentRank = 'N/A' } else { currentRank = theInfo.currentRank }
         this.setState({
@@ -1046,26 +1046,26 @@ class RamUfc extends Component {
     var i = 0, theAmount = []
     theItems.map((item, index) => {
       var amount = 0
-      //////console.log('kufinish kumalo 1')
+      //console.log('kufinish kumalo 1')
       i++
       if (item.status1 === 'played') {
-        //////console.log('kufinish kumalo 2',item.bet,item.winner)
+        //console.log('kufinish kumalo 2',item.bet,item.winner)
         if (item.bet === 'player1' && item.winner === 'player1') {
           amount = Number(item.p1Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 3')
+          //console.log('kufinish kumalo 3')
         }
         if (item.bet === 'player2' && item.winner === 'player2') {
           amount = Number(item.p2Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 4')
+          //console.log('kufinish kumalo 4')
         }
 
-        //////console.log('kufinish kumalo 4B',i,theItems.length)
+        //console.log('kufinish kumalo 4B',i,theItems.length)
         if (i === theItems.length) {
-          //////console.log('kufinish kumalo 5')
+          //console.log('kufinish kumalo 5')
           const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-          //////console.log('the current Score',sum)
+          //console.log('the current Score',sum)
           this.setState({ currentScore: sum.toFixed(2) })
         }
       }
@@ -1075,7 +1075,7 @@ class RamUfc extends Component {
   // todo add stopEdit on getting matches
   hideModal = () => {
     this.setState({ opendetailsModal: false })
-    //////console.log('Button clicked!');
+    //console.log('Button clicked!');
   };
   checkEpiry = async () => {
     var userInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/time/')
@@ -1095,7 +1095,7 @@ class RamUfc extends Component {
     //console.log('this.state.theItems',allMatches)
     await allMatches.map((item, index) => {
       i++
-      ////console.log('item.p1Points',item.p1Points)
+      //console.log('item.p1Points',item.p1Points)
       if ((item.p1Points === 'N/A' || item.p2Points === 'N/A') && item.status1 !== 'cancelled') {
         pointMissing = true
         //console.log('item.p1Points',item)
@@ -1208,11 +1208,11 @@ class RamUfc extends Component {
     this.setState({ count: this.state.count + 1, showUFCModal: false })
   };
   openConfirmModal = (message, type) => {
-    console.log('this.state.theEventKey',this.state.theEventKey)
+    //console.log('this.state.theEventKey',this.state.theEventKey)
     var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/time/')
     timeInfoDb.once('value', dataSnapshot => {
       var theEventTime = dataSnapshot.val()
-      console.log('theEventTime',theEventTime)
+      //console.log('theEventTime',theEventTime)
       if (type === 'oddsUpdate') { 
         if (new Date().getTime() > theEventTime) {
           this.notify('Event odds update time expired')
@@ -1248,7 +1248,7 @@ class RamUfc extends Component {
     }*/
     allUFCMatches[index2]['showChooseWinner'] = true
     this.setState({ allUFCMatches: allUFCMatches })
-    console.log('this.state.currentItems allUFCMatches', allUFCMatches)
+    //console.log('this.state.currentItems allUFCMatches', allUFCMatches)
   }
   chosenWinner = (id, winner) => {
     var index2 = this.state.allUFCMatches.map(function (x) { return x.id; }).indexOf(id);
@@ -1256,7 +1256,7 @@ class RamUfc extends Component {
     theItems[index2]['chosenWinner'] = winner
     theItems[index2]['status1'] = 'played'
     this.setState({ allUFCMatches: theItems })
-    console.log('this.state.currentItems 008', theItems)
+    //console.log('this.state.currentItems 008', theItems)
   }
   closePickWinner = (id) => {
     var index2 = this.state.allUFCMatches.map(function (x) { return x.id; }).indexOf(id);
@@ -1264,14 +1264,14 @@ class RamUfc extends Component {
     delete theItems[index2]['chosenWinner']
     delete theItems[index2]['showChooseWinner']
     this.setState({ allUFCMatches: theItems })
-    console.log('this.state.currentItems 001', theItems)
+    //console.log('this.state.currentItems 001', theItems)
   }
 
   submitWinner = (id, winner) => {
-    console.log('haaaaaaaaaaaapa 000000')
+    //console.log('haaaaaaaaaaaapa 000000')
      /*var sangalewaRef = firebase.database().ref('/sangalewa/kiio/')
      sangalewaRef.set('kibeeeee')
-       console.log('haaaaaaaaaaaapa 2222222 555555')
+       //console.log('haaaaaaaaaaaapa 2222222 555555')
      return*/
     var index = this.state.allUFCMatches.map(function (x) { return x.id; }).indexOf(id);
     if (winner !== 'player1' && winner !== 'player2') {
@@ -1284,13 +1284,13 @@ class RamUfc extends Component {
     try {
       //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
       var shortArr = []
-      console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
+      //console.log('haaaaaaaaaaaapa', this.state.currentSelection, index, winner)
       items[index]['winner'] = winner
       delete items[index]['chosenWinner']
       delete items[index]['showChooseWinner']
       this.setState({ allUFCMatches: items })
       items.map((item, index) => {
-        console.log('shortArr', shortArr)
+        //console.log('shortArr', shortArr)
         var theItem = {
           p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
           status1: item.status1, id: item.id, type: item.type
@@ -1304,9 +1304,9 @@ class RamUfc extends Component {
       var theLink = 'theEvents::ramUfc::' + this.state.theEventKey + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
-      console.log('001', this.state.theEventKey, theItems)
-      console.log('theLink', theLink, theItems)
-      console.log('this.state.shortArr 006', shortArr)
+      //console.log('001', this.state.theEventKey, theItems)
+      //console.log('theLink', theLink, theItems)
+      //console.log('this.state.shortArr 006', shortArr)
       //return
        await axios.get("https://theramtournament.com/getSingleUFCResults?term=" + theQuery)
        //await axios.get("http://localhost:4000/getSingleUFCResults?term="+theQuery)
@@ -1318,7 +1318,7 @@ class RamUfc extends Component {
           }
         })
     } catch (error) {
-      ////console.log('error',error)
+      //console.log('error',error)
     }
   }
   openUFCModal = () => {
@@ -1439,7 +1439,7 @@ class RamUfc extends Component {
         </div>
         <div className={style.listCont}>
           {this.state.theItems.map((item, index) => {
-            ////console.log('the iteeeeeeeeeem',item)
+            //console.log('the iteeeeeeeeeem',item)
             var playStat = ''
             var playStatCol = ''
 
@@ -1469,13 +1469,13 @@ class RamUfc extends Component {
             if (item.bet === 'player1') { myPick = item.fighter1Name }
             if (item.bet === 'player2') { myPick = item.fighter2Name }
             var matchTime = ''
-            // //console.log('item.timeInMillis',item.timeInMillis)
+            //console.log('item.timeInMillis',item.timeInMillis)
             if (item.timeInMillis) {
               matchTime = Number(item.timeInMillis)
               matchTime = dayjs(item.timeInMillis).format('DD MMM YYYY HH:mm A')
               //matchTime=new Date(item.timeInMillis).toDateString()
             } else { matchTime = item.time }
-            ////console.log('matchTime',matchTime)
+            //console.log('matchTime',matchTime)
             var status1Item = ''
             if (item.status1 === 'notPlayed' && (new Date().getTime() < item.timeInMillis)) { status1Item = <div className={style.theCountDiv}><Countdown date={item.timeInMillis} className={style.theCount} /></div> }
             if (item.status1 === 'notPlayed' && (new Date().getTime() > item.timeInMillis)) { status1Item = <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p> }
@@ -1483,7 +1483,7 @@ class RamUfc extends Component {
             if (item.status1 === 'played') { status1Item = <p className={style.eventStatP} style={{ color: playStatCol }}>{playStat}</p> }
             if (item.status1 === 'ongoing') { status1Item = <p className={style.eventStatP} style={{ color: '#CB1E31' }}>Ongoing</p> }
             if (item.status1 === "cancelled") { status1Item = <p className={style.eventStatP} style={{ color: '#919191' }}>Cancelled</p> }
-            ////console.log('item.status1 rakada',item.id,item.status1,new Date().getTime(),item.timeInMillis)
+            //console.log('item.status1 rakada',item.id,item.status1,new Date().getTime(),item.timeInMillis)
             return (
               <div className={style.listDiv} key={index}>
                 <div className={style.theCont0}>

@@ -17,12 +17,9 @@ class TheMarchMadness extends Component {
     //this.setState({theCount:this.props.theCount})
    // this.props.onClick()
     //return
-    this.getRound1Matches()
-    this.getRound2Matches()
-    this.getFinalRound()
-    this.getOverall()
-    this.checkAuth()
+   
     //this.props.setClick(this.getAlert);
+    this.checkAuth()
   }
   getAlert() {
     alert('getAlert from Child');
@@ -31,17 +28,94 @@ class TheMarchMadness extends Component {
     var userId=''
     firebase.auth().onAuthStateChanged((user) => {
      if (user) {
+       var isAdmin=false
        userId=user.uid
        if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'){
-        this.setState({isAdmin:true})
+        this.setState({isAdmin:true});isAdmin=true
        }
        this.setState({userId,userLoggedIn:true}) 
+        this.getRound1Matches(isAdmin)
+    this.getRound2Matches(isAdmin)
+    this.getFinalRound(isAdmin)
+    this.getOverall(isAdmin)
      }else{
+       this.getRound1Matches(false)
+    this.getRound2Matches(false)
+    this.getFinalRound(false)
+    this.getOverall(false)
      }
    })
  }
-  getRound1Matches=()=>{
-    //console.log('craaaaaaaaaaaaaaaaaaaaaaaazy',this.props.theEventKey)
+ getRound1Matches = async (isAdmin) => {
+  const leadersRef = firebase.database().ref('/userBets/NCAAB/' + this.props.theEventKey + '/');
+  const theDet2 = [];
+
+  leadersRef.once('value', async (dataSnapshot) => {
+    if (!dataSnapshot.exists()) return;
+
+    const userPromises = [];
+
+    dataSnapshot.forEach((data) => {
+      const theId = data.key;
+
+      // We create a "Task" for each user that returns their complete object
+      const userTask = (async () => {
+        const isTherData = await firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/" + this.props.theEventKey + "/bets/round1/").once('value');
+        
+        if (isTherData.exists()) {
+          let theEmail = 'N/A';
+          let thePhone = 'N/A';
+
+          // 1. Fetch Admin Info if needed
+          if (isAdmin) {
+            const adminSnap = await firebase.database().ref('/users/' + theId + '/userData').once('value');
+            if (adminSnap.exists()) {
+              const adminData = adminSnap.val();
+              theEmail = adminData.email || 'N/A';
+              thePhone = adminData.phoneNo || 'N/A';
+            }
+          }
+
+          // 2. Fetch Bet Details
+          const detailsSnap = await firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/" + this.props.theEventKey + "/details/").once('value');
+          
+          if (detailsSnap.exists()) {
+            const userBetData = detailsSnap.val();
+            return {
+              id: theId,
+              flockName: userBetData.flockName,
+              teamName: userBetData.teamName,
+              bestPossibleScore: userBetData.round1BPS,
+              score: userBetData.round1Score || 0,
+              email: theEmail,
+              phone: thePhone
+            };
+          }
+        }
+        return null; // Return null if user has no data so we can filter it out
+      })();
+
+      userPromises.push(userTask);
+    });
+
+    // Wait for ALL users to finish fetching their names, emails, and scores
+    const results = await Promise.all(userPromises);
+    
+    // Filter out nulls and sort by score
+    const finalArray = results
+      .filter(item => item !== null)
+      .sort((a, b) => b.score - a.score);
+
+    this.setState({
+      round1Arr: finalArray,
+      theItems: finalArray,
+      areMessagesAvailable: finalArray.length > 0
+    });
+  });
+}
+  /*getRound1Matches=(isAdmin)=>{
+    //console.log('craaaaaaaaaaaaaaaaaaaaaaaazy',isAdmin)
+  //  return
     var leadersRef = firebase.database().ref('/userBets/NCAAB/'+this.props.theEventKey+'/')
    // var leadersRef = firebase.database().ref('/userBets/scoreBoards/NCAAB/'+this.props.theEventKey+'/round1/')
     var i=0,theDet2=[]
@@ -58,9 +132,11 @@ class TheMarchMadness extends Component {
         isTherData.once('value', dataSnapshot => {
           if(dataSnapshot.exists()){
         var theEmail='',thePhone=''
-        if(this.state.isAdmin){
+        if(isAdmin){
           userInfoDb2.once('value',dataSnapshot=>{
+           
             var theD=dataSnapshot.val()
+             //console.log('ikoooooooooooooooo 0000',theD)
             if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
             theDet['email']=theD.email
             if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
@@ -83,12 +159,12 @@ class TheMarchMadness extends Component {
         if(theCount===i){
           var sort=this.state.round1Arr.sort((a, b) => b.score - a.score )
           this.setState({round1Arr:sort})
-          ////console.log('finaaal',theDet2)
+          //console.log('finaaal',theDet2)
           //this.setState({round1Arr:theDet2})
         }
       })
     })
-  }
+  }*/
   
   getFinalRound=()=>{
     //return
@@ -113,7 +189,7 @@ class TheMarchMadness extends Component {
           i++
           var theId=data.key
           var theDet={}
-         /// //console.log('the final uid',theId)
+         ///console.log('the final uid',theId)
          
           var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
           var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
@@ -165,7 +241,7 @@ class TheMarchMadness extends Component {
                 //console.log('final round 36366',theDet2)
               this.setState({finalRoundArr:theDet2})
              }else{
-              ////console.log('hakunaaaaaaaaaaaaa 11111')
+              //console.log('hakunaaaaaaaaaaaaa 11111')
              }
           })
         }
@@ -192,7 +268,7 @@ class TheMarchMadness extends Component {
           i++
           var theId=data.key
           var theDet={}
-        //  //console.log('the uid',theId)
+        //console.log('the uid',theId)
           var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
           var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
           var theEmail='',thePhone=''
@@ -217,7 +293,7 @@ class TheMarchMadness extends Component {
               if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
               if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
               if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
-              ////console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
+              //console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
              
               var score=Number(round1Score)+Number(round2Score)+Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
               score=Number(score).toFixed(2)
@@ -226,10 +302,10 @@ class TheMarchMadness extends Component {
                 sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,
                 finalRoundScore:finalRoundScore,score:score}
                 theDet2.push(theDet)
-               // //console.log('ikoooooooooooooooo 1111',theDet2)
+               //console.log('ikoooooooooooooooo 1111',theDet2)
               this.setState({overallArr:theDet2})
              }else{
-              ////console.log('hakunaaaaaaaaaaaaa 11111')
+              //console.log('hakunaaaaaaaaaaaaa 11111')
              }
           })
           if(theCount===i){
@@ -274,7 +350,7 @@ class TheMarchMadness extends Component {
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
               bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
               theDet2.push(theDet)
-              console.log('ikoooooooooooooooo 1111',theDet2)
+              //console.log('ikoooooooooooooooo 1111',theDet2)
             this.setState({round2Arr:theDet2,theItems:theDet2})
            }else{
             //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -285,7 +361,7 @@ class TheMarchMadness extends Component {
         if(theCount===i){
           var sort=this.state.round2Arr.sort((a, b) => b.score - a.score )
           this.setState({round2Arr:sort})
-          console.log('round 2',theDet2)
+          //console.log('round 2',theDet2)
           //this.setState({round1Arr:theDet2})
         }
       })
@@ -298,7 +374,7 @@ class TheMarchMadness extends Component {
       dataSnapshot.forEach((data) => {
         var theId=data.key
         var theDet={}
-       // //console.log('the uid',theId)
+       //console.log('the uid',theId)
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
             var theEmail='',thePhone=''
@@ -316,10 +392,10 @@ class TheMarchMadness extends Component {
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
               bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
             theDet2.push(theDet)
-           // //console.log('ikoooooooooooooooo 22222',theDet2)
+           //console.log('ikoooooooooooooooo 22222',theDet2)
             this.setState({round2Arr:theDet2})
            }else{
-            ////console.log('hakunaaaaaaaaaaaaa 222222')
+            //console.log('hakunaaaaaaaaaaaaa 222222')
            }
         })
       })
@@ -355,8 +431,9 @@ class TheMarchMadness extends Component {
       });
   }
   render() {
-    ////console.log('this.state.currentSelection',this.state.currentSelection)
+    //console.log('this.state.currentSelection',this.state.currentSelection)
     var sortData=this.state.theItems.sort((a, b) => b.score - a.score )
+    //console.log('sortDataaaa',sortData)
     //var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore )
     return (
       <>

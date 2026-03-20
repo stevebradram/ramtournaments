@@ -11,8 +11,8 @@ const ConfirmableDialog = confirmable(ConfirmationDialog);
 const confirm = createConfirmation(ConfirmableDialog);
 const handleOnClick = async () => {
  if (await confirm({ confirmation: 'Are you sure?' })) {
-   console.log('Confirmed');
+   //console.log('Confirmed');
  } else {
-   console.log('Cancelled');
+   //console.log('Cancelled');
  }
 };

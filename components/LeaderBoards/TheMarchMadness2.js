@@ -13,7 +13,7 @@ class TheMarchMadness extends Component {
 
   componentDidMount=()=>{
     this.setState()
-    console.log('here march madness 2222222 again agaiiiiiiin')
+    //console.log('here march madness 2222222 again agaiiiiiiin')
     //this.setState({theCount:this.props.theCount})
    // this.props.onClick()
     //return
@@ -83,7 +83,7 @@ class TheMarchMadness extends Component {
       if(theCount===i){
         var sort=this.state.round1Arr.sort((a, b) => b.score - a.score )
         this.setState({round1Arr:sort})
-        ////console.log('finaaal',theDet2)
+        //console.log('finaaal',theDet2)
         //this.setState({round1Arr:theDet2})
       }
     })
@@ -113,7 +113,7 @@ getFinalRound=()=>{
         i++
         var theId=data.key
         var theDet={}
-       /// //console.log('the final uid',theId)
+       ///console.log('the final uid',theId)
        
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
@@ -165,7 +165,7 @@ getFinalRound=()=>{
               //console.log('final round 36366',theDet2)
             this.setState({finalRoundArr:theDet2})
            }else{
-            ////console.log('hakunaaaaaaaaaaaaa 11111')
+            //console.log('hakunaaaaaaaaaaaaa 11111')
            }
         })
       }
@@ -192,7 +192,7 @@ getFinalRound=()=>{
           i++
           var theId=data.key
           var theDet={}
-        //  //console.log('the uid',theId)
+        //console.log('the uid',theId)
           var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
           var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
           var theEmail='',thePhone=''
@@ -217,7 +217,7 @@ getFinalRound=()=>{
               if(!elite8Score||elite8Score===undefined||elite8Score===null){elite8Score=0}
               if(!final4Score||final4Score===undefined||final4Score===null){final4Score=0}
               if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
-              ////console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
+              //console.log('scorees',theId,round1Score,round2Score,sweet16Score,elite8Score,final4Score,finalRoundScore)
              
               var score=Number(round1Score)+Number(round2Score)+Number(sweet16Score)+Number(elite8Score)+Number(final4Score)+Number(finalRoundScore)
               score=Number(score).toFixed(2)
@@ -226,10 +226,10 @@ getFinalRound=()=>{
                 sweet16Score:sweet16Score,elite8Score:elite8Score,final4Score:final4Score,
                 finalRoundScore:finalRoundScore,score:score}
                 theDet2.push(theDet)
-               // //console.log('ikoooooooooooooooo 1111',theDet2)
+               //console.log('ikoooooooooooooooo 1111',theDet2)
               this.setState({overallArr:theDet2})
              }else{
-              ////console.log('hakunaaaaaaaaaaaaa 11111')
+              //console.log('hakunaaaaaaaaaaaaa 11111')
              }
           })
           if(theCount===i){
@@ -285,7 +285,7 @@ getFinalRound=()=>{
         if(theCount===i){
           var sort=this.state.round2Arr.sort((a, b) => b.score - a.score )
           this.setState({round2Arr:sort})
-          ////console.log('finaaal',theDet2)
+          //console.log('finaaal',theDet2)
           //this.setState({round1Arr:theDet2})
         }
       })
@@ -298,7 +298,7 @@ getFinalRound=()=>{
       dataSnapshot.forEach((data) => {
         var theId=data.key
         var theDet={}
-       // //console.log('the uid',theId)
+       //console.log('the uid',theId)
         var userInfoDb2=firebase.database().ref('/users/'+theId+'/userData')
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/NCAAB/"+this.props.theEventKey+"/details/")
             var theEmail='',thePhone=''
@@ -316,10 +316,10 @@ getFinalRound=()=>{
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
               bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
             theDet2.push(theDet)
-           // //console.log('ikoooooooooooooooo 22222',theDet2)
+           //console.log('ikoooooooooooooooo 22222',theDet2)
             this.setState({round2Arr:theDet2})
            }else{
-            ////console.log('hakunaaaaaaaaaaaaa 222222')
+            //console.log('hakunaaaaaaaaaaaaa 222222')
            }
         })
       })
@@ -355,7 +355,7 @@ getFinalRound=()=>{
       });
   }
   render() {
-    ////console.log('this.state.currentSelection',this.state.currentSelection)
+    //console.log('this.state.currentSelection',this.state.currentSelection)
     var sortData=this.state.theItems.sort((a, b) => b.score - a.score )
     //var sortData=this.state.theItems.sort((a, b) => b.currentScore - a.currentScore )
     return (

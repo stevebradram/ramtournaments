@@ -53,11 +53,11 @@ class Messages extends Component {
     this.checkAuth()
     /* const { isWindowInFocus } = this.props;
       if (!isWindowInFocus) {
-        console.log('page visible 1111',isWindowInFocus)
+        //console.log('page visible 1111',isWindowInFocus)
       }*/
   }
    listentoWindow = isVisible => {
-    console.log('page visible 22222',isVisible)
+    //console.log('page visible 22222',isVisible)
       this.setState({
         isWindowInFocus: isVisible,
       });
@@ -178,10 +178,10 @@ class Messages extends Component {
     amOnline.on('value',snapshot=>{
       if (snapshot.val()) {
         userRef.onDisconnect().remove(()=>{
-          console.log('internet disconnected',new Date().getTime())
+          //console.log('internet disconnected',new Date().getTime())
         });
         userRef.set(true,()=>{
-       console.log('internert connected',new Date().getTime())
+       //console.log('internert connected',new Date().getTime())
         });
       }
     });
@@ -193,7 +193,7 @@ class Messages extends Component {
   updateMessages = () => {
     var messageRef = firebase.database().ref('/messaging/messages/' + this.state.myUserId + '/' + this.state.theMessageId).orderByKey().startAfter(this.state.lastMesoId);
     var theMessages = [...this.state.theMessagesArray], updateMessages = []
-    console.log('weeeeeee', theMessages)
+    //console.log('weeeeeee', theMessages)
     // return
     messageRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
@@ -234,7 +234,7 @@ class Messages extends Component {
     //console.log('rrrrrrr 599999',this.state.myUserId,messageId)
     await chatRef.on('value', snapshot => {
 
-      console.log('something changeeeeeeeeeeeed', new Date().getTime())
+      //console.log('something changeeeeeeeeeeeed', new Date().getTime())
       this.updateMessages()
       this.hasInitializedFirebase()
       // chatRef.off('child_changed');
@@ -245,7 +245,7 @@ class Messages extends Component {
   realTimeLastChatUpdate = async (messageId) => {
     //return
     var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.otheUserId + '/' + messageId)
-    ////console.log('rrrrrrr',this.state.myUserId,messageId)
+    //console.log('rrrrrrr',this.state.myUserId,messageId)
     if (messageId === null || messageId.length < 4) return
     //console.log('rrrrrrr 599999',this.state.myUserId,messageId)
     await chatRef.on('value', snapshot => {

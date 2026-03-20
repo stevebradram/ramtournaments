@@ -17,7 +17,7 @@ class CommMarchMadness extends Component {
   }
 
   componentDidMount = () => {
-    console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces, this.state.round1Arr)
+    //console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces, this.state.round1Arr)
     //return
       this.setState({ isEventStarted: this.props.eventStarted, theEventKey: this.props.theEventKey, flockNameWithNoSpaces: this.props.flockNameWithNoSpaces, flockNameAvailable: this.props.flockNameAvailable, currentRound: this.props.currentRound, endTime: this.props.endTime, menuToShow: this.props.menuToShow, currentSubSelection: this.props.currentSubSelection }, () => {
       this.getRamMembersData()
@@ -25,8 +25,13 @@ class CommMarchMadness extends Component {
     })
 
   }
+  runCustomLogic2 = (type,menu)=>{
+    //console.log('wewe mzeeeeeeeeeee',type,menu)
+    if(type==='ramsChange'){ this.setState({menuToShow:menu})}
+    if(type==='round'){ this.setState({currentRound:menu})}
+  }
   runCustomLogic = (theEventKey, currentSelection, sportType,endTime,isEventExpired) => {
-    console.log('week 1 matches 52525252', theEventKey, currentSelection, sportType)
+    //console.log('week 1 matches 52525252', theEventKey, currentSelection, sportType)
     /*this.setState({isEventStarted, currentSelection: 'round1'})
     this.showShimmer()
     this.timerHandle = setTimeout(
@@ -62,7 +67,6 @@ this.getRamMembersData()
     var flockNameWithNoSpaces = flockNameWithSpaces?.split(' ').join('|')
     var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores/' + flockNameWithNoSpaces)
     var flockCreatorRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/unique/' + flockNameWithNoSpaces + '/creatorId')
-    //console.log('hureeeeeeeeeeeeeeeee',flockNameWithNoSpaces,theEventKey,currentSelection,sportType)
     flockCreatorRef.once('value', dataSnapshot => {
       var creatorId = dataSnapshot.val()
       this.setState({ creatorId })
@@ -120,7 +124,7 @@ this.getRamMembersData()
             }
           })
         } else {
-          console.log('hakuna data mseeeeeeeeeeeeeeeeee')
+          //console.log('hakuna data mseeeeeeeeeeeeeeeeee')
         }
       })
     })
@@ -139,7 +143,7 @@ this.getRamMembersData()
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          ////console.log('theFlocksArr 7777 theData',data.key, theData)
+          //console.log('theFlocksArr 7777 theData',data.key, theData)
           // var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
           var theItem = { flockName: data.key, membersNo: theData.round1MembersNo, score: theData.round1Score, avScore: theData.round1AvScore }
           var theItem2 = { flockName: data.key, membersNo: theData.round2MembersNo, score: theData.round2Score, avScore: theData.round2AvScore }
@@ -263,7 +267,7 @@ this.getRamMembersData()
             //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
 
             // this.setState({ flockSysRound1 })
-            // //console.log('theFlocksArr 9999 22', flockSysRound1)
+            //console.log('theFlocksArr 9999 22', flockSysRound1)
           }
         })
       }
@@ -301,7 +305,7 @@ this.getRamMembersData()
           // allArr.push(theArr)
           if (count === i) {
             this.setState({ theAdminFlocksArr: allArr })
-            // //console.log('theFlocksArr', allArr)
+            //console.log('theFlocksArr', allArr)
           }
         })
       } else {
@@ -322,7 +326,7 @@ this.getRamMembersData()
     });
   }
   render() {
-
+    //console.log('this.state.menuToShow',this.state.menuToShow)
     var flockNameAvailable = this.state.flockNameAvailable
     //console.log('flockNameAvailable',flockNameAvailable)
     var theItems = [], theItems2 = [], theSeparator = 0 //round1Sep:0,round2Sep:0,finalRoundSep:0
@@ -364,7 +368,7 @@ this.getRamMembersData()
                 <th>Action</th>
               </tr>
               {theItems.map((item, index) => {
-                ////console.log('picked', item)
+                //console.log('picked', item)
                 var thePick = ''
                 if (item.pick === true) { thePick = 'true' }
                 if (item.pick === false) { thePick = 'false' }
@@ -411,7 +415,7 @@ this.getRamMembersData()
               {theItems2.map((item, index) => {
 
                 return (
-                  <tr key={index} id={theSeparator < index + 1 && item.flockName !== this.state.flockNameWithNoSpaces ? styles.table1Tr2D : styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.flockNameWithNoSpaces ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.flockName === this.state.flockNameWithNoSpaces ? 'white' : '#292f51' }}>
+                  <tr key={index} id={theSeparator < index + 1 && item.flockName !== this.state.flockNameWithNoSpaces ? styles.table1Tr2D : styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.flockNameWithNoSpaces ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.flockName===this.state.flockNameWithNoSpaces||index===0 ? 'white' : '#292f51' }}>
                     <td>{index + 1}</td>
                     <td>{item.flockName?.split("|").join(' ')}</td>
                     <td>{item.membersNo}</td>
@@ -447,7 +451,7 @@ this.getRamMembersData()
                   <th>Phone No</th></> : null}
               </tr>
               {this.state.theAdminFlocksArr.map((item, index) => {
-                // //console.log('itttm',item)
+                //console.log('itttm',item)
                 return (
                   <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                     <td>{index + 1}</td>

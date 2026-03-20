@@ -57,11 +57,11 @@ class Messages extends Component {
        // window.addEventListener('receiveMessages', this.receiveMessages)
         //this.checkIo()
         return
-        console.log('theData',this.props.from)
-        console.log('theData',this.props.theData)
+        //console.log('theData',this.props.from)
+        //console.log('theData',this.props.theData)
         var theData=this.props.theData
         if(this.props.from==='fromFriends'&&theData!=='N/A'){
-            console.log('ddddddddd')
+            //console.log('ddddddddd')
             this.setState({profilePhoto:theData['profilePhoto'],userName:theData['userName'],acronym:theData['acronym'],lastSeen:theData['lastSeen'],otheUserId:theData['uid']})
         }
         //this.props.theData['profilePhoto']
@@ -70,7 +70,7 @@ class Messages extends Component {
     }
    /* checkIo=()=>{
   socket.on("message",(message)=>{
-  console.log('User coonected',message)
+  //console.log('User coonected',message)
 
         })
     }*/
@@ -82,9 +82,9 @@ class Messages extends Component {
    // window.removeEventListener('receiveMessages', this.receiveMessages)
 }
 /*receiveMessages= () => {
-  console.log('updating messages')
+  //console.log('updating messages')
   socket.on("receive_message",(data)=>{
-    console.log('message receiveddddddddddddddddddddddd')
+    //console.log('message receiveddddddddddddddddddddddd')
     alert(data.message)
     this.setState({count:this.state.count+1})
   })
@@ -104,7 +104,7 @@ class Messages extends Component {
             })
           }
     closeMessenger=()=>{
-        console.log('clicked!')
+        //console.log('clicked!')
     this.props.onClick('fromMessages','chatId','N/A')
     }
   doNothing = (event) => {
@@ -112,18 +112,18 @@ class Messages extends Component {
     event.preventDefault()
   }
   checkData=(myUid)=>{
-    console.log('uids',myUid,this.state.otheUserId)
+    //console.log('uids',myUid,this.state.otheUserId)
   var myUidKey = myUid.slice(-10);
   var otherUidKey = this.state.otheUserId.slice(-10);
   var mesoId1=myUidKey+otherUidKey
   var mesoId2=otherUidKey+myUidKey
-  console.log('mesoidddddddd',mesoId1,mesoId2)
+  //console.log('mesoidddddddd',mesoId1,mesoId2)
   var messageRef1 = firebase.database().ref('/messaging/messages/'+myUid+'/'+mesoId1)
   var messageRef2 = firebase.database().ref('/messaging/messages/'+myUid+'/'+mesoId2)
   var theMessages=[]
   messageRef1.once('value', dataSnapshot => {
     if(dataSnapshot.exists()){
-        console.log('1 exiiiiiists',dataSnapshot.val())
+        //console.log('1 exiiiiiists',dataSnapshot.val())
           var theNo=dataSnapshot.numChildren(), i=0
           this.setState({theMessageId:mesoId1})
            //this.checkLastSeenChat(mesoId1,this.state.otheUserId)
@@ -134,8 +134,8 @@ class Messages extends Component {
             theMessages.push(theData)
             if(theNo===i){
                 let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-                console.log('objMax',objMax,objMax['id'])
-                console.log('theMessages1',theMessages)
+                //console.log('objMax',objMax,objMax['id'])
+                //console.log('theMessages1',theMessages)
                 this.setState({areMessagesAvailable:true,theMessagesArray:theMessages,lastMesoId:objMax['id']},()=>{
                  //this.upadateLastSeenChat(mesoId1,this.state.otheUserId)
                  //this.realTimeUpdate(mesoId1)
@@ -146,7 +146,7 @@ class Messages extends Component {
     }else{
     messageRef2.once('value', dataSnapshot => {
     if(dataSnapshot.exists()){
-         console.log('2 exiiiiiists',dataSnapshot.val())
+         //console.log('2 exiiiiiists',dataSnapshot.val())
          var theNo=dataSnapshot.numChildren(), i=0
           this.setState({theMessageId:mesoId2})
           //this.checkLastSeenChat(mesoId2,this.state.otheUserId)
@@ -157,8 +157,8 @@ class Messages extends Component {
             theMessages.push(theData)
             if(theNo===i){
                 let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-                console.log('objMax',objMax,objMax['id'])
-                console.log('theMessages2',theMessages)
+                //console.log('objMax',objMax,objMax['id'])
+                //console.log('theMessages2',theMessages)
                 this.setState({areMessagesAvailable:true,theMessagesArray:theMessages,lastMesoId:objMax['id']},()=>{
                // this.upadateLastSeenChat(mesoId2,this.state.otheUserId)
                 //this.realTimeUpdate(mesoId2)
@@ -174,7 +174,7 @@ class Messages extends Component {
   })
   }
     upadateLastSeenChat=(messageId,otherUserId)=>{
-        console.log('otherUserId to be updated',otherUserId,'ny id',this.state.myUserId)
+        //console.log('otherUserId to be updated',otherUserId,'ny id',this.state.myUserId)
     var chatRef = firebase.database().ref('/messaging/lastChats/'+otherUserId+'/'+messageId+'/lastChatSeen/')
     chatRef.set(new Date().getTime())
   }
@@ -185,30 +185,30 @@ class Messages extends Component {
     updateMessages=()=>{
        var messageRef = firebase.database().ref('/messaging/messages/'+this.state.myUserId+'/'+this.state.theMessageId).orderByKey().startAfter(this.state.lastMesoId);
         var theMessages=[...this.state.theMessagesArray],updateMessages=[]
-        console.log('weeeeeee',theMessages)
+        //console.log('weeeeeee',theMessages)
        // return
         messageRef.once('value', dataSnapshot => {
            if(dataSnapshot.exists()){
             var theNo=dataSnapshot.numChildren(),i=0
             // this.checkLastSeenChat(this.state.theMessageId,this.state.otheUserId)
            dataSnapshot.forEach((data) => {
-            console.log('the new data',data.val())
+            //console.log('the new data',data.val())
              i++
             var theData=data.val()
             theData['id']=data.key
             theMessages.push(theData)
             updateMessages.push(theData)
             if(theNo===i){
-              console.log('updateMessages',theMessages)
+              //console.log('updateMessages',theMessages)
              let objMax = updateMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-                console.log('objMax',objMax,objMax['id'])
-                console.log('theMessages2',theMessages)
+                //console.log('objMax',objMax,objMax['id'])
+                //console.log('theMessages2',theMessages)
              this.upadateLastSeenChat(this.state.theMessageId,this.state.otheUserId)
              this.setState({areMessagesAvailable:true,theMessagesArray:theMessages,lastMesoId:objMax['id']})
             }
            })
            }else{
-            console.log('no daaata currentlyyyyyy')
+            //console.log('no daaata currentlyyyyyy')
            }
         })
     }
@@ -221,10 +221,10 @@ class Messages extends Component {
     var chatRef = firebase.database().ref('/messaging/lastChats/'+this.state.myUserId+'/'+messageId)
     //console.log('rrrrrrr',this.state.myUserId,messageId)
     if (messageId === null || messageId.length < 4) return
-     console.log('rrrrrrr 599999',this.state.myUserId,messageId)
+     //console.log('rrrrrrr 599999',this.state.myUserId,messageId)
     await chatRef.on('child_changed', snapshot => {
    if(this.state.hasInitializedFirebase===false) return  
-    console.log('something changeeeeeeeeeeeed')
+    //console.log('something changeeeeeeeeeeeed')
     this.updateMessages()
     this.hasInitializedFirebase()
    // chatRef.off('child_changed');
@@ -237,9 +237,9 @@ class Messages extends Component {
     var chatRef = firebase.database().ref('/messaging/lastChats/'+this.state.otheUserId+'/'+messageId)
     //console.log('rrrrrrr',this.state.myUserId,messageId)
     if (messageId === null || messageId.length < 4) return
-     console.log('rrrrrrr 599999',this.state.myUserId,messageId)
+     //console.log('rrrrrrr 599999',this.state.myUserId,messageId)
     await chatRef.on('value', snapshot => {
-    console.log('something changeeeeeeeeeeeed')
+    //console.log('something changeeeeeeeeeeeed')
     this.updateMessages()
       //this.fetchDataReload(this.state.messagesId)
 
@@ -252,14 +252,14 @@ class Messages extends Component {
       1000)
   }
   sendMessage=()=>{
-      console.log('rrrrrrrrrr 22222')
+      //console.log('rrrrrrrrrr 22222')
       this.notify("Can't send a message at the moment")
       socket.emit("send_message",{message:"Kyieeeeeeee"})
       return
   var messageRef = firebase.database().ref('/messaging/messages/')
   var chatRef = firebase.database().ref('/messaging/lastChats/')
   var theKey=chatRef.push().key
-  console.log('rrrrrrrrrr',theKey)
+  //console.log('rrrrrrrrrr',theKey)
   var myUidKey = this.state.myUserId.slice(-10);
   var otherUidKey = this.state.otheUserId.slice(-10);
   var mesoId=''
@@ -268,7 +268,7 @@ class Messages extends Component {
   }else{
      mesoId=this.state.theMessageId  
   }
-  console.log('mesoId',mesoId)
+  //console.log('mesoId',mesoId)
  // return
   
   if(this.state.theMessage.length>=1&&mesoId!==''){
@@ -287,7 +287,7 @@ class Messages extends Component {
   }
   inputChange = async (e) => {
             var value = e.target.value
-            console.log('theId', e.target.id)
+            //console.log('theId', e.target.id)
             await this.setState({[e.target.id]: value})
   }
     notify = (message) => {

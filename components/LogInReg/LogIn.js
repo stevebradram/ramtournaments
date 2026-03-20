@@ -15,11 +15,7 @@ class LogIn extends Component {
         teamName:'',flockName:'',teamNameErr:'',flockNameErr:''}
          
            componentDidMount=()=>{
-            console.log('component mounted')
-            
-            //this.notify2('Success Validating Log In Information')
-            //this.signOut()
-
+           
            }
            resetInputChange = async (e) => {
             var value = e.target.value
@@ -31,7 +27,7 @@ class LogIn extends Component {
            }
            inputChange = async (e) => {
             var value = e.target.value
-            console.log('theId', e.target.id)
+            //console.log('theId', e.target.id)
             await this.setState({[e.target.id]: value})
 
             //LOGIN INPUT
@@ -83,11 +79,11 @@ class LogIn extends Component {
                 if (this.state.teamName.length>=3){this.setState({teamNameErr:''})}
               }
               if (e.target.id ==='flockName'){
-                console.log('hapa tu',e.target.id)
+                //console.log('hapa tu',e.target.id)
                 if (this.state.flockName.length>=3){this.setState({flockNameErr:''})}
               }
               if (e.target.id ==='phoneNo'){
-                console.log('hapa tu',e.target.id)
+                //console.log('hapa tu',e.target.id)
                 if (this.state.phoneNo.length>=5){this.setState({phoneNoErr:''})}
                 else{this.setState({phoneNoErr:'Phone Number field must be atleast above 5 characters'})}
               }
@@ -98,7 +94,7 @@ class LogIn extends Component {
         
 
            showLogIn=(status1,status2,status3)=>{
-             console.log(this.state.status1,this.state.status2,this.state.status3)
+             //console.log(this.state.status1,this.state.status2,this.state.status3)
           this.setState({showLogIn:status1,showRegister:status2,showPasswordReset:status3})
       }
       showRam=(status1,status2,status3)=>{
@@ -136,15 +132,15 @@ class LogIn extends Component {
         }else{this.setState({logInEmailErr:''})}
         if(validate===false)return
         //this.notify2('Success Validating Log In Information')
-        console.log('the credentials',this.state.email, this.state.password)
+        //console.log('the credentials',this.state.email, this.state.password)
         firebase.auth().fetchSignInMethodsForEmail(this.state.email).then((signInMethods) => {
-          console.log('signInMethods ',signInMethods)
+          //console.log('signInMethods ',signInMethods)
           firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
           .then((resp) => {
             this.setState({logInPassErr:''})
             var user = resp.user;
             var userId=user.uid
-            console.log('the user info',userId,user)
+            //console.log('the user info',userId,user)
             //this.props.onClick()
             localStorage.set('loggedIn', 'true');
             this.notify2('Logged In Successfully')
@@ -152,7 +148,7 @@ class LogIn extends Component {
            // window.location.reload();
           }).catch((error) => {
             this.setState({logInPassErr:'Email or Password is incorrect'})
-            console.log('the error 0001',error.code)
+            //console.log('the error 0001',error.code)
             if(error.code==='auth/internal-error'){
               this.notify('The email or password entered is incorrect')
             }else{
@@ -161,15 +157,15 @@ class LogIn extends Component {
           });
         }).catch((error) => {
           this.notify('The email or password entered is incorrect')
-          console.log('the error 2',error.message)
+          //console.log('the error 2',error.message)
         });
       }
       signOut = async () => {
       firebase.auth().signOut().then(function() {
-        console.log('Signed Out');
+        //console.log('Signed Out');
         Router.push('/loggingin')
       }, function(error) {
-        console.error('Sign Out Error', error);
+        //console.error('Sign Out Error', error);
       });}
       showProgressBar=()=>{
         this.setState({showProgressBar:true})
@@ -180,26 +176,26 @@ class LogIn extends Component {
       submitRegistrationInfo = async () => { 
         if (!this.state.buttonClick)return
         this.buttonClickStat()
-        console.log('hapa kwa reg',this.state.regEmail)
+        //console.log('hapa kwa reg',this.state.regEmail)
         if (this.state.regEmail===''){this.setState({emailErr:'Email field must be filled'})}
         if (this.state.regName===''){this.setState({nameErr:'Name field must be filled'})}
         if (this.state.regPassword===''){this.setState({passErr:'Password field must be filled'})}
         if (this.state.phoneNo===''||this.state.phoneNo.length<5){this.setState({phoneNoErr:'Phone Number field must be atleast above 5 characters'})}
-        console.log('hapa 111111111111')
+        //console.log('hapa 111111111111')
         // if (this.state.regPassword2===''){this.setState({pass2Err:'Retype password field must be filled'})}
         //if (this.state.regEmail===''||this.state.regName===''||this.state.regPassword===''||this.state.regPassword2==='')return
         if (this.state.regEmail===''||this.state.regName===''||this.state.regPassword==='',this.state.phoneNo===''||this.state.phoneNo.length<5)return
         //if (this.state.emailValidated===false||this.state.nameValidated===false||this.state.passValidated===false||this.state.pass2Validated===false)return
         if (this.state.emailValidated===false||this.state.nameValidated===false||this.state.passValidated===false)return
         var validate = this.validateEmail(this.state.regEmail)
-        console.log('hapa 22222222222222')
+        //console.log('hapa 22222222222222')
         if(validate===false){
         this.setState({emailErr:'Please enter a valid email'})
         }else{this.setState({emailErr:'',emailValidated:true})}
         if(validate===false)return
-        console.log('hapa 333333333')
+        //console.log('hapa 333333333')
         //this.notify2('Success Validating Registration Information')
-        console.log('almost successful')
+        //console.log('almost successful')
         this.createAccount(this.state.regEmail,this.state.regPassword,this.state.regName,this.state.phoneNo)
       }
       createAccount=async(email,password,name,phoneNo)=>{
@@ -216,28 +212,28 @@ class LogIn extends Component {
         var userInfoDb = firebase.database().ref('users/')
         var phoneNoInfoDb = firebase.database().ref('phoneNo')
         firebase.auth().fetchSignInMethodsForEmail(email).then((signInMethods) => {
-          console.log('signInMethods ',signInMethods)
+          //console.log('signInMethods ',signInMethods)
           firebase.auth().createUserWithEmailAndPassword(email, password)
           .then((resp) => {
             var user = resp.user;
             var userId=user.uid
-            console.log('here at the user info',user)
+            //console.log('here at the user info',user)
             phoneNoInfoDb.child(phoneNo).set(1)
             userInfoDb.child('/'+userId+'/userData/').set(infoData).then(() => {
-              console.log('mambo ngoooooooooooooori')
+              //console.log('mambo ngoooooooooooooori')
               user.sendEmailVerification().then(() => {
                // this.props.onClick()
-               console.log('hureeeeeeeeeeeee malisa',user)
+               //console.log('hureeeeeeeeeeeee malisa',user)
                 this.setState({showProgressBar:false})
                 localStorage.set('loggedIn', 'true');
                 this.notify2('Account created successfully')
                 //window.location.reload();
                 Router.push('/reload')
               }).catch((error) => {
-                console.log('sendEmailVerification error',error.message)})
+                })
             })
           }).catch((error) => {
-            console.log('the error 1',error.message)
+            //console.log('the error 1',error.message)
             if(error.message==='The email address is already in use by another account.'){
               this.notify('Email entered is already registered please enter another email or Log In')
             }else{
@@ -246,7 +242,7 @@ class LogIn extends Component {
           });
         }).catch((error) => {
           this.notify('Email entered is already registered please enter another email or Log In')
-          console.log('the error 2',error.message)
+          //console.log('the error 2',error.message)
         });
     }
     submitLogIn = async (event) => {
@@ -268,21 +264,21 @@ class LogIn extends Component {
           firebase.auth().signInWithEmailAndPassword(this.state.logInEmail, this.state.logInPass)
             .then((resp) => {
               return (
-                console.log('the user', resp.user),
+                //console.log('the user', resp.user),
                 firebase.auth().currentUser.getIdToken(true).then((idToken) => {
-                  console.log('idToken2', idToken)
+                  //console.log('idToken2', idToken)
                   this.notify('Log In successful')
                   this.saveAuthToken(idToken)})
               )
   
             }).catch((error) => {
-              console.log(error),
+              //console.log(error),
                 this.setState({ loading: false, logInPassEmpty: 'Incorrect password for the above entered email.', disableClick: false })
             });
         }
       })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           this.setState({ loading: false }),
           this.notify('An error occured, please try again')
          
@@ -298,7 +294,7 @@ class LogIn extends Component {
       if(validate===false)return
       firebase.auth().sendPasswordResetEmail(this.state.resetEmail)
       .then((resp) => {
-        console.log('the rees',resp)
+        //console.log('the rees',resp)
         this.notify2('Reset password link send to your Email send successfuly')
         this.setState({resetPassP:'Reset password link has been send to the provided email',theCol:'red'})
         this.timerHandle = setTimeout(
@@ -307,7 +303,7 @@ class LogIn extends Component {
       })
       .catch((error) => {
         this.notify('An error occured, please try again later')
-        console.log('the rees',error)
+        //console.log('the rees',error)
        
       });
     }

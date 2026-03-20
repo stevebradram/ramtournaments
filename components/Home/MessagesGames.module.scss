@@ -12,7 +12,7 @@ $blackish:#292f51;
     overflow-y: auto;
     padding-bottom: 10px;
   }
-  .container2::-webkit-scrollbar {
+ /* .container2::-webkit-scrollbar {
     width: 0px;
     height: 0px;
 }
@@ -24,11 +24,9 @@ $blackish:#292f51;
 }
 .container2::-webkit-scrollbar-thumb {
     background: blue
-}​
+}​*/
   
-  #container2{
-    width: 300px;
-  }
+
   .container2 h1{
      font-size: 20px;
      margin-top: 20px;
@@ -313,3 +311,18 @@ $blackish:#292f51;
 .theMenuIc{
   margin: 0px 5px;
 }
+@media all and (max-width: 430px) {
+    .container2{
+    width: 330px;
+  }
+  }
+    @media all and (max-width: 370px) {
+        .container2{
+    width: 300px;
+  }
+    }
+  @media all and (max-width: 320px) {
+    .container2{
+    width: 250px;
+  }
+  }

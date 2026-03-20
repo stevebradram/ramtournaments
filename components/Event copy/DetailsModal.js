@@ -69,17 +69,17 @@ class DetailsModal extends Component {
     myFlockNamesRef.once('value',dataSnapshot=>{
       var flockCount=dataSnapshot.numChildren()
       if(!dataSnapshot.val()){
-        console.log('hakuna kitu mzeeee')
+        //console.log('hakuna kitu mzeeee')
         this.setState({openNewFlockModal:false})
-      }else{console.log('kunaaaaaaaaaa kitu mzeeee')}
+      }else{//console.log('kunaaaaaaaaaa kitu mzeeee')}
       dataSnapshot.forEach((data,index) => {
         i++
-       console.log('the flock names',data.key,flockCount)
+       //console.log('the flock names',data.key,flockCount)
        var theKey=data.key.replace(/_/g,' ')
        flocks.push(theKey)
        if(flockCount===i){
         this.setState({ramFlockNames:flocks})
-        console.log('the flockssss',flocks)
+        //console.log('the flockssss',flocks)
        }
       })
     })
@@ -101,7 +101,7 @@ class DetailsModal extends Component {
    
     uniqueFlockNameRef.once('value',dataSnapshot=>{
       if(!dataSnapshot.val()){
-       console.log('there is no data')
+       //console.log('there is no data')
        uniqueFlockNameRef.set(userId)
     uniqueFlockMembersRef.set('Admin')
     myFlockNamesRef.child(theFlockName).set(userId,(error) => {
@@ -115,7 +115,7 @@ class DetailsModal extends Component {
         }
     })
       }else{
-        console.log('there is dataaaa',dataSnapshot.val())
+        //console.log('there is dataaaa',dataSnapshot.val())
         this.notify('Flock Name already taken, please enter another name')
         this.setState({flockNameErr:'Flock Name already taken, please enter another name'});
         return
@@ -396,7 +396,7 @@ class DetailsModal extends Component {
                             {tableArray.map((item, index) => {
                               var theItem=item?.split('#')
                               var selected=theItem[2]
-                             // //console.log('the item',item)
+                             //console.log('the item',item)
                               var selectedToShow=selectedToShow=<div className={styles.boxDiv2} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}><MdCheck color="#fff" size={15} /></div>
                               if(index===0&&selected==='player1'){
                                 selectedToShow=<div className={styles.boxDiv3}><MdCheck color="#fff" size={15} onClick={()=>this.selectedItems(theId,index,theBet,player1Points,player2Points)}/></div>

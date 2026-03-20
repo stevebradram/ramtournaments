@@ -17,7 +17,7 @@ class TheMarchMadness extends Component {
 
   componentDidMount = () => {
     //this.setState()
-    console.log('here march madness again agaiiiiiiin 111',this.props.theEventKey)
+    //console.log('here march madness again agaiiiiiiin 111',this.props.theEventKey)
    // return
     this.setState({theCount:this.props.theCount,theEventKey:this.props.theEventKey})
     // this.props.onClick()
@@ -25,14 +25,14 @@ class TheMarchMadness extends Component {
     this.loadData(this.props.theEventKey)
   }
   runCustomLogic = (eventKey) => {
-    console.log('week 1 matches 004',eventKey,this.props.theEventKey)
+    //console.log('week 1 matches 004',eventKey,this.props.theEventKey)
     this.setState({theEventKey:eventKey,currentSelection: 'week1'})
     //console.log("Child logic triggered from parent!");
     //alert("Child method executed!");
     this.loadData(eventKey)
   };
   loadData=async(eventKey)=>{
-     console.log('here march madness again agaiiiiiiin 222',eventKey)
+     //console.log('here march madness again agaiiiiiiin 222',eventKey)
     //return
     this.checkRoundAvailability(eventKey)
     this.getweek1Matches(eventKey)
@@ -82,7 +82,7 @@ class TheMarchMadness extends Component {
      })
   }
   getweek1Matches = (eventKey) => {
-     console.log('week 1 matches',eventKey)
+     //console.log('week 1 matches',eventKey)
     var leadersRef = firebase.database().ref('/userBets/NFLRegular/' + eventKey + '/')
     var i = 0, theDet2 = []
     leadersRef.once('value', dataSnapshot => {
@@ -91,7 +91,7 @@ class TheMarchMadness extends Component {
         i++
         var theId = data.key
         var theDet = {}
-        ////console.log('the uid', theId)
+        //console.log('the uid', theId)
         var userInfoDb2 = firebase.database().ref('/users/' + theId + '/userData')
         var userInfoDb = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/details/")
         var isTherData = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/bets/week1Round/")
@@ -115,7 +115,7 @@ class TheMarchMadness extends Component {
                   bestPossibleScore: userBetData.week1RoundBPS, score: userBetData.week1RoundScore, email: theEmail, phone: thePhone
                 }
                 theDet2.push(theDet)
-                ////console.log('ikoooooooooooooooo 1111', theDet2)
+                //console.log('ikoooooooooooooooo 1111', theDet2)
                 this.setState({ week1RoundArr: theDet2, theItems: theDet2 })
               } else {
                 //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -143,7 +143,7 @@ class TheMarchMadness extends Component {
         i++
         var theId = data.key
         var theDet = {}
-        ////console.log('the uid', theId)
+        //console.log('the uid', theId)
         var userInfoDb2 = firebase.database().ref('/users/' + theId + '/userData')
         var userInfoDb = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/details/")
         var isTherData = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/bets/week2Round/")
@@ -167,7 +167,7 @@ class TheMarchMadness extends Component {
                   bestPossibleScore: userBetData.week2RoundBPS, score: userBetData.week2RoundScore, email: theEmail, phone: thePhone
                 }
                 theDet2.push(theDet)
-                ////console.log('ikoooooooooooooooo 1111', theDet2)
+                //console.log('ikoooooooooooooooo 1111', theDet2)
                 this.setState({ week2RoundArr: theDet2 })
               } else {
                 //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -175,13 +175,13 @@ class TheMarchMadness extends Component {
             })
           }else{
             this.setState({ week2RoundArr:[]})
-            console.log('hakunaaaaaaaaaaaaa data week 22222222222222')
+            //console.log('hakunaaaaaaaaaaaaa data week 22222222222222')
           }
         })
         if (theCount === i) {
           var sort = this.state.week2RoundArr.sort((a, b) => b.score - a.score)
           this.setState({ week2RoundArr: sort })
-          ////console.log('finaaal',theDet2)
+          //console.log('finaaal',theDet2)
           //this.setState({week1RoundArr:theDet2})
         }
       })
@@ -196,7 +196,7 @@ class TheMarchMadness extends Component {
         i++
         var theId = data.key
         var theDet = {}
-        ////console.log('the uid', theId)
+        //console.log('the uid', theId)
         var userInfoDb2 = firebase.database().ref('/users/' + theId + '/userData')
         var userInfoDb = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/details/")
         var isTherData = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/bets/week2Round/")
@@ -220,7 +220,7 @@ class TheMarchMadness extends Component {
                   bestPossibleScore: userBetData.week3RoundBPS, score: userBetData.week3RoundScore, email: theEmail, phone: thePhone
                 }
                 theDet2.push(theDet)
-                ////console.log('ikoooooooooooooooo 1111', theDet2)
+                //console.log('ikoooooooooooooooo 1111', theDet2)
                 this.setState({ week3RoundArr: theDet2 })
               } else {
                 //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -233,7 +233,7 @@ class TheMarchMadness extends Component {
         if (theCount === i) {
           var sort = this.state.week3RoundArr.sort((a, b) => b.score - a.score)
           this.setState({ week3RoundArr: sort })
-          ////console.log('finaaal',theDet2)
+          //console.log('finaaal',theDet2)
           //this.setState({week1RoundArr:theDet2})
         }
       })
@@ -248,7 +248,7 @@ class TheMarchMadness extends Component {
         i++
         var theId = data.key
         var theDet = {}
-        ////console.log('the uid', theId)
+        //console.log('the uid', theId)
         var userInfoDb2 = firebase.database().ref('/users/' + theId + '/userData')
         var userInfoDb = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" +eventKey+ "/details/")
         var isTherData = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/bets/week4Round/")
@@ -272,7 +272,7 @@ class TheMarchMadness extends Component {
                   bestPossibleScore: userBetData.week4RoundBPS, score: userBetData.week4RoundScore, email: theEmail, phone: thePhone
                 }
                 theDet2.push(theDet)
-                ////console.log('ikoooooooooooooooo 1111', theDet2)
+                //console.log('ikoooooooooooooooo 1111', theDet2)
                 this.setState({ week4RoundArr: theDet2 })
               } else {
                 //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -285,7 +285,7 @@ class TheMarchMadness extends Component {
         if (theCount === i) {
           var sort = this.state.week4RoundArr.sort((a, b) => b.score - a.score)
           this.setState({ week4RoundArr: sort })
-          ////console.log('finaaal',theDet2)
+          //console.log('finaaal',theDet2)
           //this.setState({week1RoundArr:theDet2})
         }
       })
@@ -304,7 +304,7 @@ class TheMarchMadness extends Component {
           i++
           var theId = data.key
           var theDet = {}
-          //  //console.log('the uid',theId)
+          //console.log('the uid',theId)
           var userInfoDb2 = firebase.database().ref('/users/' + theId + '/userData')
           var userInfoDb = firebase.database().ref('/users/').child(theId).child("/ramData/events/NFLRegular/" + eventKey + "/details/")
           var theEmail = '', thePhone = ''
@@ -335,10 +335,10 @@ class TheMarchMadness extends Component {
                 week3RoundScore: week3RoundScore, week4RoundScore: week4RoundScore, score: score
               }
               theDet2.push(theDet)
-              // //console.log('ikoooooooooooooooo 1111',theDet2)
+              //console.log('ikoooooooooooooooo 1111',theDet2)
               this.setState({ overallArr: theDet2 })
             } else {
-              ////console.log('hakunaaaaaaaaaaaaa 11111')
+              //console.log('hakunaaaaaaaaaaaaa 11111')
             }
           })
           if (theCount === i) {
@@ -361,7 +361,7 @@ class TheMarchMadness extends Component {
     }
     if (round === 'week2') {
       this.setState({ theItems: this.state.week2RoundArr })
-      console.log('it is final round', this.state.week2RoundArr)
+      //console.log('it is final round', this.state.week2RoundArr)
     }
     if (round === 'week3') {
       this.setState({ theItems: this.state.week3RoundArr })
@@ -513,7 +513,7 @@ class TheMarchMadness extends Component {
                   {this.state.isAdmin ? <><th>Phone</th><th>Email</th><th>Delete</th></> : null}
                 </tr>
                 {sortData.map((item, index) => {
-                  ////console.log('tttttttt', item)
+                  //console.log('tttttttt', item)
                   return (
                     <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.id === this.state.userId ? 'white' : index === 0 ? '#ffffff' : '#292f51' }}>
                       <td>{index + 1}</td>

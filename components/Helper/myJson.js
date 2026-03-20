@@ -2950,7 +2950,7 @@ class myJason extends Component {
             theFightsJson[index]['p2Points']=item2.awayTeamPoints}*/
             var subDifference=matchMillis+292200000
        if(f1Name===item2.homeTeam||f2Name===item2.awayTeam){
-            console.log('allName',allName)
+            //console.log('allName',allName)
             theFightsJson[index]['p1Points']=item2.homeTeamPoints
             theFightsJson[index]['p2Points']=item2.awayTeamPoints 
             theFightsJson[index]['commenceTime']=item2.commenceTime
@@ -2964,8 +2964,8 @@ class myJason extends Component {
                     theFightsJson[index]['commenceTime']=item2.commenceTime
                     theFightsJson[index]['timeInMillis']=item2.timeInMillis
                 theMissing.push(item2.homeTeam+item2.awayTeam)
-                console.log('hainaaaaaa',f1Name,item2.homeTeam,item2.awayTeam)
-                console.log('the fighters',v,f1Name,f2Name)
+                //console.log('hainaaaaaa',f1Name,item2.homeTeam,item2.awayTeam)
+                //console.log('the fighters',v,f1Name,f2Name)
                 //f1Name='',f2Name=''
                 }
             }
@@ -2983,8 +2983,8 @@ class myJason extends Component {
        })
        
        if(theFightsJson.length===v){
-        console.log('fights array 004',theFightsJson)
-        console.log('the misssssssssssssssssssssssssing',theMissing)
+        //console.log('fights array 004',theFightsJson)
+        //console.log('the misssssssssssssssssssssssssing',theMissing)
     }
       })
     }
@@ -3027,8 +3027,8 @@ class myJason extends Component {
                     newOddsJson.push(newItem)
                     })
                     if(m===theOddsJson.length){
-                        console.log('new array oldd',theOddsJson)
-                        console.log('new array laaast',newOddsJson)
+                        //console.log('new array oldd',theOddsJson)
+                        //console.log('new array laaast',newOddsJson)
                         this.sortTheArrays(newOddsJson)
                     } 
                 }
@@ -3044,8 +3044,8 @@ class myJason extends Component {
         var theDate=day+'-'+month+'-'+year
         var dateObj = new Date(theDate); 
         var theMillis = dateObj.getTime();
-        console.log('theWorddddddddddddddd',theDate)
-        console.log('the milllis',theMillis)*/
+        //console.log('theWorddddddddddddddd',theDate)
+        //console.log('the milllis',theMillis)*/
         
         theOddsJson.map((item1,index)=>{
        /* //console.log('bookmakers draftkings',item.bookmakers.key)
@@ -3055,7 +3055,7 @@ class myJason extends Component {
         //console.log('item main '+index,item1)
         var team1=item1.away_team
         var team2=item1.home_team
-        ////console.log('item filtered',this.pick(item.bookmakers, ['draftkings']))
+        //console.log('item filtered',this.pick(item.bookmakers, ['draftkings']))
         var i=0
         item1.bookmakers.map((item2)=>{
             i++
@@ -3076,7 +3076,7 @@ class myJason extends Component {
                      theOddsJson[index].draftkingsOdds=obj
                     //var newObj = Object.assign({}, ...(item3.outcomes.map(item => ({ [item.key]: item.value }) )));
                     //theOddsJson[index].draftkingsOdds=item3.outcomes
-                    ////console.log('draftkingsMarket 100000000000000',newObj)
+                    //console.log('draftkingsMarket 100000000000000',newObj)
                     //var priceArray={}
                    /* var priceArray=[],j=0
                     item3.outcomes.map((item4)=>{
@@ -3112,7 +3112,7 @@ class myJason extends Component {
                     }else{
                         var homeFighterName=item12.home_team
                         var awayFighterName=item12.away_team
-                        ////console.log('shit is dooope',item12.home_team,item12.draftkingsOdds[fighter1Name])
+                        //console.log('shit is dooope',item12.home_team,item12.draftkingsOdds[fighter1Name])
                         //console.log('home Fighter',homeFighterName,item12.draftkingsOdds[homeFighterName])
                         //console.log('away Fighter',awayFighterName,item12.draftkingsOdds[awayFighterName])
                         awayPoints=item12.draftkingsOdds[awayFighterName]
@@ -3129,14 +3129,14 @@ class myJason extends Component {
                 })
                 if(m===theOddsJson.length){
                     //console.log('new array oldd',theOddsJson)
-                    console.log('new array laaast',newOddsJson)
+                    //console.log('new array laaast',newOddsJson)
                     this.sortTheArrays(newOddsJson)
                 } 
             }
            // this.pick(obj, ['a', 'c']);
         })
     })
-    ////console.log('theSon',theOddsJson)
+    //console.log('theSon',theOddsJson)
     return (
       <div>myJason</div>
     )

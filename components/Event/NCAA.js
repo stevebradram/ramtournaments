@@ -67,11 +67,11 @@ class NCAA extends Component {
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
       var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
       var theQuery = encodeURIComponent(theLink)
-      console.log('queeeeeeeeeeeeeeery',theQuery)
+      //console.log('queeeeeeeeeeeeeeery',theQuery)
       //return
       var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
-        console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+        //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
        if((new Date().getTime()>dataSnapshot.val())){
         this.notify('Update odds time expired')
        }
@@ -106,7 +106,7 @@ class NCAA extends Component {
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
       
       var theQuery=encodeURIComponent(theLink) 
-      console.log('theLink',theLink)
+      //console.log('theLink',theLink)
       //return
       await axios.get("https://theramtournament.com/getNCAAFNFLResults?term="+theQuery)
       //await axios.get("http://localhost:4000/getNCAAFNFLResults?term="+theQuery)
@@ -200,8 +200,8 @@ class NCAA extends Component {
     this.setState({ firstRoundArray: [], quarterFinalsArray: [], semiFinalsArray: [], finalArray: [], theMenu: 'mainCard', dataAvailable: false, currentEventUserInfo: {} })
     var userInfoDb = firebase.database().ref('/theEvents/NCAAF/').child(this.state.theEventKey)
     userInfoDb.once('value', dataSnapshot => {
-      ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var firstRoundCount = dataSnapshot.child('firstRound').numChildren()
       var quarterFinalsCount = dataSnapshot.child('quarterFinals').numChildren()
       var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
@@ -218,14 +218,14 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === firstRoundCount) {
-            ////console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ firstRoundArray: array1, theItems: array1 })
           }
         }
       }
       if (theInfo.quarterFinals) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.quarterFinals) {
           i++
@@ -233,14 +233,14 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === quarterFinalsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //console.log('whole prelimms Array',array1)
             this.setState({ quarterFinalsArray: array1 })
             this.getMatchesInfo(this.state.userId,'firstRound')
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //console.log('hakuna prelimsssssss')
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'firstRound')
         }
@@ -248,7 +248,7 @@ class NCAA extends Component {
       //console.log('iko finalssssssssssssssssss 0000')
       if (theInfo.semiFinals) {
         var array1 = []
-        ////console.log('iko earlyPrelims')
+        //console.log('iko earlyPrelims')
         var i = 0
         for (var key in theInfo.semiFinals) {
           i++
@@ -256,7 +256,7 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === semiFinalsCount) {
-            console.log('wholesemiFinalsArray',array1)
+            //console.log('wholesemiFinalsArray',array1)
             this.setState({ semiFinalsArray: array1 })
             if (this.state.userId.length > 3) {
               this.getMatchesInfo(this.state.userId,'quarterFinals')
@@ -267,7 +267,7 @@ class NCAA extends Component {
       } else {
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'quarterFinals')
-          ////console.log('hakuna early prelimsssssss')
+          //console.log('hakuna early prelimsssssss')
         }
       }
       //console.log('iko finalssssssssssssssssss 1111')
@@ -281,7 +281,7 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === finalsCount) {
-            ////console.log('whole early prelimms Array',array1)
+            //console.log('whole early prelimms Array',array1)
             this.setState({ finalArray: array1 })
             if (this.state.userId.length > 3) {
               this.getMatchesInfo(this.state.userId,'semiFinals')
@@ -293,14 +293,14 @@ class NCAA extends Component {
       } else {
         if (this.state.userId.length > 3) {
           this.getMatchesInfo(this.state.userId,'semiFinals')
-          ////console.log('hakuna early prelimsssssss')
+          //console.log('hakuna early prelimsssssss')
         }
       }
     })
-    ////console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
+    //console.log('hakuna early hureeeeeeeeeeeeeeeeeeeeeeeeee')
   }
   getMatchesInfo = async (userId,selection) => {
-    ////console.log('allMatches',userId,this.state.theEventKey)
+    //console.log('allMatches',userId,this.state.theEventKey)
     //return
     if(userId.length<5)return
     var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/NCAAF/" + this.state.theEventKey + '/')
@@ -315,29 +315,29 @@ class NCAA extends Component {
     else{
       this.setState({hasUserPicked:true})
      selectedMatchesKeyDb.once('value', dataSnapshot => {
-      ////console.log('the key',dataSnapshot.val())
+      //console.log('the key',dataSnapshot.val())
       if (!dataSnapshot.val()) return
       photoRefDb.once('value', dataSnapshot => {
-        ////console.log('proofile photo',dataSnapshot.val())
+        //console.log('proofile photo',dataSnapshot.val())
         if (dataSnapshot.val()) {
           this.setState({ profilePhoto: dataSnapshot.val() })
         }
       })
       userInfoDb.once('value', dataSnapshot => {
         if (!dataSnapshot.val()) return
-        console.log('the type user 0000000000000', dataSnapshot.val())
+        //console.log('the type user 0000000000000', dataSnapshot.val())
         if (dataSnapshot.val()) {
           var theInfo = dataSnapshot.val()
           this.setState({ currentEventUserInfo: theInfo, currentRank: theInfo.currentRank })
           currentEventUserInfo = dataSnapshot.val()
           totalScore=Number(theInfo.firstRoundScore)+Number(theInfo.quarterFinalsScore)+Number(theInfo.semiFinalsScore)+Number(theInfo.finalsScore)
-          console.log('the dddddddd',theInfo)
+          //console.log('the dddddddd',theInfo)
 
         }
       })
       var thetrrrr = ''
       //console.log('this.state.currentSelection', this.state.currentSelection)
-     // console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
+     //console.log('firstRoundArray',this.state.firstRoundArray,'quarterFinalsArray',this.state.quarterFinalsArray,'semiFinalsArray',this.state.semiFinalsArray)
       if (selection === 'firstRound') {
         thetrrrr = this.state.firstRoundArray
       }
@@ -352,13 +352,13 @@ class NCAA extends Component {
       }
 
       //var thetrrrr=[...this.state.ramUfcMaincardArray,...this.state.ramUfcPrelimsArray,...this.state.ramUfcEarlyPrelimsArray]
-      ////console.log('thetrrrr',thetrrrr)
+      //console.log('thetrrrr',thetrrrr)
       userBetsDb.once('value', dataSnapshot => {
-        ////console.log('the bets data',dataSnapshot.val())
-        ////console.log('this.state.theItems',this.state.theItems)
+        //console.log('the bets data',dataSnapshot.val())
+        //console.log('this.state.theItems',this.state.theItems)
         if (!dataSnapshot.val()) return
         var itemsCount = dataSnapshot.numChildren()
-        console.log('selection',selection,'itemsCount',itemsCount)
+        //console.log('selection',selection,'itemsCount',itemsCount)
             if(itemsCount===4){this.setState({isFirstRoundPicked:true,BPSTitle:'First Round'})}
             if(itemsCount===8){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,BPSTitle:'Quarter Finals'})}
             if(itemsCount===10){this.setState({isFirstRoundPicked:true,isQuarterFinalsPicked:true,isSemiFinalsPicked:true,BPSTitle:'Semi Finals'})}
@@ -367,32 +367,32 @@ class NCAA extends Component {
             if(selection==='quarterFinals'&&itemsCount<8)return
             if(selection==='semiFinals'&&itemsCount<10)return
             if(selection==='finals'&&itemsCount<11)return
-            // console.log('MEGA count',itemsCount)
+            //console.log('MEGA count',itemsCount)
         var i = 0, thePoints = [], currentScore = []
         dataSnapshot.forEach((data, index) => {
           i++
-        //  console.log('thank DAATA',selection,data.val())
+        //console.log('thank DAATA',selection,data.val())
           thetrrrr.map((item) => {
-            ////console.log('thank you sir',item.winner)
+            //console.log('thank you sir',item.winner)
             if (item.id === data.key) {
               //console.log('thank you sir')
               item['bet'] = data.val()
               if (item.status1 === 'played') {
 
-                ////console.log('item.winner',item.winner)
-                ////console.log('my beeeeet',data.val())
-                ////console.log('item.p1Points',item.p1Points)
-                ////console.log('item.p2Points',item.p2Points)
+                //console.log('item.winner',item.winner)
+                //console.log('my beeeeet',data.val())
+                //console.log('item.p1Points',item.p1Points)
+                //console.log('item.p2Points',item.p2Points)
                 if (item.winner === 'player1' && data.val() === 'player1') { currentScore.push(item.p1Points);thePoints.push(item.p1Points);}
                 if (item.winner === 'player2' && data.val() === 'player2') { currentScore.push(item.p2Points);thePoints.push(item.p2Points);}
-                ////console.log('p1 pointsss',currentScore)
+                //console.log('p1 pointsss',currentScore)
 
               }else{
               if (data.val() === 'player1') {
-                thePoints.push(item.p1Points);////console.log('the points',item.p1Points)
+                thePoints.push(item.p1Points);//console.log('the points',item.p1Points)
               }
               if (data.val() === 'player2') {
-                thePoints.push(item.p2Points);////console.log('the points',item.p2Points)
+                thePoints.push(item.p2Points);//console.log('the points',item.p2Points)
               }}
             }
           })
@@ -408,7 +408,7 @@ class NCAA extends Component {
   })
   }
   loadOtherFights = async (theEventKey, theEventTitle,currentSelection,oddsUpdate,resultsUpdate) => {
-    console.log('the info',theEventKey,theEventTitle,currentSelection)
+    //console.log('the info',theEventKey,theEventTitle,currentSelection)
     //return
     this.setState({oddsUpdate,resultsUpdate})
     var eventsInfo = firebase.database().ref('/theEvents/eventsIds/' + theEventKey + '/time')
@@ -447,15 +447,15 @@ class NCAA extends Component {
     var userInfoDb = firebase.database().ref('/activeEvents/').child(name)
 
     userInfoDb.once('value', dataSnapshot => {
-      ////console.log('children count',dataSnapshot.child('mainCard').numChildren());
-      ////console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
+      //console.log('children count',dataSnapshot.child('mainCard').numChildren());
+      //console.log('prelims count',dataSnapshot.child('prelims').numChildren()); 
       var mainCardCount = dataSnapshot.child('mainCard').numChildren()
       var prelimsCount = dataSnapshot.child('prelims').numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if (theInfo.mainCard) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo.mainCard)
+        //console.log('iko maincarddddd',theInfo.mainCard)
         var i = 0
         for (var key in theInfo.mainCard) {
           i++
@@ -463,7 +463,7 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === mainCardCount) {
-            ////console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ ramUfcMaincardArray: array1 })
             this.setState({ theItems: array1 })
           }
@@ -471,7 +471,7 @@ class NCAA extends Component {
       }
       if (theInfo.prelims) {
         var array1 = []
-        ////console.log('iko prelimsssssss')
+        //console.log('iko prelimsssssss')
         var i = 0
         for (var key in theInfo.prelims) {
           i++
@@ -479,13 +479,13 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === prelimsCount) {
-            ////console.log('whole prelimms Array',array1)
+            //console.log('whole prelimms Array',array1)
             this.setState({ ramUfcPrelimsArray: array1 })
           }
         }
         //prelimsArray
       } else {
-        ////console.log('hakuna prelimsssssss')
+        //console.log('hakuna prelimsssssss')
       }
     })
   }
@@ -494,10 +494,10 @@ class NCAA extends Component {
     userInfoDb.once('value', dataSnapshot => {
       var count = dataSnapshot.numChildren()
       var theInfo = dataSnapshot.val()
-      ////console.log('the event eventSelection',theInfo) 
+      //console.log('the event eventSelection',theInfo) 
       if (theInfo) {
         var array1 = []
-        ////console.log('iko maincarddddd',theInfo)
+        //console.log('iko maincarddddd',theInfo)
         var i = 0
         for (var key in theInfo) {
           i++
@@ -505,7 +505,7 @@ class NCAA extends Component {
           var array2 = { theId: key, ...theData }
           array1.push(array2)
           if (i === count) {
-            ////console.log('whole maincard Array',array1)
+            //console.log('whole maincard Array',array1)
             this.setState({ [theArr]: array1 })
           }
         }
@@ -517,26 +517,26 @@ class NCAA extends Component {
     var i = 0, theAmount = []
     theItems.map((item, index) => {
       var amount = 0
-      //////console.log('kufinish kumalo 1')
+      //console.log('kufinish kumalo 1')
       i++
       if (item.status1 === 'played') {
-        //////console.log('kufinish kumalo 2',item.bet,item.winner)
+        //console.log('kufinish kumalo 2',item.bet,item.winner)
         if (item.bet === 'player1' && item.winner === 'player1') {
           amount = Number(item.p1Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 3')
+          //console.log('kufinish kumalo 3')
         }
         if (item.bet === 'player2' && item.winner === 'player2') {
           amount = Number(item.p2Points)
           theAmount.push(amount)
-          //////console.log('kufinish kumalo 4')
+          //console.log('kufinish kumalo 4')
         }
 
-        //////console.log('kufinish kumalo 4B',i,theItems.length)
+        //console.log('kufinish kumalo 4B',i,theItems.length)
         if (i === theItems.length) {
-          //////console.log('kufinish kumalo 5')
+          //console.log('kufinish kumalo 5')
           const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
-          //////console.log('the current Score',sum)
+          //console.log('the current Score',sum)
           this.setState({ currentScore: sum.toFixed(2) })
         }
       }
@@ -546,7 +546,7 @@ class NCAA extends Component {
 
   hideModal = () => {
     this.setState({ opendetailsModal: false })
-    //////console.log('Button clicked!');
+    //console.log('Button clicked!');
   };
   openTheModal = (items) => {
    
@@ -558,13 +558,13 @@ class NCAA extends Component {
     var i=0,pointMissing=false
     items.map((item,index)=>{
      i++
-       console.log('item.p1Points',item.p1Points)
+       //console.log('item.p1Points',item.p1Points)
        if(item.p1Points==='N/A'||item.p2Points==='N/A'){
          pointMissing=true
        }
       if(items.length===index+1){
       if(pointMissing===true){
-        console.log('missing shiiit')
+        //console.log('missing shiiit')
        this.notify('Event points not yet populated')
       }else{
        this.openTheModal2()
@@ -582,8 +582,8 @@ class NCAA extends Component {
 
   }
   openTheModal2=()=>{
-    console.log('this.state.theEventKey',this.state.currentSelection,this.state.theEventKey,this.state.editType)
-    console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
+    //console.log('this.state.theEventKey',this.state.currentSelection,this.state.theEventKey,this.state.editType)
+    //console.log('this.state.theEventKey',this.state.theEventKey,this.state.editType)
     //return
      var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey+'/'+this.state.editType)
      editDbRef.once('value', dataSnapshot => {
@@ -591,7 +591,7 @@ class NCAA extends Component {
         this.notify('Event pick/edit not available at the moment')
       }else{
         if((new Date().getTime()>dataSnapshot.val())){
-          console.log('now 005',new Date().getTime(),dataSnapshot.val())
+          //console.log('now 005',new Date().getTime(),dataSnapshot.val())
           if(this.state.currentSelection==='finals'){
             this.notify("Event pick expired")
           }else{this.notify("Can't make a pick when the event has already started")}
@@ -600,7 +600,7 @@ class NCAA extends Component {
           this.setState({ openLoginModal:false, opendetailsModal:true})
          }
       }
-      /* console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
+      /* //console.log('zeve mbyu',dataSnapshot.val(),new Date().getTime())
       if((new Date().getTime()>dataSnapshot.val())){
        this.notify('Event pick/edit not available at the moment')
       }
@@ -608,7 +608,7 @@ class NCAA extends Component {
        if(this.state.currentSelection!=='firstRound'){
          var theDbRef=firebase.database().ref('/userBets/scoreBoards/NCAAF/'+this.state.theEventKey)
          theDbRef.child(this.state.userId).once('value', dataSnapshot => {
-           console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
+           //console.log('the dddddddddddd',this.state.userId,dataSnapshot.val())
             if(dataSnapshot.exists()){this.setState({ openLoginModal:false,opendetailsModal: true })}
             else{this.notify("Can't make a pick when the event has already started")}
          })
@@ -646,7 +646,7 @@ class NCAA extends Component {
     event.stopPropagation()
     event.preventDefault()
     data['id']=id
-    console.log('data',data)
+    //console.log('data',data)
     var theDb=firebase.database().ref('/theEvents/eventToShowHomePage/')
     theDb.set(data,error=>{
       if(!error){
@@ -658,7 +658,7 @@ class NCAA extends Component {
     createEvent = () => {
       var round1Arr = {}, quarterFinalsArr = {}, semiFinalsArr = {}, finalsArr = {}, final4Arr = {}, finalArr = {}
   
-      console.log('round1 length', round1.length)
+      //console.log('round1 length', round1.length)
       var year =new Date().getFullYear()
       var nextYear=year+1
       var eventKey = 'NCAAF' + year+'-'+nextYear
@@ -692,7 +692,7 @@ class NCAA extends Component {
           round1Arr[item.id] = item
        
           if (round1.length === index + 1) {
-            console.log('round1Arr 1111',round1Arr)
+            //console.log('round1Arr 1111',round1Arr)
             generalDb.child('/firstRound/').update(round1Arr)
           }
         })
@@ -715,7 +715,7 @@ class NCAA extends Component {
   
           quarterFinalsArr[item.id] = item
           if (quarterFinals.length === index + 1) {
-            console.log('quarterFinalsArr 1111',quarterFinalsArr)
+            //console.log('quarterFinalsArr 1111',quarterFinalsArr)
             generalDb.child('/quarterFinals/').update(quarterFinalsArr)
           }
         })
@@ -736,7 +736,7 @@ class NCAA extends Component {
           ////
           semiFinalsArr[item.id] = item
           if (semiFinals.length === index + 1) {
-            console.log('semiFinalsArr 1111',semiFinalsArr)
+            //console.log('semiFinalsArr 1111',semiFinalsArr)
             generalDb.child('/semiFinals/').update(semiFinalsArr)
           }
         })
@@ -758,7 +758,7 @@ class NCAA extends Component {
            ////
           finalsArr[item.id] = item
           if (finals.length === index + 1) {
-            console.log('finalsArr 1111',finalsArr)
+            //console.log('finalsArr 1111',finalsArr)
             generalDb.child('/finals/').update(finalsArr,(error) => {
               if (error) {
                 this.notify('An error occured while creating event, try again')
@@ -783,7 +783,7 @@ class NCAA extends Component {
     }
     inputChange = async (e) => {
       var value = e.target.value
-      console.log('valueee',value)
+      //console.log('valueee',value)
       
       await this.setState({ [e.target.id]: value })
       if (this.state.round1Time.length >= 3) { this.setState({ round1Err: '' }) }
@@ -797,7 +797,7 @@ class NCAA extends Component {
       }
       openNCAAFModal=()=>{
         //firstRound quarterFinals semiFinals finals
-        console.log('detailsssssss',this.state.theEventKey)
+        //console.log('detailsssssss',this.state.theEventKey)
         this.setState({itemsToModal:[]})
         var editDbRef=firebase.database().ref('/theEvents/NCAAF/eventIds/'+this.state.theEventKey)
         editDbRef.once('value', dataSnapshot => {
@@ -814,31 +814,31 @@ class NCAA extends Component {
           //if(finalEditExpiry==='N/A'){finalEditExpiry=0}
          // if(selection==='firstRound'&&firstRoundEditExpiry===0)
           if(selection==='firstRound'&&firstRoundEditExpiry!=='N/A'&&new Date().getTime()>firstRoundEditExpiry){
-            console.log('wild card expired')
+            //console.log('wild card expired')
             this.setState({eventToModal:'quarterFinals',itemsToModal:this.state.quarterFinalsArray,ncaaModal:true})
           }else if(selection==='firstRound'&&(new Date().getTime()<firstRoundEditExpiry)||firstRoundEditExpiry==='N/A'){
             this.setState({eventToModal:'firstRound',itemsToModal:this.state.firstRoundArray,ncaaModal:true})
-            console.log('hapa kwa all finalArray',this.state.firstRoundArray)
+            //console.log('hapa kwa all finalArray',this.state.firstRoundArray)
           }//else{}
           if(selection==='quarterFinals'&&quarterEditExpiry!=='N/A'&&new Date().getTime()>quarterEditExpiry){
-            console.log('divisional Round expired')
+            //console.log('divisional Round expired')
             this.setState({eventToModal:'semiFinals',itemsToModal:this.state.semiFinalsArray,ncaaModal:true})
           }else if(selection==='quarterFinals'&&new Date().getTime()<quarterEditExpiry){
             this.setState({eventToModal:'quarterFinals',itemsToModal:this.state.quarterFinalsArray,ncaaModal:true})
           }
           if(selection==='semiFinals'&&semiEditExpiry!=='N/A'&&new Date().getTime()>semiEditExpiry){
-            console.log('hapa kwa finals 111',this.state.finalArray)
+            //console.log('hapa kwa finals 111',this.state.finalArray)
             //return
             this.setState({eventToModal:'finals',itemsToModal:this.state.finalArray,ncaaModal:true})
           }else if(selection==='semiFinals'&&new Date().getTime()<semiEditExpiry){
             this.setState({eventToModal:'semiFinals',itemsToModal:this.state.semiFinalsArray,ncaaModal:true})
           }
           if(selection==='finals'&&finalEditExpiry!=='N/A'&&new Date().getTime()>finalEditExpiry){
-            console.log('wild card expired')
+            //console.log('wild card expired')
             this.notify("Can't enter event details to an expired event")
           }else if(selection==='finals'&&new Date().getTime()<finalEditExpiry){
             this.setState({eventToModal:'finals',itemsToModal:this.state.finalArray,ncaaModal:true})
-            console.log('hapa kwa finals 565656')
+            //console.log('hapa kwa finals 565656')
           }
         })
       }
@@ -863,10 +863,10 @@ class NCAA extends Component {
         var theItems=this.state.firstRoundArray
         theItems[index2]['showChooseWinner']=true
         this.setState({firstRoundArray:theItems})
-        console.log('this.state.currentItems 002',theItems)
+        //console.log('this.state.currentItems 002',theItems)
       }
       if(this.state.currentSelection==='quarterFinals'){
-        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        //console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
         var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
         var nowTime=new Date().getTime()
         var theItems=this.state.quarterFinalsArray
@@ -884,7 +884,7 @@ class NCAA extends Component {
         this.setState({quarterFinalsArray:theItems})
       }
       if(this.state.currentSelection==='semiFinals'){
-        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        //console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
         var index2 = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
         var nowTime=new Date().getTime()
         var theItems=this.state.semiFinalsArray
@@ -900,10 +900,10 @@ class NCAA extends Component {
         var theItems=this.state.semiFinalsArray
         theItems[index2]['showChooseWinner']=true
         this.setState({semiFinalsArray:theItems})
-        console.log('theItems',theItems)
+        //console.log('theItems',theItems)
       }
       if(this.state.currentSelection==='finals'){
-        console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
+        //console.log('this.currentSelection',this.state.currentSelection,time,nowTime)
         var index2 = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
         var nowTime=new Date().getTime()
         var theItems=this.state.finalArray
@@ -918,7 +918,7 @@ class NCAA extends Component {
         var theItems=this.state.finalArray
         theItems[index2]['showChooseWinner']=true
         this.setState({finalArray:theItems})
-        console.log('theItems',theItems)
+        //console.log('theItems',theItems)
       }
       }
       chosenWinner=(id,winner)=>{
@@ -929,14 +929,14 @@ class NCAA extends Component {
         theItems[index2]['status1']='played'
        // theItems[index2]['isItPlayed']='played'
         this.setState({firstRoundArray:theItems})
-        console.log('this.state.currentItems 008',theItems)
+        //console.log('this.state.currentItems 008',theItems)
       }
         if(this.state.currentSelection==='quarterFinals'){
           var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
           var theItems=this.state.quarterFinalsArray
           theItems[index2]['chosenWinner']=winner
           theItems[index2]['status1']='played'
-          console.log('this.state.currentItems 009',theItems)
+          //console.log('this.state.currentItems 009',theItems)
           this.setState({quarterFinalsArray:theItems})
         }
         if(this.state.currentSelection==='semiFinals'){
@@ -944,7 +944,7 @@ class NCAA extends Component {
           var theItems=this.state.semiFinalsArray
           theItems[index2]['chosenWinner']=winner
           theItems[index2]['status1']='played'
-          console.log('this.state.currentItems 009',theItems)
+          //console.log('this.state.currentItems 009',theItems)
           this.setState({semiFinalsArray:theItems})
         }
         if(this.state.currentSelection==='finals'){
@@ -952,7 +952,7 @@ class NCAA extends Component {
           var theItems=this.state.finalArray
           theItems[index2]['chosenWinner']=winner
           theItems[index2]['status1']='played'
-          console.log('this.state.currentItems 009',theItems)
+          //console.log('this.state.currentItems 009',theItems)
           this.setState({finalArray:theItems})
         }
       }
@@ -963,32 +963,32 @@ class NCAA extends Component {
         delete theItems[index2]['chosenWinner']
         delete theItems[index2]['showChooseWinner']
         this.setState({firstRoundArray:theItems})
-        console.log('this.state.currentItems 001',theItems)}
+       }
         if(this.state.currentSelection==='quarterFinals'){
           var index2 = this.state.quarterFinalsArray.map(function(x) {return x.id; }).indexOf(id);
           var theItems=this.state.quarterFinalsArray
           delete theItems[index2]['chosenWinner']
           delete theItems[index2]['showChooseWinner']
           this.setState({quarterFinalsArray:theItems})
-          console.log('this.state.currentItems 001',theItems)}
+         }
           if(this.state.currentSelection==='semiFinals'){
             var index2 = this.state.semiFinalsArray.map(function(x) {return x.id; }).indexOf(id);
             var theItems=this.state.semiFinalsArray
             delete theItems[index2]['chosenWinner']
             delete theItems[index2]['showChooseWinner']
             this.setState({semiFinalsArray:theItems})
-            console.log('this.state.currentItems 001',theItems)}
+            }
             if(this.state.currentSelection==='finals'){
               var index2 = this.state.finalArray.map(function(x) {return x.id; }).indexOf(id);
               var theItems=this.state.finalArray
               delete theItems[index2]['chosenWinner']
               delete theItems[index2]['showChooseWinner']
               this.setState({finalArray:theItems})
-              console.log('this.state.currentItems 001',theItems)}
+            }
     
       }
       submitWinner=(id,winner)=>{
-        console.log('haaaaaaaaaaaapa 000000')
+        //console.log('haaaaaaaaaaaapa 000000')
         if(this.state.currentSelection==='firstRound'){
         var index = this.state.firstRoundArray.map(function(x) {return x.id; }).indexOf(id);
         if(winner!=='player1'&&winner!=='player2'){
@@ -1026,7 +1026,7 @@ class NCAA extends Component {
         try {
           //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
           var shortArr=[]
-          console.log('haaaaaaaaaaaapa 2222',index,winner)
+          //console.log('haaaaaaaaaaaapa 2222',index,winner)
     
             if((this.state.currentSelection==='firstRound')){
               this.checkForRoundOutcome(index,winner,this.state.firstRoundArray,'sweet16Arr')
@@ -1041,20 +1041,20 @@ class NCAA extends Component {
               this.checkForRoundOutcome(index,winner,this.state.finalArray,'finalArr')
             }
             } catch (error) {
-              ////console.log('error',error)
+              //console.log('error',error)
             }
         }
         checkForRoundOutcome=async (index,winner,items,name) => {
           try {
             //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
             var shortArr=[]
-            console.log('haaaaaaaaaaaapa',this.state.currentSelection,index,winner)
+            //console.log('haaaaaaaaaaaapa',this.state.currentSelection,index,winner)
             items[index]['winner']=winner
             delete items[index]['chosenWinner']
             delete items[index]['showChooseWinner']
             this.setState({[name]:items})
             items.map((item,index)=>{
-              console.log('shortArr',shortArr)
+              //console.log('shortArr',shortArr)
               shortArr['p1Points']=item.p1Points
               shortArr['p2Points']=item.p2Points
               shortArr['winner']=item.winner
@@ -1075,9 +1075,9 @@ class NCAA extends Component {
             var theLink='theEvents::NCAAF::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
             if(!this.state.theEventKey||this.state.theEventKey.length===0)return
             var theQuery=encodeURIComponent(theLink)
-            console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
-            console.log('theLink',theLink,theItems)
-            console.log('this.state.shortArr 006',shortArr)
+            //console.log('001',this.state.theEventKey,this.state.currentSelection,scoreName,theItems)
+            //console.log('theLink',theLink,theItems)
+            //console.log('this.state.shortArr 006',shortArr)
            // return
             await axios.get("https://theramtournament.com/getSingleNCAAFNFLResults?term="+theQuery)
             //await axios.get("http://localhost:4000/getSingleNCAAFNFLResults?term="+theQuery)
@@ -1089,7 +1089,7 @@ class NCAA extends Component {
                 }
               })
               } catch (error) {
-                ////console.log('error',error)
+                //console.log('error',error)
               }
           }
    openConfirmModal=(message,type)=>{
@@ -1100,7 +1100,7 @@ class NCAA extends Component {
   if(this.state.confirmModalType==='resultsUpdate'){this.checkForOutcome2()}
   }
   render() {
-   // console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
+   //console.log('this.state.isFirstRoundDataAvailable',this.state.isFirstRoundDataAvailable)
     //console.log('this.state.isQuarterFinalsDataAvailable',this.state.isQuarterFinalsDataAvailable)
     //console.log('this.state.isSemiFinalsDataAvailable',this.state.isSemiFinalsDataAvailable)
     //console.log('this.state.isFinalsDataAvailable',this.state.isFinalsDataAvailable)
@@ -1128,7 +1128,7 @@ class NCAA extends Component {
         {this.state.allEvents.length > 0 ? <div className={style.matchesHeadDiv}>
           {this.state.allEvents.map((item, index) => {
             var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
-           console.log('the tiiiiime',item.endTime)
+           //console.log('the tiiiiime',item.endTime)
             var theColor='#292f51',timing='Active Event'
             if(item.endTime<todayInMillis&&(item.endTime-todayInMillis)<-86400000){
               theColor='#919191'

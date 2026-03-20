@@ -150,8 +150,8 @@ $blackish:#292f51;
 }
 .chatItenDiv{
     display: flex;
-    padding-right:20px;
-   // padding-left: 15px;
+    padding-right:50px;
+    padding-left: 15px;
     margin-bottom: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -159,7 +159,6 @@ $blackish:#292f51;
     cursor: pointer;
     position: relative;
     order: 1;
-    margin-left: 15px;
 }
 .chatItenDiv1{
     //background-color: red;
@@ -168,7 +167,7 @@ $blackish:#292f51;
 }
 .chatItenDiv2{
     display: flex;
-   // padding-right: 5px;
+    padding-right: 5px;
     padding-left: 50px;
     margin-bottom: 5px;
     padding-top: 5px;
@@ -177,7 +176,6 @@ $blackish:#292f51;
     cursor: pointer;
     position: relative;
     align-self: flex-start;
-    margin-right: 15px;
 }
 
 
@@ -190,7 +188,7 @@ $blackish:#292f51;
     font-size: 14px;
     line-height: 14px;
     font-weight: 600;
-    margin-bottom:10px;
+    margin-bottom:5px;
    // color: $blackish;
    // font-family:'Times New Roman', Times, serif;
     font-family: "Roboto", sans-serif;
@@ -243,10 +241,6 @@ $blackish:#292f51;
     color: #636262;
     //font-style: italic;
     font-weight: 600;
-}
-.mesoP{
-    font-size: 16px;
-    color: $blackish;
 }
 .timeP{
     font-size: 10px;
@@ -361,7 +355,7 @@ $blackish:#292f51;
     color: #616161;
 }
 @media all and (max-width: 430px) {
-  .container{
+.container{
     height: 100vh;
     background-color: white;
     width: 100%;
@@ -372,32 +366,6 @@ $blackish:#292f51;
 }
 .headerDiv{
     height: 70px;
-    font-size: 50px;
-}
-.userImgDiv{
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
-    margin-right: 5px;
-}
-.backIc{
-    font-size: 32px;
-}
-.acroP{
-    font-size: 18px;
-}
-.userNameP{
-    font-size: 18px;
-    font-weight: 600;  
-    margin-top: -2px;
-}
-.lastSeenP{
-     color: #616161;
-    font-size: 12px;
-    margin-top: 0px;
-    margin-right: 5px;
-    font-weight: 500;
-    margin-left: 2px;
 }
 .chatsCont{
     height: 100vh;
@@ -411,25 +379,40 @@ $blackish:#292f51;
     border-radius: 30px;
     margin-bottom: 20px;
 }
-.verifiedDiv{
-    display: flex;
-    align-items: center;
+.backIc{
+    font-size: 32px;
 }
-.mesoInput{
-    max-height: 40px;
-    border: none;
-    background-color: #fff;
-    border-radius: 2px;
-    width: 90%;
-    outline: none;
-    display: flex;
-    align-items: center;
-    resize: none;
-    overflow:hidden;
-    font-family: "Rubik", sans-serif;
-
-   //border: 1px solid #d8d8d8;
-    padding-top: 10px;
-
+.userNameP{
+    font-size: 20px;
+    font-weight: 600;  
+    margin-top: -2px;
 }
+.lastSeenP{
+    font-size: 14px;
+    margin-top: 0px;
+    margin-right: 5px;
+    margin-left: 2px;
 }
+.userImgDiv{
+    background-color: #eee;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    margin-right: 5px;
+}
+.theMessageDiv{
+    padding: 15px 10px 30px 10px;
+    min-width: 70px;
+}
+.titleP{
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 600;
+    margin-bottom:5px;
+}
+.mesoP{
+    font-size: 16px;
+    margin-top: -2px;
+    margin-right: 5px;
+}
+  }

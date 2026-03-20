@@ -15,11 +15,11 @@ class Messages4 extends Component {
     this.checkAuth()
     // socket.off('new_message');
      socket.on('new_message', (payload) => {
-      console.log("New message received:", payload);
+      //console.log("New message received:", payload);
     });
   }
  componentWillUnmount() {
-  console.log('message 4 unmounted')
+  //console.log('message 4 unmounted')
   socket.off('new_message');
   //socket.disconnect();
 }
@@ -38,7 +38,7 @@ class Messages4 extends Component {
       })
     }
       sendMessage=()=>{
-      console.log('rrrrrrrrrr 22222')
+      //console.log('rrrrrrrrrr 22222')
       //this.notify("Can't send a message at the moment")
      // socket.emit("send_message",{message:message})
      socket.emit('send_private_message', {
@@ -53,7 +53,7 @@ class Messages4 extends Component {
   } 
     inputChange = async (e) => {
     var value = e.target.value
-   // console.log('theId', e.target.id)
+   //console.log('theId', e.target.id)
    //await this.setState({ [e.target.id]: value })
   }
   render() {
@@ -99,11 +99,11 @@ class Messages4 extends Component {
     };
   }
   componentDidMount() {
-    console.log('theData', this.props.from)
-    console.log('theData', this.props.theData)
+    //console.log('theData', this.props.from)
+    //console.log('theData', this.props.theData)
     var theData = this.props.theData
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
-      console.log('ddddddddd')
+      //console.log('ddddddddd')
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], lastSeen: theData['lastSeen'], otheUserId: theData['uid'] })
     }
     //this.props.theData['profilePhoto']
@@ -111,7 +111,7 @@ class Messages4 extends Component {
     this.checkAuth()
 
     socket.on('connect')
-    socket.on("receive_message", (data) => { console.log('rrrrrrrrrr 000000',data.message) })
+    socket.on("receive_message", (data) => { //console.log('rrrrrrrrrr 000000',data.message) })
     socket.on("send_message")
   }
   joinRoom=(token)=>{
@@ -124,7 +124,7 @@ class Messages4 extends Component {
       if (user) {
         var userId = user.uid
         this.setState({ myUserId: userId, isLogged: true })
-        console.log('my uiiiiid',userId)
+        //console.log('my uiiiiid',userId)
         //this.checkData(userId)
         //this.theInterval()
         this.getMessageToken(userId)
@@ -155,9 +155,9 @@ class Messages4 extends Component {
     })
   }
   // componentDidUpdate(){
-   //  console.log('updateddddd')
+   //console.log('updateddddd')
    //  socket.on("receive_message",(data)=>{
-  //       console.log('rrrrrrrrrr 000000',new Date(),data.message)
+  //       //console.log('rrrrrrrrrr 000000',new Date(),data.message)
        //alert(data.message)
    //   })
   // }
@@ -172,9 +172,9 @@ class Messages4 extends Component {
     //e.preventDefault();
     //socket.emit('sendMessage', this.state.theMessage);
     var room=this.state.messageToken
-    console.log('this.state.theMessage', this.state.theMessage)
-    console.log('this.state.otheUserId', this.state.otheUserId)
-    console.log('room', room)
+    //console.log('this.state.theMessage', this.state.theMessage)
+    //console.log('this.state.otheUserId', this.state.otheUserId)
+    //console.log('room', room)
     //return
     socket.emit("send_message", { message: this.state.theMessage,room})
     // socket.emit("send_message",{message:message,socketId:socketId})
@@ -189,7 +189,7 @@ class Messages4 extends Component {
   }
   inputChange = async (e) => {
     var value = e.target.value
-    console.log('theId', e.target.id)
+    //console.log('theId', e.target.id)
     await this.setState({ [e.target.id]: value })
   }
   render() {
