@@ -36,6 +36,7 @@ const AdminMessages = dynamic(() => import('../Home/AdminMessages'), {
 class NavBar extends Component {
   constructor(props) {
     super(props)
+    this.allNotsRef=null
     this.state = {
       queryName: '',
       openAccDiv: false,
@@ -69,7 +70,6 @@ class NavBar extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.onScroll, false);
     this.checkAuth()
-
     //console.log('the time 001', new Date().getTime())
     //console.log('the time 0025999', new Date('2025-01-26T20:00:00Z').getTime())
 
@@ -91,9 +91,10 @@ class NavBar extends Component {
   componentWillUnmount() {
     window.removeEventListener("scroll", this.onScroll, false);
     if (this.state.myUserId) {
-    var allNotsRef = firebase.database().ref('/messaging/notifications/'+this.state.myUserId+ '/allNots/')
-    allNotsRef.off();}
-  }
+      if (this.allNotsRef) {
+      this.allNotsRef.off();
+    }
+  }}
   getUserInfo = (id) => {
     var userInfoDb = firebase.database().ref('/users/' + id)
     userInfoDb.once('value', dataSnapshot => {
@@ -135,10 +136,11 @@ class NavBar extends Component {
         userRef.set(new Date().getTime())
         var chatNotRef = firebase.database().ref('/messaging/notifications/' + userId + '/messages/')
         var friendsNotRef = firebase.database().ref('/messaging/notifications/' + userId + '/friends/')
-        var allNotsRef = firebase.database().ref('/messaging/notifications/' + userId + '/allNots/')
+        this.allNotsRef = firebase.database().ref('/messaging/notifications/' + userId + '/allNots/')
         chatNotRef.once('value', dataSnapshot => { if (dataSnapshot.exists()) { this.setState({ showMessageNot: true }) } })
-        friendsNotRef.once('value', dataSnapshot => { if (dataSnapshot.exists()){this.setStat}})
-      } else {
+        friendsNotRef.once('value', dataSnapshot => { if (dataSnapshot.exists()){this.setState({showFriendsNot: true })}})
+        this.allNotsRef.on('value',dataSnapshot=>{this.checkNotifications()})
+        } else {
         this.setState({ isLogged: false })
         localStorage.set('loggedIn', 'false');
       }
