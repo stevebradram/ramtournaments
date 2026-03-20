@@ -231,7 +231,8 @@ class LogIn extends Component {
                 this.notify2('Account created successfully')
                 this.props.onClick()
               }).catch((error) => {
-                //console.log('sendEmailVerification error',error.message)})
+                //console.log('sendEmailVerification error',error.message)
+                })
             })
           }).catch((error) => {
             //console.log('the error 1',error.message)
