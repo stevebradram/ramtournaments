@@ -97,6 +97,7 @@ class Friends extends Component {
     //messageRef.set('kkkk')
   }
   openMessages = (item) => {
+    item['senderID']=this.state.myUserId
     if (this.props.from === 'events') { this.postMyPicks(item) }
     else { this.props.onClick('fromFriends', 'chatId', item) }
   }

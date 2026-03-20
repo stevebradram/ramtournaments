@@ -169,7 +169,7 @@ class Messages extends Component {
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: objMax['id'] }, () => {
               //console.log('going to post shit 222', this.props.theData.senderID, this.state.myUserId, mesoId2)
               this.deleteNots()
-              if (this.props.theData.senderID !== this.state.myUserId) { this.upadateLastSeenChat(mesoId2, this.state.otheUserId) }
+              if (this.props.theData.senderID !== this.state.myUserId) { this.upadateLastSeenChat(mesoId1, myUid) }
             })
           }
         })
