@@ -118,6 +118,7 @@ class Friends extends Component {
     var otheUserId = item.uid
     var messageRef = firebase.database().ref('/messaging/messages/')
     var chatRef = firebase.database().ref('/messaging/lastChats/')
+    var chatNotRef = firebase.database().ref('/messaging/notifications/')
     var theKey = chatRef.push().key
     var myUidKey = this.state.myUserId.slice(-10);
     var otherUidKey = otheUserId.slice(-10);
@@ -133,6 +134,8 @@ class Friends extends Component {
       messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessageItem)
       messageRef.child(otheUserId).child(otherUserMesoId).child(theKey).set(theMessageItem)
       chatRef.child(this.state.myUserId).child(mesoId).update(myChat)
+      chatNotRef.child(otheUserId).child('messages').child(otherUserMesoId).set(new Date().getTime())
+      chatNotRef.child(otheUserId).child('allNots').set(new Date().getTime())
       chatRef.child(otheUserId).child(otherUserMesoId).update(otherUserChat, (error) => {
         if (error) { this.notify('Error sending message') }
         else {

@@ -64,14 +64,11 @@ class Messages extends Component {
       this.upadateLastSeenChat(this.state.theMessageId, this.state.myUserId)
     });
     socket.on('user_presence_update', (data) => {
-      if (data.userId === this.state.otheUserId) {
-        toast.info("The other user just joined the chat!", {
-          position: "top-center",
-          autoClose: 3000
-        });
         if (data.status === 'offline') {
+          toast.info("The other user left the chat!", {position: "top-center",autoClose: 3000})
           this.setState({ otherUserLastSeen: new Date().getTime() })
         } else if (data.status === 'viewing_chat') {
+          toast.info("The other user joined the chat!", {position: "top-center",autoClose: 3000})
           var chatNotRef = firebase.database().ref('/messaging/notifications/')
           this.setState({ otherUserLastSeen: 'Online' })
           this.setState({ theLastSeenChat: new Date().getTime() })
@@ -83,16 +80,7 @@ class Messages extends Component {
           chatRef.child('lastChatSeen').set(new Date().getTime())
           chatNotRef.child(this.state.otheUserId).child(otherUserMesoId).set(null)
           chatNotRef.child(this.state.otheUserId).child('allNots').set(new Date().getTime())
-          /*chatRef.once('value', dataSnapshot => {
-            if (dataSnapshot.exists()) { 
-              //if(this.props.senderID!==this.state.myUserId){chatRef.child('lastChatSeen').set(new Date().getTime())} 
-              //console.log('going to post shit 111')
-              chatRef.child('lastChatSeen').set(new Date().getTime()) 
-              chatNotRef.child(this.state.otheUserId).child(otherUserMesoId).set(null)
-            }
-          })*/
         }
-      }
     });
   }
   handleUnload = (e) => {
@@ -120,8 +108,8 @@ class Messages extends Component {
     userRef.set(value)
   }
   componentWillUnmount() {
-    var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + this.state.theMessageId + '/time')
-    chatRef.off('value');
+   // var chatRef = firebase.database().ref('/messaging/lastChats/' + this.state.myUserId + '/' + this.state.theMessageId + '/time')
+   // chatRef.off();
     this.onlinePresence(this.state.myUserId, new Date().getTime())
     if (socket) socket.disconnect();
   }
@@ -190,18 +178,8 @@ class Messages extends Component {
   }
   upadateLastSeenChat = (messageId, otherUserId) => {
     var chatRef = firebase.database().ref('/messaging/lastChats/' + otherUserId + '/' + messageId + '/lastChatSeen/')
-   // var chatNotRef = firebase.database().ref('/messaging/notifications/')
     chatRef.set(new Date().getTime())
     this.deleteNots()
-   // chatNotRef.child(otherUserId).child(messageId).set(null)
-   // chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
-    /* chatRef.once('value', dataSnapshot => {
-       if (dataSnapshot.exists()) { 
-         chatRef.set(new Date().getTime()) 
-         chatNotRef.child(otherUserId).child(messageId).set(null)
-         chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
-       }
-     })*/
   }
     deleteNots = () => {
     var myUidKey = this.state.myUserId.slice(-10);
@@ -211,15 +189,9 @@ class Messages extends Component {
     var chatNotRef = firebase.database().ref('/messaging/notifications/')
     chatNotRef.child(this.state.myUserId).child('messages').child(messageId).set(null)
     chatNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
-    /* chatRef.once('value', dataSnapshot => {
-       if (dataSnapshot.exists()) { 
-         chatRef.set(new Date().getTime()) 
-         chatNotRef.child(otherUserId).child(messageId).set(null)
-         chatNotRef.child(otherUserId).child('allNots').set(new Date().getTime())
-       }
-     })*/
+    
   }
-  checkOnline = (userId) => {
+ /* checkOnline = (userId) => {
     var amOnline = firebase.database().ref(".info/connected")
     var userRef = firebase.database().ref('/online/' + userId + '/online/');
     amOnline.on('value', snapshot => {
@@ -228,7 +200,7 @@ class Messages extends Component {
         userRef.set(true);
       }
     });
-  }
+  }*/
   checkLastSeenChat = (messageId, myUid) => {
     var chatRef = firebase.database().ref('/messaging/lastChats/' + myUid + '/' + messageId + '/lastChatSeen/')
     chatRef.once('value', dataSnapshot => {

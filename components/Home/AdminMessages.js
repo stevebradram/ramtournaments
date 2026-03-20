@@ -77,6 +77,7 @@ class Messages extends Component {
             //console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()
+            this.deleteNots()
             })
           }
            })}else{
@@ -85,7 +86,9 @@ if (theNo === i) {
             var lastMesoId=objMax['id']
             //console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
-            this.upadateLastSeenChat()})}
+            this.upadateLastSeenChat()
+            this.deleteNots()
+          })}
            } 
         })
       } else {
@@ -97,10 +100,15 @@ if (theNo === i) {
     var chatRef = firebase.database().ref('/messaging/adminChatLastSeen/'+this.state.myUserId+ '/')
     chatRef.set(new Date().getTime())
   }
-
+      deleteNots = () => {
+      var chatNotRef = firebase.database().ref('/messaging/notifications/')
+      chatNotRef.child(this.state.myUserId).child('messages').child('admin').set(null)
+      chatNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
+    }
   sendMessage = () => {
     var messageRef = firebase.database().ref('/messaging/adminMessages/')
     var chatRef = firebase.database().ref('/messaging/adminChats/')
+    var chatNotRef = firebase.database().ref('/messaging/notifications/')
     var theKey = chatRef.push().key
     var theMessagesArray = this.state.theMessagesArray
     if (this.state.message.length >= 1 && this.state.message.includes('###')) {
@@ -110,6 +118,8 @@ if (theNo === i) {
       //var theMessage = { title:title, message:message, time: new Date().getTime()}
       var theMessage={id:theKey, time:new Date().getTime(), title:title, message:message,  howManyReaders:0,adminId:this.state.myUserId}
       messageRef.child(theKey).set(theMessage)
+      chatNotRef.child(this.state.myUserId).child('messages').child('admin').set(new Date().getTime())
+      chatNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
       chatRef.set(theMessage, (error) => {
         if (error) { this.notify('Error sending message') }
         else { 
