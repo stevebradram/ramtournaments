@@ -57,6 +57,7 @@ class Messages extends Component {
     event.preventDefault()
   }
   checkMessages = (isAdmin) => {
+    console.log('checking messages')
     var messageRef = firebase.database().ref('/messaging/adminMessages/')
     var theMessages = []
     messageRef.once('value', dataSnapshot => {
@@ -74,7 +75,7 @@ class Messages extends Component {
             if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             var lastMesoId=objMax['id']
-            //console.log('theMessages1',theMessages)
+            console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()
             this.deleteNots()
@@ -84,7 +85,7 @@ class Messages extends Component {
 if (theNo === i) {
             let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
             var lastMesoId=objMax['id']
-            //console.log('theMessages1',theMessages)
+            console.log('theMessages1',theMessages)
             this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId:lastMesoId }, () => {
             this.upadateLastSeenChat()
             this.deleteNots()

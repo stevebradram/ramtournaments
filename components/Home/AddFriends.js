@@ -153,12 +153,12 @@ class Friends extends Component {
           emailsRef.child(safeEmail).once('value', dataSnapshot => {
             if(dataSnapshot.exists()){
               var theUid=dataSnapshot.val()
-              var otherUesrIdDeobfs=Obfuscator.unmask(theUid);
+              var otherUserIdUnmasked=Obfuscator.unmask(theUid);
               var safeId = Obfuscator.mask(this.state.myUserId);
               //console.log('friend reqqqqq',theUid,safeId)
               friendRequestRef.child(theUid).child(safeId).set(new Date().getTime())
-              friendsNotRef.child(otherUesrIdDeobfs).child('friends').child(this.state.myUserId).set(new Date().getTime())
-              friendsNotRef.child(otherUesrIdDeobfs).child('allNots').set(new Date().getTime())
+              friendsNotRef.child(otherUserIdUnmasked).child('friends').child(this.state.myUserId).set(new Date().getTime())
+              friendsNotRef.child(otherUserIdUnmasked).child('allNots').set(new Date().getTime())
               this.notify('Friend request send successfully')
               this.setState({emailErr:'',showAddFrienModal:false})
             }
