@@ -74,10 +74,7 @@ class AdminMessages extends Component {
               theData['name'] = name
               theMessages.push(theData)
               if (theNo === i) {
-                //let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-                let objMax = theMessages.length > 0
-                  ? theMessages.reduce((max, curren) => (max.time > curren.time ? max : curren), theMessages[0])
-                  : null;
+                let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
                 var lastMesoId = objMax['id']
                 console.log('theMessages1', theMessages)
                 this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: lastMesoId }, () => {
@@ -89,10 +86,7 @@ class AdminMessages extends Component {
           } else {
             theMessages.push(theData)
             if (theNo === i) {
-              //let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
-              let objMax = theMessages.length > 0
-                ? theMessages.reduce((max, curren) => (max.time > curren.time ? max : curren), theMessages[0])
-                : null;
+              let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
               var lastMesoId = objMax['id']
               console.log('theMessages1', theMessages)
               this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: lastMesoId }, () => {
