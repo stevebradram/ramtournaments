@@ -9,7 +9,7 @@ import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
 import PageVisibility from 'react-page-visibility';
 var theLastTime = ''
-class Messages extends Component {
+class AdminMessages extends Component {
   constructor() {
     super();
     this.messagesEndRef = React.createRef(null);
@@ -87,6 +87,7 @@ class Messages extends Component {
               }
             })
           } else {
+            theMessages.push(theData)
             if (theNo === i) {
               //let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
               let objMax = theMessages.length > 0
@@ -233,4 +234,4 @@ class Messages extends Component {
   }
 }
 
-export default Messages;
+export default AdminMessages;
