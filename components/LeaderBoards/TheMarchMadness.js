@@ -337,14 +337,7 @@ class TheMarchMadness extends Component {
         isTherData.once('value', dataSnapshot => {
           if(dataSnapshot.exists()){
         var theEmail='',thePhone=''
-        if(this.state.isAdmin){
-          userInfoDb2.once('value',dataSnapshot=>{
-            var theD=dataSnapshot.val()
-            if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
-            theDet['email']=theD.email
-            if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
-            if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
-          })}
+      
         userInfoDb.once('value', dataSnapshot => {
            if(dataSnapshot.exists()){
             var userBetData=dataSnapshot.val()
@@ -353,6 +346,14 @@ class TheMarchMadness extends Component {
               theDet2.push(theDet)
               console.log('ikoooooooooooooooo 1111',theDet2)
             this.setState({round2Arr:theDet2,theItems:theDet2})
+              if(this.state.isAdmin){
+          userInfoDb2.once('value',dataSnapshot=>{
+            var theD=dataSnapshot.val()
+            if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+            theDet['email']=theD.email
+            if(theD.phoneNo){thePhone=theD.phoneNo}else{thePhone='N/A'}
+            if(theD.email){theEmail=theD.email}else{theEmail='N/A'}
+          })}
            }else{
             //console.log('hakunaaaaaaaaaaaaa 11111')
            }
