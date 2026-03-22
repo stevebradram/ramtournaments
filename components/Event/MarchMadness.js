@@ -1302,7 +1302,7 @@ class MarchMadness extends Component {
       //console.log('this.state.currentItems 002', theItems)
     }
     if (this.state.currentSelection === 'round2') {
-      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
       var theItems = this.state.allRound2MatchesArr
@@ -1315,7 +1315,6 @@ class MarchMadness extends Component {
         this.notify('Winner already filled')
         return
       }
-
       var theItems = this.state.allRound2MatchesArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound2MatchesArr: theItems })

@@ -272,7 +272,7 @@ getFinalRound=()=>{
            if(dataSnapshot.exists()){
             var userBetData=dataSnapshot.val()
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
-              bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
+              bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
               theDet2.push(theDet)
               //console.log('ikoooooooooooooooo 1111',theDet2)
             this.setState({round2Arr:theDet2,theItems:theDet2})

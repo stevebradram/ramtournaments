@@ -111,6 +111,7 @@ class TheMarchMadness extends Component {
       theItems: finalArray,
       areMessagesAvailable: finalArray.length > 0
     });
+    console.log('round1Arr',finalArray)
   });
 }
   /*getRound1Matches=(isAdmin)=>{
@@ -348,9 +349,9 @@ class TheMarchMadness extends Component {
            if(dataSnapshot.exists()){
             var userBetData=dataSnapshot.val()
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
-              bestPossibleScore:userBetData.round1BPS,score:userBetData.round1Score,email:theEmail,phone:thePhone}
+              bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
               theDet2.push(theDet)
-              //console.log('ikoooooooooooooooo 1111',theDet2)
+              console.log('ikoooooooooooooooo 1111',theDet2)
             this.setState({round2Arr:theDet2,theItems:theDet2})
            }else{
             //console.log('hakunaaaaaaaaaaaaa 11111')
@@ -361,7 +362,7 @@ class TheMarchMadness extends Component {
         if(theCount===i){
           var sort=this.state.round2Arr.sort((a, b) => b.score - a.score )
           this.setState({round2Arr:sort})
-          //console.log('round 2',theDet2)
+          console.log('round 2',sort)
           //this.setState({round1Arr:theDet2})
         }
       })
@@ -402,7 +403,6 @@ class TheMarchMadness extends Component {
     })
   }*/  
  getCurrentRound=(round)=>{
-    
     if(round==='round1'){
     this.setState({theItems:this.state.round1Arr})
     }
