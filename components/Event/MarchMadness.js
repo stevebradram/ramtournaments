@@ -1292,10 +1292,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+      /*if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
       var theItems = this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound1MatchesArr: theItems })
@@ -1311,10 +1311,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+     /* if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
       var theItems = this.state.allRound2MatchesArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound2MatchesArr: theItems })
@@ -1329,10 +1329,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+      /*if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
 
       var theItems = this.state.sweet16Arr
       theItems[index2]['showChooseWinner'] = true
@@ -1349,10 +1349,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+     /* if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
 
       var theItems = this.state.elite8Arr
       theItems[index2]['showChooseWinner'] = true
@@ -1369,10 +1369,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+     /* if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
 
       var theItems = this.state.final4Arr
       theItems[index2]['showChooseWinner'] = true
@@ -1389,10 +1389,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      if (winner !== 'N/A') {
+     /* if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }
+      }*/
       var theItems = this.state.finalArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ finalArr: theItems })
