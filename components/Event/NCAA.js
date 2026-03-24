@@ -62,10 +62,11 @@ class NCAA extends Component {
     //console.log('azeeza', this.state.count)
   };
   checkForOddsUpdate = async () => {
+    var oddsApiKey = await localStorage.get('oddsApiKey');
     try {
      
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NCAAF::' + this.state.theEventKey + '::' + this.state.currentSelection+'::'+oddsApiKey
       var theQuery = encodeURIComponent(theLink)
       //console.log('queeeeeeeeeeeeeeery',theQuery)
       //return
@@ -76,8 +77,9 @@ class NCAA extends Component {
         this.notify('Update odds time expired')
        }
        else{
+       // return
          axios.get("https://theramtournament.com/updateNCAANFLFOdds?term="+theQuery)
-         //axios.get("http://localhost:4000/updateNCAANFLFOdds?term=" + theQuery)
+        //axios.get("http://localhost:4000/updateNCAANFLFOdds?term=" + theQuery)
         .then((res) => {
           var theItems = res.data
           this.notify('Success Updating the NCAAF odds')

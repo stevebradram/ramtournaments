@@ -9,6 +9,7 @@ import theRamOdds from './ramOdds.json'
 import theNCAAFOdds from '../TheJSONS/ncaafOdds.json'
 import dayjs from 'dayjs';
 import axios from "axios"
+import localStorage from 'local-storage'
 var firstRoundEdit=[],quarterFinalsEdit=[],semiFinalsEdit=[],finalEdit=[]
 class NCAAModal extends Component {
   state={firstRoundEdit:[],quarterFinalsEdit:[],semiFinalsEdit:[],finalEdit:[],submitErr:"",showProgressBar:false,isItSubmit:false,
@@ -115,12 +116,12 @@ class NCAAModal extends Component {
         if(this.state.currentSelection==='semiFinals'){this.submitDetails(this.state.semiFinalsEdit,'semiFinalsEdit')}
         if(this.state.currentSelection==='finals'){this.submitDetails(this.state.finalEdit,'finalEdit')}
       }
-      submitDetails = (theItems,theState) => {
+      submitDetails = async(theItems,theState) => {
         var i = 0, j = 0, k = 0, l = 0
         //console.log('theItems',theItems)
         var teamsArr=[]
         var time='2025-03-20T00:00'
-        
+        var oddsApiKey = await localStorage.get('sportsDataApiKey');
         theItems.map((item, index) => {
           if (item.team1Id === ''||item.team2Id === ''||item.apiId==='') {
             theItems[index]['error'] = 'Teams id & API Id field must be filled'
@@ -160,7 +161,7 @@ class NCAAModal extends Component {
             })
           }else{
             //console.log('the teams data nooot available')
-            var oddsApi = "https://api.sportsdata.io/v3/cfb/scores/json/teams?key=f691242b217547ff9bfe4354f59f0fc1"
+            var oddsApi = "https://api.sportsdata.io/v3/cfb/scores/json/teams?key="+oddsApiKey
            var firebaseItem={}
             axios.get(oddsApi)
             .then((res) => {

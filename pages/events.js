@@ -30,9 +30,10 @@ class events extends Component {
     teamName: '', flockName: '', openLoginModal: false, clickHere1: 'CLICK HERE TO MAKE YOUR PICKS', clickHere2: 'CLICK HERE TO ENTER THE GAME',
     currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'marchMadness', pastEventsAvailable: false,
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [],
-    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', selectedSport: 'March Madness', selectedId: '',
-    allGames: [], theEventTitle: '', theEventKey: '', sportType: '', theTime: '', endTime: '', showChooseEventModal: false, firstSport: '',isAdmin:false,
-    theEvents: [{ id: "NCAAB", name: 'March Madness' }, { id: "ramUfc", name: 'RAM UFC' }, { id: "NCAAF", name: 'NCAAF' }, { id: "NFL", name: 'NFL Playoffs' }, { id: "NFLRegular", name: 'NFL Season' }]
+    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', selectedSport: 'March Madness', selectedId: '',theApiKey:'',
+    allGames: [], theEventTitle: '', theEventKey: '', sportType: '', theTime: '', endTime: '', showChooseEventModal: false, firstSport: '',isAdmin:false,openApiModal:false,apiKeyErr:'',
+    theEvents: [{ id: "NCAAB", name: 'March Madness' }, { id: "ramUfc", name: 'RAM UFC' }, { id: "NCAAF", name: 'NCAAF' }, { id: "NFL", name: 'NFL Playoffs' }, { id: "NFLRegular", name: 'NFL Season' }],
+    apiEvents: [{ id: "oddsApi", name: 'https://api.the-odds-api.com/' }, { id: "sportsDataApi", name: 'https://api.sportsdata.io/' }],apiEventSelectedName:'',apiEventSelectedId:''
   }
   componentDidMount = () => {
     this.checkAuth()
@@ -46,6 +47,7 @@ class events extends Component {
         this.checkForAllEvents()
          if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
         this.setState({isAdmin:true})
+        this.getApiKey()
        }
 
       } else {
@@ -56,6 +58,14 @@ class events extends Component {
       }
     })
   }
+      getApiKey = async () => {
+        var apiRef = firebase.database().ref('/apiKeys')
+         await apiRef.once('value', dataSnapshot => {
+           this.setState({oddsApiKey:dataSnapshot.val().oddsApi})
+            localStorage.set('oddsApiKey', dataSnapshot.val().oddsApi)
+            localStorage.set('sportsDataApiKey', dataSnapshot.val().sportsDataApi)
+         })
+      }
   hideModal = () => {
     this.setState({ opendetailsModal: false })
     //console.log('Button clicked!');
@@ -103,6 +113,17 @@ class events extends Component {
       })
     } else {
       this.notify('No Sport selected')
+    }
+  }
+  submitApiKey = async () => {
+    var apiRef = firebase.database().ref('/apiKeys')
+    if(this.state.apiEventSelectedName&&this.state.theApiKey.length>2){
+    apiRef.child(this.state.apiEventSelectedId).set(this.state.theApiKey)
+    this.setState({apiKeyErr:'',openApiModal:false})
+    this.notify('Key updated successfully')
+    this.getApiKey()
+    }else{
+      this.setState({apiKeyErr:'Error: Fill in the required info'})
     }
   }
   checkForAllEvents = async () => {
@@ -182,6 +203,10 @@ class events extends Component {
       progress: undefined,
     });
   }
+       inputChange = async (e) => {
+            var value = e.target.value
+            await this.setState({[e.target.id]: value})
+       }
   render() {
     //console.log('this.state.theEvents',this.state.theEvents)
     var isPastEvent = ''
@@ -208,6 +233,7 @@ class events extends Component {
             )
           })}</div>
           <div className={style.leaderBDiv} onClick={()=>Router.push('/leaderboard')}><h3>GO TO LEADERBOARD</h3><MdKeyboardDoubleArrowRight className={style.arrIC}/></div>
+          <div className={style.leaderBDiv} onClick={()=>this.setState({openApiModal:true})}><h3>ENTER NEW API KEY</h3></div>
         <div className={style.matchesHeadDiv}>
           {/*this.state.allGames.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')
@@ -254,6 +280,26 @@ class events extends Component {
               <button style={{ backgroundColor: '#CB1E31', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.submitSport()}>Submit</button>
             </div>
           </div></div> : null}
+          {this.state.openApiModal?<div className={style.detailsModal} onClick={() => this.setState({ openApiModal: false })}>
+            <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
+            <p className={style.weekP}>Choose API</p>
+             {this.state.apiEvents.map((item, index) => {
+              return (
+                <div className={style.selectorDiv} key={index} onClick={() => this.setState({ apiEventSelectedName: item.name, apiEventSelectedId: item.id })}>
+                  <div className={this.state.apiEventSelectedName === item.name ? style.boxDiv3 : style.boxDiv3b}>
+                    <MdCheck size={15} /></div>
+                  <p style={{ color: this.state.apiEventSelectedName === item.name ? '#CB1E31' : null }}>{item.name}</p>
+                </div>
+              )
+            })}
+            <p style={{ color: '#CB1E31', marginTop: 10, fontWeight: 500, fontSize: 16 }}>{this.state.apiKeyErr}</p>
+            <p className={style.enterApiP}>Enter the api key below:</p>
+            <input className={style.apiInput} id='theApiKey' value={this.state.theApiKey} placeholder='Enter the odds api key' onChange={(event) => this.inputChange(event)} />
+            <div style={{ display: 'flex', justifyContent: 'end', marginTop: 20 }}>
+              <button style={{ backgroundColor: '#ddd', border: 'none', color: 'black', padding: '7px 15px', cursor: 'pointer' }} onClick={() => this.setState({ openApiModal: false })}>Cancel</button>
+              <button style={{ backgroundColor: '#CB1E31', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.submitApiKey()}>Submit</button>
+            </div>
+          </div></div>:null}
       </div>
         <ToastContainer />
       </>

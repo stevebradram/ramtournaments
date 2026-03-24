@@ -93,117 +93,6 @@ class NCAAModal extends Component {
     localStorage.clear()
     this.props.onClick()
   }
-  /*fillEventDetails=async(menu)=>{
-   
-    this.showProgressBar()
-    var idStart=''
-    if(this.state.currentSelection==='wildCard'){idStart='wildCardMatch'}
-    if(this.state.currentSelection==='divisionalRound'){idStart='divisionalRoundMatch'}
-    if(this.state.currentSelection==='conferenceChampionship'){idStart='conferenceChampionshipMatch'}
-    if(this.state.currentSelection==='superBowl'){idStart='superBowlMatch'}
-    var incomingData=this.props.itemsToNFLModal
-    var firstEventTime = await Math.min(...incomingData.map(item => item.timeInMillis));
-    var lastEventTime = await Math.max(...incomingData.map(item => item.timeInMillis));
-    firstEventTime=new Date(firstEventTime-86400000).toLocaleDateString()
-    firstEventTime=firstEventTime?.split('/')
-    var theMonthFirst='',theDateFirst=''
-    if(firstEventTime[0].length<=1){theMonthFirst='0'+firstEventTime[0]}else{theMonthFirst=firstEventTime[0]}
-    if(firstEventTime[1].length<=1){theDateFirst='0'+firstEventTime[1]}else{theDateFirst=firstEventTime[1]}
-    firstEventTime=firstEventTime[2]+'-'+theMonthFirst+'-'+theDateFirst+'T21:00:00Z'
-    lastEventTime=new Date(lastEventTime+(86400000*2)).toLocaleDateString()
-    lastEventTime=lastEventTime?.split('/')
-    var theMonthLast='',theDateLast=''
-    if(lastEventTime[0].length<=1){theMonthLast='0'+lastEventTime[0]}else{theMonthLast=lastEventTime[0]}
-    if(lastEventTime[1].length<=1){theDateLast='0'+lastEventTime[1]}else{theDateLast=lastEventTime[1]}
-    lastEventTime=lastEventTime[2]+'-'+theMonthLast+'-'+theDateLast+'T21:00:00Z'
-    //firstEventTime=dayjs(firstEventTime)
-    //console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
-    //return
-
-    var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
-    //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
-    //console.log('oddsApi',oddsApi)
-    //return
-    const response = await axios.get(oddsApi)
-    var theOddsJson=response.data
-    //console.log('theOddsJson',theOddsJson)
-    this.sortOddsJson(theOddsJson,idStart,menu,incomingData)
-  }
-   sortOddsJson=async(theOddsJson,idStart,menu,incomingData)=>{
-   
-    try {
-      //console.log('theOddsJson',theOddsJson)
-      //return
-      var jCount=0
-    theOddsJson.map((item1,index)=>{
-        var i=0,newOddsJson=[]
-        jCount++
-        item1.bookmakers.map((item2)=>{
-            i++
-            var draftkingsMarket=[]
-            if(item2.key==='draftkings'){
-               
-                draftkingsMarket=item2.markets
-                //console.log('draftkings markets',item2.markets)
-                //console.log('draftkingsMarket 005',draftkingsMarket.outcomes)
-                draftkingsMarket.map((item3)=>{
-                    //console.log('draftkingsMarket 006',item3.outcomes)
-                   const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                     theOddsJson[index].draftkingsOdds=obj
-                })
-            }
-           
-            if(item1.bookmakers.length===i){
-                //console.log('new array',theOddsJson)
-               
-                var m=0
-                theOddsJson.map((item12,index)=>{
-                    m++
-                    //console.log('item12.draftkingsOdds',item12.draftkingsOdds)
-                    var awayPoints=0,homePoints=0
-                    if(item12.draftkingsOdds === undefined || item12.draftkingsOdds.length == 0){
-                        //console.log('shit is undefined')
-                    }else{
-                        var homeFighterName=item12.home_team
-                        var awayFighterName=item12.away_team
-                        awayPoints=item12.draftkingsOdds[awayFighterName]
-                        homePoints=item12.draftkingsOdds[homeFighterName]
-                }
-
-          var hTPointsNum=Number(theRamOdds[homePoints])
-          var aTPointsNum=Number(theRamOdds[awayPoints])
-          if(homePoints<-10000){hTPointsNum=1.01}
-          if(awayPoints<-10000){aTPointsNum=1.01}
-          if(homePoints>12620){hTPointsNum=1247.20}
-          if(awayPoints>12620){aTPointsNum=1247.20}
-          //console.log('item2.homeTeam',item2.homeTeam,item2.homeTeamPoints)
-         
-          if(homePoints<=101&&homePoints>=-101){hTPointsNum=2.03}
-          if(awayPoints<=101&&awayPoints>=-101){aTPointsNum=2.03}
-
-
-          //console.log('hTPointsNum',hTPointsNum,'aTPointsNum',aTPointsNum)
-
-                var matchTime= new Date(item12.commence_time);
-                var newItem={player2:item12.away_team,player1:item12.home_team,apiId:item12.id,commenceTime:item12.commence_time,timeInMillis:matchTime.getTime(),
-                  p2Points:aTPointsNum,p1Points:hTPointsNum,id:idStart+index,
-                }
-               
-                newOddsJson.push(newItem)
-                })
-                if(m===theOddsJson.length){
-                  this.setState({theNewArr:newOddsJson})
-                  //newOddsJson
-                  this.getLogos2(newOddsJson,menu,incomingData)
-                  //console.log('new array laaast',newOddsJson)
-                }
-            }
-        })
-    })
-  } catch (error) {
-    //console.log('ERROR OCURRED AT SORTING ODDS', error)
-  }
-  }*/
   doNothing = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -498,16 +387,12 @@ class NCAAModal extends Component {
 
   }
   getOddsApiData = async (theArr, stateEdit) => {
-    //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
-    //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
-    var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
+    var oddsApiKey = await localStorage.get('oddsApiKey');
+    var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey="+oddsApiKey
     const response = await axios.get(oddsApi)
     var theOddsJson = response.data
-    //TO BE CONTINUED CHECK FOR NAME DATABASE AND ODDS API
     var firstMatchTime = []
-    //var theOddsJson=theNFLOdds
     try {
-      //console.log('theOddsJson',theOddsJson)
       var jCount = 0
       theOddsJson.map((item1, index) => {
         var i = 0, newOddsJson = []
@@ -599,112 +484,6 @@ class NCAAModal extends Component {
     } catch (error) {
       //console.log('ERROR OCURRED AT SORTING ODDS', error)
     }
-  }
-  getOddsApiData2 = async (theArr) => {
-    //this.getLogos()
-    //return
-    //var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    var oddsApi = theNFLOdds
-    var resultsArr = theNFLOdds
-    theArr.map((item, index) => {
-      resultsArr.map((item2) => {
-        if (item.apiId === item2.id) {
-          var time = item2.commence_time
-          var timeInMillis = new Date(time).getTime()
-          var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-          theArr[index]['player1'] = item2.home_team
-          theArr[index]['player2'] = item2.away_team
-          theArr[index]['commenceTime'] = theTime
-          //console.log('at getOddsApiData sawaaaaaaaa 222222')
-          theArr[index]['time'] = time
-          theArr[index]['timeInMillis'] = timeInMillis
-          /* item2.bookmakers.map((item2)=>{
-            if(item2.key==='draftkings'){
-              var draftkingsMarket=item2.markets
-              var i=0
-              draftkingsMarket.map((item3)=>{
-                i++
-                if(item3.outcomes[i]['name']===item2.home_team){
-                  week1RoundEdit[index]['p1Points']=item3.outcomes[i]['name']
-                }
-                if(item3.outcomes[i]['name']===item2.away_team){
-                  week1RoundEdit[index]['p1Points']=item3.outcomes[i]['name']
-                }
-                //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
-                
-               const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                // week1RoundEdit[index].draftkingsOdds=obj
-                //console.log('draftkingsMarket obj',obj)
-                //console.log('draftkingsMarket week1RoundEdit',week1RoundEdit)
-            })
-            }
-          })*/
-          //console.log('the Item', item2)
-          if (index + 1 === theArr.length) {
-            this.getLogos(theArr)
-            //console.log('the theArr', theArr)
-          }
-
-
-        }
-      })
-    })
-    return
-    // const response = await axios.get(oddsApi)
-    //var theOddsJson=response.data
-    //sortOddsJson(theOddsJson)
-
-    //https://api.sportsdata.io/v3/cbb/scores/json/GamesByDateFinal/21-MAY-25?key=4a474f7d13314c6098a394987bed453f
-    axios.get(oddsApi)
-      .then((res) => {
-        var resultsArr = res.data
-        theArr.map((item, index) => {
-          resultsArr.map((item2) => {
-            if (item.apiId === item2.id) {
-              var time = item2.commence_time
-              var timeInMillis = new Date(time).getTime()
-              var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-              theArr[index]['player1'] = item2.home_team
-              theArr[index]['player2'] = item2.away_team
-              theArr[index]['commenceTime'] = theTime
-              //console.log('at getOddsApiData sawaaaaaaaa 222222')
-              theArr[index]['time'] = time
-              theArr[index]['timeInMillis'] = timeInMillis
-              /* item2.bookmakers.map((item2)=>{
-                 if(item2.key==='draftkings'){
-                   var draftkingsMarket=item2.markets
-                   var i=0
-                   draftkingsMarket.map((item3)=>{
-                     i++
-                     if(item3.outcomes[i]['name']===item2.home_team){
-                       week1RoundEdit[index]['p1Points']=item3.outcomes[i]['name']
-                     }
-                     if(item3.outcomes[i]['name']===item2.away_team){
-                       week1RoundEdit[index]['p1Points']=item3.outcomes[i]['name']
-                     }
-                     //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                     //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
-                     
-                    const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                     // week1RoundEdit[index].draftkingsOdds=obj
-                     //console.log('draftkingsMarket obj',obj)
-                     //console.log('draftkingsMarket week1RoundEdit',week1RoundEdit)
-                 })
-                 }
-               })*/
-              //console.log('the Item', item2)
-              if (index + 1 === theArr.length) {
-                this.getLogos(theArr)
-                //console.log('the theArr', theArr)
-              }
-
-
-            }
-          })
-        })
-
-      })
   }
   getLogos = async (theArr) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"

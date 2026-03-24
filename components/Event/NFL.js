@@ -62,53 +62,25 @@ class NCAA extends Component {
  
   handleChildClick = (title,item) => {
     this.setState({ count: this.state.count + 1, nflModal: false });
-    /*if(title==='getOdds'&&item.length>10){
-    this.checkForOddsUpdate2(item)
-    }
-    //console.log('azeeza', item)*/
   };
-  checkForOddsUpdate2 = async (theLink) => {
-    try {
-      var theQuery = encodeURIComponent(theLink)
-      //console.log('the theLink 000000',theLink)
-      //return
-      var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
-      editDbRef.once('value', dataSnapshot => {
-       if((new Date().getTime()>dataSnapshot.val())){
-        this.notify('Update odds time expired')
-       }
-       else{
-        //console.log('kufinish kudonjo')
-         axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
-       
-        .then((res) => {
-          var theItems = res.data.result
-          this.notify('Success Updating NFL the odds')
-          //console.log('theItems', theItems)
-
-        })
-       }})
-      
-    } catch (error) {
-      //console.log('error', error)
-    }
-  }
   checkForOddsUpdate = async () => {
+     var oddsApiKey = await localStorage.get('oddsApiKey');
     try {
      
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NFL::' + this.state.theEventKey + '::' + this.state.currentSelection+'::'+oddsApiKey
       var theQuery = encodeURIComponent(theLink)
       //console.log('the theLink 11111',theLink)
       //return
       var editDbRef=firebase.database().ref('/theEvents/NFL/eventsIds/'+this.state.theEventKey+'/'+this.state.editType)
       editDbRef.once('value', dataSnapshot => {
        
-       if((new Date().getTime()>dataSnapshot.val())){
-        this.notify('Update odds time expired')
+      if((new Date().getTime()>dataSnapshot.val())){
+        this.notify('Update odds time expired 44')
         //console.log('the Z000000',new Date().getTime(),dataSnapshot.val())
        }
        else{
+       // return
         //console.log('the theLink RRRRRAAAAAAA',theLink)
          //axios.get("http://localhost:4000/updateNCAANFLFOdds?term=" + theQuery)
          axios.get("https://theramtournament.com/updateNCAANFLFOdds?term=" + theQuery)
@@ -117,13 +89,15 @@ class NCAA extends Component {
           this.notify('Success Updating the NFL odds')
 
         })
-       }})
+       }
+      })
       
     } catch (error) {
       //console.log('error', error)
     }
   }
   checkForOutcome=async () => {
+    var oddsApiKey = await localStorage.get('oddsApiKey');
     try {
       //theEvents::NCAAF::ncaaf20242025::firstRound
       var scoreName=''
@@ -134,7 +108,7 @@ class NCAA extends Component {
       if(this.state.currentSelection==='divisionalRound'){scoreName='divisionalRoundScore'}
       if(this.state.currentSelection==='conferenceChampionship'){scoreName='conferenceChampionshipScore'}
       if(this.state.currentSelection==='superBowl'){scoreName='superBowlScore'}
-      var theLink='theEvents::NFL::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName
+      var theLink='theEvents::NFL::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+oddsApiKey
       if(!this.state.theEventKey||this.state.theEventKey.length===0)return
       //var theLink='theEvents::NFL::'+this.state.theEventKey+'::'+this.state.currentSelection+'::'+scoreName+'::'+theItems
       var theQuery=encodeURIComponent(theLink)
@@ -568,12 +542,6 @@ class NCAA extends Component {
         this.notify('Selected Succesfully')
       }
     })
-    }
-    updateEvent=async()=>{
-      var oddsApi="https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
-      const response = await axios.get(oddsApi)
-      var theOddsJson=response.data
-      sortOddsJson(theOddsJson)
     }
     openNFLModal=()=>{
       //console.log('detailsssssss',this.state.theEventKey)

@@ -221,7 +221,29 @@ $theDark: #b2b2b2;
 .checkDiv {
     cursor: pointer;
 }
+.apiInput{
+  outline: none;
+  border: none;
+  color: #000000;
+  width: 100%;
+  border: 1px solid #959595;
+  padding: 5px 10px 5px 10px;
+  margin-top: 5px;
+}
+.apiInput[type='number'] {
+  -moz-appearance:textfield;
+}
 
+.apiInput::-webkit-outer-spin-button,
+.apiInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.enterApiP{
+    margin-top: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $blackish;
+}
 @media all and (max-width: 900px) {
     .eventsDiv {
         margin-right: 0px;

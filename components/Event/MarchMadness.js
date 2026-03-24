@@ -1030,6 +1030,7 @@ class MarchMadness extends Component {
     this.notify('Link copied successfully')
   }
   openTheModal = async () => {
+ 
     if (this.state.userLoggedIn === false) {
       this.notify("Please Log In to continue")
       this.setState({ openLoginModal: true })
@@ -1089,7 +1090,7 @@ class MarchMadness extends Component {
           } else {
             this.setState({ openLoginModal: true, opendetailsModal: false })
           }
-        }
+       }
       }
     })
   }
@@ -1292,10 +1293,10 @@ class MarchMadness extends Component {
         this.notify('Match not yet started')
         return
       }
-      /*if (winner !== 'N/A') {
+      if (winner !== 'N/A') {
         this.notify('Winner already filled')
         return
-      }*/
+      }
       var theItems = this.state.allRound1MatchesArr
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound1MatchesArr: theItems })

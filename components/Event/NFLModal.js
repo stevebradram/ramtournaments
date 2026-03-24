@@ -9,6 +9,7 @@ import axios from "axios"
 import dayjs from 'dayjs';
 import theRamOdds from './ramOdds.json'
 import theNFLOdds from '../TheJSONS/nflOdds.json'
+import localStorage from 'local-storage'
 
 var wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
 
@@ -54,7 +55,7 @@ class NCAAModal extends Component {
   }
   }
   fillEventDetails=async(menu)=>{
-   
+    var oddsApiKey = await localStorage.get('oddsApiKey');
     this.showProgressBar()
     var idStart=''
     if(this.state.currentSelection==='wildCard'){idStart='wildCardMatch'}
@@ -80,7 +81,7 @@ class NCAAModal extends Component {
     //console.log('firstEventTime',firstEventTime,'lastEventTime',lastEventTime)
     //return
 
-    var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
+    var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom="+firstEventTime+"&commenceTimeTo="+lastEventTime+"&regions=us&markets=h2h&oddsFormat=american&apiKey="+oddsApiKey
     //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
     //console.log('oddsApi',oddsApi)
     //return
@@ -501,10 +502,8 @@ class NCAAModal extends Component {
     if(this.state.currentSelection==='superBowl'){this.submitDetails(this.state.superBowlEdit,'superBowlEdit')}
   }
   getOddsApiData=async(theArr,stateEdit)=>{
-    //e9588a5ac96d554bb82f408b998e0617 368a2a41d5755a2105d864570b332d20
-   //cee48e2a2178b941b7812630706a9f78 5646efe9a934b4789e8ef316a1de1ac8
-
-   var oddsApi='https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b'
+   var oddsApiKey = await localStorage.get('oddsApiKey');
+   var oddsApi='https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey='+oddsApiKey
    const response = await axios.get(oddsApi)
    var theOddsJson=response.data
   //TO BE CONTINUED CHECK FOR NAME DATABASE AND ODDS API
@@ -603,112 +602,6 @@ class NCAAModal extends Component {
    //console.log('ERROR OCURRED AT SORTING ODDS', error) 
  }
  }
-  getOddsApiData2 = async (theArr) => {
-    //this.getLogos()
-    //return
-    //var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    var oddsApi=theNFLOdds
-    var resultsArr=theNFLOdds
-    theArr.map((item, index) => {
-      resultsArr.map((item2) => {
-        if (item.apiId === item2.id) {
-          var time = item2.commence_time
-          var timeInMillis = new Date(time).getTime()
-          var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-          theArr[index]['player1'] = item2.home_team
-          theArr[index]['player2'] = item2.away_team
-          theArr[index]['commenceTime'] = theTime
-          //console.log('at getOddsApiData sawaaaaaaaa 222222')
-          theArr[index]['time'] = time
-          theArr[index]['timeInMillis'] = timeInMillis
-           /* item2.bookmakers.map((item2)=>{
-             if(item2.key==='draftkings'){
-               var draftkingsMarket=item2.markets
-               var i=0
-               draftkingsMarket.map((item3)=>{
-                 i++
-                 if(item3.outcomes[i]['name']===item2.home_team){
-                   wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
-                 }
-                 if(item3.outcomes[i]['name']===item2.away_team){
-                   wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
-                 }
-                 //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                 //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
-                 
-                const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                 // wildCardEdit[index].draftkingsOdds=obj
-                 //console.log('draftkingsMarket obj',obj)
-                 //console.log('draftkingsMarket wildCardEdit',wildCardEdit)
-             })
-             }
-           })*/
-          //console.log('the Item', item2)
-          if (index + 1 === theArr.length) {
-            this.getLogos(theArr)
-            //console.log('the theArr', theArr)
-          }
-
-
-        }
-      })
-    })
-    return
-    // const response = await axios.get(oddsApi)
-    //var theOddsJson=response.data
-    //sortOddsJson(theOddsJson)
-    
-//https://api.sportsdata.io/v3/cbb/scores/json/GamesByDateFinal/21-MAY-25?key=4a474f7d13314c6098a394987bed453f
-    axios.get(oddsApi)
-      .then((res) => {
-        var resultsArr = res.data
-        theArr.map((item, index) => {
-          resultsArr.map((item2) => {
-            if (item.apiId === item2.id) {
-              var time = item2.commence_time
-              var timeInMillis = new Date(time).getTime()
-              var theTime = dayjs(timeInMillis).format('MMM D, YYYY h:mm A')
-              theArr[index]['player1'] = item2.home_team
-              theArr[index]['player2'] = item2.away_team
-              theArr[index]['commenceTime'] = theTime
-              //console.log('at getOddsApiData sawaaaaaaaa 222222')
-              theArr[index]['time'] = time
-              theArr[index]['timeInMillis'] = timeInMillis
-              /* item2.bookmakers.map((item2)=>{
-                 if(item2.key==='draftkings'){
-                   var draftkingsMarket=item2.markets
-                   var i=0
-                   draftkingsMarket.map((item3)=>{
-                     i++
-                     if(item3.outcomes[i]['name']===item2.home_team){
-                       wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
-                     }
-                     if(item3.outcomes[i]['name']===item2.away_team){
-                       wildCardEdit[index]['p1Points']=item3.outcomes[i]['name']
-                     }
-                     //console.log('draftkingsMarket 006 name',item3.outcomes[i]['name'])
-                     //console.log('draftkingsMarket 006 price',item3.outcomes[i]['price'])
-                     
-                    const obj = Object.fromEntries(item3.outcomes.map(item => [item.name, item.price]));
-                     // wildCardEdit[index].draftkingsOdds=obj
-                     //console.log('draftkingsMarket obj',obj)
-                     //console.log('draftkingsMarket wildCardEdit',wildCardEdit)
-                 })
-                 }
-               })*/
-              //console.log('the Item', item2)
-              if (index + 1 === theArr.length) {
-                this.getLogos(theArr)
-                //console.log('the theArr', theArr)
-              }
-
-
-            }
-          })
-        })
-
-      })
-  }
   getLogos = async (theArr) => {
     var logosUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
     //const response = await axios.get(logosUrl);

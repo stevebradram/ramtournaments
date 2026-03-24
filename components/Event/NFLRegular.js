@@ -137,38 +137,11 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 // Perform delete action
 }
 };
-  checkForOddsUpdate2 = async (theLink) => {
-    try {
-      var theQuery = encodeURIComponent(theLink)
-      //console.log('the theLink 000000', theLink)
-      //return
-      var editDbRef = firebase.database().ref('/theEvents/NFL/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
-      editDbRef.once('value', dataSnapshot => {
-        if ((new Date().getTime() > dataSnapshot.val())) {
-          this.notify('Update odds time expired')
-        }
-        else {
-          //console.log('kufinish kudonjo')
-          axios.get("http://localhost:4000/updateNFLOdds?term=" + theQuery)
-
-            .then((res) => {
-              var theItems = res.data.result
-              this.notify('Success Updating NFL the odds')
-              //console.log('theItems', theItems)
-
-            })
-        }
-      })
-
-    } catch (error) {
-      //console.log('error', error)
-    }
-  }
   checkForOddsUpdate = async () => {
     try {
-
+     var oddsApiKey = await localStorage.get('oddsApiKey');
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection
+      var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection+'::'+oddsApiKey
       var theQuery = encodeURIComponent(theLink)
       //console.log('the theLink 11111', theLink)
       //return
@@ -182,7 +155,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         }
         else {
           //console.log('the theLink RRRRRAAAAAAA', theLink)
-          //axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
+         // axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
           axios.get("https://theramtournament.com/updateNFLRegularOdds?term=" + theQuery)
             .then((res) => {
               this.setState({ showConfirmModal: false, showProgressBar: false })
@@ -703,12 +676,6 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       }
     })
   }
-  updateEvent = async () => {
-    var oddsApi = "https://api.the-odds-api.com/v4/sports/mma_mixed_martial_arts/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    const response = await axios.get(oddsApi)
-    var theOddsJson = response.data
-    sortOddsJson(theOddsJson)
-  }
   openRangeLModal = () => {
     //console.log('detailsssssss', this.state.theEventKey, this.state.selectedWeek)
     if (this.state.selectedWeek === '') {
@@ -805,15 +772,11 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       30000)
   }
   fillEventDetails = async (firstEventTime, lastEventTime) => {
+    var oddsApiKey = await localStorage.get('oddsApiKey');
     this.showProgressBar()
     var idStart = this.state.toDbId, matchType = this.state.toDbRound
-    var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=" + firstEventTime + "&commenceTimeTo=" + lastEventTime + "&regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=2025-02-09T23:30:00Z&commenceTimeTo=2025-01-26T23:30:00Z&regions=us&markets=h2h&oddsFormat=american&apiKey=82315a13f42fe75c782f5def370b12e9"
-    //var oddsApi="https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h&oddsFormat=american&apiKey=f059e49c28b51da7b69e03dc1122338b"
-    //console.log('oddsApi', oddsApi)
-    //console.log('the theOddsJson 019', idStart, matchType, this.state.selectedWeek)
-    // return
-
+    var oddsApi = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=" + firstEventTime + "&commenceTimeTo=" + lastEventTime + "&regions=us&markets=h2h&oddsFormat=american&apiKey="+oddsApiKey
+  
     const response = await axios.get(oddsApi)
     var theOddsJson = response.data
     this.sortOddsJson(theOddsJson, idStart, matchType, this.state.selectedWeek)
