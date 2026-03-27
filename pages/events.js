@@ -233,7 +233,7 @@ class events extends Component {
             )
           })}</div>
           <div className={style.leaderBDiv} onClick={()=>Router.push('/leaderboard')}><h3>GO TO LEADERBOARD</h3><MdKeyboardDoubleArrowRight className={style.arrIC}/></div>
-          <div className={style.leaderBDiv} onClick={()=>this.setState({openApiModal:true})}><h3>ENTER NEW API KEY</h3></div>
+          {this.state.isAdmin?<div className={style.leaderBDiv} onClick={()=>this.setState({openApiModal:true})}><h3>ENTER NEW API KEY</h3></div>:null}
         <div className={style.matchesHeadDiv}>
           {/*this.state.allGames.map((item,index)=>{
            var eventTime = dayjs(item.endTime).format('DD MMM YYYY')

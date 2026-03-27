@@ -767,7 +767,7 @@ class NCAA extends Component {
   }
       pickWinner=(id,winner,time,selection)=>{
         if(this.state.currentSelection!==selection){
-          this.notify('Not available at the moment')
+          this.notify('Not available at the moment 1')
           return
         }
         var nowTime=new Date().getTime()  
