@@ -344,7 +344,7 @@ class TheMarchMadness extends Component {
             var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
               bestPossibleScore:userBetData.round2BPS,score:userBetData.round2Score,email:theEmail,phone:thePhone}
               theDet2.push(theDet)
-              console.log('ikoooooooooooooooo 1111',theDet2)
+           //   console.log('ikoooooooooooooooo 1111',theDet2)
             this.setState({round2Arr:theDet2,theItems:theDet2})
               if(this.state.isAdmin){
           userInfoDb2.once('value',dataSnapshot=>{

@@ -857,7 +857,7 @@ class MyFlocks extends Component {
                 </div> </div> : <div>
                 <p className={styles.noDataP0} style={{ color: this.state.eventStarted ? statCol : null }}>{statToShow}</p>
                 <p className={styles.noDataP1}>No Admin data available for this event</p>
-              </div>}</> : null}</> : this.state.showNCAAB ? <CommMarchMadness ref={this.marchMadnessRef} theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} currentRound={this.state.currentSelection} menuToShow={this.state.menuToShow} flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection} /> : null}
+              </div>}</> : null}</> : this.state.showNCAAB ? <CommMarchMadness ref={this.marchMadnessRef} theEventKey={this.state.theEventKey} flockNameWithNoSpaces={this.state.myFlockName} /*currentRound={this.state.currentSelection}*/ currentRound='round1' /*menuToShow={this.state.menuToShow}*/ menuToShow='Rams In Your Flock' flockNameAvailable={this.state.flockNameAvailable} eventStarted={this.state.eventStarted} endTime={this.state.endTime} currentSubSelection={this.state.currentSubSelection} /> : null}
 
           </div>
         </div>

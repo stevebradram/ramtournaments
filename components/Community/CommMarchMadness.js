@@ -17,7 +17,7 @@ class CommMarchMadness extends Component {
   }
 
   componentDidMount = () => {
-    //console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces, this.state.round1Arr)
+   // console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces, this.props.currentRound,this.props.menuToShow)
     //return
       this.setState({ isEventStarted: this.props.eventStarted, theEventKey: this.props.theEventKey, flockNameWithNoSpaces: this.props.flockNameWithNoSpaces, flockNameAvailable: this.props.flockNameAvailable, currentRound: this.props.currentRound, endTime: this.props.endTime, menuToShow: this.props.menuToShow, currentSubSelection: this.props.currentSubSelection }, () => {
       this.getRamMembersData()
@@ -148,9 +148,9 @@ this.getRamMembersData()
           var theItem = { flockName: data.key, membersNo: theData.round1MembersNo, score: theData.round1Score, avScore: theData.round1AvScore }
           var theItem2 = { flockName: data.key, membersNo: theData.round2MembersNo, score: theData.round2Score, avScore: theData.round2AvScore }
 
-
-
           var sweet16MembersNo = theData.sweet16MembersNo
+          var overallMembersNoNew=(theData.round1MembersNo||0)+'>'+(theData.round2MembersNo||0)+'>'+(sweet16MembersNo||0)
+         // overallMembersNoNew='2+3+5'//`${a}+${b}+${c}`//overallMembersNoNew+';'
           var sweet16Score = theData.sweet16Score
           var elite8Score = theData.elite8Score
           var final4Score = theData.final4Score
@@ -169,18 +169,21 @@ this.getRamMembersData()
             avScore = Number(avScore.toFixed(2))
           }
 
+          var overallAvScoreNew=theData.round1AvScore+theData.round2AvScore+avScore
+          overallAvScoreNew=overallAvScoreNew.toFixed(2);
           //console.log('yyyyyyyy',theScore,sweet16MembersNo)
           var theItem3 = { flockName: data.key, membersNo: sweet16MembersNo, score: theScore, avScore: avScore }
 
-          var avMmebersNo = (Number(sweet16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3
-          avMmebersNo = Math.ceil(avMmebersNo) //Number(avMmebersNo.toFixed(2))
-          var averallAvScore = (Number(theData.round1Score) + Number(theScore) + Number(theData.round2Score)) / avMmebersNo
-          averallAvScore = Number(averallAvScore.toFixed(2))
+          var avMmebersNo =overallMembersNoNew //(Number(sweet16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3
+          var avMmebersNo2 =(Number(sweet16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3
+          avMmebersNo2 = Math.ceil(avMmebersNo2) //Number(avMmebersNo2.toFixed(2))
+          var averallAvScore ='' //(Number(theData.round1Score) + Number(theScore) + Number(theData.round2Score)) / avMmebersNo
+          averallAvScore =overallAvScoreNew // Number(averallAvScore.toFixed(2))
           var overalScore = Number(theData.round1Score) + Number(theScore) + Number(theData.round2Score)
           overalScore = Number(overalScore.toFixed(2))
           var theItem4 = {
             flockName: data.key, round1Score: theData.round1Score, round2Score: theData.round2Score, finalRoundScore: theScore, avScore: averallAvScore,
-            finalRoundMembNo: sweet16MembersNo, round1MembMo: theData.round1MembersNo, round2MembMo: theData.round2MembersNo, membersNo: avMmebersNo, score: overalScore
+            finalRoundMembNo: sweet16MembersNo, round1MembMo: theData.round1MembersNo, round2MembMo: theData.round2MembersNo, membersNo: avMmebersNo,membersNo2:avMmebersNo2,score: overalScore
           }
           flockSysRound1.push(theItem)
           flockSysRound2.push(theItem2)
@@ -228,7 +231,7 @@ this.getRamMembersData()
                 //console.log('flockSysRound1',round1Final1,round1Final2) 
               }
             })
-
+           
             flockSysRound2.map((item, map) => {
               q++
               if (item.membersNo < 4) {
@@ -246,9 +249,10 @@ this.getRamMembersData()
               }
             })
             var overallFinal1 = [], overallFinal2 = [], r = 0, r2 = 0
+             console.log('flockSysfloskSysOverallRound2',floskSysOverall)
             floskSysOverall.map((item, map) => {
               r++
-              if (item.membersNo < 4) {
+              if (item.membersNo2 < 4) {
                 overallFinal1.push(item)
               } else {
                 overallFinal2.push(item)
@@ -409,7 +413,7 @@ this.getRamMembersData()
               <tr id={styles.table1Tr1}>
                 <th>Flock Rank In Herd</th>
                 <th>Flock Names</th>
-                {this.state.currentRound !== 'overall' ? <th>Members No</th> : <th>Average<br />Members No</th>}
+                {this.state.currentRound !== 'overall' ? <th>Members No</th> : <th>Members No<br />Per Event</th>}
                 <th>Total Points</th>
                 <th>Average Points<br />Per RAM</th></tr>
               {theItems2.map((item, index) => {
