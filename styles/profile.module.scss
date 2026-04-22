@@ -9,6 +9,7 @@ $blackish:#292f51;
     align-items: center;
     justify-content: center;
     margin-bottom: 50px;
+    position: relative;
 
 }
 #container2{
@@ -23,6 +24,25 @@ $blackish:#292f51;
     flex-direction: column;
     align-items: center;
 }
+.editModal{
+    height: 100vh;
+    background-color: #00000055;
+    width: 100%;
+    border-radius: 10px;
+    position: absolute;
+    right:0;top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+.editCard{
+    height: 320px;
+    background-color: #fff;
+    width: 350px;
+    border-radius: 10px;
+    padding: 20px 20px;
+}
 .editP{
     width: 360px;
     text-align: center;
@@ -36,6 +56,38 @@ $blackish:#292f51;
     cursor: pointer;
     margin-bottom: 20px;
     border: 1px solid #949494;
+}
+.theInput{
+    width: 100%;
+    padding: 10px 10px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    border: none;
+    outline: none;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+}
+.editCardP1{
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.editCardP2{
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+.inputErr{
+    font-size: 12px;
+    color: red;
+    margin-top: 2px;
+}
+.submitBtn{
+    background-color: $blackish;
+    color: #fff;
+    text-align: center;
+    padding: 8px 0px;
+    margin-top: 30px;
+    cursor: pointer;
 }
 .deleteP{
     background-color:$redColor;

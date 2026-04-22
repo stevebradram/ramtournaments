@@ -1074,6 +1074,7 @@ class MarchMadness extends Component {
     })
   }
   openTheModal2 = (stopEdit) => {
+    console.log('')
     var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEdit)
     timeInfoDb.once('value', dataSnapshot => {
       var theEventTime = dataSnapshot.val()
@@ -1320,7 +1321,8 @@ class MarchMadness extends Component {
       theItems[index2]['showChooseWinner'] = true
       this.setState({ allRound2MatchesArr: theItems })
     }
-    if (this.state.currentSelection === 'sweet16') {
+    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'sweet16') {
       //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
@@ -1340,7 +1342,7 @@ class MarchMadness extends Component {
       this.setState({ sweet16Arr: theItems })
       //console.log('theItems', theItems)
     }
-    if (this.state.currentSelection === 'elite8') {
+    if (this.state.theMenu === 'elite8') {
       //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
@@ -1360,7 +1362,7 @@ class MarchMadness extends Component {
       this.setState({ elite8Arr: theItems })
       //console.log('theItems', theItems)
     }
-    if (this.state.currentSelection === 'final4') {
+    if (this.state.theMenu === 'final4') {
       //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
@@ -1380,7 +1382,7 @@ class MarchMadness extends Component {
       this.setState({ final4Arr: theItems })
       //console.log('iteeeems final4Arr', theItems)
     }
-    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'finalRound') {
       //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
       var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
       var nowTime = new Date().getTime()
@@ -1398,9 +1400,10 @@ class MarchMadness extends Component {
       theItems[index2]['showChooseWinner'] = true
       this.setState({ finalArr: theItems })
       //console.log('iteeeems finalArr', theItems)
-    }
+    }}
   }
   chosenWinner = (id, winner) => {
+   // return
     if (this.state.currentSelection === 'round1') {
       var index2 = this.state.allRound1MatchesArr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.allRound1MatchesArr
@@ -1415,36 +1418,42 @@ class MarchMadness extends Component {
       var theItems = this.state.allRound2MatchesArr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
+      this.setState({ allRound2MatchesArr: theItems })
       //console.log('this.state.currentItems 009', theItems)
     }
-    if (this.state.currentSelection === 'sweet16') {
+    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'sweet16') {
       var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.sweet16Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
-      //console.log('this.state.currentItems 009', theItems)
+      this.setState({ sweet16Arr: theItems })
+     // console.log('this.state.currentItems 009', theItems)
     }
-    if (this.state.currentSelection === 'elite8') {
+    if (this.state.theMenu === 'elite8') {
       var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.elite8Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
+      this.setState({ elite8Arr: theItems })
       //console.log('this.state.currentItems 009', theItems)
     }
-    if (this.state.currentSelection === 'final4') {
+    if (this.state.theMenu === 'final4') {
       var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.final4Arr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
+      this.setState({ final4Arr: theItems })
       //console.log('this.state.currentItems 010', theItems)
     }
-    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'finalRound') {
       var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
       var theItems = this.state.finalArr
       theItems[index2]['chosenWinner'] = winner
       theItems[index2]['status1'] = 'played'
+      this.setState({ finalArr: theItems })
       //console.log('this.state.currentItems 010', theItems)
-    }
+    }}
 
   }
   submitWinner = (id, winner) => {
@@ -1465,7 +1474,8 @@ class MarchMadness extends Component {
         this.checkForOutcome(index, winner)
       }
     }
-    if (this.state.currentSelection === 'sweet16') {
+    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'sweet16') {
       var index = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
       if (winner !== 'player1' && winner !== 'player2') {
         this.notify('Nothing to submit')
@@ -1473,7 +1483,7 @@ class MarchMadness extends Component {
         this.checkForOutcome(index, winner)
       }
     }
-    if (this.state.currentSelection === 'elite8') {
+    if (this.state.theMenu === 'elite8') {
       var index = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
       if (winner !== 'player1' && winner !== 'player2') {
         this.notify('Nothing to submit')
@@ -1481,7 +1491,7 @@ class MarchMadness extends Component {
         this.checkForOutcome(index, winner)
       }
     }
-    if (this.state.currentSelection === 'final4') {
+    if (this.state.theMenu === 'final4') {
       var index = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
       if (winner !== 'player1' && winner !== 'player2') {
         this.notify('Nothing to submit')
@@ -1489,14 +1499,14 @@ class MarchMadness extends Component {
         this.checkForOutcome(index, winner)
       }
     }
-    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'finalRound') {
       var index = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
       if (winner !== 'player1' && winner !== 'player2') {
         this.notify('Nothing to submit')
       } else {
         this.checkForOutcome(index, winner)
       }
-    }
+    }}
   }
   checkForOutcome = async (index, winner) => {
     try {
@@ -1549,18 +1559,19 @@ class MarchMadness extends Component {
       if ((this.state.currentSelection === 'round2')) {
         this.checkForOutcome2(index, winner)
       }
-      if ((this.state.currentSelection === 'sweet16')) {
+      if ((this.state.currentSelection === 'finalRound')) {
+      if ((this.state.theMenu === 'sweet16')) {
         this.checkForFinalRoundOutcome(index, winner, this.state.sweet16Arr, 'sweet16Arr')
       }
-      if ((this.state.currentSelection === 'elite8')) {
+      if ((this.state.theMenu === 'elite8')) {
         this.checkForFinalRoundOutcome(index, winner, this.state.elite8Arr, 'elite8Arr')
       }
-      if ((this.state.currentSelection === 'final4')) {
+      if ((this.state.theMenu === 'final4')) {
         this.checkForFinalRoundOutcome(index, winner, this.state.final4Arr, 'final4Arr')
       }
-      if ((this.state.currentSelection === 'finalRound')) {
+      if ((this.state.theMenu === 'finalRound')) {
         this.checkForFinalRoundOutcome(index, winner, this.state.finalArr, 'finalArr')
-      }
+      }}
     } catch (error) {
       //console.log('error',error)
     }
@@ -1639,14 +1650,16 @@ class MarchMadness extends Component {
         }
         shortArr.push(theItem)
       })
-      if (this.state.theEventKey === '', this.state.currentSelection === '', scoreName === '', items.length < 1) return
+            var theSelection=this.state.currentSelection
+      if(this.state.currentSelection==='finalRound'){theSelection=this.state.theMenu}
+      if (this.state.theEventKey === '', theSelection === '', scoreName === '', items.length < 1) return
       var scoreName = ''
       if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
       //if(this.state.currentSelection==='sweet16'){scoreName='round1Score'}
       //if(this.state.currentSelection==='round2'){scoreName='round2Score'}
-      scoreName = this.state.currentSelection + 'Score'
+      scoreName = theSelection + 'Score'
       let theItems = JSON.stringify(shortArr);
-      var theLink = 'theEvents::NCAAB::' + this.state.theEventKey + '::' + this.state.currentSelection + '::' + scoreName + '::' + theItems
+      var theLink = 'theEvents::NCAAB::' + this.state.theEventKey + '::' + theSelection + '::' + scoreName + '::' + theItems
       if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
       var theQuery = encodeURIComponent(theLink)
       //console.log('001', this.state.theEventKey, this.state.currentSelection, scoreName, theItems)

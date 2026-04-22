@@ -92,6 +92,7 @@ class Chats extends Component {
             if (theNo === i) {
               let objMax = ''
               if (theChats.length) { objMax = theChats.reduce((max, curren) => max.time > curren.time ? max : curren); }
+              theChats=theChats.sort((a, b) => new Date(b.time) - new Date(a.time));
               ////console.log('objMax',objMax,objMax['id'])
               //console.log('theChats1232323', theChats)
               // return
@@ -193,9 +194,9 @@ class Chats extends Component {
           <div className={styles.noDataDiv}>
             <p>Your chats will appear here</p>
           </div>}
-        <div className={styles.addChat} onClick={() => this.openFriends()}>
+       {/*<div className={styles.addChat} onClick={() => this.openFriends()}>
           <MdAddComment className={styles.chatIc} />
-        </div>
+        </div>*/}
       </div><ToastContainer /></>
     );
   }

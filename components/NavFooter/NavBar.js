@@ -250,7 +250,12 @@ class NavBar extends Component {
     if (from === 'fromMessages') {
       this.setState({ showMessages: false, showChats: true });
     }
-    if (from === 'fromAddFriends') { this.setState({ showMessages: false, showChats: false, showFriends: false, showAddFriends: false }); }
+    if (from === 'fromAddFriends') {
+      if (text === 'close') {this.setState({ showMessages: false, showChats: false, showFriends: false, showAddFriends: false })}
+      else{
+        console.log('theData 545',theData)
+        this.setState({ showMessages:true, showChats: false, showFriends: false, showAddFriends: false,theData})} 
+    }
   }
   theTypeAnimation = (text1, text2) => {
     return (

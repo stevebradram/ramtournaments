@@ -7,7 +7,8 @@ import { AiFillMessage } from "react-icons/ai";
 import firebase from '../FirebaseClient'
 import { Obfuscator } from '../Helper/Obfuscator';
 import { ToastContainer, toast } from 'react-toastify';
-class Friends extends Component {
+import Friends from './FriendsModal'
+class AddFriends extends Component {
   state = {friendsListArr: [],friendsListAvailable:false, myUserId: '', isLogged: '',showAddFrienModal:false,email:'',emailErr:''}
 
   componentDidMount = () => {
@@ -111,10 +112,16 @@ class Friends extends Component {
       progress: undefined,
     });
   }
+  handleChildClick = (from, text, theData) => {
+ // console.log('rrrrrrrrrr',from, text, theData)
+   this.props.onClick('fromAddFriends', text, theData)
+   //this.props.onClick('fromAddFriends', 'close', 'N/A')
+  }
   closeMessenger = () => {
     //console.log('clicked!')
     this.props.onClick('fromAddFriends', 'close', 'N/A')
   }
+  
   doNothing = (event) => {
     event.stopPropagation();
     event.preventDefault()
@@ -187,13 +194,14 @@ class Friends extends Component {
     return (
       <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
         <div className={styles.headerDiv}>
-          <h2>Friend Requests</h2>
+          <h2 style={{fontSize:16,fontWeight:600}}>Friend Requests</h2>
           <MdOutlineClose className={styles.backIc} onClick={() => this.closeMessenger()} />
         </div>
+        
         <div className={styles.noDataCont}>
           <div className={styles.noDataDiv} onClick={()=>this.setState({showAddFrienModal:true})}>
               <MdOutlinePersonAddAlt size={20} color='#fff'/>
-                          <p>Add Friends</p>
+                          <p>Friends</p>
                         </div></div>
         <div className={styles.chatsCont}>
           {this.state.friendsListAvailable?this.state.friendsListArr.map((item, index) => {
@@ -221,7 +229,10 @@ class Friends extends Component {
           }):<div className={styles.noDataDiv2}>
                   <p>Friend requests send to you  will appear here</p>
                 </div>}
+                 <Friends onClick={this.handleChildClick}/>
         </div>
+       
+        <p>hallow</p>
         
       </div>  {this.state.showAddFrienModal?<div className={styles.searchFriendsModal}>
         <div className={styles.searchFriendsDiv} onClick={(event) => this.doNothing(event)}>
@@ -235,4 +246,4 @@ class Friends extends Component {
   }
 }
 
-export default Friends;
+export default AddFriends;

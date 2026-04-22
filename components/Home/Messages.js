@@ -41,6 +41,9 @@ class Messages extends Component {
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
     }
+     if (this.props.from === 'fromAddFriends' && theData !== 'N/A') {
+      this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
+    }
     if (this.props.from === 'fromChats' && theData !== 'N/A') {
       this.setState({ profilePhoto: theData['profilePhoto'], userName: theData['userName'], acronym: theData['acronym'], otheUserId: theData['uid'] })
     }
