@@ -10,6 +10,7 @@ import NCAA from '../components/Event/NCAA'
 import NFL from '../components/Event/NFL'
 import NFLRegular from '../components/Event/NFLRegular'
 import MarchMadness from '../components/Event/MarchMadness'
+import WorldCup from '../components/Event/WorldCup'
 import LogIn from '../components/LogInReg/LogIn'
 import localStorage from 'local-storage'
 import firebase from '../components/FirebaseClient'
@@ -26,13 +27,13 @@ var selectedRamUfcArray = [], selectedNflArray = [], selectedMarchMadnesArray = 
 class events extends Component {
   state = {
     theMenu: 'round1', theItems: [], opendetailsModal: false, getRamDetails: false, dataAvailable: '', theEvent: 'Current Events', currentID: 1,
-    theRamUfc: false, theMarchMadness: false, theNfl: false, theNcaaf: false, theFifa: '', userId: '', userLoggedIn: false, selectedEvent: 'March Madness', eventToShow: false,
+    theRamUfc: false, theMarchMadness: false, theNfl: false, theNcaaf: false, theFifa: '', userId: '', userLoggedIn: false, selectedEvent: 'World Cup', eventToShow: false,
     teamName: '', flockName: '', openLoginModal: false, clickHere1: 'CLICK HERE TO MAKE YOUR PICKS', clickHere2: 'CLICK HERE TO ENTER THE GAME',
-    currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'marchMadness', pastEventsAvailable: false,
+    currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'WorldCup', pastEventsAvailable: false,
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [],
-    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', selectedSport: 'March Madness', selectedId: '',theApiKey:'',
+    ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', selectedSport: 'World Cup', selectedId: '',theApiKey:'',
     allGames: [], theEventTitle: '', theEventKey: '', sportType: '', theTime: '', endTime: '', showChooseEventModal: false, firstSport: '',isAdmin:false,openApiModal:false,apiKeyErr:'',
-    theEvents: [{ id: "NCAAB", name: 'March Madness' }, { id: "ramUfc", name: 'RAM UFC' }, { id: "NCAAF", name: 'NCAAF' }, { id: "NFL", name: 'NFL Playoffs' }, { id: "NFLRegular", name: 'NFL Season' }],
+    theEvents: [{ id: "NCAAB", name: 'March Madness' }, { id: "ramUfc", name: 'RAM UFC' }, { id: "NCAAF", name: 'NCAAF' }, { id: "NFL", name: 'NFL Playoffs' }, { id: "NFLRegular", name: 'NFL Season' },{ id: "WorldCup", name: 'World Cup' }],
     apiEvents: [{ id: "oddsApi", name: 'https://api.the-odds-api.com/' }, { id: "sportsDataApi", name: 'https://api.sportsdata.io/' }],apiEventSelectedName:'',apiEventSelectedId:''
   }
   componentDidMount = () => {
@@ -43,7 +44,7 @@ class events extends Component {
       if (user) {
         var userId = user.uid
         this.setState({ userId, userLoggedIn: true })
-        this.checkForFirstSport()
+       // this.checkForFirstSport()
         this.checkForAllEvents()
          if(user.uid==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'||user.uid==='zZTNto5p3XVSLYeovAwWXHjvkN43'||user.uid==='vKBbDsyLvqZQR1UR39XIJQPwwgq1'||user.uid==='qXeqfrI5VNV7bPMkrzl0QsySmoi2'){
         this.setState({isAdmin:true})
@@ -179,6 +180,7 @@ class events extends Component {
     if (name === 'NFL Season') { this.setState({ theCurrentEvent: 'nflRegular',selectedEvent:name }) }
     if (name === 'RAM UFC') { this.setState({ theCurrentEvent: 'ramUfc',selectedEvent:name }) }
     if (name === 'NCAAF') { this.setState({ theCurrentEvent: 'NCAAF',selectedEvent:name }) }
+    if (name === 'World Cup') { this.setState({ theCurrentEvent: 'WorldCup',selectedEvent:name }) }
 
 
 
@@ -226,6 +228,7 @@ class events extends Component {
             if (item.name === 'NFL Playoffs' && this.state.theNfl === true) { colorP = '#b2b2b2', clickable = false }
             if (item.name === 'NFL Season' && this.state.theNflRegular === true) { colorP = '#b2b2b2', clickable = false }
             if (item.name === 'RAM UFC' && this.state.theRamUfc === true) { colorP = '#b2b2b2', clickable = false }
+             if (item.name === 'World Cup' && this.state.theRamUfc === true) { colorP = '#b2b2b2', clickable = false }
             return (
               <div key={index} onClick={() => this.chooseEvent(item.name)}>
                 <p className={style.listP} style={{ color: colorP, borderColor: colorP }} id={this.state.selectedEvent === item.name ? style.playerP3 : style.playerP}>{item.name}</p>
@@ -261,6 +264,7 @@ class events extends Component {
           {this.state.selectedEvent==='NFL Playoffs'?<NFL isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='NFL Season'?<NFLRegular isUserLoggedIn={this.state.userLoggedIn}/>:null}
           {this.state.selectedEvent==='March Madness'?<MarchMadness isUserLoggedIn={this.state.userLoggedIn}/>:null}
+          {this.state.selectedEvent==='World Cup'?<WorldCup isUserLoggedIn={this.state.userLoggedIn}/>:null}
         </div>
         {this.state.showChooseEventModal ? <div className={style.detailsModal} onClick={() => this.setState({ showChooseEventModal: false })}>
           <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>

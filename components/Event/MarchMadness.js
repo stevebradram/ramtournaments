@@ -521,10 +521,6 @@ class MarchMadness extends Component {
 
     this.getNCAABMatches2()
     this.getNCAABMatchesFinal()
-    return
-    this.getNCAABMatches4()
-    this.getNCAABFinal4()
-    //this.getMatchesInfo()
   }
   getNCAABMatches2 = () => {
     var round2EastArr = [], round2WestArr = [], round2SouthArr = [], round2midWestArr = [], allMatches = []

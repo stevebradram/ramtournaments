@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styles from "./Chats.module.scss";
 import postTime from '../Helper/postTime';
 import Image from 'next/image'
-var theImg = 'https://images.pexels.com/photos/447186/pexels-photo-447186.jpeg'
 import { AiFillMessage } from "react-icons/ai";
 import { MdOutlineClose, MdAddComment } from "react-icons/md";
 import firebase from '../FirebaseClient'
