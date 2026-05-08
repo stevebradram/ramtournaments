@@ -776,7 +776,7 @@ class WorldCup extends Component {
         var thePicks=[]
         return (
             <div className={style.itemComp}>
-              <div className={style.groupDiv}><p className={style.groupP}>{group}</p><p className={style.editDivP} onClick={() => this.setState({ openEnterTeamsModal: group })}>Edit</p></div>  
+              <div className={style.groupDiv}><p className={style.groupP}>{group}</p>{this.state.isAdmin?<p className={style.editDivP} onClick={() => this.setState({ openEnterTeamsModal: group })}>Edit</p>:null}</div>  
                 <div id={style.table1Div}>
                     <table className={style.table1}>
                         <tr id={style.table1Tr1}>
