@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import style from "./WorldCup.module.scss";
 import { ToastContainer, toast } from 'react-toastify';
-import { MdCheck } from "react-icons/md";
+import { MdCheck,MdInfoOutline,MdOutlinePersonOutline,MdOutlineKeyboardArrowRight} from "react-icons/md";
 import { FaFontAwesomeFlag } from "react-icons/fa";
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
@@ -15,10 +15,11 @@ import { BsFillLightningFill } from "react-icons/bs";
 import { FaRegCopy } from "react-icons/fa";
 import { TbCheckbox } from "react-icons/tb";
 import { MdClose,MdOutlineShare } from "react-icons/md";
+import RamOdds from '../TheJSONS/ramOdds'
 import Image from 'next/image'
 var flagImg = 'https://a.espncdn.com/i/teamlogos/soccer/500/164.png'
 var groupATeams = [{ id: 'groupATeam1', teamName: 'Mexico', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/203.png', outCome: 'Proceed', rank: 24, points: 4.8 }, { id: 'groupATeam2', teamName: 'South Africa', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/467.png', outCome: 'Proceed', rank: 96, points: 2.3 }, { id: 'groupATeam3', teamName: 'South Korea', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/451.png', outCome: 'Eliminated', rank: 24, points: 1.52 }, { id: 'groupATeam4', teamName: 'Czechia', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/450.png', outCome: 'N/A', rank: 103, points: 3.52 }]
-var chosenTeams = []
+var chosenTeams = [],ramOddsMap=''
 const groupStage = [
     { id: 'groupAMatch1', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
     { id: 'groupAMatch2', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
@@ -113,13 +114,14 @@ const final = [
 
 class WorldCup extends Component {
     state = {
-        isAdmin: true, showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '',
-        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round1', theMenu: 'roundOf16', groupStagePopulated: false,
+        isAdmin: true, showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '',enterTeamNameInfoModal:false,team1Odds:'0.00',team2Odds:'0.00',team3Odds:'0.00',team4Odds:'0.00',
+        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round1', theMenu: 'roundOf16', groupStagePopulated: false,teamName:'',flockName:'',teamNameErr:'',flockNameErr:'',myEmail:'',myPhoneNo:'',flockNameNoSpace:'',ramFlockName:'Flockless',
         groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [],dataAvailable:false,
         quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '',theLink:'',theEventTitle:'World Cup 2026'
     }
     componentDidMount = () => {
         this.checkAuth()
+       
     }
     checkAuth = () => {
         var userId = ''
@@ -138,6 +140,25 @@ class WorldCup extends Component {
             }
         })
     }
+       getUserDetails=(userId)=>{
+        var userRef = firebase.database().ref('/users/'+this.state.userId+'/userData/')
+        var myFlockNamesRef=firebase.database().ref('/users/').child(this.state.userId+'/flockData/flockNames/').child(this.state.theEventKey)
+        userRef.once('value', dataSnapshot => {
+         var myEmail=dataSnapshot.val().email
+         var myPhoneNo=dataSnapshot.val().phoneNo
+         this.setState({myEmail,myPhoneNo})
+        
+        })
+        myFlockNamesRef.once('value',dataSnapshot=>{
+          if(dataSnapshot.exists()){
+          var theFlockName=dataSnapshot.val().name
+          theFlockName=theFlockName?.split("|").join(" ")
+          this.setState({ramFlockName:theFlockName,flockNameNoSpace:dataSnapshot.val().name})
+          }else{
+            this.setState({ramFlockName:'Flockless',flockNameNoSpace:'Flockless'})
+          }
+        })
+       }
     getWorldCupMatches = () => {
         var groupAArr = [], groupBArr = [], groupCArr = [], groupDArr = [], groupEArr = [], groupFArr = [], groupGArr = [], groupHArr = [], groupIArr = [], groupJArr = [], groupKArr = [], groupLArr = [], allMatches = []
         this.setState({ eastRound1Arr: [], eastRound2Arr: [], eastroundOf16Arr: [], eastquarterFinalsArr: [], dataAvailable: false, currentEventUserInfo: {} })
@@ -274,6 +295,7 @@ class WorldCup extends Component {
                 round1Arr = theData.round1 
                 this.combineMatchesInfo(round1Arr,'groupAArr',this.state.groupAArr)
                 this.combineMatchesInfo(round1Arr,'groupBArr',this.state.groupBArr)
+                this.getUserDetails()
                 
             }
         })
@@ -283,178 +305,6 @@ class WorldCup extends Component {
                 if (roundArr.hasOwnProperty(team.id)) {return { ...team, bet: true };}
                 const { bet, ...rest } = team;return rest;});
                 this.setState({[groupName]:updatedGroupAArr})    
-    }
-    getMatchesInfo = async () => {
-        var userId = this.state.userId
-        var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/WorldCup/" + this.state.theEventKey + '/')
-        var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
-        var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/WorldCup/" + this.state.theEventKey + '/details/')
-        var userBetsDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/WorldCup/" + this.state.theEventKey + '/bets/')
-        var currentEventUserInfo = '', finalRoundScore = 0
-        await selectedMatchesKeyDb.once('value', dataSnapshot => {
-            //console.log('the key',dataSnapshot.val())
-            if (!dataSnapshot.val()) return
-            photoRefDb.once('value', dataSnapshot => {
-                //console.log('proofile photo',dataSnapshot.val())
-                if (dataSnapshot.val()) {
-                    this.setState({ profilePhoto: dataSnapshot.val() })
-                }
-            })
-            userInfoDb.once('value', dataSnapshot => {
-                if (!dataSnapshot.val()) return
-                //console.log('the type user 0000000000000', dataSnapshot.val())
-                if (dataSnapshot.val()) {
-                    var theInfo = dataSnapshot.val()
-                    currentEventUserInfo = dataSnapshot.val()
-                    finalRoundScore = Number(theInfo.sweet16Score) + Number(theInfo.elite8Score) + Number(theInfo.final4Score) + Number(theInfo.finalRoundScore)
-                    this.setState({ currentEventUserInfo: theInfo, finalRoundScore, dataAvailable: true })
-                }
-            })
-            userBetsDb.once('value', dataSnapshot => {
-                var theData = dataSnapshot.val()
-                var round1Arr = [], round2Arr = [], finalRoundArr = [], sweet16Arr = [], elite8Arr = [], final4Arr = []
-                var round1Exists = dataSnapshot.child('round1').exists()
-                var round1Count = dataSnapshot.child('round1').numChildren()
-                var round2Count = dataSnapshot.child('round2').numChildren()
-                var sweet16Count = dataSnapshot.child('sweet16').numChildren()
-
-                var elite8Count = dataSnapshot.child('elite8').numChildren()
-                var final4Count = dataSnapshot.child('final4').numChildren()
-                var finalRoundCount = dataSnapshot.child('finalRound').numChildren()
-                if (round1Exists) {
-                    var i = 0
-                    round1Arr = theData.round1
-                    //console.log('round 14 item',round1Count,round1Arr)
-                    for (var key in round1Arr) {
-                        i++
-                        var theId = key
-                        var betPlayer = round1Arr[key]
-                        this.state.allRound1MatchesArr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                                /* if (item2.status1 === 'played') {
-                                   if (item2.winner === 'player1' && betPlayer) { currentScore.push(item.p1Points);thePoints.push(item.p1Points);}
-                                   if (item2.winner === 'player2' && betPlayer) { currentScore.push(item.p2Points);thePoints.push(item.p2Points);}
-                                 }*/
-                            }
-                        })
-                        if (round1Count === i) {
-                            //console.log('round 19 item',this.state.allRound1MatchesArr)
-                            this.setState({ allRound1MatchesArr: this.state.allRound1MatchesArr })
-                        }
-                    }
-                }
-                var round2Exists = dataSnapshot.child('round2').exists()
-                if (round2Exists) {
-                    var i = 0
-                    round2Arr = theData.round2
-                    //console.log('round 14 item',round2Count,round2Arr)
-                    for (var key in round2Arr) {
-                        i++
-                        var theId = key
-                        var betPlayer = round2Arr[key]
-                        this.state.allRound2MatchesArr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                            }
-                        })
-                        if (round2Count === i) {
-                            this.setState({ allRound2MatchesArr: this.state.allRound2MatchesArr })
-                            //console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
-                        }
-                    }
-                }
-                var sweet16Exists = dataSnapshot.child('sweet16').exists()
-                if (sweet16Exists) {
-                    var i = 0
-                    sweet16Arr = theData.sweet16
-                    //console.log('round 14 item',round2Count,round2Arr)
-                    for (var key in sweet16Arr) {
-                        i++
-                        var theId = key
-                        var betPlayer = sweet16Arr[key]
-                        this.state.sweet16Arr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                            }
-                        })
-                        if (sweet16Count === i) {
-                            this.setState({ sweet16Arr: this.state.sweet16Arr })
-                            //console.log('sweet16Count ', this.state.sweet16Arr)
-                        }
-                    }
-                }
-                var elite8Exists = dataSnapshot.child('elite8').exists()
-                if (elite8Exists) {
-                    var i = 0
-                    elite8Arr = theData.elite8
-                    //console.log('round 14 item',round2Count,round2Arr)
-                    for (var key in elite8Arr) {
-                        i++
-                        var theId = key
-                        var betPlayer = elite8Arr[key]
-                        this.state.elite8Arr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                            }
-                        })
-                        if (elite8Count === i) {
-                            this.setState({ elite8Arr: this.state.elite8Arr })
-                            //console.log('elite8Arr ', this.state.elite8Arr)
-                        }
-                    }
-                } else {
-                    //console.log('elite 8 not existing')
-                }
-                var final4Exists = dataSnapshot.child('final4').exists()
-                if (final4Exists) {
-                    var i = 0
-                    final4Arr = theData.final4
-                    //console.log('round 14 item',round2Count,round2Arr)
-                    for (var key in final4Arr) {
-                        i++
-                        var theId = key
-                        var betPlayer = final4Arr[key]
-                        this.state.final4Arr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                            }
-                        })
-                        if (final4Count === i) {
-                            this.setState({ final4Arr: this.state.final4Arr })
-                            //console.log('final4Arr ', this.state.final4Arr)
-                        }
-                    }
-                }
-
-                var finalRoundExists = dataSnapshot.child('finalRound').exists()
-                if (finalRoundExists) {
-                    var i = 0
-                    finalRoundArr = theData.finalRound
-                    //console.log('round 14 item',round2Count,round2Arr)
-                    for (var key in finalRoundArr) {
-                        i++
-                        var theId = key
-                        var betPlayer = finalRoundArr[key]
-                        this.state.finalArr.map((item2, index) => {
-                            if (item2.id === theId) {
-                                item2['bet'] = betPlayer
-                            }
-                        })
-                        if (final4Count === i) {
-                            this.setState({ finalArr: this.state.finalArr })
-                            //console.log('finalRoundArr ', this.state.finalArr)
-                        }
-                    }
-                }
-                return
-
-                var finalRoundExists = dataSnapshot.child('finalRound').exists()
-                if (finalRoundExists) { finalRoundArr = theData.finalRound }
-                //console.log('round1Exists', round1Exists)
-                //console.log('round1 data', theData.round1)
-            })
-        })
     }
     inputChange = async (e) => {
         var value = e.target.value
@@ -468,7 +318,20 @@ class WorldCup extends Component {
     }
     teamsInputChange = async (e) => {
         var value = e.target.value
-        await this.setState({ [e.target.id]: value })
+        // ramOddsMap=new Map([RamOdds])
+        var theValue=RamOdds[value]
+        var theOdds=''
+        if(e.target.id==='team1Points'){theOdds='team1Odds'}
+        if(e.target.id==='team2Points'){theOdds='team2Odds'}
+        if(e.target.id==='team3Points'){theOdds='team3Odds'}
+        if(e.target.id==='team4Points'){theOdds='team4Odds'}
+        console.log('theValue',theValue)
+        
+        //if(value>100)
+        if (value < -10000) { theValue = 1.01 }
+        if (value > 12620) { theValue = 1247.20 }
+        if (value<= 101 && value >= -101) {theValue= 2.03}
+        await this.setState({ [e.target.id]:value,[theOdds]:theValue})
     }
     saveTeams = async (group) => {
         var idPart1 = group.charAt(0).toLowerCase() + group.slice(1).replace(" ", "");
@@ -482,17 +345,12 @@ class WorldCup extends Component {
             this.state.team1Points.length < 1 || this.state.team2Points.length < 1 || this.state.team3Points.length < 1 || this.state.team4Points.length < 1) { this.notify('All fields must be filled') }
         else {
             var id1 = idPart1 + 'Team1', id2 = idPart1 + 'Team2', id3 = idPart1 + 'Team3', id4 = idPart1 + 'Team4'
-            updates[id1] = { id: id1, teamName: this.state.team1Name, points: this.state.team1Points, teamFlag: this.state.team1Flag, outCome: 'N/A', group: group };
-            updates[id2] = { id: id2, teamName: this.state.team2Name, points: this.state.team2Points, teamFlag: this.state.team2Flag, outCome: 'N/A', group: group };
-            updates[id3] = { id: id3, teamName: this.state.team3Name, points: this.state.team3Points, teamFlag: this.state.team3Flag, outCome: 'N/A', group: group };
-            updates[id4] = { id: id4, teamName: this.state.team4Name, points: this.state.team4Points, teamFlag: this.state.team4Flag, outCome: 'N/A', group: group };
+            updates[id1] = { id: id1, teamName: this.state.team1Name, points: this.state.team1Points,odds: this.state.team1Odds, teamFlag: this.state.team1Flag, outCome: 'N/A', group: group };
+            updates[id2] = { id: id2, teamName: this.state.team2Name, points: this.state.team2Points,odds: this.state.team2Odds, teamFlag: this.state.team2Flag, outCome: 'N/A', group: group };
+            updates[id3] = { id: id3, teamName: this.state.team3Name, points: this.state.team3Points,odds: this.state.team3Odds, teamFlag: this.state.team3Flag, outCome: 'N/A', group: group };
+            updates[id4] = { id: id4, teamName: this.state.team4Name, points: this.state.team4Points,odds: this.state.team4Odds, teamFlag: this.state.team4Flag, outCome: 'N/A', group: group };
 
 
-            /*  team1Item['id'] = idPart1+'Team1'; team1Item['teamName'] = this.state.team1Name; team1Item['points'] = this.state.team1Points; team1Item['teamFlag'] = this.state.team1Flag; team1Item['outCome'] = 'N/A';team1Item['group'] =group;
-              team2Item['id'] = idPart1+'Team2'; team2Item['teamName'] = this.state.team2Name; team2Item['points'] = this.state.team2Points; team2Item['teamFlag'] = this.state.team2Flag; team2Item['outCome'] = 'N/A';team2Item['group'] =group;
-              team3Item['id'] = idPart1+'Team3'; team3Item['teamName'] = this.state.team3Name; team3Item['points'] = this.state.team3Points; team3Item['teamFlag'] = this.state.team3Flag; team3Item['outCome'] = 'N/A';team3Item['group'] =group;
-              team4Item['id'] = idPart1+'Team4'; team4Item['teamName'] = this.state.team4Name; team4Item['points'] = this.state.team4Points; team4Item['teamFlag'] = this.state.team4Flag; team4Item['outCome'] = 'N/A';team4Item['group'] =group;*/
-            //itemArr.push(team1Item);itemArr.push(team2Item);itemArr.push(team3Item);itemArr.push(team4Item)
             console.log('the iteeeeeeeeeeeeeeeeem', updates)
             generalDb.child('groupStage').update(updates, (error) => {
                 if (!error) {
@@ -699,6 +557,177 @@ class WorldCup extends Component {
         gamesDataRef.child(this.state.theEventKey + '/bets/' + this.state.currentRound).update(updates)
         console.log('chosenTeams updates', updates, this.state.chosenTeams)
     }
+       toDatabase=()=>{
+        if(!this.state.userId)return
+        var eventKey=this.props.theEventKey
+        var itemsData={},theSelection=this.state.currentRound
+        const theTime = new Date().getTime()
+        var detailsData = {},scoreData={}
+        var dataScore=theSelection+'Score'
+        var thePick=theSelection+'Pick'
+        var bps2=theSelection+'BPS'
+        if(theSelection==='round1'){
+          detailsData = {
+            teamName:this.state.teamName,
+            flockName:this.state.ramFlockName,
+            created: theTime,
+            bestPossibleScore:this.state.bestPossibleScore,
+            currentScore:'0.00',
+            round1Score:'0',
+            round2Score:'0',
+            finalRoundScore:'0',
+            sweet16Score:'0',
+            quarterFinalsScore:'0',
+            semiFinalScore:'0',
+            [dataScore]:'0.00',
+            currentRank:false, 
+            [thePick]:true,
+            currentPick:theSelection,
+            theMenu:this.props.theMenu,
+            round1Rank:false,
+            round2Rank:false,
+            finalRoundRank:false,
+            [bps2]:this.state.bestPossibleScore
+          }
+          scoreData={BPS:this.state.bestPossibleScore,score:0,
+            round1Score:'0',round2Score:'0',finalRoundScore:'0',
+            sweet16Score:'0',elite8Score:'0',final4Score:'0',
+            currentPick:theSelection,theMenu:this.props.theMenu,
+            ramName:this.state.teamName,picked:true, [thePick]:true,
+            [bps2]:this.state.bestPossibleScore}
+        }else{
+          detailsData = {
+            teamName:this.state.teamName,
+            bestPossibleScore:this.state.bestPossibleScore,
+            flockName:this.state.ramFlockName,
+            [dataScore]:'0.00',
+            currentPick:theSelection,
+            theMenu:this.props.theMenu,
+            [thePick]:true,
+            [bps2]:this.state.bestPossibleScore
+          }
+          scoreData={BPS:this.state.bestPossibleScore,score:0,
+            currentPick:theSelection,theMenu:this.props.theMenu,
+            ramName:this.state.teamName,picked:true, [thePick]:true,
+            [bps2]:this.state.bestPossibleScore}
+        }
+     
+        var i=0
+        this.state.theItems.map((item,index)=>{
+          //console.log('iteeem',item.id,item.bet)
+          i++
+          itemsData[item.id]=item.bet
+              if(this.state.theItems.length===i){
+               
+            
+        //return
+        //console.log('detailsData',detailsData)
+        var theTeamName=this.state.teamName.replace(/ /g,"_")
+        var theFlockName=this.state.ramFlockName.replace(/ /g,"_")
+        var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
+        var uniqueFlockNamesRef = firebase.database().ref('/theNames/flockNames/').child(this.state.currentEvent+'/'+this.props.theEventKey+'/')
+        uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
+          var theInfo=dataSnapshot.val()
+          var theName=dataSnapshot.key
+          //console.log('theName',theName,'theInfo',theInfo)
+          //console.log('flockTeamName[0]',flockTeamName[0])
+         // return
+          if(!theInfo){
+            if(flockTeamName[0]){
+              var name1=flockTeamName[0].replace(/ /g,"_")
+              uniqueRamNamesRef.child(name1).set(null)
+            }
+            ////CONTINUE
+            this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)
+          }
+          else{
+            if(theInfo===this.state.userId){
+              if(flockTeamName[0]){
+                var name1=flockTeamName[0].replace(/ /g,"_")
+                uniqueRamNamesRef.child(name1).set(null)
+              }
+              this.toDatabase2(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)
+              //console.log('continue 222222')
+            }else{
+            this.notify('RAM Name already taken')
+            this.setState({teamNameErr:'RAM Name already taken, please try another one'})}
+              //console.log('change that shit')
+          }})
+    
+        }
+      })
+       }
+       toDatabase2=(detailsData,theFlockName,uniqueFlockNamesRef,itemsData,uniqueRamNamesRef,theTeamName,scoreData,theSelection)=>{
+        //console.log('detailsData',detailsData)
+        //console.log('itemsData',itemsData)
+        //console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,theSelection,this.state.userId)
+        //return
+        var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents').child(this.state.currentEvent)
+        var gamesDataRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('events').child(this.state.currentEvent)
+        var ramsBets = firebase.database().ref('userBets/'+this.state.currentEvent+'/')
+        //var adminRef = firebase.database().ref('userBets/admin/'+this.state.currentEvent+'/')
+        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey)
+        var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.props.theEventKey+'/admin')
+        
+        var toAdmin=this.state.teamName+'!!'+this.state.ramFlockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
+    
+        if(this.state.ramFlockName!=='Flockless'){
+          membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
+          adminRef.child(this.state.userId).set(toAdmin)
+          membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
+        }
+    
+        keysDbRef.child(this.props.theEventKey).set(true)
+        gamesDataRef.child(this.props.theEventKey+'/details/').update(detailsData)
+        gamesDataRef.child(this.props.theEventKey+'/bets/'+theSelection).update(itemsData)
+        uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
+       // uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
+        //adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
+        ramsBets.child(this.props.theEventKey+'/').child(this.state.userId+'/'+theSelection+'/').update(itemsData,(error) => {
+          if (error) {
+            //console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
+          } else {
+            //console.log('Your picks have been submitted successfully') 
+            this.notify('Your picks have been submitted successfully')
+            Router.push('/reload')        
+          }
+        })
+       }
+       saveTeamNameInfo=()=>{
+        //ramFlockName teamName teamNameErr
+        var itemsData={},theSelection=this.state.currentRound
+         var dataScore=theSelection+'Score'
+        var thePick=theSelection+'Pick'
+        var bps2=theSelection+'BPS'
+        var detailsData = {
+            teamName:this.state.teamName,
+            flockName:this.state.ramFlockName,
+            created: new Date().getTime(),
+            bestPossibleScore:'0.00',
+            currentScore:'0.00',
+            round1Score:'0',
+            round2Score:'0',
+            finalRoundScore:'0',
+            roundOf16Score:'0',
+            quarterFinalsScore:'0',
+            semiFinalScore:'0',
+            currentRank:false, 
+            currentPick:'round1',
+            round1Rank:false,
+            round2Rank:false,
+            finalRoundRank:false,
+            round1BPS:'0',
+            round2BPS:'0',
+            finalRoundBPS:'0',
+          }
+        if(this.state.teamName.length<3){
+            this.setState({teamNameErr:'Ram name must be 3 characters and above'})
+            return
+        }else{
+            console.log('detailsData',detailsData)
+        }
+
+       }
     dummyItems = (group, theItems) => {
         return (
             <div className={style.itemComp}>
@@ -733,12 +762,13 @@ class WorldCup extends Component {
                     <p className={style.myPicksP1}>My Picks: N/A</p>
                     <p className={style.myPicksP2}>Points Earned: N/A</p>
                 </div>
-                {this.state.isAdmin ? <p className={style.winnerPickP} onClick={() => this.setState({ openEnterTeamsModal: group })}>Fill In {group} Teams</p> : <p className={style.winnerPickP} onClick={() => this.notify('Selection not available at the moment')}>Pick {group} Winners</p>}
+                {this.state.isAdmin ? <p className={style.winnerPickP} onClick={() => this.setState({ openEnterTeamsModal: group,team1Points:'',team2Points:'',team3Points:'',team4Points:'',team1Odds:'0.00',team2Odds:'0.00',team3Odds:'0.00',team4Odds:'0.00'})}>Fill In {group} Teams</p> : <p className={style.winnerPickP} onClick={() => this.notify('Selection not available at the moment')}>Pick {group} Winners</p>}
                 {this.state.isAdmin && this.state.openEnterTeamsModal === group ? <div className={style.fillTeamsCont}>
                     <p className={style.teamTitleP}>{group} Team 1</p>
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team1Name' placeholder='Enter team name' type='text' value={this.state.team1Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team1Points' placeholder='Team points' type='number' value={this.state.team1Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team1Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team1Flag' placeholder='Paste team flag' type='text' value={this.state.team1Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -747,6 +777,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team2Name' placeholder='Enter team name' type='text' value={this.state.team2Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team2Points' placeholder='Team points' type='number' value={this.state.team2Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team2Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team2Flag' placeholder='Paste team flag' type='text' value={this.state.team2Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -755,6 +786,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team3Name' placeholder='Enter team name' type='text' value={this.state.team3Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team3Points' placeholder='Team points' type='number' value={this.state.team3Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team3Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team3Flag' placeholder='Paste team flag' type='text' value={this.state.team3Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -763,6 +795,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team4Name' placeholder='Enter team name' type='text' value={this.state.team4Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team4Points' placeholder='Team points' type='number' value={this.state.team4Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team4Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team4Flag' placeholder='Paste team flag' type='text' value={this.state.team4Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -776,35 +809,36 @@ class WorldCup extends Component {
         var thePicks=[]
         return (
             <div className={style.itemComp}>
-              <div className={style.groupDiv}><p className={style.groupP}>{group}</p>{this.state.isAdmin?<p className={style.editDivP} onClick={() => this.setState({ openEnterTeamsModal: group })}>Edit</p>:null}</div>  
+              <div className={style.groupDiv}><p className={style.groupP}>{group}</p>{this.state.isAdmin?<p className={style.editDivP} onClick={() => this.setState({ openEnterTeamsModal: group,team1Points:'',team2Points:'',team3Points:'',team4Points:'',team1Odds:'0.00',team2Odds:'0.00',team3Odds:'0.00',team4Odds:'0.00' })}>Edit</p>:null}</div>  
                 <div id={style.table1Div}>
                     <table className={style.table1}>
                         <tr id={style.table1Tr1}>
                             <th>Pick</th>
-                            <th>Flag</th>
-                            <th>Country</th>
+                            <th style={{paddingLeft:10}}>Flag</th>
+                            <th style={{paddingLeft:10}}>Country</th>
                             <th>Points</th>
-                            <th>Outcome</th>
+                            <th style={{paddingLeft:20}}>Outcome</th>
                         </tr>
                         {theItems.map((item, index) => {
                             if (item.bet) {thePicks.push(item.teamName)}
                             console.log('the thePicks',thePicks)
-                            var textColor = '#292f51'
+                            var textColor = '#292f51',teamName=item.teamName
                             var selectedToShow = selectedToShow = <div className={style.boxDiv} onClick={() => this.selectedItems(item.id, item.teamName, item.points, item.group)}><MdCheck color="#fff" size={15} /></div>
                             if (item.bet) {
                                 selectedToShow = <div className={style.boxDiv3}><MdCheck color="#fff" size={15} onClick={() => this.deselectItems(item.id, item.teamName, item.points, item.group)} /></div>
                             }
                             if (item.outCome === 'Proceed') { textColor = '#1ecb97' }
                             if (item.outCome === 'Eliminated') { textColor = '#CB1E31' }
+                            if(item.teamName.length>15){teamName=teamName.slice(0,15)+'...'}
                             return (
                                 <tr id={style.table1Tr2} key={index}>
                                     <td style={{ cursor: 'pointer' }}>{selectedToShow}</td>
-                                    <td>
-                                        <img className={style.flagImg} src={item.teamFlag} alt={'RAM'} />
+                                    <td style={{paddingLeft:10}}>
+                                    <div className={style.flagImgDiv}><img className={style.flagImg} src={item.teamFlag} alt={'RAM'} /></div>
                                     </td>
-                                    <td>{item.teamName}</td>
-                                    <td>{item.points}</td>
-                                    <td style={{ color: textColor }}>{item.outCome}</td>
+                                    <td style={{paddingLeft:10}}>{teamName}</td>
+                                    <td>{item.odds}</td>
+                                    <td style={{color:textColor,paddingLeft:20}}>{item.outCome}</td>
                                 </tr>
                             )
                         })}
@@ -820,6 +854,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team1Name' placeholder='Enter team name' type='text' value={this.state.team1Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team1Points' placeholder='Team points' type='number' value={this.state.team1Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team1Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team1Flag' placeholder='Paste team flag' type='text' value={this.state.team1Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -828,6 +863,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team2Name' placeholder='Enter team name' type='text' value={this.state.team2Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team2Points' placeholder='Team points' type='number' value={this.state.team2Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team2Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team2Flag' placeholder='Paste team flag' type='text' value={this.state.team2Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -836,6 +872,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team3Name' placeholder='Enter team name' type='text' value={this.state.team3Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team3Points' placeholder='Team points' type='number' value={this.state.team3Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team3Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team3Flag' placeholder='Paste team flag' type='text' value={this.state.team3Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -844,6 +881,7 @@ class WorldCup extends Component {
                     <div className={style.teamsInputCont}>
                         <input className={style.teamsInput1} id='team4Name' placeholder='Enter team name' type='text' value={this.state.team4Name} onChange={(event) => this.teamsInputChange(event)}></input>
                         <input className={style.teamsInput2} id='team4Points' placeholder='Team points' type='number' value={this.state.team4Points} onChange={(event) => this.teamsInputChange(event)}></input>
+                        <p className={style.teamsPointsP}>{this.state.team4Odds}</p>
                     </div>
                     <div>
                         <input className={style.teamsInput3} id='team4Flag' placeholder='Paste team flag' type='text' value={this.state.team4Flag} onChange={(event) => this.teamsInputChange(event)}></input>
@@ -1040,7 +1078,7 @@ class WorldCup extends Component {
               </div>
               <div className={style.scoresCont3}>
                 <p className={style.currentP}>{titleToShow}</p>
-                <p className={style.scoreP1}>Current Rank in NCAAB</p>
+                <p className={style.scoreP1}>Current Rank in World Cup</p>
                 <p className={style.scoreP2}>{this.state.dataAvailable && currentRank !== false ? currentRank : 'N/A'}</p>
               </div>
             </div>
@@ -1101,6 +1139,35 @@ class WorldCup extends Component {
                             {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr)}</div> : null}
                             {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr)}</div> : null}</>
                         : null}
+                       {this.state.enterTeamNameInfoModal?<div className={style.modal} onClick={() => this.setState({ enterTeamNameInfoModal: false })}>
+                        <div className={style.createEventDiv} onClick={(e) => this.doNothing(e)}>
+                        <h1 className={style.theTitleP}>Enter RAM Details</h1>
+                                            <div className={style.theMenuDiv}>
+                                            <p>World Cup</p>
+                                            <MdOutlineKeyboardArrowRight className={style.theMenuIc}/>
+                                            <p>{this.state.theEventTitle}</p>
+                                            </div>
+                        <div ><div className={style.nameCont}>
+                                            <p className={style.P1}>RAM Name</p>
+                                           
+                                            </div>
+                                            <div className={style.cont1}>
+                                            <MdOutlinePersonOutline    className={style.logInIcon}/>
+                                            <input  className={style.logInInput} placeholder='Enter your RAM name' type='text' id='teamName' value={this.state.teamName} onChange={(event)=>this.inputChange(event)}></input> 
+                                            </div>
+                                            <p className={style.pErr}>{this.state.teamNameErr}</p>  
+                                            <div className={style.nameCont}>
+                                            <p className={style.P1}>Flock Name</p>
+                                            
+                                            </div>
+                                            <div className={style.cont2}>
+                                            <div className={style.cont2b}>
+                                            <MdOutlinePersonOutline   className={style.logInIcon}/> 
+                                            <input  className={style.logInInput} placeholder='Enter your Flock Name' type='text' id='ramFlockName' readOnly value={this.state.ramFlockName} onChange={(event)=>this.inputChange(event)}></input>  
+                                            </div>
+                                            </div>
+                                            <p className={style.saveP} onClick={() => this.saveTeamNameInfo()}>SAVE</p>
+                                            </div></div></div>:null}
                 </div>
                 <ToastContainer />
             </>
