@@ -34,6 +34,31 @@ $theDark:#b2b2b2;
     border-radius: 5px;
     box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
 }
+.groupStagePicksDiv{
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    padding: 20px 20px 40px 20px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2); 
+    overflow-y: auto;
+}
+.groupStagePicksDiv::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.groupStagePicksDiv::-webkit-scrollbar-button {
+  background: red
+}
+
+.groupStagePicksDiv::-webkit-scrollbar-track-piece {
+  background: green
+}
+
+.groupStagePicksDiv::-webkit-scrollbar-thumb {
+  background: blue
+}
 .eventHeadP{
     font-weight: 600;
     color: $blackish;
@@ -989,10 +1014,23 @@ $theDark:#b2b2b2;
   margin-right: 15px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
 }
+.itemCont2{
+  background-color: white;
+  width: 100%;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  border: 1px solid #eee;
+  //box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+}
 .itemComp{
    width: 100%;
    position: relative;
     padding: 20px 20px;
+}
+.itemComp3{
+   width: 100%;
+   position: relative;
+   padding: 10px 10px;
 }
 #table1Div{
   margin-top: 10px;
@@ -1210,6 +1248,13 @@ $theDark:#b2b2b2;
     padding: 5px 10px;
     text-align: center;
     color: #fff;
+    cursor: pointer;
+}
+.pickTeamsP{
+    font-size: 14px;
+    margin: 15px 0px 5px 0px;
+    color: $blackish;
+    font-weight: 600;
 }
 @media all and (max-width: 1000px) {
     .profileDiv{
