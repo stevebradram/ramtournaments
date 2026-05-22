@@ -341,20 +341,24 @@ class WorldCup extends Component {
     }
     teamsInputChange = async (e) => {
         var value = e.target.value
+        //console.log('theGroupArr',this.state[theGroupArr])
         // ramOddsMap=new Map([RamOdds])
         var theValue = RamOdds[value]
-        var theOdds = ''
-        if (e.target.id === 'team1Points') { theOdds = 'team1Odds' }
-        if (e.target.id === 'team2Points') { theOdds = 'team2Odds' }
-        if (e.target.id === 'team3Points') { theOdds = 'team3Odds' }
-        if (e.target.id === 'team4Points') { theOdds = 'team4Odds' }
+        var theOdds = '',oddsInput=false
+        if (e.target.id === 'team1Points') { theOdds = 'team1Odds',oddsInput=true}
+        if (e.target.id === 'team2Points') { theOdds = 'team2Odds',oddsInput=true}
+        if (e.target.id === 'team3Points') { theOdds = 'team3Odds',oddsInput=true}
+        if (e.target.id === 'team4Points') { theOdds = 'team4Odds',oddsInput=true}
         console.log('theValue', theValue)
 
         //if(value>100)
-        if (value < -10000) { theValue = 1.01 }
+        if(oddsInput){if (value < -10000) { theValue = 1.01 }
         if (value > 12620) { theValue = 1247.20 }
-        if (value <= 101 && value >= -101) { theValue = 2.03 }
-        await this.setState({ [e.target.id]: value, [theOdds]: theValue })
+        if (value <= 101 && value >= -101) { theValue = 2.03 }}
+       await this.setState({ [e.target.id]: value})
+        if(oddsInput){
+            this.setState({[theOdds]: theValue })}
+        //else{this.setState({ [e.target.id]: value})}
     }
     saveTeams = async (group) => {
         var idPart1 = group.charAt(0).toLowerCase() + group.slice(1).replace(" ", "");
@@ -527,8 +531,6 @@ class WorldCup extends Component {
         var theGroup = group.charAt(0).toLowerCase() + group.slice(1).replace(" ", "");
         var groupArrName = theGroup + 'Arr', theItem = {}
         var groupArr = this.state[groupArrName]
-        //  chosenTeams = [...new Set(chosenTeams)];
-        //  const count = Object.keys(chosenTeams).length;
         console.log('groupArr', id, name, groupArr)
         //  return
         var betMap = (groupArr ?? [])
@@ -545,9 +547,6 @@ class WorldCup extends Component {
         else {
             betMap[id] = name
             chosenTeams = { ...chosenTeams, ...betMap };
-            console.log('chosenTeams', chosenTeams)
-            //  betMap.push(theItem)
-            //chosenTeams[id]=name
         }
         const updatedItems = groupArr.map(team => {
             if (team.id === id) {
@@ -555,9 +554,8 @@ class WorldCup extends Component {
             }
             return team; // Leave others as they are
         });
-        // this.setState({ [groupArrName]: updatedItems, chosenTeams: betMap })
+        
         this.setState((prevState) => {
-            // 1. Fallback to an empty object if prevState.chosenTeams doesn't exist yet
             const currentChosenTeams = prevState.chosenTeams ?? {};
 
             // 2. Combine the old dictionary items with your new betMap updates
@@ -572,9 +570,8 @@ class WorldCup extends Component {
                 chosenTeams: updatedChosenTeams
             };
         });
-        // groupArr['bet']=chosenTeams
-        console.log('it is 001', chosenTeams)
-        console.log('it is', updatedItems, groupArr, chosenTeams, id, name, points, group, betMap)//groupBArr
+       // console.log('it is 001', chosenTeams)
+       // console.log('it is', updatedItems, groupArr, chosenTeams, id, name, points, group, betMap)//groupBArr
     }
     deselectItems = (id, name, points, group) => {
         // this.notify('Slection not available at the moment');
@@ -612,31 +609,45 @@ class WorldCup extends Component {
         if (this.state.isAdmin && this.state.currentRound === 'round1') { this.setState({ enterTeamNameInfoModal: true }) }
         else { this.notify('Selection not available at the moment'); }
     }
-    openPicksModal = () => {
-        if (this.state.isAdmin) { this.setState({ enterTeamNameInfoModal: true }) }
-        else { this.notify('Selection not available at the moment'); }
 
-    }
-    saveWinners = (group) => {
-        //var theGroup = group.charAt(0).toLowerCase() + group.slice(1).replace(" ", "");
-        const count = Object.keys(chosenTeams ?? {}).length, updates = {}
-        //const count = Object.keys(chosenTeams ?? {}).length;
-        if (count < 24) { this.notify('First 24 teams must be chosen'); return }
-        /*this.state.chosenTeams.forEach((obj) => {
-            const [key, value] = Object.entries(obj)[0];
-            // This creates { "groupATeam1": "Mexico", "groupATeam2": "South Africa" }
-            updates[key] = value;
-        });*/
-        else {
-            var gamesDataRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/').child('events').child('WorldCup')
-            gamesDataRef.child(this.state.theEventKey + '/bets/' + this.state.currentRound).update(chosenTeams)
-            this.setState({ enterTeamNameInfoModal: false })
-            console.log('chosenTeams updates', updates, this.state.chosenTeams)
-        }
-    }
-    saveTeamNameInfo = () => {
+       teamFlockNameCheck=()=>{
+        if(!this.state.userId)return
+        const count = Object.keys(chosenTeams ?? {}).length
+        if (this.state.teamName.length < 3) { this.setState({ teamNameErr: 'Ram name must be 3 characters and above' }); this.notify('Ram name must be 3 characters and above'); return }
+        this.setState({ teamNameErr: '' })
+        if (count < 32) { this.notify('A total of 32 teams must be chosen'); return }
+        const totalOddsSum = Object.values(teamsChosenOdds ?? {})
+            .reduce((acc, currentVal) => {
+                // Convert string value to a decimal number, falling back to 0 if empty/malformed
+                const parsedValue = parseFloat(currentVal) || 0;
+                return acc + parsedValue;
+            }, 0);
+        var theTeamName=this.state.teamName.replace(/ /g,"_")
+        var flockTeamName=this.props.flockTeamName?.split('::')
+        var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child('WorldCup/'+this.state.theEventKey+'/')
+        uniqueRamNamesRef.child(theTeamName).once('value',dataSnapshot=>{
+            if(dataSnapshot.exists()){
+                var theId=dataSnapshot.val()
+                var theName=dataSnapshot.key
+                if(theId===this.state.userId){
+                uniqueRamNamesRef.child(theName).set(null)
+                this.saveTeamNameInfo(theTeamName,uniqueRamNamesRef,totalOddsSum)
+                }else{
+                 this.notify('RAM Name already taken')
+                 this.setState({teamNameErr:'RAM Name already taken, please try another one'})
+                }
+            }else{
+                this.saveTeamNameInfo(theTeamName,uniqueRamNamesRef,totalOddsSum)
+            }
+        })
+     }
+    saveTeamNameInfo = (theTeamName,uniqueRamNamesRef,totalOddsSum) => {
         //ramFlockName teamName teamNameErr
         var gamesDataRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/events/WorldCup/' + this.state.theEventKey + '/')
+        var ramsBets = firebase.database().ref('userBets/WorldCup/')
+        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)
+        var adminRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey+'/admin')
+        var keysDbRef = firebase.database().ref('users/').child(this.state.userId+'/ramData/').child('upcomingEvents/WorldCup/')
         /*  gamesDataRef.child('details').once('value',dataSnapshot=>{
               if(dataSnapshot.exists()){
   
@@ -644,16 +655,7 @@ class WorldCup extends Component {
   
               }
           })*/
-        const count = Object.keys(chosenTeams ?? {}).length
-        if (this.state.teamName.length < 3) { this.setState({ teamNameErr: 'Ram name must be 3 characters and above' }); this.notify('Ram name must be 3 characters and above'); return }
-        this.setState({ teamNameErr: '' })
-        if (count < 24) { this.notify('First 24 teams must be chosen'); return }
-        const totalOddsSum = Object.values(teamsChosenOdds ?? {})
-            .reduce((acc, currentVal) => {
-                // Convert string value to a decimal number, falling back to 0 if empty/malformed
-                const parsedValue = parseFloat(currentVal) || 0;
-                return acc + parsedValue;
-            }, 0);
+       
         const formattedSum = totalOddsSum.toFixed(2);
         var itemsData = {}, theSelection = this.state.currentRound
         var dataScore = theSelection + 'Score'
@@ -687,11 +689,28 @@ class WorldCup extends Component {
             round2Picked: false,
             finalRoundPicked: false
         }
+        var scoreData = {
+                BPS: formattedSum, score: 0,
+                round1Score: '0', round2Score: '0', finalsScore: '0',
+                roundOf16Score: '0', quarterFinalsScore: '0', semiFinalScore: '0',
+                currentPick: theSelection, theMenu: 'round1',
+                ramName: this.state.teamName, picked: true, [thePick]: true,
+                [bps2]: formattedSum
+            }
         // console.log('formattedSum', formattedSum)
         // console.log('chosenTeams', chosenTeams)
-        // console.log('detailsData', detailsData)
+         console.log('detailsData', theTeamName,uniqueRamNamesRef)
         // return
-        gamesDataRef.child('/bets/' + this.state.currentRound).set(chosenTeams)
+     var toAdmin = this.state.teamName + '!!' + this.state.ramFlockName + '!!' + this.state.myEmail + '!!' + this.state.myPhoneNo
+    if(this.state.ramFlockName!=='Flockless'){
+      membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
+      adminRef.child(this.state.userId).set(toAdmin)
+      membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
+    }
+        keysDbRef.child(this.state.theEventKey).set(true)
+        uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
+        gamesDataRef.child('/bets/round1/').set(chosenTeams)
+        ramsBets.child(this.state.theEventKey + '/').child(this.state.userId + '/round1/').set(chosenTeams)
         gamesDataRef.child('details').set(detailsData, (error) => {
             if (error) {
                 //console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
@@ -702,150 +721,126 @@ class WorldCup extends Component {
             }
         })
 
-
     }
-    toDatabase = () => {
-        if (!this.state.userId) return
-        var eventKey = this.props.theEventKey
-        var itemsData = {}, theSelection = this.state.currentRound
-        const theTime = new Date().getTime()
-        var detailsData = {}, scoreData = {}
-        var dataScore = theSelection + 'Score'
-        var thePick = theSelection + 'Pick'
-        var bps2 = theSelection + 'BPS'
-        if (theSelection === 'round1') {
-            detailsData = {
-                teamName: this.state.teamName,
-                flockName: this.state.ramFlockName,
-                created: theTime,
-                bestPossibleScore: this.state.bestPossibleScore,
-                currentScore: '0.00',
-                round1Score: '0',
-                round2Score: '0',
-                finalRoundScore: '0',
-                sweet16Score: '0',
-                quarterFinalsScore: '0',
-                semiFinalScore: '0',
-                [dataScore]: '0.00',
-                currentRank: false,
-                [thePick]: true,
-                currentPick: theSelection,
-                theMenu: this.props.theMenu,
-                round1Rank: false,
-                round2Rank: false,
-                finalRoundRank: false,
-                [bps2]: this.state.bestPossibleScore
-            }
-            scoreData = {
-                BPS: this.state.bestPossibleScore, score: 0,
-                round1Score: '0', round2Score: '0', finalRoundScore: '0',
-                sweet16Score: '0', elite8Score: '0', final4Score: '0',
-                currentPick: theSelection, theMenu: this.props.theMenu,
-                ramName: this.state.teamName, picked: true, [thePick]: true,
-                [bps2]: this.state.bestPossibleScore
-            }
-        } else {
-            detailsData = {
-                teamName: this.state.teamName,
-                bestPossibleScore: this.state.bestPossibleScore,
-                flockName: this.state.ramFlockName,
-                [dataScore]: '0.00',
-                currentPick: theSelection,
-                theMenu: this.props.theMenu,
-                [thePick]: true,
-                [bps2]: this.state.bestPossibleScore
-            }
-            scoreData = {
-                BPS: this.state.bestPossibleScore, score: 0,
-                currentPick: theSelection, theMenu: this.props.theMenu,
-                ramName: this.state.teamName, picked: true, [thePick]: true,
-                [bps2]: this.state.bestPossibleScore
-            }
-        }
-
-        var i = 0
-        this.state.theItems.map((item, index) => {
-            //console.log('iteeem',item.id,item.bet)
-            i++
-            itemsData[item.id] = item.bet
-            if (this.state.theItems.length === i) {
-
-
-                //return
-                //console.log('detailsData',detailsData)
-                var theTeamName = this.state.teamName.replace(/ /g, "_")
-                var theFlockName = this.state.ramFlockName.replace(/ /g, "_")
-                var uniqueRamNamesRef = firebase.database().ref('/theNames/ramNames/').child(this.state.currentEvent + '/' + this.props.theEventKey + '/')
-                var uniqueFlockNamesRef = firebase.database().ref('/theNames/flockNames/').child(this.state.currentEvent + '/' + this.props.theEventKey + '/')
-                uniqueRamNamesRef.child(theTeamName).once('value', dataSnapshot => {
-                    var theInfo = dataSnapshot.val()
-                    var theName = dataSnapshot.key
-                    //console.log('theName',theName,'theInfo',theInfo)
-                    //console.log('flockTeamName[0]',flockTeamName[0])
-                    // return
-                    if (!theInfo) {
-                        if (flockTeamName[0]) {
-                            var name1 = flockTeamName[0].replace(/ /g, "_")
-                            uniqueRamNamesRef.child(name1).set(null)
-                        }
-                        ////CONTINUE
-                        this.toDatabase2(detailsData, theFlockName, uniqueFlockNamesRef, itemsData, uniqueRamNamesRef, theTeamName, scoreData, theSelection)
-                    }
-                    else {
-                        if (theInfo === this.state.userId) {
-                            if (flockTeamName[0]) {
-                                var name1 = flockTeamName[0].replace(/ /g, "_")
-                                uniqueRamNamesRef.child(name1).set(null)
-                            }
-                            this.toDatabase2(detailsData, theFlockName, uniqueFlockNamesRef, itemsData, uniqueRamNamesRef, theTeamName, scoreData, theSelection)
-                            //console.log('continue 222222')
-                        } else {
-                            this.notify('RAM Name already taken')
-                            this.setState({ teamNameErr: 'RAM Name already taken, please try another one' })
-                        }
-                        //console.log('change that shit')
-                    }
-                })
-
-            }
-        })
+      pickWinner = (id, winner, time) => {
+    this.notify('Match not yet started')
+    return
+    var nowTime = new Date().getTime()
+    if (this.state.currentSelection === 'round1') {
+      var index2 = this.state.allRound1MatchesArr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+      if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }
+      var theItems = this.state.allRound1MatchesArr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ allRound1MatchesArr: theItems })
+      //console.log('this.state.currentItems 002', theItems)
     }
-    toDatabase2 = (detailsData, theFlockName, uniqueFlockNamesRef, itemsData, uniqueRamNamesRef, theTeamName, scoreData, theSelection) => {
-        //console.log('detailsData',detailsData)
-        //console.log('itemsData',itemsData)
-        //console.log('other dets',this.state.currentEvent,theTeamName,theFlockName,this.props.theEventKey,theSelection,this.state.userId)
-        //return
-        var keysDbRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/').child('upcomingEvents').child(this.state.currentEvent)
-        var gamesDataRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/').child('events').child(this.state.currentEvent)
-        var ramsBets = firebase.database().ref('userBets/' + this.state.currentEvent + '/')
-        //var adminRef = firebase.database().ref('userBets/admin/'+this.state.currentEvent+'/')
-        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/' + this.props.theEventKey)
-        var adminRef = firebase.database().ref('/flocksSystem/flockNames/' + this.props.theEventKey + '/admin')
+    if (this.state.currentSelection === 'round2') {
+      console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      var theItems = this.state.allRound2MatchesArr
 
-        var toAdmin = this.state.teamName + '!!' + this.state.ramFlockName + '!!' + this.state.myEmail + '!!' + this.state.myPhoneNo
-
-        if (this.state.ramFlockName !== 'Flockless') {
-            membersFlockNamesRef.child('/members/' + this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
-            adminRef.child(this.state.userId).set(toAdmin)
-            membersFlockNamesRef.child('/membersScores/' + this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
-        }
-
-        keysDbRef.child(this.props.theEventKey).set(true)
-        gamesDataRef.child(this.props.theEventKey + '/details/').update(detailsData)
-        gamesDataRef.child(this.props.theEventKey + '/bets/' + theSelection).update(itemsData)
-        uniqueRamNamesRef.child(theTeamName).set(this.state.userId)
-        // uniqueFlockNamesRef.child(theFlockName).set(this.state.userId)
-        //adminRef.child(this.props.theEventKey+'/'+this.props.currentSelection).child(this.state.userId).set(new Date().getTime())
-        ramsBets.child(this.props.theEventKey + '/').child(this.state.userId + '/' + theSelection + '/').update(itemsData, (error) => {
-            if (error) {
-                //console.log('AN ERROR OCCURED WHILE POSTING YOUR PICKS TO FIREBASE')
-            } else {
-                //console.log('Your picks have been submitted successfully') 
-                this.notify('Your picks have been submitted successfully')
-                Router.push('/reload')
-            }
-        })
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+     /* if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }*/
+      var theItems = this.state.allRound2MatchesArr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ allRound2MatchesArr: theItems })
     }
+    if (this.state.currentSelection === 'finalRound') {
+    if (this.state.theMenu === 'sweet16') {
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      var theItems = this.state.sweet16Arr
+
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+      /*if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }*/
+
+      var theItems = this.state.sweet16Arr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ sweet16Arr: theItems })
+      //console.log('theItems', theItems)
+    }
+    if (this.state.theMenu === 'elite8') {
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      var theItems = this.state.elite8Arr
+
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+     /* if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }*/
+
+      var theItems = this.state.elite8Arr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ elite8Arr: theItems })
+      //console.log('theItems', theItems)
+    }
+    if (this.state.theMenu === 'final4') {
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      var theItems = this.state.final4Arr
+
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+     /* if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }*/
+
+      var theItems = this.state.final4Arr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ final4Arr: theItems })
+      //console.log('iteeeems final4Arr', theItems)
+    }
+    if (this.state.theMenu === 'finalRound') {
+      //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+      var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+      var nowTime = new Date().getTime()
+      var theItems = this.state.finalArr
+
+      if (nowTime < time) {
+        this.notify('Match not yet started')
+        return
+      }
+     /* if (winner !== 'N/A') {
+        this.notify('Winner already filled')
+        return
+      }*/
+      var theItems = this.state.finalArr
+      theItems[index2]['showChooseWinner'] = true
+      this.setState({ finalArr: theItems })
+      //console.log('iteeeems finalArr', theItems)
+    }}
+  }
     openWorldCupModal = async () => {
      this.notify('No details to enter at the moment')
      return
@@ -930,6 +925,9 @@ class WorldCup extends Component {
         }
       })
     }
+    openEnterTeamsModal = () => {
+    this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00',team1Name: '', team2Name: '', teamName: '', team4Name: '',team1Flag: '', team2Flag: '', team3Flag: '', team4Flag: '' })
+     }
     dummyItems = (group, theItems) => {
         return (
             <div className={style.itemComp}>
@@ -1008,13 +1006,20 @@ class WorldCup extends Component {
         )
     }
     groupItemComp = (group, theItems) => {
-        //  console.log('theItems 1111', theItems)
+        var theGroup = group.charAt(0).toLowerCase() + group.slice(1).replace(" ", "");
+        var theGroupArr=theGroup+'Arr'
+        const team1Item = (theItems ?? []).find(item => item.id === (theGroup+'Team1'));
+        const team2Item = (theItems ?? []).find(item => item.id === (theGroup+'Team2'));
+        const team3Item = (theItems ?? []).find(item => item.id === (theGroup+'Team3'));
+        const team4Item = (theItems ?? []).find(item => item.id === (theGroup+'Team4'));
+       // console.log('theItems 1111',team1Item,theGroup, theItems)
         const totalOdds = (theItems ?? []).filter(item => item.bet === true)
             .reduce((acc, curr) => {
                 const val = parseFloat(curr.odds);
                 return acc + (!isNaN(val) ? val : 0);
             }, 0).toFixed(2);
         var thePicks = [], thePoints = []
+        //
         return (
             <div className={style.itemComp}>
                 <div className={style.groupDiv}><p className={style.groupP}>{group}</p>{this.state.isAdmin ? <p className={style.editDivP} onClick={() => this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00' })}>Edit</p> : null}</div>
@@ -1031,9 +1036,9 @@ class WorldCup extends Component {
                             if (item.bet) { thePicks.push(item.teamName), thePoints = thePoints + (item.odds) }
                             //  console.log('the thePicks', thePicks)
                             var textColor = '#292f51', teamName = item.teamName
-                            var selectedToShow = selectedToShow = <div className={style.boxDiv} onClick={() => this.openPicksModal()}><MdCheck color="#fff" size={15} /></div>
+                            var selectedToShow = selectedToShow = <div className={style.boxDiv} onClick={() => this.openTheModal()}><MdCheck color="#fff" size={15} /></div>
                             if (item.bet) {
-                                selectedToShow = <div className={style.boxDiv3}><MdCheck color="#fff" size={15} onClick={() => this.openPicksModal()} /></div>
+                                selectedToShow = <div className={style.boxDiv3}><MdCheck color="#fff" size={15} onClick={() => this.openTheModal()} /></div>
                             }
                             if (item.outCome === 'Proceed') { textColor = '#1ecb97' }
                             if (item.outCome === 'Eliminated') { textColor = '#CB1E31' }
@@ -1056,7 +1061,7 @@ class WorldCup extends Component {
                     <p className={style.myPicksP1}>My Picks: {thePicks.length ? (thePicks[0] ? thePicks[0] : '') + (thePicks[1] ? ', ' + thePicks[1] : '') + (thePicks[2] ? ', ' + thePicks[2] : '') : 'N/A'}</p>
                     <p className={style.myPicksP2}>Points: {totalOdds}</p>
                 </div>
-                <p className={style.winnerPickP} style={{ background: '#246fac' }} onClick={() => this.openPicksModal()}>{thePicks.length ? 'EDIT YOUR PICKS' : 'MAKE YOUR PICKS'}</p>
+                <p className={style.winnerPickP} style={{ background: '#246fac' }} onClick={() => this.openTheModal()}>{thePicks.length ? 'EDIT YOUR PICKS' : 'MAKE YOUR PICKS'}</p>
                 {this.state.isAdmin && this.state.openEnterTeamsModal === group ? <div className={style.fillTeamsCont}>
                     <p className={style.teamTitleP}>{group} Team 1</p>
                     <div className={style.teamsInputCont}>
@@ -1101,7 +1106,7 @@ class WorldCup extends Component {
     }
 
     groupItemComp2 = (group, theItems) => {
-        console.log('theItems 222222', theItems)
+      //  console.log('theItems 222222', theItems)
         const totalOdds = (theItems ?? []).filter(item => item.bet === true)
             .reduce((acc, curr) => {
                 const val = parseFloat(curr.odds);
@@ -1113,7 +1118,7 @@ class WorldCup extends Component {
         //teamsChosenOdds
         chosenTeams = { ...chosenTeams, ...betMap };
         teamsChosenOdds = { ...teamsChosenOdds, ...betOdds };
-        console.log('betMap2222222 betMap', betMap, 'chosenTeams', chosenTeams, 'teamsChosenOdds', teamsChosenOdds)
+      //  console.log('betMap2222222 betMap', betMap, 'chosenTeams', chosenTeams, 'teamsChosenOdds', teamsChosenOdds)
         // const activeBetNames = (theItems ?? []).filter(item => item.bet === true).map(item => item.teamName);
 
         var thePicks = [], thePoints = []
@@ -1456,7 +1461,7 @@ class WorldCup extends Component {
                                 <div className={style.itemCont2}>{this.groupItemComp2('Group J', this.state.groupJArr)}</div>
                                 <div className={style.itemCont2}>{this.groupItemComp2('Group K', this.state.groupKArr)}</div>
                                 <div className={style.itemCont2}>{this.groupItemComp2('Group L', this.state.groupLArr)}</div>
-                                <p className={style.saveP} onClick={() => this.saveTeamNameInfo()}>SAVE</p>
+                                <p className={style.saveP} onClick={() => this.teamFlockNameCheck()}>SAVE</p>
                             </div></div></div> : null}
                 </div>
                 <ToastContainer />
