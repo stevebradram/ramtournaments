@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import styles from "./AddFriends.module.scss";
 import postTime from '../Helper/postTime';
 import Image from 'next/image'
-import { MdOutlineClose, MdAddComment, MdSend,MdOutlinePersonAddAlt,MdOutlineAdd } from "react-icons/md";
+import { MdOutlineClose, MdAddComment, MdSend, MdOutlinePersonAddAlt, MdOutlineAdd } from "react-icons/md";
 import { AiFillMessage } from "react-icons/ai";
 import firebase from '../FirebaseClient'
 import { Obfuscator } from '../Helper/Obfuscator';
 import { ToastContainer, toast } from 'react-toastify';
 import Friends from './FriendsModal'
+import axios from "axios"
 class AddFriends extends Component {
-  state = {friendsListArr: [],friendsListAvailable:false, myUserId: '', isLogged: '',showAddFrienModal:false,email:'',emailErr:''}
+  state = { friendsListArr: [], friendsListAvailable: false, myUserId: '', isLogged: '', showAddFrienModal: false, email: '', emailErr: '', myName: '' }
 
   componentDidMount = () => {
     this.checkAuth()
@@ -23,43 +24,44 @@ class AddFriends extends Component {
         //console.log('myyyyyyyyyyyyyyyyyyy user id',safeId, userId)
         this.setState({ myUserId: userId, isLogged: true })
         this.getData(userId)
+        this.getMyName(userId)
       } else {
         this.setState({ isLogged: false })
       }
     })
   }
-    getEmails = () => {
-      var usersRef = firebase.database().ref('/users/')
-      var emailsRef = firebase.database().ref('/emails/')
-      var emailsList = {}
-      usersRef.once('value', dataSnapshot => {
-        var theNo = dataSnapshot.numChildren(), i = 0
-        dataSnapshot.forEach((data) => {
-          i++
-         var theEM=data.val().userData.email
-         var safeId = Obfuscator.mask(data.key);
-         //var realID = Obfuscator.unmask(safeId);
-         var safeEmail = Obfuscator.maskEmailForKey(theEM);
-         //var realEmail = Obfuscator.unmaskEmailFromKey(safeEmail);
+  getEmails = () => {
+    var usersRef = firebase.database().ref('/users/')
+    var emailsRef = firebase.database().ref('/emails/')
+    var emailsList = {}
+    usersRef.once('value', dataSnapshot => {
+      var theNo = dataSnapshot.numChildren(), i = 0
+      dataSnapshot.forEach((data) => {
+        i++
+        var theEM = data.val().userData.email
+        var safeId = Obfuscator.mask(data.key);
+        //var realID = Obfuscator.unmask(safeId);
+        var safeEmail = Obfuscator.maskEmailForKey(theEM);
+        //var realEmail = Obfuscator.unmaskEmailFromKey(safeEmail);
         //console.log('safe details',safeId,safeEmail)
         //console.log('myyyyyyyyyyyyyyyyyyy email',safeEmail,realEmail)
-         // uid=this.maskUID(uid)
-          //var safeId = Obfuscator.mask(data.key);
-          //var theMail=data.val().userData.email
-          //theMail=theMail.replace(/./g,'!!!!')
-          //return
-          //emailsRef.child(safeEmail).set(safeId)
-          //console.log('the daaaaaaaata',uid,safeId,theMail)
-          //var item={[safeEmail]:safeId}
-          emailsList[safeEmail]=safeId
-          if(theNo===i){
-            //console.log('the cont',emailsList.length,theNo)
-            //console.log('alllllllllll',emailsList)
-            emailsRef.update(emailsList)
-          }
-        })
+        // uid=this.maskUID(uid)
+        //var safeId = Obfuscator.mask(data.key);
+        //var theMail=data.val().userData.email
+        //theMail=theMail.replace(/./g,'!!!!')
+        //return
+        //emailsRef.child(safeEmail).set(safeId)
+        //console.log('the daaaaaaaata',uid,safeId,theMail)
+        //var item={[safeEmail]:safeId}
+        emailsList[safeEmail] = safeId
+        if (theNo === i) {
+          //console.log('the cont',emailsList.length,theNo)
+          //console.log('alllllllllll',emailsList)
+          emailsRef.update(emailsList)
+        }
       })
-      }
+    })
+  }
   getData = (userId) => {
     //console.log('userId', userId)
     var safeId = Obfuscator.mask(userId);
@@ -69,35 +71,35 @@ class AddFriends extends Component {
     var friendsListArr = []
     messageRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
-      var theNo = dataSnapshot.numChildren(), i = 0
-      dataSnapshot.forEach((data) => {
-        i++
-        var theUserId = data.key
-        theUserId = Obfuscator.unmask(theUserId);
-        var friendsList = { uid: theUserId }
-        userRef.child(theUserId).child('userData').once('value', dataSnapshot => {
-          var profilePhoto = dataSnapshot.val().profilePhoto
-          var userName = dataSnapshot.val().name
-          var lastSeen = dataSnapshot.val().lastSeen
-          var matches = userName.match(/\b(\w)/g);
-          var acronym = matches.join('');
-          friendsList['userName'] = userName
-          friendsList['acronym'] = acronym
-          friendsList['lastSeen'] = lastSeen
-          if (profilePhoto) { friendsList['profilePhoto'] = profilePhoto }
-          else { friendsList['profilePhoto'] = 'N/A' }
-          friendsListArr.push(friendsList)
-          if (theNo === i) {
-            //console.log('friendsListArr', friendsListArr)
-            this.setState({ friendsListArr,friendsListAvailable:true})
-          }
-        })
-        
-        //console.log('the uid', theUserId)
-      })
-    }else{
+        var theNo = dataSnapshot.numChildren(), i = 0
+        dataSnapshot.forEach((data) => {
+          i++
+          var theUserId = data.key
+          theUserId = Obfuscator.unmask(theUserId);
+          var friendsList = { uid: theUserId }
+          userRef.child(theUserId).child('userData').once('value', dataSnapshot => {
+            var profilePhoto = dataSnapshot.val().profilePhoto
+            var userName = dataSnapshot.val().name
+            var lastSeen = dataSnapshot.val().lastSeen
+            var matches = userName.match(/\b(\w)/g);
+            var acronym = matches.join('');
+            friendsList['userName'] = userName
+            friendsList['acronym'] = acronym
+            friendsList['lastSeen'] = lastSeen
+            if (profilePhoto) { friendsList['profilePhoto'] = profilePhoto }
+            else { friendsList['profilePhoto'] = 'N/A' }
+            friendsListArr.push(friendsList)
+            if (theNo === i) {
+              //console.log('friendsListArr', friendsListArr)
+              this.setState({ friendsListArr, friendsListAvailable: true })
+            }
+          })
 
-    }
+          //console.log('the uid', theUserId)
+        })
+      } else {
+
+      }
     })
     //messageRef.set('kkkk')
   }
@@ -113,15 +115,15 @@ class AddFriends extends Component {
     });
   }
   handleChildClick = (from, text, theData) => {
- // console.log('rrrrrrrrrr',from, text, theData)
-   this.props.onClick('fromAddFriends', text, theData)
-   //this.props.onClick('fromAddFriends', 'close', 'N/A')
+    // console.log('rrrrrrrrrr',from, text, theData)
+    this.props.onClick('fromAddFriends', text, theData)
+    //this.props.onClick('fromAddFriends', 'close', 'N/A')
   }
   closeMessenger = () => {
     //console.log('clicked!')
     this.props.onClick('fromAddFriends', 'close', 'N/A')
   }
-  
+
   doNothing = (event) => {
     event.stopPropagation();
     event.preventDefault()
@@ -129,82 +131,120 @@ class AddFriends extends Component {
   oddOrEven = (x) => {
     return (x & 1) ? "odd" : "even";
   }
-  acceptFriendRequest=(item)=>{
-     var otherUserId=item.uid
-    //console.log('iteeeeem',otherUserId,this.state.myUserId,item,this.state.friendsListArr)
-     var friendsRef = firebase.database().ref('/messaging/friends/')
-     var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
-     var friendsNotRef = firebase.database().ref('/messaging/notifications/')
-     friendsRef.child(this.state.myUserId).child(otherUserId).set(new Date().getTime())
-     friendsRef.child(otherUserId).child(this.state.myUserId).set(new Date().getTime())
-     var safeId = Obfuscator.mask(this.state.myUserId);
-     var otherUserSafeId = Obfuscator.mask(otherUserId);
-     friendRequestRef.child(safeId).child(otherUserSafeId).set(null,(error) => {
-        if (error) { this.notify('An error occured') }
-        else {
-         friendsNotRef.child(this.state.myUserId).child('friends').set(null)
-         friendsNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
-         const friendsListArr = this.state.friendsListArr.filter(item => item.uid !== otherUserId);
-         this.setState({friendsListArr})
-        }})
-  }
-  submitRequest=()=>{
-     var emailsRef = firebase.database().ref('/emails/')
-     var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
-     var friendsNotRef = firebase.database().ref('/messaging/notifications/')
-     var validate = this.validateEmail(this.state.email)
-        if(validate===false){
-        this.setState({emailErr:'Please enter a valid email'})
-        }else{
-          var safeEmail = Obfuscator.maskEmailForKey(this.state.email);
-          emailsRef.child(safeEmail).once('value', dataSnapshot => {
-            if(dataSnapshot.exists()){
-              var theUid=dataSnapshot.val()
-              var otherUserIdUnmasked=Obfuscator.unmask(theUid);
-              var safeId = Obfuscator.mask(this.state.myUserId);
-              //console.log('friend reqqqqq',theUid,safeId)
-              friendRequestRef.child(theUid).child(safeId).set(new Date().getTime())
-              friendsNotRef.child(otherUserIdUnmasked).child('friends').child(this.state.myUserId).set(new Date().getTime())
-              friendsNotRef.child(otherUserIdUnmasked).child('allNots').set(new Date().getTime())
-              this.notify('Friend request send successfully')
-              this.setState({emailErr:'',showAddFrienModal:false})
-            }
-            else{this.setState({emailErr:'No user found matching the typed email'})}
-          })
-          }
-  }
-      validateEmail(val) {
-        let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!regEmail.test(val)) {
-          return false;
-        } else {
-          return true;
-        }
+  acceptFriendRequest = (item) => {
+    var otherUserId = item.uid
+    console.log('iteeeeem',otherUserId,this.state.myUserId,item)
+   // return
+    var friendsRef = firebase.database().ref('/messaging/friends/')
+    var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
+    var friendsNotRef = firebase.database().ref('/messaging/notifications/')
+
+    friendsRef.child(this.state.myUserId).child(otherUserId).set(new Date().getTime())
+    friendsRef.child(otherUserId).child(this.state.myUserId).set(new Date().getTime())
+    var safeId = Obfuscator.mask(this.state.myUserId);
+    var otherUserSafeId = Obfuscator.mask(otherUserId);
+    friendRequestRef.child(safeId).child(otherUserSafeId).set(null, (error) => {
+      if (error) { this.notify('An error occured') }
+      else {
+        friendsNotRef.child(this.state.myUserId).child('friends').set(null)
+        friendsNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
+        const friendsListArr = this.state.friendsListArr.filter(item => item.uid !== otherUserId);
+        this.setState({ friendsListArr })
+        var notMessage = { id: otherUserId, title: 'Friend request', message: this.state.myName + ' accepted your friend request', name: this.state.myName }
+        var fcmRef = firebase.database().ref('/messaging/fcms/' + otherUserId + '/')
+        fcmRef.once('value', dataSnapshot => {
+          if (dataSnapshot.exists()) {
+             console.log('existssssss')
+            var fcmToken = dataSnapshot.val()
+            notMessage['fcmToken'] = fcmToken
+            this.sendNotification(notMessage)
+          }else{console.log('no existssssss')}
+        })
       }
-    inputChange = async (e) => {
+    })
+  }
+  getMyName = (userId) => {
+    var myNameRef = firebase.database().ref('/users/' + userId + '/userData/name/');
+    myNameRef.once('value', dataSnapshot => { this.setState({ myName: dataSnapshot.val() }) })
+  }
+  submitRequest = () => {
+    var emailsRef = firebase.database().ref('/emails/')
+    var friendRequestRef = firebase.database().ref('/messaging/friendRequests/')
+    var friendsNotRef = firebase.database().ref('/messaging/notifications/')
+    var validate = this.validateEmail(this.state.email)
+    if (validate === false) {
+      this.setState({ emailErr: 'Please enter a valid email' })
+    } else {
+      var safeEmail = Obfuscator.maskEmailForKey(this.state.email);
+      emailsRef.child(safeEmail).once('value', dataSnapshot => {
+        if (dataSnapshot.exists()) {
+
+          var theUid = dataSnapshot.val()
+          var otherUserIdUnmasked = Obfuscator.unmask(theUid);
+          var safeId = Obfuscator.mask(this.state.myUserId);
+
+          // return
+          //console.log('friend reqqqqq',theUid,safeId)
+          friendRequestRef.child(theUid).child(safeId).set(new Date().getTime())
+          friendsNotRef.child(otherUserIdUnmasked).child('friends').child(this.state.myUserId).set(new Date().getTime())
+          friendsNotRef.child(otherUserIdUnmasked).child('allNots').set(new Date().getTime())
+          this.notify('Friend request send successfully')
+          this.setState({ emailErr: '', showAddFrienModal: false })
+          var notMessage = { id: otherUserIdUnmasked, title: 'Friend request', message: this.state.myName + ' send you a friend request', name: this.state.myName }
+          var fcmRef = firebase.database().ref('/messaging/fcms/' + otherUserIdUnmasked + '/')
+          fcmRef.once('value', dataSnapshot => {
+            if (dataSnapshot.exists()) {
+              var fcmToken = dataSnapshot.val()
+              notMessage['fcmToken'] = fcmToken
+              this.sendNotification(notMessage)
+            }
+          })
+        }
+        else { this.setState({ emailErr: 'No user found matching the typed email' }) }
+      })
+    }
+  }
+  sendNotification = async (theMessage) => {
+    try {
+      console.log('sendNotification', theMessage)
+      const response = await axios.post("https://theramtournament.com/sendUserNotifications", theMessage)
+      console.log("Notification sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending notification via Axios:", error);
+    }
+  }
+  validateEmail(val) {
+    let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regEmail.test(val)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  inputChange = async (e) => {
     var value = e.target.value
     //console.log('theId', e.target.id)
     await this.setState({ [e.target.id]: value })
     var validate = this.validateEmail(value)
-        if(validate===false){
-        this.setState({emailErr:'Please enter a valid email'})
-        }else{this.setState({emailErr:''})}
+    if (validate === false) {
+      this.setState({ emailErr: 'Please enter a valid email' })
+    } else { this.setState({ emailErr: '' }) }
   }
   render() {
     return (
       <><div className={styles.container} onClick={(event) => this.doNothing(event)}>
         <div className={styles.headerDiv}>
-          <h2 style={{fontSize:16,fontWeight:600}}>Friend Requests</h2>
+          <h2 style={{ fontSize: 16, fontWeight: 600 }}>Friend Requests</h2>
           <MdOutlineClose className={styles.backIc} onClick={() => this.closeMessenger()} />
         </div>
-        
+
         <div className={styles.noDataCont}>
-          <div className={styles.noDataDiv} onClick={()=>this.setState({showAddFrienModal:true})}>
-              <MdOutlinePersonAddAlt size={20} color='#fff'/>
-                          <p>Friends</p>
-                        </div></div>
+          <div className={styles.noDataDiv} onClick={() => this.setState({ showAddFrienModal: true })}>
+            <MdOutlinePersonAddAlt size={20} color='#fff' />
+            <p>Friends</p>
+          </div></div>
         <div className={styles.chatsCont}>
-          {this.state.friendsListAvailable?this.state.friendsListArr.map((item, index) => {
+          {this.state.friendsListAvailable ? this.state.friendsListArr.map((item, index) => {
             var theNo = index + 1
             //console.log('is even', this.oddOrEven(theNo))
             var isEvenOdd = this.oddOrEven(theNo)
@@ -220,28 +260,28 @@ class AddFriends extends Component {
                     <p className={styles.nameP}>{item.userName}</p>
                   </div>
                   <p className={styles.mesoP}>Click to add friend</p>
-                    <div className={styles.addChat}>
-                      <MdOutlineAdd  className={styles.chatIc} />
-                    </div>
+                  <div className={styles.addChat}>
+                    <MdOutlineAdd className={styles.chatIc} />
+                  </div>
 
                 </div>
               </div>)
-          }):<div className={styles.noDataDiv2}>
-                  <p>Friend requests send to you  will appear here</p>
-                </div>}
-                 <Friends onClick={this.handleChildClick}/>
+          }) : <div className={styles.noDataDiv2}>
+            <p>Friend requests send to you  will appear here</p>
+          </div>}
+          <Friends onClick={this.handleChildClick} />
         </div>
-       
+
         <p>hallow</p>
-        
-      </div>  {this.state.showAddFrienModal?<div className={styles.searchFriendsModal}>
+
+      </div>  {this.state.showAddFrienModal ? <div className={styles.searchFriendsModal}>
         <div className={styles.searchFriendsDiv} onClick={(event) => this.doNothing(event)}>
           <p className={styles.addFrienTitleP}>Add Friend</p>
-           <input className={styles.friendsInput} id='email' placeholder='Enter friends email here' value={this.state.email} multiple onChange={(event) => this.inputChange(event)} />
+          <input className={styles.friendsInput} id='email' placeholder='Enter friends email here' value={this.state.email} multiple onChange={(event) => this.inputChange(event)} />
           <p className={styles.emailErr}>{this.state.emailErr}</p>
-          <p className={styles.friendsSubmit} onClick={()=>this.submitRequest()}>Submit</p>
+          <p className={styles.friendsSubmit} onClick={() => this.submitRequest()}>Submit</p>
         </div>
-        </div>:null}<ToastContainer /></>
+      </div> : null}<ToastContainer /></>
     );
   }
 }

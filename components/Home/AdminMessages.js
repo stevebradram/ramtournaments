@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
 import PageVisibility from 'react-page-visibility';
+import axios from "axios"
 var theLastTime = ''
 class AdminMessages extends Component {
   constructor() {
@@ -122,6 +123,8 @@ class AdminMessages extends Component {
       var message = theMessage[1]
       //var theMessage = { title:title, message:message, time: new Date().getTime()}
       var theMessage = { id: theKey, time: new Date().getTime(), title: title, message: message, howManyReaders: 0, adminId: this.state.myUserId }
+      //this.sendNotification(theMessage)
+      //return
       messageRef.child(theKey).set(theMessage)
       chatNotRef.child(this.state.myUserId).child('messages').child('admin').set(new Date().getTime())
       chatNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
@@ -129,6 +132,7 @@ class AdminMessages extends Component {
         if (error) { this.notify('Error sending message') }
         else {
           theMessagesArray.push(theMessage)
+          this.sendNotification(theMessage)
           this.notify('Message send successfully');
           this.setState({ message: '' }); this.setState({ lastMesoId: theKey, theMessagesArray, areMessagesAvailable: true })
         }
@@ -137,6 +141,17 @@ class AdminMessages extends Component {
       this.notify('You can not send an empty message')
     }
   }
+      sendNotification = async (theMessage) => {
+        try {
+            console.log('sendNotification',theMessage)
+           // var theQuery = encodeURIComponent(theMessage)
+            const response = await axios.post("https://theramtournament.com/sendAdminNotifications", theMessage)
+                
+            console.log("Notification sent successfully:", response.data);
+        } catch (error) {
+            console.error("Error sending notification via Axios:", error);
+        }
+    }
   inputChange = async (e) => {
     var value = e.target.value
     //console.log('theId', e.target.id)

@@ -25,11 +25,12 @@ import EditDetails from './DetailsModalFlockSystem'
 import MarchMadnessModal from './MarchMadnessModal'
 import TheMarchMadness from '../LeaderBoards/TheMarchMadness'
 import Friends from '../Home/Friends'
+import axios from "axios"
 const Messages = dynamic(() => import('../Home/Messages'), { 
   ssr: false,
   loading: () => <p>Loading Chat...</p> // Optional loading state
 });
-import axios from "axios"
+
 var thePoints = [{ seed: 1, val: 1.01 }, { seed: 2, val: 1.08 }, { seed: 3, val: 1.17 }, { seed: 4, val: 1.27 }, { seed: 5, val: 1.54 }, { seed: 6, val: 1.61 }, { seed: 7, val: 1.63 }, { seed: 8, val: 2.02 },
 { seed: 9, val: 1.95 }, { seed: 10, val: 2.58 }, { seed: 11, val: 2.62 }, { seed: 12, val: 2.86 }, { seed: 13, val: 4.75 }, { seed: 14, val: 6.91 }, { seed: 15, val: 13.81 }, { seed: 16, val: 76 }
 ]

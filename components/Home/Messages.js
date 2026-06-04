@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
 import PageVisibility from 'react-page-visibility';
+import axios from "axios"
 import { io } from "socket.io-client"
 var socket = io("https://theramtournament.com", {
   withCredentials: true,
@@ -31,11 +32,11 @@ class Messages extends Component {
   }
   state = {
     theMessage: '', incomingData: [], profilePhoto: '', userName: '', acronym: '', lastSeen: '', myUserId: '', isLogged: '', otheUserId: '', areMessagesAvailable: '', theMessageId: '', theMessagesArray: [], lastMesoId: '', theLastSeenChat: 0,
-    hasInitializedFirebase: true, areThereMessages: false, isWindowInFocus: true, otherUserLastSeen: 'Offline', isFirstTime: '', myMesoId: '', otherUserMesoId: '', senderID: ''
+    hasInitializedFirebase: true, areThereMessages: false, isWindowInFocus: true, otherUserLastSeen: 'Offline', isFirstTime: '', myMesoId: '', otherUserMesoId: '', senderID: '',myName:''
   }
   componentDidMount = () => {
     this.scrollToBottom()
-    //console.log('theData rrrrrrrrra', this.props.theData)
+    console.log('theData rrrrrrrrra 222222', this.props.theData)
     var theData = this.props.theData
     //console.log('theData 365214', this.props.from, theData)
     if (this.props.from === 'fromFriends' && theData !== 'N/A') {
@@ -127,6 +128,7 @@ class Messages extends Component {
         this.checkMessages(userId)
         this.onlinePresence(userId, 'Online')
         this.checkOnlinePresence(this.state.otheUserId)
+        this.getMyName(userId)
         if (socket.connected) {
           socket.emit('identify', userId);
           socket.emit('opened_chat', { myUserId: userId, otherUserId: this.state.otheUserId });
@@ -142,6 +144,11 @@ class Messages extends Component {
       }
     })
   }
+   getMyName = (userId) => {
+        var myNameRef = firebase.database().ref('/users/' + userId + '/userData/name/');
+        myNameRef.once('value', dataSnapshot => {this.setState({myName: dataSnapshot.val() })})
+
+    }
   closeMessenger = () => {
     this.props.onClick('fromMessages', 'chatId', 'N/A')
   }
@@ -220,11 +227,15 @@ class Messages extends Component {
     var theMessagesArray = this.state.theMessagesArray
     var mesoId = myUidKey + otherUidKey
     var otherUserMesoId = otherUidKey + myUidKey
+    var otheUserId=this.state.otheUserId
     if (this.state.theMessage.length >= 1 && mesoId !== '') {
       var theMessage = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId }
       var myChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId }
       var otherUserChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.myUserId }
+      var notMessage = {id:mesoId, title:this.state.myName, message:this.state.theMessage, name:this.state.myName}
       if (this.state.areThereMessages === false) { myChat['1stSenderId'] = this.state.myUserId }
+      
+            //return
       messageRef.child(this.state.myUserId).child(mesoId).child(theKey).set(theMessage)
       messageRef.child(this.state.otheUserId).child(otherUserMesoId).child(theKey).set(theMessage)
       chatRef.child(this.state.myUserId).child(mesoId).update(myChat)
@@ -233,6 +244,14 @@ class Messages extends Component {
       chatRef.child(this.state.otheUserId).child(otherUserMesoId).update(otherUserChat, (error) => {
         if (error) { this.notify('Error sending message') }
         else {
+         var fcmRef = firebase.database().ref('/messaging/fcms/'+otheUserId+'/')
+               fcmRef.once('value', dataSnapshot => {
+                if(dataSnapshot.exists()){
+                var fcmToken=dataSnapshot.val()
+                notMessage['fcmToken']=fcmToken
+                this.sendNotification(notMessage)
+                }
+            })
           theMessage['id'] = mesoId
           socket.emit('send_private_message', { from: 'sendMessage', recipientId: this.state.otheUserId, senderId: this.state.myUserId, message: theMessage, mesoId: mesoId });
           theMessagesArray.push(theMessage)
@@ -244,6 +263,15 @@ class Messages extends Component {
       this.notify('You can not send an empty message')
     }
   }
+   sendNotification = async (theMessage) => {
+            try {
+            console.log('sendNotification',theMessage)            
+            const response = await axios.post("https://theramtournament.com/sendUserNotifications", theMessage)  
+            console.log("Notification sent successfully:", response.data);
+            } catch (error) {
+                console.error("Error sending notification via Axios:", error);
+            }
+        }
   inputChange = async (e) => {
     var value = e.target.value
     await this.setState({ [e.target.id]: value })
