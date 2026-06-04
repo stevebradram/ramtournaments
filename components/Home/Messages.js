@@ -244,7 +244,12 @@ class Messages extends Component {
       chatRef.child(this.state.otheUserId).child(otherUserMesoId).update(otherUserChat, (error) => {
         if (error) { this.notify('Error sending message') }
         else {
-         var fcmRef = firebase.database().ref('/messaging/fcms/'+otheUserId+'/')
+          theMessage['id'] = mesoId
+          socket.emit('send_private_message', { from: 'sendMessage', recipientId: this.state.otheUserId, senderId: this.state.myUserId, message: theMessage, mesoId: mesoId });
+          theMessagesArray.push(theMessage)
+          this.setState({ theMessagesArray, lastMesoId: mesoId, areMessagesAvailable: true })
+          this.notify('Message send successfully'); this.setState({ theMessage: '' }); this.setState({ theMessageId: mesoId })
+           var fcmRef = firebase.database().ref('/messaging/fcms/'+otheUserId+'/')
                fcmRef.once('value', dataSnapshot => {
                 if(dataSnapshot.exists()){
                 var fcmToken=dataSnapshot.val()
@@ -252,11 +257,6 @@ class Messages extends Component {
                 this.sendNotification(notMessage)
                 }
             })
-          theMessage['id'] = mesoId
-          socket.emit('send_private_message', { from: 'sendMessage', recipientId: this.state.otheUserId, senderId: this.state.myUserId, message: theMessage, mesoId: mesoId });
-          theMessagesArray.push(theMessage)
-          this.setState({ theMessagesArray, lastMesoId: mesoId, areMessagesAvailable: true })
-          this.notify('Message send successfully'); this.setState({ theMessage: '' }); this.setState({ theMessageId: mesoId })
         }
       })
     } else {
@@ -265,7 +265,8 @@ class Messages extends Component {
   }
    sendNotification = async (theMessage) => {
             try {
-            console.log('sendNotification',theMessage)            
+            console.log('sendNotification',theMessage)
+             //const response = await axios.post("http://localhost:4000/sendUserNotifications", theMessage)            
             const response = await axios.post("https://theramtournament.com/sendUserNotifications", theMessage)  
             console.log("Notification sent successfully:", response.data);
             } catch (error) {

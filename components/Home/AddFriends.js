@@ -207,6 +207,7 @@ class AddFriends extends Component {
   sendNotification = async (theMessage) => {
     try {
       console.log('sendNotification', theMessage)
+      // const response = await axios.post("http://localhost:4000/sendUserNotifications", theMessage) 
       const response = await axios.post("https://theramtournament.com/sendUserNotifications", theMessage)
       console.log("Notification sent successfully:", response.data);
     } catch (error) {

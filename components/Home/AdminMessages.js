@@ -143,9 +143,10 @@ class AdminMessages extends Component {
   }
       sendNotification = async (theMessage) => {
         try {
-            console.log('sendNotification',theMessage)
+            console.log('sendNotification 910000000',theMessage)
            // var theQuery = encodeURIComponent(theMessage)
-            const response = await axios.post("https://theramtournament.com/sendAdminNotifications", theMessage)
+            //const response = await axios.post("http://localhost:4000/sendAdminNotifications", theMessage)
+           const response = await axios.post("https://theramtournament.com/sendAdminNotifications", theMessage)
                 
             console.log("Notification sent successfully:", response.data);
         } catch (error) {
