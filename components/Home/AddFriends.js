@@ -150,7 +150,7 @@ class AddFriends extends Component {
         friendsNotRef.child(this.state.myUserId).child('allNots').set(new Date().getTime())
         const friendsListArr = this.state.friendsListArr.filter(item => item.uid !== otherUserId);
         this.setState({ friendsListArr })
-        var notMessage = { id: otherUserId, title: 'Friend request', message: this.state.myName + ' accepted your friend request', name: this.state.myName }
+        var notMessage = { id: otherUserId, title: 'Friend request', message: this.state.myName + ' accepted your friend request', name: this.state.myName,userId:otherUserId}
         var fcmRef = firebase.database().ref('/messaging/fcms/' + otherUserId + '/')
         fcmRef.once('value', dataSnapshot => {
           if (dataSnapshot.exists()) {
@@ -190,7 +190,7 @@ class AddFriends extends Component {
           friendsNotRef.child(otherUserIdUnmasked).child('allNots').set(new Date().getTime())
           this.notify('Friend request send successfully')
           this.setState({ emailErr: '', showAddFrienModal: false })
-          var notMessage = { id: otherUserIdUnmasked, title: 'Friend request', message: this.state.myName + ' send you a friend request', name: this.state.myName }
+          var notMessage = { id: otherUserIdUnmasked, title: 'Friend request', message: this.state.myName + ' send you a friend request', name: this.state.myName,userId:otherUserIdUnmasked}
           var fcmRef = firebase.database().ref('/messaging/fcms/' + otherUserIdUnmasked + '/')
           fcmRef.once('value', dataSnapshot => {
             if (dataSnapshot.exists()) {

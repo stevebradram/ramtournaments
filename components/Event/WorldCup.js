@@ -20,6 +20,7 @@ import Image from 'next/image'
 var flagImg = 'https://a.espncdn.com/i/teamlogos/soccer/500/164.png'
 var groupATeams = [{ id: 'groupATeam1', teamName: 'Mexico', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/203.png', outCome: 'Proceed', rank: 24, points: 4.8 }, { id: 'groupATeam2', teamName: 'South Africa', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/467.png', outCome: 'Proceed', rank: 96, points: 2.3 }, { id: 'groupATeam3', teamName: 'South Korea', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/451.png', outCome: 'Eliminated', rank: 24, points: 1.52 }, { id: 'groupATeam4', teamName: 'Czechia', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/450.png', outCome: 'N/A', rank: 103, points: 3.52 }]
 var chosenTeams = [], ramOddsMap = '', teamsChosenOdds = []
+var theGameEvents=['Group Stage','Round of 32','Round of 16','Quarter Finals','Semi Finals','Finals']
 const groupStage = [
     { id: 'groupAMatch1', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
     { id: 'groupAMatch2', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
@@ -116,7 +117,7 @@ class WorldCup extends Component {
     state = {
         isAdmin: true, showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '',
         quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round1', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless',
-        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '',
+        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '',theGameEvent:'',
         quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026'
     }
     componentDidMount = () => {
@@ -178,6 +179,7 @@ class WorldCup extends Component {
         matchesRef.once('value', dataSnapshot => {
             if (!dataSnapshot.exists()) { this.setState({ groupStagePopulated: false }) }
             else {
+                this.checkGameEventChosen()
                 var theCount = dataSnapshot.numChildren()
                 this.setState({ groupStagePopulated: true })
                 //if(theCount>=48){this.setState({ groupStagePopulated: true })}
@@ -606,8 +608,23 @@ class WorldCup extends Component {
         console.log('chosenTeams', id, chosenTeams, updatedItems)
     }
     openTheModal = () => {
-        if (this.state.isAdmin && this.state.currentRound === 'round1') { this.setState({ enterTeamNameInfoModal: true }) }
-        else { this.notify('Selection not available at the moment'); }
+        var pickEvent=false
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
+        editDbRef.child('currentPick').once('value', dataSnapshot => {
+         if (dataSnapshot.exists()) {
+         this.setState({theGameEvent:dataSnapshot.val()})
+         var theGameEvent=dataSnapshot.val()
+         if (this.state.currentRound === 'round1'&&theGameEvent === 'Group Stage'){pickEvent=true}
+         if (this.state.currentRound === 'round2'&&theGameEvent === 'Round of 32'){pickEvent=true}
+         if (this.state.theMenu === 'roundOf16'&&theGameEvent === 'Round of 16'){pickEvent=true}
+         if (this.state.theMenu === 'quarterFinals'&&theGameEvent === 'Quarter Finals'){pickEvent=true}
+         if (this.state.theMenu === 'semiFinals'&&theGameEvent === 'Semi Finals'){pickEvent=true}
+         if (this.state.theMenu === 'final'&&theGameEvent === 'Finals'){pickEvent=true}
+         if (this.state.currentRound === 'round1'&&pickEvent===true) { this.setState({ enterTeamNameInfoModal: true })}
+        }else{
+            this.notify('Selection not available at the moment')
+        }
+         })
     }
 
        teamFlockNameCheck=()=>{
@@ -927,6 +944,24 @@ class WorldCup extends Component {
     }
     openEnterTeamsModal = () => {
     this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00',team1Name: '', team2Name: '', teamName: '', team4Name: '',team1Flag: '', team2Flag: '', team3Flag: '', team4Flag: '' })
+     }
+      checkGameEventChosen= () => {
+        if(this.state.theEventKey){
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
+        editDbRef.child('currentPick').once('value', dataSnapshot => {
+         if (dataSnapshot.exists()) {this.setState({theGameEvent:dataSnapshot.val()})}
+        })}
+     }
+     chooseGameEvent= (item) => {
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey+'/currentPick/')
+        if(this.state.theGameEvent===item){
+         editDbRef.set(null)
+         this.setState({theGameEvent:''})
+        }else{
+         editDbRef.set(item,(error)=>{
+            if(!error){this.setState({theGameEvent:item})}
+        })
+      }
      }
     dummyItems = (group, theItems) => {
         return (
@@ -1341,6 +1376,22 @@ class WorldCup extends Component {
                                 repeat={Infinity}
                             />}
                     </div>
+                         {this.state.isAdmin&&this.state.groupStagePopulated ?
+          <div>
+            <p id={style.picksP}>Allow World Cup Picks</p> 
+            <div id={style.selectorDiv}>
+              {theGameEvents.map((item, index) => {
+                return (
+                  <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item)}>
+                    <div className={this.state.theGameEvent === item? style.boxDiv3 : style.boxDiv3b}>
+                      <MdCheck size={15} /></div>
+                    <p style={{ color: this.state.theGameEvent === item ? '#CB1E31' : null }}>{item}</p>
+                  </div>
+                )
+              })}
+             
+              
+            </div></div> : null}
                     <div className={style.scoresCont}>
                         <div className={style.scoresCont1}>
                             <p className={style.currentP}>{titleToShow}</p>

@@ -78,6 +78,7 @@ class AdminMessages extends Component {
                 let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
                 var lastMesoId = objMax['id']
                 console.log('theMessages1', theMessages)
+                theMessages = theMessages.sort((a, b) => a.time - b.time);
                 this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: lastMesoId }, () => {
                   this.upadateLastSeenChat()
                   this.deleteNots()
@@ -90,6 +91,7 @@ class AdminMessages extends Component {
               let objMax = theMessages.reduce((max, curren) => max.time > curren.time ? max : curren);
               var lastMesoId = objMax['id']
               console.log('theMessages1', theMessages)
+              theMessages = theMessages.sort((a, b) => a.time - b.time);
               this.setState({ areMessagesAvailable: true, theMessagesArray: theMessages, lastMesoId: lastMesoId }, () => {
                 this.upadateLastSeenChat()
                 this.deleteNots()
@@ -123,6 +125,7 @@ class AdminMessages extends Component {
       var message = theMessage[1]
       //var theMessage = { title:title, message:message, time: new Date().getTime()}
       var theMessage = { id: theKey, time: new Date().getTime(), title: title, message: message, howManyReaders: 0, adminId: this.state.myUserId }
+      var notMessage = { id: theKey, title: title, message: message, howManyReaders: 0, adminId: this.state.myUserId }
       //this.sendNotification(theMessage)
       //return
       messageRef.child(theKey).set(theMessage)
@@ -132,6 +135,7 @@ class AdminMessages extends Component {
         if (error) { this.notify('Error sending message') }
         else {
           theMessagesArray.push(theMessage)
+          theMessagesArray = theMessagesArray.sort((a, b) => a.time - b.time);
           this.sendNotification(theMessage)
           this.notify('Message send successfully');
           this.setState({ message: '' }); this.setState({ lastMesoId: theKey, theMessagesArray, areMessagesAvailable: true })

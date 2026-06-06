@@ -232,7 +232,7 @@ class Messages extends Component {
       var theMessage = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId }
       var myChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.otheUserId }
       var otherUserChat = { message: this.state.theMessage, time: new Date().getTime(), status: 'sent', senderID: this.state.myUserId, otherUserID: this.state.myUserId }
-      var notMessage = {id:mesoId, title:this.state.myName, message:this.state.theMessage, name:this.state.myName}
+      var notMessage = {id:mesoId, title:'New Message', message:this.state.myName+': '+this.state.theMessage, name:this.state.myName,userId:this.state.otheUserId}
       if (this.state.areThereMessages === false) { myChat['1stSenderId'] = this.state.myUserId }
       
             //return
@@ -266,7 +266,7 @@ class Messages extends Component {
    sendNotification = async (theMessage) => {
             try {
             console.log('sendNotification',theMessage)
-             //const response = await axios.post("http://localhost:4000/sendUserNotifications", theMessage)            
+            //const response = await axios.post("http://localhost:4000/sendUserNotifications", theMessage)            
             const response = await axios.post("https://theramtournament.com/sendUserNotifications", theMessage)  
             console.log("Notification sent successfully:", response.data);
             } catch (error) {
