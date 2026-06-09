@@ -5,6 +5,7 @@ import { MdOutlineFolderOff } from "react-icons/md";
 import { PiFolderDashedThin } from "react-icons/pi";
 import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 import ProgressBar from '../components/Helper/ProgressBar'
 import Router from 'next/router';
 class leaderboard extends Component {
@@ -12,6 +13,7 @@ class leaderboard extends Component {
     dataAvailable:false,sportType:'',theEventKey:'',theEventTitle:'',userLoggedIn:false,nullData:[],theEvent:'',theTime:'',isTherNormalData:false,eventStartTime:''}
   componentDidMount=()=>{
      //this.getScoreBoardData()
+     this.tableRef = React.createRef(null);
      this.showProgressBar()
      this.checkAuth()
      
@@ -77,10 +79,17 @@ class leaderboard extends Component {
         return (
           <>
       {this.state.isAdmin?<div className={styles.container}>
-      <p className={styles.titleP} style={{marginBottom:40}}>RAM Users</p>
+      <div className={styles.downloadCont}><p className={styles.titleP}>RAM Users</p>
+       {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
+                    filename={this.state.theEventKey}
+                    sheet="users"
+                    currentTableRef={this.tableRef.current}        
+                >
+                  <p className={styles.exportP}>Export Document</p>
+                  </DownloadTableExcel> </div></div>:null}</div>
       <div className={styles.menu2Div1}>
       <div id={styles.table1Div}>
-      <table className={styles.table1}>
+      <table className={styles.table1} ref={ this.tableRef}>
         <tr id={styles.table1Tr1}>
           <th></th>
           <th>Name</th>
