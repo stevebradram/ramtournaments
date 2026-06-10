@@ -884,14 +884,15 @@ $theDark:#b2b2b2;
     align-items: center;
  }
  .shareDiv{
-    border: 1px solid $redColor;
+    border: 1px solid rgb(76, 142, 218);
+    background-color: #377ecfff;
     width: 150px;
     display: flex;
     justify-content: center;
     height: 30px;
     align-items: center;
     border-radius: 5px;
-    color: $redColor;
+    color: #fff;
     margin-top: 10px;
     cursor: pointer;
     margin-right: 10px;

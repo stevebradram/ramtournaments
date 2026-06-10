@@ -115,7 +115,7 @@ const final = [
 
 class WorldCup extends Component {
     state = {
-        isAdmin: true, showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '',
+        isAdmin: true, showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '',theTime:'',
         quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round1', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless',
         groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '',theGameEvent:'',
         quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026'
@@ -133,11 +133,11 @@ class WorldCup extends Component {
                     this.setState({ isAdmin: true })
                 }
                 this.setState({ userId, userLoggedIn: true })
-                if (userId) { this.getWorldCupMatches() }
+                if (userId) { this.getWorldCupMatches(userId) }
                 //this.getMatchesInfo(userId)
             } else {
                 this.setState({ userLoggedIn: false })
-                this.getWorldCupMatches()
+                this.getWorldCupMatches('')
             }
         })
     }
@@ -172,13 +172,37 @@ class WorldCup extends Component {
             }
         })
     }
-    getWorldCupMatches = () => {
+    checkLink = async (userId) => {
+        var flocksDataRef = firebase.database().ref('users/').child(userId + '/flockData/flockNames/' + this.state.theEventKey + '/link')
+        //console.log('flocksDataRef the key',userId,this.state.theEventKey)
+        flocksDataRef.once('value', dataSnapshot => {
+         
+          if (dataSnapshot.exists()) {
+            this.setState({ theLink: dataSnapshot.val() })
+          } else {
+            this.setState({ theLink: '' })
+          }
+        })
+      }
+        copyLink = () => {
+          copy(this.state.theLink);
+          this.notify('Link copied successfully')
+        }
+       groupStageStartTime = () => {
+        var startDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
+        startDbRef.child('groupStageStartTime').once('value', dataSnapshot => {
+            this.setState({theTime:dataSnapshot.val()})
+             //console.log('flocksDataRef the start', dataSnapshot.val(),this.state.theEventKey)
+        })
+     }
+    getWorldCupMatches = (userId) => {
         var groupAArr = [], groupBArr = [], groupCArr = [], groupDArr = [], groupEArr = [], groupFArr = [], groupGArr = [], groupHArr = [], groupIArr = [], groupJArr = [], groupKArr = [], groupLArr = [], allMatches = []
         this.setState({ eastRound1Arr: [], eastRound2Arr: [], eastroundOf16Arr: [], eastquarterFinalsArr: [], dataAvailable: false, currentEventUserInfo: {} })
         var matchesRef = firebase.database().ref('/theEvents/WorldCup/').child(this.state.theEventKey + '/' + 'groupStage/')
         matchesRef.once('value', dataSnapshot => {
             if (!dataSnapshot.exists()) { this.setState({ groupStagePopulated: false }) }
             else {
+            if(userId){this.checkLink(userId);this.groupStageStartTime()}
                 this.checkGameEventChosen()
                 var theCount = dataSnapshot.numChildren()
                 this.setState({ groupStagePopulated: true })

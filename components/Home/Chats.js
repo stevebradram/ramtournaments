@@ -76,8 +76,10 @@ class Chats extends Component {
           i++
           var theData = data.val()
           theData['id'] = data.key
+          var theKey=data.key
           var otherUserID = data.val().otherUserID
           //console.log('my otherUserID id', otherUserID)
+          if(otherUserID){
           userRef.child(otherUserID).child('userData').once('value', dataSnapshot => {
             var profilePhoto = dataSnapshot.val().profilePhoto
             var userName = dataSnapshot.val().name
@@ -102,7 +104,9 @@ class Chats extends Component {
               })
 
             }
-          })
+          })}else{
+                     chatsRef.child(theKey).set(null)
+                    }
 
         })
       } else { this.setState({ areChatsAvailable: false }) }
