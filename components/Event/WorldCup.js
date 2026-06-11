@@ -159,15 +159,18 @@ class WorldCup extends Component {
 
         })
         detailsRef.once('value', dataSnapshot => {
-            this.setState({ currentEventUserInfo: dataSnapshot.val(), teamName: dataSnapshot.val().teamName, dataAvailable: true })
+            if (dataSnapshot.exists()) {
+            this.setState({ currentEventUserInfo: dataSnapshot.val(), teamName: dataSnapshot.val().teamName, dataAvailable: true })}
 
         })
         myFlockNamesRef.once('value', dataSnapshot => {
             if (dataSnapshot.exists()) {
+                console.log('it existssssssssssssssss 222222',dataSnapshot.val().name)
                 var theFlockName = dataSnapshot.val().name
                 theFlockName = theFlockName?.split("|").join(" ")
                 this.setState({ ramFlockName: theFlockName, flockNameNoSpace: dataSnapshot.val().name })
             } else {
+                console.log('it existssssssssssssssss 33333333')
                 this.setState({ ramFlockName: 'Flockless', flockNameNoSpace: 'Flockless' })
             }
         })
@@ -314,6 +317,8 @@ class WorldCup extends Component {
                     }
                     // this.getMatchesInfo()
                     this.getTheMatchesInfo()
+                    this.getUserDetails()
+                   
                 }
             }
 
@@ -343,7 +348,7 @@ class WorldCup extends Component {
                 this.combineMatchesInfo(round1Arr, 'groupJArr', this.state.groupJArr)
                 this.combineMatchesInfo(round1Arr, 'groupKArr', this.state.groupKArr)
                 this.combineMatchesInfo(round1Arr, 'groupLArr', this.state.groupLArr)
-                this.getUserDetails()
+                 
 
             }
         })
@@ -684,6 +689,8 @@ class WorldCup extends Component {
      }
     saveTeamNameInfo = (theTeamName,uniqueRamNamesRef,totalOddsSum) => {
         //ramFlockName teamName teamNameErr
+        console.log('this.state.ramFlockName',this.state.ramFlockName)
+        return
         var gamesDataRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/events/WorldCup/' + this.state.theEventKey + '/')
         var ramsBets = firebase.database().ref('userBets/WorldCup/')
         var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)
