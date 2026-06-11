@@ -688,9 +688,7 @@ class WorldCup extends Component {
         })
      }
     saveTeamNameInfo = (theTeamName,uniqueRamNamesRef,totalOddsSum) => {
-        //ramFlockName teamName teamNameErr
-        console.log('this.state.ramFlockName',this.state.ramFlockName)
-        return
+      
         var gamesDataRef = firebase.database().ref('users/').child(this.state.userId + '/ramData/events/WorldCup/' + this.state.theEventKey + '/')
         var ramsBets = firebase.database().ref('userBets/WorldCup/')
         var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/'+this.state.theEventKey)

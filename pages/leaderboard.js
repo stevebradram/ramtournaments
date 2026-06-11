@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { ToastContainer, toast } from 'react-toastify';
 import ProgressBar from '../components/Helper/ProgressBar'
 import TheMarchMadness from '../components/LeaderBoards/TheMarchMadness'
+import WorldCup from '../components/LeaderBoards/WorldCup'
 import TheMarchMadness2 from '../components/LeaderBoards/TheMarchMadness2'
 import NFLRegular from '../components/LeaderBoards/NFLRegular'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
@@ -731,7 +732,7 @@ class leaderboard extends Component {
             <p id={this.state.currentSelection==='finalRound'?styles.theSubMenuP2:null} onClick={()=>this.getCurrentRound('finalRound')}>Final Round</p>
            </div>:null*/}
           
-           {this.state.sportType!=='NCAAB'&&this.state.sportType!=='NFLRegular'?<div className={styles.menu2Div1}>    
+           {this.state.sportType!=='NCAAB'&&this.state.sportType!=='NFLRegular'&&this.state.sportType!=='WorldCup'?<div className={styles.menu2Div1}>    
               {this.state.isAdmin?<div id={styles.exportDiv}> <div  id={styles.exportDiv1} onClick={()=>this.notify('Downloading...')}><DownloadTableExcel
                     filename={this.state.theEventKey}
                     sheet="users"
@@ -749,9 +750,9 @@ class leaderboard extends Component {
       <PiFolderDashedThin  className={styles.noDataIc}/>
      <p>Please LOG IN to view data in this page</p>
    </div>}
-      </div>:this.state.sportType!=='NFLRegular'?<>{this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
+      </div>:this.state.sportType!=='NFLRegular'&&this.state.sportType!=='WorldCup'?<>{this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
         <TheMarchMadness2  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}</>
-        :<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count} ref={this.nflRegularRef}/></div>}
+        :this.state.sportType!=='WorldCup'?<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count} ref={this.nflRegularRef}/></div>:<WorldCup  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}
          {this.state.deleteModal?<div className={styles.modal}>
                 <div className={styles.delModal}>
                   <p className={styles.delModalP1}>Confirm Delete?</p>
