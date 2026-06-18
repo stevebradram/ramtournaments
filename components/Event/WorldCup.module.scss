@@ -1070,6 +1070,10 @@ $theDark:#b2b2b2;
 #table1Tr2{
   padding-bottom: 20px;
 }
+.pickWinnerDiv2{
+    display: flex;
+    justify-content: space-between;
+}
 .winnerPickP{
     background-color: $blackish;
     color: white;
@@ -1078,6 +1082,17 @@ $theDark:#b2b2b2;
     padding: 5px 5px;
     box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
     cursor: pointer;
+    width: 49%;
+}
+.winnerPickP2{
+    background-color: $blackish;
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+    padding: 5px 5px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    width: 49%;
 }
 .groupP{
     font-weight: 600;
