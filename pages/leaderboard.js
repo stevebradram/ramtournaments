@@ -199,8 +199,8 @@ class leaderboard extends Component {
       if(this.state.isAdmin){
       userInfoDb2.once('value',dataSnapshot=>{
         var theD=dataSnapshot.val()
-        if(theD.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
-        theDet['email']=theD.email
+        if(theD?.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+        if(theD?.email){theDet['email']=theD.phoneNo}else{theDet['email']='N/A'}
       })}
       userInfoDb.once('value',dataSnapshot=>{
         //console.log('here at nulll',scoreBoardNo,i,dataSnapshot.val())
@@ -321,11 +321,12 @@ class leaderboard extends Component {
           //console.log('theD.email',theId)
           
           var theD=dataSnapshot.val()
-          theDet['phone']=theD.phoneNo
+          if(theD?.phoneNo){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
+          if(theD?.email){theDet['email']=theD.phoneNo}else{theDet['email']='N/A'}
          //console.log('theD.email',theD.email)
           //if(theD.phoneNo!==null){theDet['phone']=theD.phoneNo}else{theDet['phone']='N/A'}
           //if(theD.email!==null){theDet['email']=theD.phoneNo}else{theDet['email']='N/A'}
-          theDet['email']=theD.email
+          //theDet['email']=theD.email
         })}
         var userInfoDb=firebase.database().ref('/users/').child(theId).child("/ramData/events/"+sportType+"/"+theEventKey+"/details/")
         userInfoDb.once('value',dataSnapshot=>{

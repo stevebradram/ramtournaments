@@ -19,7 +19,7 @@ class CommMarchMadness extends Component {
   componentDidMount = () => {
    // console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces, this.props.currentRound,this.props.menuToShow)
     //return
-      this.setState({ isEventStarted: this.props.eventStarted, theEventKey: this.props.theEventKey, flockNameWithNoSpaces: this.props.flockNameWithNoSpaces, flockNameAvailable: this.props.flockNameAvailable, currentRound: this.props.currentRound, endTime: this.props.endTime, menuToShow: this.props.menuToShow, currentSubSelection: this.props.currentSubSelection }, () => {
+      this.setState({ isEventStarted: this.props.eventStarted, theEventKey: this.props.theEventKey, flockNameWithNoSpaces: this.props.flockNameWithNoSpaces, flockNameAvailable: this.props.flockNameAvailable, currentRound: this.props.currentRound, endTime: this.props.endTime, menuToShow: this.props.menuToShow, currentSubSelection:'finalRound'}, () => {
       this.getRamMembersData()
       this.checkAuth()
     })

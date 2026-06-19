@@ -329,7 +329,6 @@ class WorldCup extends Component {
     }
     if(round==='finalRound'){
       this.setState({theItems:this.state.finalRoundArr})
-      //console.log('it is final round',this.state.finalRoundArr)
     }
     
     this.setState({currentSelection:round})
