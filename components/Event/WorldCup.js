@@ -1045,21 +1045,25 @@ class WorldCup extends Component {
             if (this.state.theEventKey === '', this.state.currentSelection === '', scoreName === '') return
             if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
             theItems = JSON.stringify(theItems);
-            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::groupStage::' + scoreName + '::' + theItems + '::' + outcome + '::round1'
+            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::groupStage::' + scoreName  + '::' + outcome + '::round1'
             if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
-            var theQuery = encodeURIComponent(theLink)
-            //await axios.get("https://theramtournament.com/getWorldCupResults?term=" + theQuery
-            await axios.get("http://localhost:4000/getWorldCupResults?term=" + theQuery)
+           // axios.post('http://localhost:4000/getWorldCupResults', {
+            axios.post('https://theramtournament.com/getWorldCupResults', {    
+                eventPath: theLink,
+                teams: theItems,
+                status: "Proceed",
+                round: "round1"
+            })
                 .then((res) => {
                     var theOutcome = res.data
                     this.notify(theOutcome)
                     if (theOutcome === 'Success Updating Results') {
-                        this.getWorldCupMatches(this.state.userId) 
+                       this.getWorldCupMatches(this.state.userId)
                     }
                 })
         } catch (error) {
-          this.notify('Error updating results')
-          console.log('error',error)
+            this.notify('Error updating results')
+            console.log('error', error)
         }
     }
     getWorldCupResults = (outcome) => {
@@ -1244,12 +1248,12 @@ class WorldCup extends Component {
                         {theItems.map((item, index) => {
                             if (item.bet) { thePicks.push(item.teamName), thePoints = thePoints + (item.odds) }
                             //  console.log('the thePicks', thePicks)
-                            var textColor = '#292f51', teamName = item.teamName,textColor2 = '#292f51'
+                            var textColor = '#292f51', teamName = item.teamName, textColor2 = '#292f51'
                             var selectedToShow = selectedToShow = <div className={style.boxDiv} onClick={() => this.openTheModal()}><MdCheck color="#fff" size={15} /></div>
                             if (item.bet) {
                                 selectedToShow = <div className={style.boxDiv3}><MdCheck color="#fff" size={15} onClick={() => this.openTheModal()} /></div>
                             }
-                            if (item.outCome === 'Proceed') { textColor = '#1ecb97',textColor2='#1ecb97'}
+                            if (item.outCome === 'Proceed') { textColor = '#1ecb97', textColor2 = '#1ecb97' }
                             if (item.outCome === 'Eliminated') { textColor = '#CB1E31' }
                             if (item.teamName.length > 15) { teamName = teamName.slice(0, 15) + '...' }
                             return (
@@ -1258,8 +1262,8 @@ class WorldCup extends Component {
                                     <td style={{ paddingLeft: 10 }}>
                                         <div className={style.flagImgDiv}><img className={style.flagImg} src={item.teamFlag} alt={'RAM'} /></div>
                                     </td>
-                                    <td style={{ paddingLeft: 10,color:textColor2 }}>{teamName}</td>
-                                    <td style={{color:textColor2 }}>{item.odds}</td>
+                                    <td style={{ paddingLeft: 10, color: textColor2 }}>{teamName}</td>
+                                    <td style={{ color: textColor2 }}>{item.odds}</td>
                                     <td style={{ color: textColor, paddingLeft: 20 }}>{item.outCome}</td>
                                 </tr>
                             )
