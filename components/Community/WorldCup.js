@@ -17,7 +17,7 @@ class WorldCup extends Component {
   }
 
   componentDidMount = () => {
-    console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces)
+    //console.log('on mountingggg', this.props.eventStarted, this.props.theEventKey, this.props.flockNameWithNoSpaces)
     //return
     this.setState({ isEventStarted: this.props.eventStarted, theEventKey: this.props.theEventKey, flockNameWithNoSpaces: this.props.flockNameWithNoSpaces, flockNameAvailable: this.props.flockNameAvailable, currentRound: 'round1', endTime: this.props.endTime, menuToShow: 'Rams In Your Flock', currentSubSelection: 'finalRound' }, () => {
       this.getRamMembersData()
@@ -26,17 +26,17 @@ class WorldCup extends Component {
 
   }
   runCustomLogic3 = (type, menu) => {
-    console.log('wewe mzeeeeeeeeeee', type, menu)
+    //console.log('wewe mzeeeeeeeeeee', type, menu)
     var theMenu = ''
     if (menu === 'groupStage') { theMenu = 'round1' }
     else if (menu === 'roundOf16') { theMenu = 'round2' }
     else{theMenu=menu}
     if (type === 'ramsChange') { this.setState({ menuToShow: menu }) }
     if (type === 'round') { this.setState({ currentRound: theMenu }) }
-    console.log('wewe theMenu', theMenu)
+    //console.log('wewe theMenu', theMenu)
   }
   runCustomLogic = (theEventKey, currentSelection, sportType, endTime, isEventExpired) => {
-    //console.log('week 1 matches 52525252', theEventKey, currentSelection, sportType)
+    ////console.log('week 1 matches 52525252', theEventKey, currentSelection, sportType)
     /*this.setState({isEventStarted, currentSelection: 'round1'})
     this.showShimmer()
     this.timerHandle = setTimeout(
@@ -75,7 +75,7 @@ this.getRamMembersData()
     flockCreatorRef.once('value', dataSnapshot => {
       var creatorId = dataSnapshot.val()
       this.setState({ creatorId })
-      //console.log('rrrrrr raaaaaa',dataSnapshot.val())
+      ////console.log('rrrrrr raaaaaa',dataSnapshot.val())
       membersFlockNamesRef.once('value', dataSnapshot => {
         if (dataSnapshot.exists()) {
           var count = dataSnapshot.numChildren()
@@ -83,7 +83,7 @@ this.getRamMembersData()
           dataSnapshot.forEach((data) => {
             i++
             var theData = data.val()
-            //console.log('the daaaaaaaaata',theData)
+            ////console.log('the daaaaaaaaata',theData)
             var theUserId = data.key
             var BPS = '', theScore = '', r1BPS = '', r2BPS = '', r1S = '', r2S = '', round1Pick = false, round2Pick = false
             r1BPS = theData.round1BPS, r2BPS = theData.round2BPS
@@ -118,18 +118,18 @@ this.getRamMembersData()
             round1Arr.push(theItem)
             round2Arr.push(theItem2)
             finalRoundArr.push(theItem3)
-            //console.log('round1Arr 4000',round1Arr)
-            //console.log('round2Arr 5000',round2Arr)
+            ////console.log('round1Arr 4000',round1Arr)
+            ////console.log('round2Arr 5000',round2Arr)
             if (i === count) {
               this.setState({ round1Arr: round1Arr, round2Arr: round2Arr, finalRoundArr: finalRoundArr, theItems: round1Arr })
-              //console.log('round1Arr 6000',round1Arr)
-              //console.log('round2Arr 7000',round2Arr)
-              // console.log('finalRoundArr 7000',finalRoundArr)
+              ////console.log('round1Arr 6000',round1Arr)
+              ////console.log('round2Arr 7000',round2Arr)
+              // //console.log('finalRoundArr 7000',finalRoundArr)
               this.theFlocksData(theEventKey)
             }
           })
         } else {
-          //console.log('hakuna data mseeeeeeeeeeeeeeeeee')
+          ////console.log('hakuna data mseeeeeeeeeeeeeeeeee')
         }
       })
     })
@@ -148,7 +148,7 @@ this.getRamMembersData()
         dataSnapshot.forEach((data) => {
           i++
           var theData = data.val()
-          //console.log('theFlocksArr 7777 theData',data.key, theData)
+          ////console.log('theFlocksArr 7777 theData',data.key, theData)
           // var theArr2 = { flockName: data.key, score:theData.score,avScore:theData.avScore,membersNo:theData.membersNo,theData:theData}
           var theItem = { flockName: data.key, membersNo: theData.round1MembersNo || 0, score: theData.round1Score || 0, avScore: theData.round1AvScore || 0 }
           var theItem2 = { flockName: data.key, membersNo: theData.round2MembersNo || 0, score: theData.round2Score || 0, avScore: theData.round2AvScore || 0 }
@@ -174,27 +174,27 @@ this.getRamMembersData()
             avScore = Number(avScore.toFixed(2))
           }
 
-          var overallAvScoreNew = theData.round1AvScore + theData.round2AvScore + avScore
+          var overallAvScoreNew = theData.round1AvScore||0 + theData.round2AvScore||0 + avScore||0
           overallAvScoreNew = overallAvScoreNew.toFixed(2);
-          //console.log('yyyyyyyy',theScore,roundOf16MembersNo)
+          ////console.log('yyyyyyyy',theScore,roundOf16MembersNo)
           var theItem3 = { flockName: data.key, membersNo: roundOf16MembersNo, score: theScore, avScore: avScore }
 
           var avMmebersNo = overallMembersNoNew //(Number(roundOf16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3
-          var avMmebersNo2 = (Number(roundOf16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3
+          var avMmebersNo2 = (Number(roundOf16MembersNo||0) + Number(theData.round1MembersNo||0) + Number(theData.round2MembersNo||0)) / 3
           avMmebersNo2 = Math.ceil(avMmebersNo2) //Number(avMmebersNo2.toFixed(2))
           var averallAvScore = '' //(Number(theData.round1Score) + Number(theScore) + Number(theData.round2Score)) / avMmebersNo
           averallAvScore = overallAvScoreNew // Number(averallAvScore.toFixed(2))
-          var overalScore = Number(theData.round1Score) + Number(theScore) + Number(theData.round2Score)
+          var overalScore = Number(theData.round1Score||0) + Number(theScore||0) + Number(theData.round2Score||0)
           overalScore = Number(overalScore.toFixed(2))
           var theItem4 = {
-            flockName: data.key, round1Score: theData.round1Score, round2Score: theData.round2Score, finalRoundScore: theScore, avScore: averallAvScore,
-            finalRoundMembNo: roundOf16MembersNo, round1MembNo: theData.round1MembersNo, round2MembNo: theData.round2MembersNo, membersNo: avMmebersNo, membersNo2: avMmebersNo2, score: overalScore
+            flockName: data.key, round1Score: theData.round1Score, round2Score: theData.round2Score||0, finalRoundScore: theScore, avScore: averallAvScore,
+            finalRoundMembNo: roundOf16MembersNo, round1MembNo: theData.round1MembersNo, round2MembNo: theData.round2MembersNo||0, membersNo: avMmebersNo, membersNo2: avMmebersNo2, score: overalScore
           }
           flockSysRound1.push(theItem)
           flockSysRound2.push(theItem2)
           flockSysFinalRound.push(theItem3)
           floskSysOverall.push(theItem4)
-          //console.log('theFlocksArr floskSysOverall', floskSysOverall)
+          console.log('theFlocksArr floskSysOverall', floskSysOverall)
           if (count === i) {
 
             var finalRound1 = [], finalRound2 = [], n = 0, n2 = 0
@@ -217,7 +217,7 @@ this.getRamMembersData()
                 finalRound1 = finalRound1.sort(function (a, b) { return b.avScore - a.avScore })
                 finalRound2 = finalRound2.sort(function (a, b) { return b.avScore - a.avScore })
                 this.setState({ finalRoundSep: n2, flockSysFinalRound: [...finalRound2, ...finalRound1] })
-                //console.log('malizaaaa',finalRound1,finalRound2) 
+                ////console.log('malizaaaa',finalRound1,finalRound2) 
               }
             })
             flockSysRound1.map((item, map) => {
@@ -233,7 +233,7 @@ this.getRamMembersData()
                 round1Final1 = round1Final1.sort(function (a, b) { return b.avScore - a.avScore })
                 round1Final2 = round1Final2.sort(function (a, b) { return b.avScore - a.avScore })
                 this.setState({ round1Sep: p2, flockSysRound1: [...round1Final2, ...round1Final1] })
-                //console.log('flockSysRound1',round1Final1,round1Final2) 
+                ////console.log('flockSysRound1',round1Final1,round1Final2) 
               }
             })
 
@@ -250,11 +250,11 @@ this.getRamMembersData()
                 round2Final1 = round2Final1.sort(function (a, b) { return b.avScore - a.avScore })
                 round2Final2 = round2Final2.sort(function (a, b) { return b.avScore - a.avScore })
                 this.setState({ round2Sep: q2, flockSysRound2: [...round2Final2, ...round2Final1] })
-                //console.log('flockSysRound1',round2Final1,round2Final2) 
+                ////console.log('flockSysRound1',round2Final1,round2Final2) 
               }
             })
             var overallFinal1 = [], overallFinal2 = [], r = 0, r2 = 0
-            console.log('flockSysfloskSysOverallRound2', floskSysOverall)
+            //console.log('flockSysfloskSysOverallRound2', floskSysOverall)
             floskSysOverall.map((item, map) => {
               r++
               if (item.membersNo2 < 4) {
@@ -268,7 +268,7 @@ this.getRamMembersData()
                 overallFinal1 = overallFinal1.sort(function (a, b) { return b.avScore - a.avScore })
                 overallFinal2 = overallFinal2.sort(function (a, b) { return b.avScore - a.avScore })
                 this.setState({ overallRoundSep: r2, floskSysOverall: [...overallFinal2, ...overallFinal1] })
-                //console.log('overallFinal1',overallFinal1,overallFinal1) 
+                ////console.log('overallFinal1',overallFinal1,overallFinal1) 
               }
             })
             //flockSysFinalRound = flockSysFinalRound.sort(function (a, b) { return b.avScore - a.avScore })
@@ -276,7 +276,7 @@ this.getRamMembersData()
             //flockSysRound2 = flockSysRound2.sort(function (x, y) { return x.membersNo - y.membersNo || x.avScore - y.avScore; });
 
             // this.setState({ flockSysRound1 })
-            //console.log('theFlocksArr 9999 22', flockSysRound1)
+            ////console.log('theFlocksArr 9999 22', flockSysRound1)
           }
         })
       }
@@ -303,10 +303,10 @@ this.getRamMembersData()
           var theArr = {}
           flockCreatorsRef.child(theUid).once('value', dataSnapshot => {
             if (dataSnapshot.exists()) {
-              //console.log('ikoooooooooo',theUid)
+              ////console.log('ikoooooooooo',theUid)
               theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked, isCreator: 'true' }
             } else {
-              //console.log('hakunaaaaaa',theUid)
+              ////console.log('hakunaaaaaa',theUid)
               theArr = { name: newName, flockName: theData[1], email: theData[2], phoneNo: theData[3], picked: picked, isCreator: 'false' }
             }
             allArr.push(theArr)
@@ -314,7 +314,7 @@ this.getRamMembersData()
           // allArr.push(theArr)
           if (count === i) {
             this.setState({ theAdminFlocksArr: allArr })
-            //console.log('theFlocksArr', allArr)
+            ////console.log('theFlocksArr', allArr)
           }
         })
       } else {
@@ -335,25 +335,25 @@ this.getRamMembersData()
     });
   }
   render() {
-    //console.log('this.state.menuToShow',this.state.menuToShow)
+    ////console.log('this.state.menuToShow',this.state.menuToShow)
     var flockNameAvailable = this.props.flockNameAvailable
-    //console.log('flockNameAvailable',flockNameAvailable)
-    console.log('currentRound', this.state.currentRound)
-    //console.log('finalRoundArr 7000', this.state.finalRoundArr)
+    ////console.log('flockNameAvailable',flockNameAvailable)
+    //console.log('currentRound', this.state.currentRound)
+    ////console.log('finalRoundArr 7000', this.state.finalRoundArr)
     var theItems = [], theItems2 = [], theSeparator = 0 //round1Sep:0,round2Sep:0,finalRoundSep:0
     if (this.state.currentRound === 'round1') { theItems = this.state.round1Arr, theItems2 = this.state.flockSysRound1, theSeparator = this.state.round1Sep }
     if (this.state.currentRound === 'round2') { theItems = this.state.round2Arr, theItems2 = this.state.flockSysRound2, theSeparator = this.state.round2Sep }
     if (this.state.currentRound === 'finalRound') { theItems = this.state.finalRoundArr, theItems2 = this.state.flockSysFinalRound, theSeparator = this.state.finalRoundSep }
     if (this.state.currentRound === 'overall') { theItems2 = this.state.floskSysOverall, theSeparator = this.state.overallRoundSep }
     theItems = theItems.sort(function (a, b) { return b.score - a.score })
-    //console.log('currentRound',this.state.menuToShow,this.state.flockNameAvailable,this.state.currentRound,theItems2)
-    console.log('theItems2',theItems2)
+    ////console.log('currentRound',this.state.menuToShow,this.state.flockNameAvailable,this.state.currentRound,theItems2)
+    //console.log('theItems2',theItems2)
     var statToShow = '', statCol = ''
     if (this.state.isEventStarted && new Date().getTime() > (this.state.endTime + 36000000)) { statToShow = 'Expired Event', statCol = '#919191' }
     if (this.state.isEventStarted && new Date().getTime() < (this.state.endTime + 36000000)) { statToShow = 'Active Event' }
     if (!this.state.isEventStarted) { statToShow = 'Upcoming Event' }
 
-    //console.log('this.state.menuToShow',this.state.menuToShow,this.state.isAdmin,this.state.currentRound,this.state.theAdminFlocksArr)
+    ////console.log('this.state.menuToShow',this.state.menuToShow,this.state.isAdmin,this.state.currentRound,this.state.theAdminFlocksArr)
     return (
       <><div>
         {this.state.menuToShow === 'Rams In Your Flock' && this.state.currentRound !== 'overall' ? <>{flockNameAvailable ? <div className={styles.menu2Div1}>
@@ -379,7 +379,7 @@ this.getRamMembersData()
                 <th>Action</th>
               </tr>
               {theItems.map((item, index) => {
-                //console.log('picked', item)
+                ////console.log('picked', item)
                 var thePick = ''
                 if (item.pick === true) { thePick = 'true' }
                 if (item.pick === false) { thePick = 'false' }
@@ -424,7 +424,7 @@ this.getRamMembersData()
                 <th>Total Points</th>
                 <th>Average Points<br />Per RAM</th></tr>
               {theItems2.map((item, index) => {
-               console.log('item.score',item.score)
+               //console.log('item.score',item.score)
                 return (
                   <tr key={index} id={theSeparator < index + 1 && item.flockName !== this.state.flockNameWithNoSpaces ? styles.table1Tr2D : styles.table1Tr2} style={{ backgroundColor: item.flockName === this.state.flockNameWithNoSpaces ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.flockName === this.state.flockNameWithNoSpaces || index === 0 ? 'white' : '#292f51' }}>
                     <td>{index + 1}</td>
@@ -466,7 +466,7 @@ this.getRamMembersData()
                   <th>Phone No</th></> : null}
               </tr>
               {this.state.theAdminFlocksArr.map((item, index) => {
-                //console.log('itttm',item)
+                ////console.log('itttm',item)
                 return (
                   <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.uid === this.state.userId ? '#292f51' : null, color: item.uid === this.state.userId ? 'white' : '#292f51' }}>
                     <td>{index + 1}</td>

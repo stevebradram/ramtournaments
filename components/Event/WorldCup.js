@@ -142,6 +142,28 @@ class WorldCup extends Component {
             }
         })
     }
+    remakeFlocks=async()=>{
+        var userRef = firebase.database().ref('/users/')
+         userRef.once('value', dataSnapshot => {
+            var theCount=0,theNo=dataSnapshot.numChildren()
+            dataSnapshot.forEach((data) => {
+                theCount++
+                var theUid=data.key,flockNameWithSpaces=''
+                var theFlockData=data.val().flockData//.WorldCup2026.name
+                if(theFlockData){
+                    theFlockData=theFlockData['flockNames']['WorldCup2026']
+                    if(theFlockData){
+                        theFlockData=theFlockData['name']
+                        flockNameWithSpaces=theFlockData.split('|').join(' ')
+                        userRef.child(theUid).child('/ramData/events/WorldCup/WorldCup2026/details/flockName/').set(flockNameWithSpaces)
+                    }else{theFlockData=''}
+                }else{theFlockData=''}
+                console.log('theFlockName 001',theCount,theUid,flockNameWithSpaces,theFlockData)
+                if(theCount===theNo){console.log('Count finished')}
+            })
+         })
+
+    }
     getUserDetails = (userId) => {//teamName
         var userRef = firebase.database().ref('/users/' + this.state.userId + '/userData/')
         var detailsRef = firebase.database().ref('/users/' + this.state.userId + '/ramData/events/WorldCup/' + this.state.theEventKey + '/details/')
