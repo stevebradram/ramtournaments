@@ -18,6 +18,8 @@ import { MdClose, MdOutlineShare } from "react-icons/md";
 import RamOdds from '../TheJSONS/ramOdds'
 import Image from 'next/image'
 import axios from "axios"
+import WorldCupModal from './WorldCupModal'
+import DetailsModal from './WorldCupDetailsModal';
 var flagImg = 'https://a.espncdn.com/i/teamlogos/soccer/500/164.png'
 var groupATeams = [{ id: 'groupATeam1', teamName: 'Mexico', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/203.png', outCome: 'Proceed', rank: 24, points: 4.8 }, { id: 'groupATeam2', teamName: 'South Africa', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/467.png', outCome: 'Proceed', rank: 96, points: 2.3 }, { id: 'groupATeam3', teamName: 'South Korea', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/451.png', outCome: 'Eliminated', rank: 24, points: 1.52 }, { id: 'groupATeam4', teamName: 'Czechia', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/450.png', outCome: 'N/A', rank: 103, points: 3.52 }]
 var chosenTeams = [], ramOddsMap = '', teamsChosenOdds = []
@@ -116,10 +118,10 @@ const final = [
 
 class WorldCup extends Component {
     state = {
-        showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '', theTime: '', showConfirmModal: false, confirmMessage: '', confirmTeam: '',
+        showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '', theTime: '', showConfirmModal: false, confirmMessage: '', confirmTeam: '',itemToModals:'',worldCupModal:false,modalTitle:'',selectionToModal:'',
         quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round1', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless', showPickWinnerModal: false, selectedId: '', selectedGroup: '',
-        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '', theGameEvent: '', selectedGroupArr: '',
-        quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026'
+        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '', theGameEvent: '', selectedGroupArr: '',opendetailsModal:false,
+        quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026',menuSelection:'',
     }
     componentDidMount = () => {
         this.checkAuth()
@@ -215,6 +217,7 @@ class WorldCup extends Component {
         copy(this.state.theLink);
         this.notify('Link copied successfully')
     }
+    
     groupStageStartTime = () => {
         var startDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
         startDbRef.child('groupStageStartTime').once('value', dataSnapshot => {
@@ -222,6 +225,7 @@ class WorldCup extends Component {
             //console.log('flocksDataRef the start', dataSnapshot.val(),this.state.theEventKey)
         })
     }
+
     getWorldCupMatches = (userId) => {
         var groupAArr = [], groupBArr = [], groupCArr = [], groupDArr = [], groupEArr = [], groupFArr = [], groupGArr = [], groupHArr = [], groupIArr = [], groupJArr = [], groupKArr = [], groupLArr = [], allMatches = []
         this.setState({ eastRound1Arr: [], eastRound2Arr: [], eastroundOf16Arr: [], eastquarterFinalsArr: [], dataAvailable: false, currentEventUserInfo: {} })
@@ -324,7 +328,7 @@ class WorldCup extends Component {
                 semiFinalsArr.push(theData)
                 allMatches.push(theData)
                 if (semiFinalsCount === h) {
-                    this.setState({ semiFinalsArr: semiFinalsArr })
+                    this.setState({ semiFinalsArr: semiFinalsArr }) 
                     //console.log('quarterFinalsArr', quarterFinalsArr)
                 }
             }
@@ -534,7 +538,7 @@ class WorldCup extends Component {
                         } else {
                             var toTheEventsIds = {
                                 time: new Date(this.state.groupStage).getTime(), title: eventTitle, sportType: 'WorldCup', endTime: new Date(this.state.final).getTime(), getEventsTimeUpdate: new Date().getTime(),
-                                stopRound1Edit: 'N/A', stopRound2Edit: 'N/A', stoproundOf16Edit: 'N/A', stopquarterFinalsEdit: 'N/A', stopquarterFinalsEdit: 'N/A', stopFinalEdit: 'N/A', currentSelection: 'groupStage', year: theYear, groupStagePopulated: false
+                                stopRound1Edit: 'N/A', stopRound2Edit: 'N/A', stopRoundOf16Edit: 'N/A', stopQuarterFinalsEdit: 'N/A', stopSemiFinalsEdit: 'N/A', stopFinalEdit: 'N/A', currentSelection: 'groupStage', year: theYear, groupStagePopulated: false
                             }
                             var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + eventKey + '/groupStagePopulated/')
                             var editDbRef2 = firebase.database().ref('/theEvents/WorldCup/eventsIds/' + eventKey + '/groupStagePopulated/')
@@ -671,6 +675,28 @@ class WorldCup extends Component {
         }
 
     }
+      openTheModal2 = (stopEdit) => {
+        console.log('')
+        var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEdit)
+        timeInfoDb.once('value', dataSnapshot => {
+          var theEventTime = dataSnapshot.val()
+          if (theEventTime === 'N/A') {
+            this.notify('Event not yet available for pick')
+            return
+          } else {
+            if ((new Date().getTime() > theEventTime)) {
+              this.notify('Event pick/edit time expired')
+              return
+            } else {
+              if (this.state.userLoggedIn === true) {
+                this.setState({ opendetailsModal: true, openLoginModal: false })
+              } else {
+                this.setState({ openLoginModal: true, opendetailsModal: false })
+              }
+           }
+          }
+        })
+      }
     openTheModal = () => {
         var pickEvent = false
         var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
@@ -923,90 +949,7 @@ class WorldCup extends Component {
             }
         }
     }
-    openWorldCupModal = async () => {
-        this.notify('No details to enter at the moment')
-        return
-        var gamesInfo = firebase.database().ref('/theEvents/NCAAB/eventsIds/' + this.state.theEventKey)
-        gamesInfo.once('value', dataSnapshot => {
-            var currentSelection = dataSnapshot.val().currentSelection
-            var stopRound1Edit = dataSnapshot.val().stopRound1Edit
-            var stopRound2Edit = dataSnapshot.val().stopRound2Edit
-            var stopSweet16Edit = dataSnapshot.val().stopSweet16Edit
-            var stopElite8Edit = dataSnapshot.val().stopElite8Edit
-            var stopFinal4Edit = dataSnapshot.val().stopFinal4Edit
-            var stopFinalEdit = dataSnapshot.val().stopFinalRoundEdit
-            var year = this.state.eventYear
 
-            /* if (currentSelection === 'round1') {
-               if (this.state.stopRound1Edit !== 'N/A') { }
-             }
-             if (currentSelection === 'round2') { }
-             if (currentSelection === 'sweet16') { }
-             if (currentSelection === 'elite8') { }
-             if (currentSelection === 'final4') { }
-             if (currentSelection === 'finalRound') { }*/
-
-            //if (currentSelection === 'finalRound') { }  
-
-            var itemToModals = '', modalTitle = ''
-            var eventYear = this.state.eventYear
-            var time = new Date().getTime()
-            if (currentSelection === 'round1' && stopRound1Edit !== 'N/A' && time > (stopRound1Edit + 3600000)) { currentSelection = 'round2' }
-            if (currentSelection === 'round2' && stopRound2Edit !== 'N/A' && time > (stopRound2Edit + 3600000)) { currentSelection = 'sweet16' }
-            if (currentSelection === 'sweet16' && stopSweet16Edit !== 'N/A' && time > (stopSweet16Edit + 3600000)) { currentSelection = 'elite8' }
-            if (currentSelection === 'elite8' && stopElite8Edit !== 'N/A' && time > (stopElite8Edit + 3600000)) { currentSelection = 'final4' }
-            if (currentSelection === 'final4' && stopFinal4Edit !== 'N/A' && time > (stopFinal4Edit + 3600000)) { currentSelection = 'finalRound' }
-
-            //console.log('currentSelection', currentSelection, time, stopRound1Edit)
-            //return
-            //return
-            if (currentSelection === 'round1') {
-                if (stopRound1Edit !== 'N/A' && time > stopRound1Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Round 1'
-                    this.setState({ itemToModals: this.state.allRound1MatchesArr, marchMadnessModal: true, modalTitle, selectionToModal: 'round1' })
-                }
-            }
-            if (currentSelection === 'round2') {
-                if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Round 2'
-                    this.setState({ itemToModals: this.state.allRound2MatchesArr, marchMadnessModal: true, modalTitle, selectionToModal: 'round2' })
-                }
-            }
-            if (currentSelection === 'sweet16') {
-                if (stopSweet16Edit !== 'N/A' && time > stopSweet16Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Sweet 16'
-                    this.setState({ itemToModals: this.state.sweet16Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'sweet16' })
-                }
-            }
-            if (currentSelection === 'elite8') {
-                if (stopElite8Edit !== 'N/A' && time > stopElite8Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Elite 8'
-                    this.setState({ itemToModals: this.state.elite8Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'elite8' })
-                }
-            }
-            if (currentSelection === 'final4') {
-                if (stopFinal4Edit !== 'N/A' && time > stopFinal4Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Final 4'
-                    this.setState({ itemToModals: this.state.final4Arr, marchMadnessModal: true, modalTitle, selectionToModal: 'final4' })
-                }
-            }
-            if (currentSelection === 'finalRound') {
-                if (stopFinalEdit !== 'N/A' && time > stopFinalEdit) {
-                    if (time > Number(stopFinalEdit + 86400000)) { this.notify('Event Expired'); return }
-                    else { this.notify('Event already started'); return }
-                }
-                else {
-                    modalTitle = 'March Madness ' + year + ' > Championship'
-                    this.setState({ itemToModals: this.state.finalArr, marchMadnessModal: true, modalTitle, selectionToModal: 'finalRound' })
-                }
-            }
-        })
-    }
     openEnterTeamsModal = () => {
         this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', team1Name: '', team2Name: '', teamName: '', team4Name: '', team1Flag: '', team2Flag: '', team3Flag: '', team4Flag: '' })
     }
@@ -1016,18 +959,91 @@ class WorldCup extends Component {
             editDbRef.child('currentPick').once('value', dataSnapshot => {
                 if (dataSnapshot.exists()) { this.setState({ theGameEvent: dataSnapshot.val() }) }
             })
-        }
+            editDbRef.child('menuSelection').once('value', dataSnapshot => {
+            if(dataSnapshot.exists()){this.setState({ menuSelection: dataSnapshot.val()})}
+               
+        })
     }
-    chooseGameEvent = (item) => {
-        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/currentPick/')
+    }
+    chooseGameEvent = (item,menuSelection) => {
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/')
+        if(menuSelection==='picks'){
         if (this.state.theGameEvent === item) {
-            editDbRef.set(null)
+            editDbRef.child('currentPick').set(null)
             this.setState({ theGameEvent: '' })
         } else {
-            editDbRef.set(item, (error) => {
+            editDbRef.child('currentPick').set(item, (error) => {
                 if (!error) { this.setState({ theGameEvent: item }) }
             })
+        }}else{
+        editDbRef.child('menuSelection').once('value', dataSnapshot => {
+            if(dataSnapshot.exists()){
+                if (dataSnapshot.val() === item) {
+                    editDbRef.child('menuSelection').set(null)
+                this.setState({ menuSelection:''})
+            }else{editDbRef.child('menuSelection').set(item);this.setState({ menuSelection:item})}
+            }else{
+             editDbRef.child('menuSelection').set(item)
+             this.setState({ menuSelection:item})
+            }
+        })
         }
+    }
+        openWorldCupModal = async () => {
+       // this.notify('No details to enter at the moment '+this.state.menuSelection)
+        var menuSelection=this.state.menuSelection
+        var gamesInfo = firebase.database().ref('/theEvents/WorldCup/eventsIds/' + this.state.theEventKey)
+        gamesInfo.once('value', dataSnapshot => {
+            var stopRound2Edit = dataSnapshot.val().stopRound2Edit
+            var stopRoundOf16Edit = dataSnapshot.val().stopRoundOf16Edit
+            var stopQuarterFinalsEdit = dataSnapshot.val().stopQuarterFinalsEdit
+            var stopSemiFinalsEdit = dataSnapshot.val().stopSemiFinalsEdit
+            var stopFinalEdit = dataSnapshot.val().stopFinalEdit
+            var year = new Date().getFullYear();
+
+            var modalTitle = ''
+            var eventYear = year
+            var time = new Date().getTime()
+           
+            if (menuSelection === 'Round of 32') {
+                if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
+                else {
+                    modalTitle = 'World Cup ' + year + ' > Round of 32'
+                    this.setState({ itemToModals: this.state.roundOf32Arr, worldCupModal: true, modalTitle, selectionToModal: 'roundOf32' })
+                }
+            }
+            if (menuSelection === 'Round of 16') { 
+                if (stopRoundOf16Edit !== 'N/A' && time > stopRoundOf16Edit) { this.notify('Event already started'); return }
+                else {
+                    modalTitle = 'World Cup ' + year + ' > Round of 16'
+                    this.setState({ itemToModals: this.state.roundOf16Arr, worldCupModal: true, modalTitle, selectionToModal: 'roundOf16' })
+                }
+            }
+            if (menuSelection === 'Quarter Finals') {
+                if (stopQuarterFinalsEdit !== 'N/A' && time > stopQuarterFinalsEdit) { this.notify('Event already started'); return }
+                else {
+                    modalTitle = 'World Cup ' + year + ' > Quarter Finals'
+                    this.setState({ itemToModals: this.state.quarterFinalsArr, worldCupModal: true, modalTitle, selectionToModal: 'quarterFinals' })
+                }
+            }
+            if (menuSelection === 'Semi Finals') {
+                if (stopSemiFinalsEdit !== 'N/A' && time > stopSemiFinalsEdit) { this.notify('Event already started'); return }
+                else {
+                    modalTitle = 'World Cup ' + year + ' > Semi Finals'
+                    this.setState({ itemToModals: this.state.semiFinalsArr, worldCupModal: true, modalTitle, selectionToModal: 'semiFinals' })
+                }
+            }
+            if (menuSelection === 'Finals') {
+                if (stopFinalEdit !== 'N/A' && time > stopFinalEdit) {
+                    if (time > Number(stopFinalEdit + 86400000)) { this.notify('Event Expired'); return }
+                    else { this.notify('Event already started'); return }
+                }
+                else {
+                    modalTitle = 'World Cup ' + year + ' > Finals'  
+                    this.setState({ itemToModals: this.state.finalArr, worldCupModal: true, modalTitle, selectionToModal: 'finalRound' })
+                }
+            }
+        })
     }
     pickGroupWinners = (group, groupArr) => {
         this.setState({ showPickWinnerModal: true, selectedGroup: group, selectedGroupArr: groupArr })
@@ -1047,6 +1063,67 @@ class WorldCup extends Component {
         })
 
     }
+      openWorldCupDetailsModal = async () => {
+           var pickEvent = false
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
+        editDbRef.child('currentPick').once('value', dataSnapshot => {
+            if (dataSnapshot.exists()) {
+                this.setState({ theGameEvent: dataSnapshot.val() })
+                var theGameEvent = dataSnapshot.val()
+                if (this.state.currentRound === 'round2' && theGameEvent === 'Round of 32') { itemToModals = this.state.allRound2MatchesArr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
+                if (this.state.theMenu === 'roundOf16' && theGameEvent === 'Round of 16') { pickEvent = true }
+                if (this.state.theMenu === 'quarterFinals' && theGameEvent === 'Quarter Finals') { pickEvent = true }
+                if (this.state.theMenu === 'semiFinals' && theGameEvent === 'Semi Finals') { pickEvent = true }
+                if (this.state.theMenu === 'final' && theGameEvent === 'Finals') { pickEvent = true }
+                if (this.state.currentRound === 'round1' && pickEvent === true) { this.setState({ enterTeamNameInfoModal: true }) }
+            } else {
+                this.notify('Selection not available at the moment')
+            }
+        })
+
+
+
+    var menuSelection=this.state.menuSelection
+    if (this.state.userLoggedIn === false) {
+      this.notify("Please Log In to continue")
+      this.setState({ openLoginModal: true })
+      return
+    }
+    var itemToModals = '', modalTitle = '', stopEdit = ''
+    var year = new Date().getFullYear()
+      if (menuSelection === 'round2') { itemToModals = this.state.allRound2MatchesArr, modalTitle = 'March Madness ' + year + ' > Round 2', stopEdit = 'stopRound2Edit' }
+      if (menuSelection === 'sweet16') {
+        itemToModals = this.state.sweet16Arr, modalTitle = 'March Madness ' + year + ' > Sweet 16', stopEdit = 'stopSweet16Edit'
+      }
+      if (menuSelection === 'elite8') {
+        itemToModals = this.state.elite8Arr, modalTitle = 'March Madness ' + year + ' > Elite 8', stopEdit = 'stopElite8Edit'
+      }
+      if (menuSelection === 'final4') {
+        itemToModals = this.state.final4Arr, modalTitle = 'March Madness ' + year + ' > Final 4', stopEdit = 'stopFinal4Edit'
+      }
+      if (menuSelection === 'finalRound') {
+        itemToModals = this.state.finalArr, modalTitle = 'March Madness ' + year + ' > Championship', stopEdit = 'stopFinalEdit'
+      }
+    
+    var i = 0, pointMissing = false
+    //console.log('this.state.theItems', itemToModals)
+    await itemToModals.map((item, index) => {
+      i++
+      //console.log('item.p1Points',item.p1Points)
+      if (item.p1Points === 'N/A' || item.p2Points === 'N/A') {
+        pointMissing = true
+      }
+      if (itemToModals.length === index + 1) {
+        if (pointMissing === true) {
+          this.notify('Event points not yet populated')
+        } else {
+          this.openTheModal2(stopEdit)
+          //console.log('itemToModals', itemToModals)
+          this.setState({ itemToModals, modalTitle })
+        }
+      }
+    })
+  }
     proceed = () => {
         console.log('this.state.selectedId', this.state.selectedId)
         var groupArr = this.state.selectedGroupArr
@@ -1106,6 +1183,10 @@ class WorldCup extends Component {
             }
         })
     }
+      handleChildClick = (title, items) => {
+    this.setState({ count: this.state.count + 1, worldCupModal: false, [title]: items });
+    //console.log('azeeza', items)
+  };
     dummyItems = (group, theItems) => {
         return (
             <div className={style.itemComp}>
@@ -1453,7 +1534,7 @@ class WorldCup extends Component {
                                                 {item.p1Photo !== 'N/A' ? <img className={style.theImg1} src={item.p1Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                                                 {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: player1Color, color: statColor }}>{statP1}</p> : null}
                                             </div>
-                                            {item.player1NickName !== 'N/A' ? <p className={style.P1}>{item.player1NickName}</p> :
+                                            {item.player1 !== 'N/A' ? <p className={style.P1}>{item.player1}</p> :
                                                 <p className={style.P1}>TBA</p>}
                                             <p className={style.countryP}>{item.fighter1Country}</p>
                                             <p className={style.P2}>{item.p1Rec}</p>
@@ -1464,7 +1545,7 @@ class WorldCup extends Component {
                                                 {item.p2Photo !== 'N/A' ? <img className={style.theImg1} src={item.p2Photo} alt='RAM'></img> : <RiTeamFill className={style.teamIC} />}
                                                 {item.status1 === 'played' ? <p className={style.gameP} style={{ backgroundColor: player2Color, color: statColor }}>{statP2}</p> : null}
                                             </div>
-                                            {item.player2NickName !== 'N/A' ? <p className={style.P1}>{item.player2NickName}</p> :
+                                            {item.player2 !== 'N/A' ? <p className={style.P1}>{item.player2}</p> :
                                                 <p className={style.P1}>TBA</p>}
                                             <p className={style.countryP}>{item.fighter2Country}</p>
                                             <p>{item.country}</p>
@@ -1586,10 +1667,26 @@ class WorldCup extends Component {
                             <div id={style.selectorDiv}>
                                 {theGameEvents.map((item, index) => {
                                     return (
-                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item)}>
+                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item,'picks')}>
                                             <div className={this.state.theGameEvent === item ? style.boxDiv3 : style.boxDiv3b}>
                                                 <MdCheck size={15} /></div>
                                             <p style={{ color: this.state.theGameEvent === item ? '#CB1E31' : null }}>{item}</p>
+                                        </div>
+                                    )
+                                })}
+
+
+                            </div></div> : null}
+                             {this.state.isAdmin && this.state.groupStagePopulated ?
+                        <div>
+                            <p id={style.picksP}>Current Selection</p>
+                            <div id={style.selectorDiv}>
+                                {theGameEvents.map((item, index) => {
+                                    return (
+                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item,'selection')}>
+                                            <div className={this.state.menuSelection === item ? style.boxDiv3 : style.boxDiv3b}>
+                                                <MdCheck size={15} /></div>
+                                            <p style={{ color: this.state.menuSelection === item ? '#CB1E31' : null }}>{item}</p>
                                         </div>
                                     )
                                 })}
@@ -1731,6 +1828,8 @@ class WorldCup extends Component {
                                 <button style={{ backgroundColor: '#CB1E31', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.eliminate()}>Eliminated</button>
                                 <button style={{ backgroundColor: '#1ecb7a', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.proceed()}>Proceeding</button>
                             </div></div></div> : null}
+                            {this.state.worldCupModal ? <div className={style.detailsModal} onClick={() => this.setState({worldCupModal: false })}><WorldCupModal eventToWorldCupModal={this.state.selectionToModal} itemsToWorldCupModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
+                       {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='NCAAB' theItems={this.state.itemToModals} flockTeamName={flockTeamName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu} /></div> : null}
                 </div>
                 <ToastContainer />
             </>
