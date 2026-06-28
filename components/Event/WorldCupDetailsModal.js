@@ -21,7 +21,7 @@ class DetailsModal extends Component {
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
-    //console.log('this.props.currentSelection 5555',this.props.currentSelection)
+    console.log('this.props.currentSelection 5555',this.props.currentSelection)
     //console.log('userId 55555555555',userId,upcomingRamUfcDetails)
     
     if(this.props.flockTeamName!==false){
@@ -484,11 +484,6 @@ class DetailsModal extends Component {
     this.setState({flockNameModal:!this.state.flockNameModal})
   }
   render() {
-    var theEvent=''
-    if(this.props.currentEvent==='ramUfc'){theEvent='RAM UFC'}
-    if(this.props.currentEvent==='NCAAF'){theEvent='NCAAF'}
-    if(this.props.currentEvent==='NFL'){theEvent='NFL'}
-    //console.log('theItems',this.state.theItems)
     return (
       <><div className={styles.container2} onClick={(event)=>this.doNothing(event)}>
                     <h1>Enter RAM Details</h1>
