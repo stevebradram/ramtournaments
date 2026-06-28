@@ -286,7 +286,7 @@ class NCAAModal extends Component {
   }
   round2Submit = async (theArr) => {
     var i = 0, j = 0, k = 0, l = 0
-    //console.log('this.state.round2Edit',this.state.round2Edit)
+    console.log('this.state.round2Edit',this.state.round2Edit)
     var teamsArr = [],k=0
      theArr.map((item, index) => {
           if (!item.apiId) {
@@ -817,6 +817,8 @@ class NCAAModal extends Component {
         this.setState({ round2Edit })
         return
       } else {
+        if(!item.p1Points){theArr[index]['p1Points'] =0}
+        if(!item.p2Points){theArr[index]['p2Points'] =0}
         i++
         theArr[index]['error'] = ''
       }
@@ -966,6 +968,7 @@ class NCAAModal extends Component {
     var theData = ''
     //localStorage.setItem(this.props.theEventKey+this.state.currentSelection, JSON.stringify(this.state.round1Edit));
     //if (this.state.currentSelection === 'round1') { this.round1Submit(); theData = this.state.round1Edit }
+    console.log('this.state.currentSelection',this.state.currentSelection)
     if (this.state.currentSelection === 'roundOf32') { this.round2Submit(this.state.round2Edit); theData = this.state.round2Edit }
     if (this.state.currentSelection === 'roundOf16') { this.sweet16Submit(); theData = this.state.roundOf16Edit }
     if (this.state.currentSelection === 'quarterFinals') { this.elite8Submit(this.state.quarterFinalsEdit, 'quarterFinalsEdit'); }

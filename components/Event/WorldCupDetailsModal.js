@@ -21,7 +21,7 @@ class DetailsModal extends Component {
     this.props.hideModal
     var upcomingRamUfcDetails = localStorage.get('upcomingRamUfcDetails');
     var userId = localStorage.get('userId');
-    console.log('this.props.currentSelection 5555',this.props.currentSelection)
+    console.log('this.props.currentSelection 5555',this.props.currentSelection,this.props.theItems)
     //console.log('userId 55555555555',userId,upcomingRamUfcDetails)
     
     if(this.props.flockTeamName!==false){
@@ -542,7 +542,7 @@ class DetailsModal extends Component {
           if(this.props.currentSelection=='round1'||this.props.currentSelection==='round2'){place=' - '+item.place}else{place=''}
           return(
            <div className={styles.listDiv} key={index}>
-           <p className={styles.matchP}>Match #{index+1}{place}</p>
+           <p className={styles.matchP}>Match {index+1}</p>
            <div id={styles.table1Div}>
                         <table className={styles.table1}>
                             <tr id={styles.table1Tr1}>

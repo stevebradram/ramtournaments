@@ -820,9 +820,6 @@ class WorldCup extends Component {
 
     }
       openTheModal2 = (itemToModals,stopEdit) => {
-        this.setState({ opendetailsModal: true, openLoginModal: false })
-        return
-        console.log('')
         var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEdit)
         timeInfoDb.once('value', dataSnapshot => {
           var theEventTime = dataSnapshot.val()
@@ -830,15 +827,15 @@ class WorldCup extends Component {
             this.notify('Event not yet available for pick')
             return
           } else {
-            if ((new Date().getTime() > theEventTime)) {
+           /* if ((new Date().getTime() > theEventTime)) {
               this.notify('Event pick/edit time expired')
               return
-            } else {
+            } else {*/
               if (this.state.userLoggedIn === true) {
                 this.setState({ opendetailsModal: true, openLoginModal: false })
               } else {
                 this.setState({ openLoginModal: true, opendetailsModal: false })
-              }
+             // }
            }
           }
         })
@@ -1150,6 +1147,7 @@ class WorldCup extends Component {
             var modalTitle = ''
             var eventYear = year
             var time = new Date().getTime()
+            console.log('this.state.roundOf32Arr',this.state.roundOf32Arr)
            
             if (menuSelection === 'Round of 32') {
                 if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
@@ -1252,7 +1250,6 @@ class WorldCup extends Component {
     
     var i = 0, pointMissing = false
     console.log('this.state.theItems', itemToModals)
-    itemToModals=itemToModals.slice(0,2)
     await itemToModals.map((item, index) => {
       i++
       //console.log('item.p1Points',item.p1Points)
@@ -1785,7 +1782,7 @@ class WorldCup extends Component {
                             <FaRegCopy />
                         </div> : null}
                     </div>
-                    <div className={style.picksDiv} onClick={() => this.openTheModal()}>
+                    <div className={style.picksDiv} onClick={() => this.openWorldCupDetailsModal()}>
                         {/*<p className={style.picksP}>CLICK HERE MAKE YOUR PICKS</p>*/}
                         {this.state.dataAvailable ?
                             <TypeAnimation
