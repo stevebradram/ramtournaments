@@ -119,7 +119,7 @@ const final = [
 class WorldCup extends Component {
     state = {
         showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '', theTime: '', showConfirmModal: false, confirmMessage: '', confirmTeam: '',itemToModals:'',worldCupModal:false,modalTitle:'',selectionToModal:'',
-        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round2', theMenu: 'roundOf32', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless', showPickWinnerModal: false, selectedId: '', selectedGroup: '',
+        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round2', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless', showPickWinnerModal: false, selectedId: '', selectedGroup: '',
         groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '', theGameEvent: '', selectedGroupArr: '',opendetailsModal:false,
         quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026',menuSelection:'',
     }
@@ -1634,6 +1634,9 @@ class WorldCup extends Component {
     }
     itemComp = (theItems, isPicked) => {
         console.log('isPicked',isPicked)
+        isPicked=this.state.currentEventUserInfo[isPicked]
+        if(!isPicked){isPicked=false}
+        
         return (
             <div className={style.divCont}>
                 <div className={style.listCont}>
@@ -1911,12 +1914,12 @@ class WorldCup extends Component {
                         <div className={style.itemCont}>{this.state.groupStagePopulated && this.state.groupKArr.length ? this.groupItemComp('Group K', this.state.groupKArr) : this.dummyItems('Group K', groupATeams)}</div>
                         <div className={style.itemCont}>{this.state.groupStagePopulated && this.state.groupLArr.length ? this.groupItemComp('Group L', this.state.groupLArr) : this.dummyItems('Group L', groupATeams)}</div>
                     </div> : null}
-                    {this.state.currentRound === 'round2' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf32Arr,this.state.currentEventUserInfo['round2Pick'])}</div> : null}
+                    {this.state.currentRound === 'round2' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf32Arr,'round2Pick')}</div> : null}
                     {this.state.currentRound === 'finalRound' ?
-                        <>{this.state.theMenu === 'roundOf16' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf16Arr,this.state.currentEventUserInfo['roundOf16Pick'])}</div> : null}
-                            {this.state.theMenu === 'quarterFinals' ? <div className={style.divCont}>{this.itemComp(this.state.quarterFinalsArr,this.state.currentEventUserInfo['quarterFinalsPick'])}</div> : null}
-                            {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr,this.state.currentEventUserInfo['semiFinalsPick'])}</div> : null}
-                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr,this.state.currentEventUserInfo['finalsPick'])}</div> : null}</>
+                        <>{this.state.theMenu === 'roundOf16' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf16Arr,'roundOf16Pick')}</div> : null}
+                            {this.state.theMenu === 'quarterFinals' ? <div className={style.divCont}>{this.itemComp(this.state.quarterFinalsArr,'quarterFinalsPick')}</div> : null}
+                            {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr,'semiFinalsPick')}</div> : null}
+                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr,'finalsPick')}</div> : null}</>
                         : null}
                     {this.state.enterTeamNameInfoModal ? <div className={style.modal} onClick={() => this.setState({ enterTeamNameInfoModal: false })}>
                         <div className={style.groupStagePicksDiv} onClick={(e) => this.doNothing(e)}>
