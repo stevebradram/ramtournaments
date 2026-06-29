@@ -29,7 +29,7 @@ class WorldCup extends Component {
     //console.log('wewe mzeeeeeeeeeee', type, menu)
     var theMenu = ''
     if (menu === 'groupStage') { theMenu = 'round1' }
-    else if (menu === 'roundOf16') { theMenu = 'round2' }
+    else if (menu === 'roundOf32') { theMenu = 'round2' }
     else{theMenu=menu}
     if (type === 'ramsChange') { this.setState({ menuToShow: menu }) }
     if (type === 'round') { this.setState({ currentRound: theMenu }) }

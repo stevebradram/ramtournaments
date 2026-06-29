@@ -406,7 +406,7 @@ class WorldCup extends Component {
                 })
                 if (round2Count === i) {
                   this.setState({ roundOf32Arr: this.state.roundOf32Arr })
-                  //console.log('round 19 item',this.state.allRound2MatchesArr,this.state.round2EastArr)
+                  //console.log('round 19 item',this.state.roundOf32Arr,this.state.round2EastArr)
                 }
               }
             }
@@ -426,7 +426,7 @@ class WorldCup extends Component {
                 })
                 if (roundOf16Count === i) {
                   this.setState({ roundOf16Arr: this.state.roundOf16Arr })
-                  //console.log('roundOf16Count ', this.state.sweet16Arr)
+                  //console.log('roundOf16Count ', this.state.roundOf16Arr)
                 }
               }
             }
@@ -503,7 +503,7 @@ class WorldCup extends Component {
         var userBetsDb = firebase.database().ref('/users/').child(this.state.userId).child("/ramData/events/WorldCup/" + this.state.theEventKey + '/bets/')
         userBetsDb.once('value', dataSnapshot => {
             var theData = dataSnapshot.val()
-            var round1Arr = [], round2Arr = [], finalRoundArr = [], sweet16Arr = [], elite8Arr = [], final4Arr = []
+            var round1Arr = [], round2Arr = [], finalRoundArr = [], roundOf16Arr = [], quarterFinalsArr = [], semiFinalsArr = []
             var round1Exists = dataSnapshot.child('round1').exists()
             if (round1Exists) {
                 var i = 0
@@ -973,30 +973,13 @@ class WorldCup extends Component {
 
     }
     pickWinner = (id, winner, time) => {
-        this.notify('Match not yet started')
-        return
         var nowTime = new Date().getTime()
-        if (this.state.currentSelection === 'round1') {
-            var index2 = this.state.allRound1MatchesArr.map(function (x) { return x.id; }).indexOf(id);
+         console.log('this.currentRound', this.state.currentRound)
+        if (this.state.currentRound === 'round2') {
+            console.log('this.currentRound', this.state.currentRound, time, nowTime)
+            var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
             var nowTime = new Date().getTime()
-            if (nowTime < time) {
-                this.notify('Match not yet started')
-                return
-            }
-            if (winner !== 'N/A') {
-                this.notify('Winner already filled')
-                return
-            }
-            var theItems = this.state.allRound1MatchesArr
-            theItems[index2]['showChooseWinner'] = true
-            this.setState({ allRound1MatchesArr: theItems })
-            //console.log('this.state.currentItems 002', theItems)
-        }
-        if (this.state.currentSelection === 'round2') {
-            console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
-            var index2 = this.state.allRound2MatchesArr.map(function (x) { return x.id; }).indexOf(id);
-            var nowTime = new Date().getTime()
-            var theItems = this.state.allRound2MatchesArr
+            var theItems = this.state.roundOf32Arr
 
             if (nowTime < time) {
                 this.notify('Match not yet started')
@@ -1006,16 +989,16 @@ class WorldCup extends Component {
                this.notify('Winner already filled')
                return
              }*/
-            var theItems = this.state.allRound2MatchesArr
+            var theItems = this.state.roundOf32Arr
             theItems[index2]['showChooseWinner'] = true
-            this.setState({ allRound2MatchesArr: theItems })
+            this.setState({ roundOf32Arr: theItems })
         }
-        if (this.state.currentSelection === 'finalRound') {
-            if (this.state.theMenu === 'sweet16') {
-                //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
-                var index2 = this.state.sweet16Arr.map(function (x) { return x.id; }).indexOf(id);
+        if (this.state.currentRound === 'finalRound') {
+            if (this.state.theMenu === 'roundOf16') {
+                //console.log('this.currentRound', this.state.currentRound, time, nowTime)
+                var index2 = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
                 var nowTime = new Date().getTime()
-                var theItems = this.state.sweet16Arr
+                var theItems = this.state.roundOf16Arr
 
                 if (nowTime < time) {
                     this.notify('Match not yet started')
@@ -1026,16 +1009,16 @@ class WorldCup extends Component {
                   return
                 }*/
 
-                var theItems = this.state.sweet16Arr
+                var theItems = this.state.roundOf16Arr
                 theItems[index2]['showChooseWinner'] = true
-                this.setState({ sweet16Arr: theItems })
+                this.setState({ roundOf16Arr: theItems })
                 //console.log('theItems', theItems)
             }
-            if (this.state.theMenu === 'elite8') {
-                //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
-                var index2 = this.state.elite8Arr.map(function (x) { return x.id; }).indexOf(id);
+            if (this.state.theMenu === 'quarterFinals') {
+                //console.log('this.currentRound', this.state.currentRound, time, nowTime)
+                var index2 = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
                 var nowTime = new Date().getTime()
-                var theItems = this.state.elite8Arr
+                var theItems = this.state.quarterFinalsArr
 
                 if (nowTime < time) {
                     this.notify('Match not yet started')
@@ -1046,16 +1029,16 @@ class WorldCup extends Component {
                    return
                  }*/
 
-                var theItems = this.state.elite8Arr
+                var theItems = this.state.quarterFinalsArr
                 theItems[index2]['showChooseWinner'] = true
-                this.setState({ elite8Arr: theItems })
+                this.setState({ quarterFinalsArr: theItems })
                 //console.log('theItems', theItems)
             }
-            if (this.state.theMenu === 'final4') {
-                //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
-                var index2 = this.state.final4Arr.map(function (x) { return x.id; }).indexOf(id);
+            if (this.state.theMenu === 'semiFinals') {
+                //console.log('this.currentRound', this.state.currentRound, time, nowTime)
+                var index2 = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
                 var nowTime = new Date().getTime()
-                var theItems = this.state.final4Arr
+                var theItems = this.state.semiFinalsArr
 
                 if (nowTime < time) {
                     this.notify('Match not yet started')
@@ -1066,13 +1049,13 @@ class WorldCup extends Component {
                    return
                  }*/
 
-                var theItems = this.state.final4Arr
+                var theItems = this.state.semiFinalsArr
                 theItems[index2]['showChooseWinner'] = true
-                this.setState({ final4Arr: theItems })
-                //console.log('iteeeems final4Arr', theItems)
+                this.setState({ semiFinalsArr: theItems })
+                //console.log('iteeeems semiFinalsArr', theItems)
             }
-            if (this.state.theMenu === 'finalRound') {
-                //console.log('this.currentSelection', this.state.currentSelection, time, nowTime)
+            if (this.state.theMenu === 'final') {
+                //console.log('this.currentRound', this.state.currentRound, time, nowTime)
                 var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
                 var nowTime = new Date().getTime()
                 var theItems = this.state.finalArr
@@ -1092,7 +1075,220 @@ class WorldCup extends Component {
             }
         }
     }
+      chosenWinner = (id, winner) => {
+    if (this.state.currentRound === 'round2') {
+      var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
+      var theItems = this.state.roundOf32Arr
+      theItems[index2]['chosenWinner'] = winner
+      theItems[index2]['status1'] = 'played'
+      this.setState({ roundOf32Arr: theItems })
+      //console.log('this.state.currentItems 009', theItems)
+    }
+    if (this.state.currentRound === 'finalRound') {
+    if (this.state.theMenu === 'roundOf16') {
+      var index2 = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
+      var theItems = this.state.roundOf16Arr
+      theItems[index2]['chosenWinner'] = winner
+      theItems[index2]['status1'] = 'played'
+      this.setState({ roundOf16Arr: theItems })
+     // console.log('this.state.currentItems 009', theItems)
+    }
+    if (this.state.theMenu === 'quarterFinals') {
+      var index2 = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+      var theItems = this.state.quarterFinalsArr
+      theItems[index2]['chosenWinner'] = winner
+      theItems[index2]['status1'] = 'played'
+      this.setState({ quarterFinalsArr: theItems })
+      //console.log('this.state.currentItems 009', theItems)
+    }
+    if (this.state.theMenu === 'semiFinals') {
+      var index2 = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+      var theItems = this.state.semiFinalsArr
+      theItems[index2]['chosenWinner'] = winner
+      theItems[index2]['status1'] = 'played'
+      this.setState({ semiFinalsArr: theItems })
+      //console.log('this.state.currentItems 010', theItems)
+    }
+    if (this.state.theMenu === 'final') {
+      var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+      var theItems = this.state.finalArr
+      theItems[index2]['chosenWinner'] = winner
+      theItems[index2]['status1'] = 'played'
+      this.setState({ finalArr: theItems })
+      //console.log('this.state.currentItems 010', theItems)
+    }}
 
+  }
+    submitWinner = (id, winner) => {
+    //console.log('haaaaaaaaaaaapa 000000')
+    if (this.state.currentRound === 'round2') {
+      var index = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
+      if (winner !== 'player1' && winner !== 'player2') {
+        this.notify('Nothing to submit')
+      } else {
+        this.checkForOutcome2(index, winner)
+      }
+    }
+    if (this.state.currentRound === 'finalRound') {
+    if (this.state.theMenu === 'roundOf16') {
+      var index = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
+      if (winner !== 'player1' && winner !== 'player2') {
+        this.notify('Nothing to submit')
+      } else {
+        this.checkForOutcome2(index, winner)
+      }
+    }
+    if (this.state.theMenu === 'quarterFinals') {
+      var index = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+      if (winner !== 'player1' && winner !== 'player2') {
+        this.notify('Nothing to submit')
+      } else {
+        this.checkForOutcome2(index, winner)
+      }
+    }
+    if (this.state.theMenu === 'semiFinals') {
+      var index = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+      if (winner !== 'player1' && winner !== 'player2') {
+        this.notify('Nothing to submit')
+      } else {
+        this.checkForOutcome2(index, winner)
+      }
+    }
+    if (this.state.theMenu === 'final') {
+      var index = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+      if (winner !== 'player1' && winner !== 'player2') {
+        this.notify('Nothing to submit')
+      } else {
+        this.checkForOutcome2(index, winner)
+      }
+    }}
+  }
+  checkForOutcome2 = async (index, winner) => {
+      try {
+        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+        var shortArr = []
+        if ((this.state.currentRound === 'round2')) {
+          this.checkForOutcome3(index, winner)
+        }
+        if ((this.state.currentRound === 'finalRound')) {
+        if ((this.state.theMenu === 'roundOf16')) {
+          this.checkForFinalRoundOutcome(index, winner, this.state.roundOf16Arr, 'roundOf16Arr')
+        }
+        if ((this.state.theMenu === 'quarterFinals')) {
+          this.checkForFinalRoundOutcome(index, winner, this.state.quarterFinalsArr, 'quarterFinalsArr')
+        }
+        if ((this.state.theMenu === 'semiFinals')) {
+          this.checkForFinalRoundOutcome(index, winner, this.state.semiFinalsArr, 'semiFinalsArr')
+        }
+        if ((this.state.theMenu === 'final')) {
+          this.checkForFinalRoundOutcome(index, winner, this.state.finalArr, 'finalArr')
+        }}
+      } catch (error) {
+        //console.log('error',error)
+      }
+  
+    }
+  
+  
+    checkForOutcome3 = async (index, winner) => {
+      try {
+        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+        var shortArr = []
+        //console.log('haaaaaaaaaaaapa 2222 round 2', index, winner)
+        var theRound2Arr = this.state.roundOf32Arr
+        theRound2Arr[index]['winner'] = winner
+        delete theRound2Arr[index]['chosenWinner']
+        delete theRound2Arr[index]['showChooseWinner']
+        this.setState({ roundOf32Arr: theRound2Arr })
+        this.state.roundOf32Arr.map((item, index) => {
+          //console.log('shortArr', shortArr)
+          shortArr['p1Points'] = item.p1Points
+          shortArr['p2Points'] = item.p2Points
+          shortArr['winner'] = item.winner
+          shortArr['status1'] = item.status1
+          shortArr['id'] = item.id
+          var theItem = {
+            p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
+            status1: item.status1, id: item.id
+          }
+          shortArr.push(theItem)
+        })
+        if (this.state.theEventKey === '', this.state.currentRound === '', scoreName === '', this.state.roundOf32Arr.length < 1) return
+        var scoreName = ''
+        if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
+        if (this.state.currentRound === 'round2') { scoreName = 'round2Score' }
+        let theItems = JSON.stringify(shortArr);
+        var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + this.state.currentRound + '::' + scoreName + '::' + theItems
+        if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
+        var theQuery = encodeURIComponent(theLink)
+        console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
+        //console.log('theLink', theLink, theItems)
+        //console.log('this.state.shortArr 006', shortArr)
+        //return
+        //await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+          await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+          .then((res) => {
+            var theOutcome = res.data
+            this.notify(theOutcome)
+            if (theOutcome === 'Success Updating Results') {
+              this.checkAuth()
+            }
+          })
+      } catch (error) {
+        //console.log('error',error)
+      }
+    }
+    checkForFinalRoundOutcome = async (index, winner, items, name) => {
+        try {
+          //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+          var shortArr = []
+          //console.log('haaaaaaaaaaaapa', this.state.currentRound, index, winner)
+          items[index]['winner'] = winner
+          delete items[index]['chosenWinner']
+          delete items[index]['showChooseWinner']
+          this.setState({ [name]: items })
+          items.map((item, index) => {
+            //console.log('shortArr', shortArr)
+            shortArr['p1Points'] = item.p1Points
+            shortArr['p2Points'] = item.p2Points
+            shortArr['winner'] = item.winner
+            shortArr['status1'] = item.status1
+            shortArr['id'] = item.id
+            var theItem = {
+              p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
+              status1: item.status1, id: item.id
+            }
+            shortArr.push(theItem)
+          })
+                var theSelection=this.state.currentRound
+          if(this.state.currentRound==='finalRound'){theSelection=this.state.theMenu}
+          if (this.state.theEventKey === '', theSelection === '', scoreName === '', items.length < 1) return
+          var scoreName = ''
+          if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
+          //if(this.state.currentRound==='sweet16'){scoreName='round1Score'}
+          //if(this.state.currentRound==='round2'){scoreName='round2Score'}
+          scoreName = theSelection + 'Score'
+          let theItems = JSON.stringify(shortArr);
+          var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + theSelection + '::' + scoreName + '::' + theItems
+          if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
+          var theQuery = encodeURIComponent(theLink)
+          console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
+          //console.log('theLink', theLink, theItems)
+          //console.log('this.state.shortArr 006', shortArr)
+          //return
+         // await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+            await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+            .then((res) => {
+              var theOutcome = res.data
+              this.notify(theOutcome)
+              if (theOutcome === 'Success Updating Results') {
+                this.checkAuth()
+              }
+            })
+        } catch (error) {
+          //console.log('error',error)
+        }
+      }
     openEnterTeamsModal = () => {
         this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', team1Name: '', team2Name: '', teamName: '', team4Name: '', team1Flag: '', team2Flag: '', team3Flag: '', team4Flag: '' })
     }
@@ -1214,7 +1410,7 @@ class WorldCup extends Component {
             if (dataSnapshot.exists()) {
                 this.setState({ theGameEvent: dataSnapshot.val() })
                 var theGameEvent = dataSnapshot.val()
-                if (this.state.currentRound === 'round2' && theGameEvent === 'Round of 32') { itemToModals = this.state.allRound2MatchesArr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
+                if (this.state.currentRound === 'round2' && theGameEvent === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
                 if (this.state.theMenu === 'roundOf16' && theGameEvent === 'Round of 16') { pickEvent = true }
                 if (this.state.theMenu === 'quarterFinals' && theGameEvent === 'Quarter Finals') { pickEvent = true }
                 if (this.state.theMenu === 'semiFinals' && theGameEvent === 'Semi Finals') { pickEvent = true }
@@ -1284,7 +1480,7 @@ class WorldCup extends Component {
     checkForOutcome = async (theItems, outcome) => {
         try {
             var scoreName = 'round1Score'
-            if (this.state.theEventKey === '', this.state.currentSelection === '', scoreName === '') return
+            if (this.state.theEventKey === '', this.state.currentRound === '', scoreName === '') return
             if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
             theItems = JSON.stringify(theItems);
             var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::groupStage::' + scoreName  + '::' + outcome + '::round1'

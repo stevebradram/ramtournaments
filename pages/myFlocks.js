@@ -544,7 +544,6 @@ class MyFlocks extends Component {
       }
     }
     if (this.state.sportType === 'WorldCup') {
-      console.log('rrrrrrr 1111')
       this.worldCupRef.current.runCustomLogic3('round',round)
         if(round==='groupStage'){
     this.setState({theItems:this.state.round1Arr})
