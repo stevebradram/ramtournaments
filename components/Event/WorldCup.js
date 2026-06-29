@@ -827,15 +827,15 @@ class WorldCup extends Component {
             this.notify('Event not yet available for pick')
             return
           } else {
-           /* if ((new Date().getTime() > theEventTime)) {
+            if ((new Date().getTime() > theEventTime)) {
               this.notify('Event pick/edit time expired')
               return
-            } else {*/
+            } else {
               if (this.state.userLoggedIn === true) {
                 this.setState({ opendetailsModal: true, openLoginModal: false })
               } else {
                 this.setState({ openLoginModal: true, opendetailsModal: false })
-             // }
+              }
            }
           }
         })
