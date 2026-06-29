@@ -1225,8 +1225,8 @@ class WorldCup extends Component {
         //console.log('theLink', theLink, theItems)
         //console.log('this.state.shortArr 006', shortArr)
         //return
-        //await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
-          await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+        await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+          //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
           .then((res) => {
             var theOutcome = res.data
             this.notify(theOutcome)
@@ -1276,8 +1276,8 @@ class WorldCup extends Component {
           //console.log('theLink', theLink, theItems)
           //console.log('this.state.shortArr 006', shortArr)
           //return
-         // await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
-            await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+          await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+            //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
             .then((res) => {
               var theOutcome = res.data
               this.notify(theOutcome)
