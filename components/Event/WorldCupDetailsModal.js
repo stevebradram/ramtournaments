@@ -324,9 +324,9 @@ class DetailsModal extends Component {
         round1Score:'0',
         round2Score:'0',
         finalRoundScore:'0',
-        sweet16Score:'0',
-        elite8Score:'0',
-        final4Score:'0',
+        roundOf16Score:'0',
+        quarterFinalsScore:'0',
+        semiFinalsScore:'0',
         [dataScore]:'0.00',
         currentRank:false, 
         [thePick]:true,
@@ -339,7 +339,7 @@ class DetailsModal extends Component {
       }
       scoreData={BPS:this.state.bestPossibleScore,score:0,
         round1Score:'0',round2Score:'0',finalRoundScore:'0',
-        sweet16Score:'0',elite8Score:'0',final4Score:'0',
+        roundOf16Score:'0',quarterFinalsScore:'0',semiFinalsScore:'0',
         currentPick:theSelection,theMenu:this.props.theMenu,
         ramName:this.state.teamName,picked:true, [thePick]:true,
         [bps2]:this.state.bestPossibleScore}

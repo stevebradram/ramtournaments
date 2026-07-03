@@ -1446,6 +1446,7 @@ class WorldCup extends Component {
     
     var i = 0, pointMissing = false
     console.log('this.state.theItems', itemToModals)
+    //itemToModals=itemToModals.slice(0,1)
     await itemToModals.map((item, index) => {
       i++
       //console.log('item.p1Points',item.p1Points)

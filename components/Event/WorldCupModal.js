@@ -48,6 +48,7 @@ class NCAAModal extends Component {
   componentDidMount = () => {
     // var incomingData = JSON.parse(JSON.stringify(this.props.itemsToWorldCupModal));
     var incomingData = this.props.itemsToWorldCupModal.map(item => JSON.parse(JSON.stringify(item)));
+    //incomingData=incomingData.slice(0,6)
     //var incomingData=[].concat(this.props.itemsToWorldCupModal)//[...this.props.itemsToWorldCupModal]
     console.log('incomingData', this.props.eventToWorldCupModal, this.state.currentSelection, incomingData)
     if (this.state.currentSelection !== 'round1') { this.setState({ getFromOddsApi: true }) }
@@ -69,7 +70,7 @@ class NCAAModal extends Component {
             incomingData[index]['team2Id'] = ''
 
           } else {
-            incomingData[index]['apiId'] = ''
+            if(!item.apiId){incomingData[index]['apiId'] = ''}
           }
           if (this.state.currentSelection !== 'round1') {
             incomingData[index]['team1Seed'] = ''
@@ -400,13 +401,28 @@ class NCAAModal extends Component {
       }
     })
   }
-  sweet16Submit = async () => {
+  sweet16Submit = async (theArr) => {
     var i = 0, j = 0, k = 0, l = 0
     //console.log('this.state.roundOf16Edit',this.state.roundOf16Edit)
     var teamsArr = []
     var time = '2025-03-20T00:00'
     var oddsApiKey = await localStorage.get('sportsDataApiKey');
-    //return
+     console.log('this.state.roundOf16Edit',this.state.round2Edit)
+    var teamsArr = [],k=0
+     theArr.map((item, index) => {
+          if (!item.apiId) {
+            theArr[index]['error'] = 'Odds ID must be filled'
+            console.log('this hakunaaaaaaa')
+          } else {
+            k++
+          }
+          console.log('this index',k,theArr.length,index)
+          if (theArr.length === k) {
+            console.log('this.state.roundOf16Edit')
+           this.sortOddsJson(theArr, 'roundOf16Edit')
+          }
+        })
+    return
     /* this.state.roundOf16Edit.map((item, index) => {
        
        roundOf16Edit[index]['team1Id'] =this.getRandom(1, 100);
@@ -860,16 +876,18 @@ class NCAAModal extends Component {
     })
   }
   sendToFirebaseSingle3 = async () => {
-    this.showProgressBar()
+   this.showProgressBar()
     var theArr = '', editTime = '', returnArrName = ''
-    theArr = this.state.roundOf16Edit, editTime = 'stoproundOf16Edit', returnArrName = 'sweet16Arr'
+    theArr = this.state.roundOf16Edit, editTime = 'stopRoundOf16Edit', returnArrName = 'allRound2MatchesArr'
     var i = 0
     theArr.map((item, index) => {
-      if (item.team2Id === '' || item.team1Id === '' || item.player1 === '' || item.player2 === '' || item.p1Photo === '' || item.p2Photo === '' || item.team1Seed === '' || item.team2Seed === '') {
+      if (item.player1 === '' || item.player2 === '' || item.p1Photo === '' || item.p2Photo === '') {
         theArr[index]['error'] = 'Some field missing data'
-        this.setState({ roundOf16Edit })
+        this.setState({ round2Edit })
         return
       } else {
+        if(!item.p1Points){theArr[index]['p1Points'] =0}
+        if(!item.p2Points){theArr[index]['p2Points'] =0}
         i++
         theArr[index]['error'] = ''
       }
@@ -902,7 +920,7 @@ class NCAAModal extends Component {
                 this.notify('Data uploaded successfully')
                 this.setState({ showProgressBar: false })
                 // var oddsServerLink='theEvents::NFL::'+eventKey+'::'+this.state.currentSelection+'::'+editTime
-                this.props.onClick(returnArrName, theArr)
+                this.props.onClick('roundOf32Arr', theArr)
               }
             })
           }
@@ -970,7 +988,7 @@ class NCAAModal extends Component {
     //if (this.state.currentSelection === 'round1') { this.round1Submit(); theData = this.state.round1Edit }
     console.log('this.state.currentSelection',this.state.currentSelection)
     if (this.state.currentSelection === 'roundOf32') { this.round2Submit(this.state.round2Edit); theData = this.state.round2Edit }
-    if (this.state.currentSelection === 'roundOf16') { this.sweet16Submit(); theData = this.state.roundOf16Edit }
+    if (this.state.currentSelection === 'roundOf16') { this.sweet16Submit(this.state.roundOf16Edit); theData = this.state.roundOf16Edit }
     if (this.state.currentSelection === 'quarterFinals') { this.elite8Submit(this.state.quarterFinalsEdit, 'quarterFinalsEdit'); }
     if (this.state.currentSelection === 'semiFinals') { this.elite8Submit(this.state.semiFinalsEdit, 'semiFinalsEdit'); }
     if (this.state.currentSelection === 'finalRound') { this.elite8Submit(this.state.finalRoundEdit, 'finalRoundEdit'); }
