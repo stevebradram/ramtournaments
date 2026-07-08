@@ -118,10 +118,10 @@ const final = [
 
 class WorldCup extends Component {
     state = {
-        showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '', theTime: '', showConfirmModal: false, confirmMessage: '', confirmTeam: '',itemToModals:'',worldCupModal:false,modalTitle:'',selectionToModal:'',
-        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'round2', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless', showPickWinnerModal: false, selectedId: '', selectedGroup: '',
-        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '', theGameEvent: '', selectedGroupArr: '',opendetailsModal:false,
-        quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026',menuSelection:'',
+        showCreateEventModal: false, groupStage: '', groupStageErr: '', roundOf32: '', round32Err: '', roundOf16: '', roundOf16Err: '', enterTeamNameInfoModal: false, team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', profilePhoto: '', theTime: '', showConfirmModal: false, confirmMessage: '', confirmTeam: '', itemToModals: '', worldCupModal: false, modalTitle: '', selectionToModal: '',
+        quarterFinals: '', groupATeamsErr: '', semiFinals: '', semiFinalsErr: '', final: '', finalErr: '', currentRound: 'finalRound', theMenu: 'roundOf16', groupStagePopulated: false, teamName: '', flockName: '', teamNameErr: '', flockNameErr: '', myEmail: '', myPhoneNo: '', flockNameNoSpace: '', ramFlockName: 'Flockless', showPickWinnerModal: false, selectedId: '', selectedGroup: '',
+        groupAArr: [], groupBArr: [], groupCArr: [], groupDArr: [], groupEArr: [], groupFArr: [], groupGArr: [], groupHArr: [], groupIArr: [], groupJArr: [], groupKArr: [], groupLArr: [], userLoggedIn: '', isAdmin: false, userId: '', roundOf32Arr: [], chosenTeams: [], dataAvailable: false, teamsChosenOdds: [], currentEventUserInfo: '', theGameEvent: '', selectedGroupArr: '', opendetailsModal: false,
+        quarterFinalsArr: [], semiFinalsArr: [], finalArr: [], roundOf16Arr: [], theEventKey: 'WorldCup2026', openEnterTeamsModal: false, team1Name: '', team1Points: '', team1Flag: '', team2Name: '', team2Points: '', team2Flag: '', team3Name: '', team3Points: '', team3Flag: '', team4Name: '', team4Points: '', team4Flag: '', theLink: '', theEventTitle: 'World Cup 2026', menuSelection: '',
     }
     componentDidMount = () => {
         this.checkAuth()
@@ -144,26 +144,89 @@ class WorldCup extends Component {
             }
         })
     }
-    remakeFlocks=async()=>{
-        var userRef = firebase.database().ref('/users/')
-         userRef.once('value', dataSnapshot => {
-            var theCount=0,theNo=dataSnapshot.numChildren()
+    reArrangeRoundOf16 = () => {
+        var userRef = firebase.database().ref('/userBets/WorldCup/WorldCup2026/')
+        // var userRef = firebase.database().ref('/users/')
+        userRef.once('value', dataSnapshot => {
+            var theCount = 0, theNo = dataSnapshot.numChildren()
             dataSnapshot.forEach((data) => {
                 theCount++
-                var theUid=data.key,flockNameWithSpaces=''
+                var theId = data.key
+                var value = data.val()
+                var round2 = data.val().round2
+                var final = data.val().final
+                console.log('value', theId, value)
+                console.log('round2', round2)
+                console.log('final', final)
+                if (round2) {
+                    const r16MatchesArray = Object.entries(round2)
+                        .filter(([matchId]) => matchId.startsWith("r16"))
+                        .map(([matchId, winner]) => ({
+                            [matchId]: winner // Dynamically sets the match ID as the key
+                        }));
+                    console.log('r16MatchesArray', theId, r16MatchesArray)
+                    const unifiedObject = Object.assign({}, ...r16MatchesArray);
+                    if (r16MatchesArray.length > 0) {
+                        console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
+                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
+                        detailsRef.set(unifiedObject)
+                        ramsBets.set(unifiedObject)
+
+                    }
+                }
+                if (final) {
+                    const r16MatchesArray = Object.entries(final)
+                        .filter(([matchId]) => matchId.startsWith("r16"))
+                        .map(([matchId, winner]) => ({
+                            [matchId]: winner // Dynamically sets the match ID as the key
+                        }));
+                    console.log('r16MatchesArray', theId, r16MatchesArray)
+                    const unifiedObject = Object.assign({}, ...r16MatchesArray);
+                    if (r16MatchesArray.length > 0) {
+                        console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
+                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
+                        detailsRef.set(unifiedObject)
+                        ramsBets.set(unifiedObject)
+
+                    }
+                }
+                /*var theUid=data.key,flockNameWithSpaces=''
                 var theFlockData=data.val().flockData//.WorldCup2026.name
                 if(theFlockData){
-                    theFlockData=theFlockData['flockNames']['WorldCup2026']
+                    theFlockData=theFlockData['ramData/events/WorldCup/WorldCup2026/bets/round2']
                     if(theFlockData){
-                        theFlockData=theFlockData['name']
+                        //theFlockData=theFlockData['name']
                         flockNameWithSpaces=theFlockData.split('|').join(' ')
-                        userRef.child(theUid).child('/ramData/events/WorldCup/WorldCup2026/details/flockName/').set(flockNameWithSpaces)
+                       // userRef.child(theUid).child('/ramData/events/WorldCup/WorldCup2026/details/flockName/').set(flockNameWithSpaces)
                     }else{theFlockData=''}
                 }else{theFlockData=''}
                 console.log('theFlockName 001',theCount,theUid,flockNameWithSpaces,theFlockData)
-                if(theCount===theNo){console.log('Count finished')}
+                if(theCount===theNo){console.log('Count finished')}*/
             })
-         })
+        })
+    }
+    remakeFlocks = async () => {
+        var userRef = firebase.database().ref('/users/')
+        userRef.once('value', dataSnapshot => {
+            var theCount = 0, theNo = dataSnapshot.numChildren()
+            dataSnapshot.forEach((data) => {
+                theCount++
+                var theUid = data.key, flockNameWithSpaces = ''
+                var theFlockData = data.val().flockData//.WorldCup2026.name
+                if (theFlockData) {
+                    theFlockData = theFlockData['flockNames']['WorldCup2026']
+                    if (theFlockData) {
+                        theFlockData = theFlockData['name']
+                        flockNameWithSpaces = theFlockData.split('|').join(' ')
+                        userRef.child(theUid).child('/ramData/events/WorldCup/WorldCup2026/details/flockName/').set(flockNameWithSpaces)
+                    } else { theFlockData = '' }
+                } else { theFlockData = '' }
+                console.log('theFlockName 001', theCount, theUid, flockNameWithSpaces, theFlockData)
+                if (theCount === theNo) { console.log('Count finished') }
+            })
+        })
 
     }
     getUserDetails = (userId) => {//teamName
@@ -217,7 +280,7 @@ class WorldCup extends Component {
         copy(this.state.theLink);
         this.notify('Link copied successfully')
     }
-    
+
     groupStageStartTime = () => {
         var startDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
         startDbRef.child('groupStageStartTime').once('value', dataSnapshot => {
@@ -328,7 +391,7 @@ class WorldCup extends Component {
                 semiFinalsArr.push(theData)
                 allMatches.push(theData)
                 if (semiFinalsCount === h) {
-                    this.setState({ semiFinalsArr: semiFinalsArr }) 
+                    this.setState({ semiFinalsArr: semiFinalsArr })
                     //console.log('quarterFinalsArr', quarterFinalsArr)
                 }
             }
@@ -354,8 +417,8 @@ class WorldCup extends Component {
         })
     }
 
-      getMatchesInfo = async (userId) => {
-        console.log('userId',userId)
+    getMatchesInfo = async (userId) => {
+        console.log('userId', userId)
         var selectedMatchesKeyDb = firebase.database().ref('/users/').child(userId).child("/ramData/upcomingEvents/WorldCup/" + this.state.theEventKey + '/')
         var photoRefDb = firebase.database().ref('/users/').child(userId + '/userData/').child('profilePhoto')
         var userInfoDb = firebase.database().ref('/users/').child(userId).child("/ramData/events/WorldCup/" + this.state.theEventKey + '/details/')
@@ -363,142 +426,142 @@ class WorldCup extends Component {
         var gamesDataRef = firebase.database().ref('users/').child(userId + '/ramData/').child('/events/WorldCup/')
         var currentEventUserInfo = '', finalRoundScore = 0
         await selectedMatchesKeyDb.once('value', dataSnapshot => {
-          //console.log('the key',dataSnapshot.val())
-          if (!dataSnapshot.val()) return
-          photoRefDb.once('value', dataSnapshot => {
-            //console.log('proofile photo',dataSnapshot.val())
-            if (dataSnapshot.val()) {
-              this.setState({ profilePhoto: dataSnapshot.val() })
-            }
-          })
-          userInfoDb.once('value', dataSnapshot => {
+            //console.log('the key',dataSnapshot.val())
             if (!dataSnapshot.val()) return
-            //console.log('the type user 0000000000000', dataSnapshot.val())
-            if (dataSnapshot.val()) {
-              var theInfo = dataSnapshot.val()
-              currentEventUserInfo = dataSnapshot.val()
-              finalRoundScore = Number(theInfo.roundOf16Score) + Number(theInfo.quarterFinalsScore) + Number(theInfo.semiFinalsScore) + Number(theInfo.finalsScore)
-              this.setState({ currentEventUserInfo: theInfo, finalRoundScore, dataAvailable: true })
-            }
-          })
-          userBetsDb.once('value', dataSnapshot => {
-            var theData = dataSnapshot.val()
-            var round1Arr = [], roundOf32Arr = [], finalRoundArr = [], roundOf16Arr = [], quarterFinalsArr = [], semiFinalsArr = [],finalArr=[]
-            var round2Count = dataSnapshot.child('round2').numChildren()
-            var roundOf16Count = dataSnapshot.child('roundOf16').numChildren()
-            var quarterFinalsCount = dataSnapshot.child('quarterFinals').numChildren()
-            var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
-            var finalRoundCount = dataSnapshot.child('finalRound').numChildren()
-            var round2Exists = dataSnapshot.child('round2').exists()
-            // 
-            if (round2Exists) {
-              var i = 0
-              roundOf32Arr = theData.round2
-              //console.log('round 14 item',round2Count,roundOf32Arr)
-              for (var key in roundOf32Arr) {
-                i++
-                var theId = key
-                var betPlayer = roundOf32Arr[key]
-                this.state.roundOf32Arr.map((item2, index) => {
-                  if (item2.id === theId) {
-                    item2['bet'] = betPlayer
-                  }
-                })
-                if (round2Count === i) {
-                  this.setState({ roundOf32Arr: this.state.roundOf32Arr })
-                  //console.log('round 19 item',this.state.roundOf32Arr,this.state.round2EastArr)
+            photoRefDb.once('value', dataSnapshot => {
+                //console.log('proofile photo',dataSnapshot.val())
+                if (dataSnapshot.val()) {
+                    this.setState({ profilePhoto: dataSnapshot.val() })
                 }
-              }
-            }
-            var roundOf16Exists = dataSnapshot.child('roundOf16').exists()
-            if (roundOf16Exists) {
-              var i = 0
-              roundOf16Arr = theData.roundOf16
-              //console.log('round 14 item',round2Count,round2Arr)
-              for (var key in roundOf16Arr) {
-                i++
-                var theId = key
-                var betPlayer = roundOf16Arr[key]
-                this.state.roundOf16Arr.map((item2, index) => {
-                  if (item2.id === theId) {
-                    item2['bet'] = betPlayer
-                  }
-                })
-                if (roundOf16Count === i) {
-                  this.setState({ roundOf16Arr: this.state.roundOf16Arr })
-                  //console.log('roundOf16Count ', this.state.roundOf16Arr)
+            })
+            userInfoDb.once('value', dataSnapshot => {
+                if (!dataSnapshot.val()) return
+                //console.log('the type user 0000000000000', dataSnapshot.val())
+                if (dataSnapshot.val()) {
+                    var theInfo = dataSnapshot.val()
+                    currentEventUserInfo = dataSnapshot.val()
+                    finalRoundScore = Number(theInfo.roundOf16Score) + Number(theInfo.quarterFinalsScore) + Number(theInfo.semiFinalsScore) + Number(theInfo.finalsScore)
+                    this.setState({ currentEventUserInfo: theInfo, finalRoundScore, dataAvailable: true })
                 }
-              }
-            }
-           // roundOf32Arr roundOf16Arr quarterFinalsArr semiFinalsArr finalArr
-            var quarterFinalsExists = dataSnapshot.child('quarterFinals').exists()
-            if (quarterFinalsExists) {
-              var i = 0
-              quarterFinalsArr = theData.quarterFinals
-              //console.log('round 14 item',round2Count,round2Arr)
-              for (var key in quarterFinalsArr) {
-                i++
-                var theId = key
-                var betPlayer = quarterFinalsArr[key]
-                this.state.quarterFinalsArr.map((item2, index) => {
-                  if (item2.id === theId) {
-                    item2['bet'] = betPlayer
-                  }
-                })
-                if (quarterFinalsCount === i) {
-                  this.setState({ quarterFinalsArr: this.state.quarterFinalsArr })
-                  //console.log('quarterFinalsArr ', this.state.quarterFinalsArr)
+            })
+            userBetsDb.once('value', dataSnapshot => {
+                var theData = dataSnapshot.val()
+                var round1Arr = [], roundOf32Arr = [], finalRoundArr = [], roundOf16Arr = [], quarterFinalsArr = [], semiFinalsArr = [], finalArr = []
+                var round2Count = dataSnapshot.child('round2').numChildren()
+                var roundOf16Count = dataSnapshot.child('roundOf16').numChildren()
+                var quarterFinalsCount = dataSnapshot.child('quarterFinals').numChildren()
+                var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
+                var finalRoundCount = dataSnapshot.child('finalRound').numChildren()
+                var round2Exists = dataSnapshot.child('round2').exists()
+                // 
+                if (round2Exists) {
+                    var i = 0
+                    roundOf32Arr = theData.round2
+                    //console.log('round 14 item',round2Count,roundOf32Arr)
+                    for (var key in roundOf32Arr) {
+                        i++
+                        var theId = key
+                        var betPlayer = roundOf32Arr[key]
+                        this.state.roundOf32Arr.map((item2, index) => {
+                            if (item2.id === theId) {
+                                item2['bet'] = betPlayer
+                            }
+                        })
+                        if (round2Count === i) {
+                            this.setState({ roundOf32Arr: this.state.roundOf32Arr })
+                            //console.log('round 19 item',this.state.roundOf32Arr,this.state.round2EastArr)
+                        }
+                    }
                 }
-              }
-            } else {
-              //console.log('elite 8 not existing')
-            }
-            var semiFinalsExists = dataSnapshot.child('semiFinals').exists()
-            if (semiFinalsExists) {
-              var i = 0
-              semiFinalsArr = theData.final4
-              //console.log('round 14 item',round2Count,round2Arr)
-              for (var key in semiFinalsArr) {
-                i++
-                var theId = key
-                var betPlayer = semiFinalsArr[key]
-                this.state.semiFinalsArr.map((item2, index) => {
-                  if (item2.id === theId) {
-                    item2['bet'] = betPlayer
-                  }
-                })
-                if (semiFinalsCount === i) {
-                  this.setState({ semiFinalsArr: this.state.semiFinalsArr })
-                  //console.log('semiFinalsArr ', this.state.semiFinalsArr)
+                var roundOf16Exists = dataSnapshot.child('roundOf16').exists()
+                if (roundOf16Exists) {
+                    var i = 0
+                    roundOf16Arr = theData.roundOf16
+                    //console.log('round 14 item',round2Count,round2Arr)
+                    for (var key in roundOf16Arr) {
+                        i++
+                        var theId = key
+                        var betPlayer = roundOf16Arr[key]
+                        this.state.roundOf16Arr.map((item2, index) => {
+                            if (item2.id === theId) {
+                                item2['bet'] = betPlayer
+                            }
+                        })
+                        if (roundOf16Count === i) {
+                            this.setState({ roundOf16Arr: this.state.roundOf16Arr })
+                            //console.log('roundOf16Count ', this.state.roundOf16Arr)
+                        }
+                    }
                 }
-              }
-            }
-    
-            var finalRoundExists = dataSnapshot.child('finalRound').exists()
-            if (finalRoundExists) {
-              var i = 0
-              finalArr = theData.finalRound
-              //console.log('round 14 item',round2Count,round2Arr)
-              for (var key in finalArr) {
-                i++
-                var theId = key
-                var betPlayer = finalArr[key]
-                this.state.finalArr.map((item2, index) => {
-                  if (item2.id === theId) {
-                    item2['bet'] = betPlayer
-                  }
-                })
-                if (semiFinalsCount === i) {
-                  this.setState({ finalArr: this.state.finalArr })
-                  //console.log('finalRoundArr ', this.state.finalArr)
+                // roundOf32Arr roundOf16Arr quarterFinalsArr semiFinalsArr finalArr
+                var quarterFinalsExists = dataSnapshot.child('quarterFinals').exists()
+                if (quarterFinalsExists) {
+                    var i = 0
+                    quarterFinalsArr = theData.quarterFinals
+                    //console.log('round 14 item',round2Count,round2Arr)
+                    for (var key in quarterFinalsArr) {
+                        i++
+                        var theId = key
+                        var betPlayer = quarterFinalsArr[key]
+                        this.state.quarterFinalsArr.map((item2, index) => {
+                            if (item2.id === theId) {
+                                item2['bet'] = betPlayer
+                            }
+                        })
+                        if (quarterFinalsCount === i) {
+                            this.setState({ quarterFinalsArr: this.state.quarterFinalsArr })
+                            //console.log('quarterFinalsArr ', this.state.quarterFinalsArr)
+                        }
+                    }
+                } else {
+                    //console.log('elite 8 not existing')
                 }
-              }
-            }
-          })
-    
+                var semiFinalsExists = dataSnapshot.child('semiFinals').exists()
+                if (semiFinalsExists) {
+                    var i = 0
+                    semiFinalsArr = theData.final4
+                    //console.log('round 14 item',round2Count,round2Arr)
+                    for (var key in semiFinalsArr) {
+                        i++
+                        var theId = key
+                        var betPlayer = semiFinalsArr[key]
+                        this.state.semiFinalsArr.map((item2, index) => {
+                            if (item2.id === theId) {
+                                item2['bet'] = betPlayer
+                            }
+                        })
+                        if (semiFinalsCount === i) {
+                            this.setState({ semiFinalsArr: this.state.semiFinalsArr })
+                            //console.log('semiFinalsArr ', this.state.semiFinalsArr)
+                        }
+                    }
+                }
+
+                var finalRoundExists = dataSnapshot.child('finalRound').exists()
+                if (finalRoundExists) {
+                    var i = 0
+                    finalArr = theData.finalRound
+                    //console.log('round 14 item',round2Count,round2Arr)
+                    for (var key in finalArr) {
+                        i++
+                        var theId = key
+                        var betPlayer = finalArr[key]
+                        this.state.finalArr.map((item2, index) => {
+                            if (item2.id === theId) {
+                                item2['bet'] = betPlayer
+                            }
+                        })
+                        if (semiFinalsCount === i) {
+                            this.setState({ finalArr: this.state.finalArr })
+                            //console.log('finalRoundArr ', this.state.finalArr)
+                        }
+                    }
+                }
+            })
+
         })
-      }
-    
+    }
+
     getTheMatchesInfo = async () => {
         var userBetsDb = firebase.database().ref('/users/').child(this.state.userId).child("/ramData/events/WorldCup/" + this.state.theEventKey + '/bets/')
         userBetsDb.once('value', dataSnapshot => {
@@ -819,27 +882,28 @@ class WorldCup extends Component {
         }
 
     }
-      openTheModal2 = (itemToModals,stopEdit) => {
+    openTheModal2 = (itemToModals, stopEdit) => {
         var timeInfoDb = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEdit)
+        console.log('stopEdit',stopEdit)
         timeInfoDb.once('value', dataSnapshot => {
-          var theEventTime = dataSnapshot.val()
-          if (theEventTime === 'N/A') {
-            this.notify('Event not yet available for pick')
-            return
-          } else {
-            if ((new Date().getTime() > theEventTime)) {
-              this.notify('Event pick/edit time expired')
-              return
+            var theEventTime = dataSnapshot.val()
+            if (theEventTime === 'N/A') {
+                this.notify('Event not yet available for pick')
+                return
             } else {
-              if (this.state.userLoggedIn === true) {
-                this.setState({ opendetailsModal: true, openLoginModal: false })
-              } else {
-                this.setState({ openLoginModal: true, opendetailsModal: false })
-              }
-           }
-          }
+                if ((new Date().getTime() > theEventTime)) {
+                    this.notify('Event pick/edit time expired')
+                    return
+                } else {
+                    if (this.state.userLoggedIn === true) {
+                        this.setState({ opendetailsModal: true, openLoginModal: false })
+                    } else {
+                        this.setState({ openLoginModal: true, opendetailsModal: false })
+                    }
+                }
+            }
         })
-      }
+    }
     openTheModal = () => {
         var pickEvent = false
         var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
@@ -974,7 +1038,7 @@ class WorldCup extends Component {
     }
     pickWinner = (id, winner, time) => {
         var nowTime = new Date().getTime()
-         console.log('this.currentRound', this.state.currentRound)
+        console.log('this.currentRound', this.state.currentRound)
         if (this.state.currentRound === 'round2') {
             console.log('this.currentRound', this.state.currentRound, time, nowTime)
             var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
@@ -1075,220 +1139,223 @@ class WorldCup extends Component {
             }
         }
     }
-      chosenWinner = (id, winner) => {
-    if (this.state.currentRound === 'round2') {
-      var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
-      var theItems = this.state.roundOf32Arr
-      theItems[index2]['chosenWinner'] = winner
-      theItems[index2]['status1'] = 'played'
-      this.setState({ roundOf32Arr: theItems })
-      //console.log('this.state.currentItems 009', theItems)
-    }
-    if (this.state.currentRound === 'finalRound') {
-    if (this.state.theMenu === 'roundOf16') {
-      var index2 = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
-      var theItems = this.state.roundOf16Arr
-      theItems[index2]['chosenWinner'] = winner
-      theItems[index2]['status1'] = 'played'
-      this.setState({ roundOf16Arr: theItems })
-     // console.log('this.state.currentItems 009', theItems)
-    }
-    if (this.state.theMenu === 'quarterFinals') {
-      var index2 = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
-      var theItems = this.state.quarterFinalsArr
-      theItems[index2]['chosenWinner'] = winner
-      theItems[index2]['status1'] = 'played'
-      this.setState({ quarterFinalsArr: theItems })
-      //console.log('this.state.currentItems 009', theItems)
-    }
-    if (this.state.theMenu === 'semiFinals') {
-      var index2 = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
-      var theItems = this.state.semiFinalsArr
-      theItems[index2]['chosenWinner'] = winner
-      theItems[index2]['status1'] = 'played'
-      this.setState({ semiFinalsArr: theItems })
-      //console.log('this.state.currentItems 010', theItems)
-    }
-    if (this.state.theMenu === 'final') {
-      var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
-      var theItems = this.state.finalArr
-      theItems[index2]['chosenWinner'] = winner
-      theItems[index2]['status1'] = 'played'
-      this.setState({ finalArr: theItems })
-      //console.log('this.state.currentItems 010', theItems)
-    }}
-
-  }
-    submitWinner = (id, winner) => {
-    //console.log('haaaaaaaaaaaapa 000000')
-    if (this.state.currentRound === 'round2') {
-      var index = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
-        this.notify('Nothing to submit')
-      } else {
-        this.checkForOutcome2(index, winner)
-      }
-    }
-    if (this.state.currentRound === 'finalRound') {
-    if (this.state.theMenu === 'roundOf16') {
-      var index = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
-        this.notify('Nothing to submit')
-      } else {
-        this.checkForOutcome2(index, winner)
-      }
-    }
-    if (this.state.theMenu === 'quarterFinals') {
-      var index = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
-        this.notify('Nothing to submit')
-      } else {
-        this.checkForOutcome2(index, winner)
-      }
-    }
-    if (this.state.theMenu === 'semiFinals') {
-      var index = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
-        this.notify('Nothing to submit')
-      } else {
-        this.checkForOutcome2(index, winner)
-      }
-    }
-    if (this.state.theMenu === 'final') {
-      var index = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
-      if (winner !== 'player1' && winner !== 'player2') {
-        this.notify('Nothing to submit')
-      } else {
-        this.checkForOutcome2(index, winner)
-      }
-    }}
-  }
-  checkForOutcome2 = async (index, winner) => {
-      try {
-        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
-        var shortArr = []
-        if ((this.state.currentRound === 'round2')) {
-          this.checkForOutcome3(index, winner)
+    chosenWinner = (id, winner) => {
+        if (this.state.currentRound === 'round2') {
+            var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
+            var theItems = this.state.roundOf32Arr
+            theItems[index2]['chosenWinner'] = winner
+            theItems[index2]['status1'] = 'played'
+            this.setState({ roundOf32Arr: theItems })
+            //console.log('this.state.currentItems 009', theItems)
         }
-        if ((this.state.currentRound === 'finalRound')) {
-        if ((this.state.theMenu === 'roundOf16')) {
-          this.checkForFinalRoundOutcome(index, winner, this.state.roundOf16Arr, 'roundOf16Arr')
-        }
-        if ((this.state.theMenu === 'quarterFinals')) {
-          this.checkForFinalRoundOutcome(index, winner, this.state.quarterFinalsArr, 'quarterFinalsArr')
-        }
-        if ((this.state.theMenu === 'semiFinals')) {
-          this.checkForFinalRoundOutcome(index, winner, this.state.semiFinalsArr, 'semiFinalsArr')
-        }
-        if ((this.state.theMenu === 'final')) {
-          this.checkForFinalRoundOutcome(index, winner, this.state.finalArr, 'finalArr')
-        }}
-      } catch (error) {
-        //console.log('error',error)
-      }
-  
-    }
-  
-  
-    checkForOutcome3 = async (index, winner) => {
-      try {
-        //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
-        var shortArr = []
-        //console.log('haaaaaaaaaaaapa 2222 round 2', index, winner)
-        var theRound2Arr = this.state.roundOf32Arr
-        theRound2Arr[index]['winner'] = winner
-        delete theRound2Arr[index]['chosenWinner']
-        delete theRound2Arr[index]['showChooseWinner']
-        this.setState({ roundOf32Arr: theRound2Arr })
-        this.state.roundOf32Arr.map((item, index) => {
-          //console.log('shortArr', shortArr)
-          shortArr['p1Points'] = item.p1Points
-          shortArr['p2Points'] = item.p2Points
-          shortArr['winner'] = item.winner
-          shortArr['status1'] = item.status1
-          shortArr['id'] = item.id
-          var theItem = {
-            p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
-            status1: item.status1, id: item.id
-          }
-          shortArr.push(theItem)
-        })
-        if (this.state.theEventKey === '', this.state.currentRound === '', scoreName === '', this.state.roundOf32Arr.length < 1) return
-        var scoreName = ''
-        if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
-        if (this.state.currentRound === 'round2') { scoreName = 'round2Score' }
-        let theItems = JSON.stringify(shortArr);
-        var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + this.state.currentRound + '::' + scoreName + '::' + theItems
-        if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
-        var theQuery = encodeURIComponent(theLink)
-        console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
-        //console.log('theLink', theLink, theItems)
-        //console.log('this.state.shortArr 006', shortArr)
-        //return
-        await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
-          //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
-          .then((res) => {
-            var theOutcome = res.data
-            this.notify(theOutcome)
-            if (theOutcome === 'Success Updating Results') {
-              this.checkAuth()
+        if (this.state.currentRound === 'finalRound') {
+            if (this.state.theMenu === 'roundOf16') {
+                var index2 = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.roundOf16Arr
+                theItems[index2]['chosenWinner'] = winner
+                theItems[index2]['status1'] = 'played'
+                this.setState({ roundOf16Arr: theItems })
+                // console.log('this.state.currentItems 009', theItems)
             }
-          })
-      } catch (error) {
-        //console.log('error',error)
-      }
+            if (this.state.theMenu === 'quarterFinals') {
+                var index2 = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.quarterFinalsArr
+                theItems[index2]['chosenWinner'] = winner
+                theItems[index2]['status1'] = 'played'
+                this.setState({ quarterFinalsArr: theItems })
+                //console.log('this.state.currentItems 009', theItems)
+            }
+            if (this.state.theMenu === 'semiFinals') {
+                var index2 = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.semiFinalsArr
+                theItems[index2]['chosenWinner'] = winner
+                theItems[index2]['status1'] = 'played'
+                this.setState({ semiFinalsArr: theItems })
+                //console.log('this.state.currentItems 010', theItems)
+            }
+            if (this.state.theMenu === 'final') {
+                var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.finalArr
+                theItems[index2]['chosenWinner'] = winner
+                theItems[index2]['status1'] = 'played'
+                this.setState({ finalArr: theItems })
+                //console.log('this.state.currentItems 010', theItems)
+            }
+        }
+
+    }
+    submitWinner = (id, winner) => {
+        //console.log('haaaaaaaaaaaapa 000000')
+        if (this.state.currentRound === 'round2') {
+            var index = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
+            if (winner !== 'player1' && winner !== 'player2') {
+                this.notify('Nothing to submit')
+            } else {
+                this.checkForOutcome2(index, winner)
+            }
+        }
+        if (this.state.currentRound === 'finalRound') {
+            if (this.state.theMenu === 'roundOf16') {
+                var index = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
+                if (winner !== 'player1' && winner !== 'player2') {
+                    this.notify('Nothing to submit')
+                } else {
+                    this.checkForOutcome2(index, winner)
+                }
+            }
+            if (this.state.theMenu === 'quarterFinals') {
+                var index = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                if (winner !== 'player1' && winner !== 'player2') {
+                    this.notify('Nothing to submit')
+                } else {
+                    this.checkForOutcome2(index, winner)
+                }
+            }
+            if (this.state.theMenu === 'semiFinals') {
+                var index = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                if (winner !== 'player1' && winner !== 'player2') {
+                    this.notify('Nothing to submit')
+                } else {
+                    this.checkForOutcome2(index, winner)
+                }
+            }
+            if (this.state.theMenu === 'final') {
+                var index = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+                if (winner !== 'player1' && winner !== 'player2') {
+                    this.notify('Nothing to submit')
+                } else {
+                    this.checkForOutcome2(index, winner)
+                }
+            }
+        }
+    }
+    checkForOutcome2 = async (index, winner) => {
+        try {
+            //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+            var shortArr = []
+            if ((this.state.currentRound === 'round2')) {
+                this.checkForOutcome3(index, winner)
+            }
+            if ((this.state.currentRound === 'finalRound')) {
+                if ((this.state.theMenu === 'roundOf16')) {
+                    this.checkForFinalRoundOutcome(index, winner, this.state.roundOf16Arr, 'roundOf16Arr')
+                }
+                if ((this.state.theMenu === 'quarterFinals')) {
+                    this.checkForFinalRoundOutcome(index, winner, this.state.quarterFinalsArr, 'quarterFinalsArr')
+                }
+                if ((this.state.theMenu === 'semiFinals')) {
+                    this.checkForFinalRoundOutcome(index, winner, this.state.semiFinalsArr, 'semiFinalsArr')
+                }
+                if ((this.state.theMenu === 'final')) {
+                    this.checkForFinalRoundOutcome(index, winner, this.state.finalArr, 'finalArr')
+                }
+            }
+        } catch (error) {
+            //console.log('error',error)
+        }
+
+    }
+
+
+    checkForOutcome3 = async (index, winner) => {
+        try {
+            //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+            var shortArr = []
+            //console.log('haaaaaaaaaaaapa 2222 round 2', index, winner)
+            var theRound2Arr = this.state.roundOf32Arr
+            theRound2Arr[index]['winner'] = winner
+            delete theRound2Arr[index]['chosenWinner']
+            delete theRound2Arr[index]['showChooseWinner']
+            this.setState({ roundOf32Arr: theRound2Arr })
+            this.state.roundOf32Arr.map((item, index) => {
+                //console.log('shortArr', shortArr)
+                shortArr['p1Points'] = item.p1Points
+                shortArr['p2Points'] = item.p2Points
+                shortArr['winner'] = item.winner
+                shortArr['status1'] = item.status1
+                shortArr['id'] = item.id
+                var theItem = {
+                    p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
+                    status1: item.status1, id: item.id
+                }
+                shortArr.push(theItem)
+            })
+            if (this.state.theEventKey === '', this.state.currentRound === '', scoreName === '', this.state.roundOf32Arr.length < 1) return
+            var scoreName = ''
+            if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
+            if (this.state.currentRound === 'round2') { scoreName = 'round2Score' }
+            let theItems = JSON.stringify(shortArr);
+            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + this.state.currentRound + '::' + scoreName + '::' + theItems
+            if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
+            var theQuery = encodeURIComponent(theLink)
+            console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
+            //console.log('theLink', theLink, theItems)
+            //console.log('this.state.shortArr 006', shortArr)
+            //return
+            await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+                //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+                .then((res) => {
+                    var theOutcome = res.data
+                    this.notify(theOutcome)
+                    if (theOutcome === 'Success Updating Results') {
+                        this.checkAuth()
+                    }
+                })
+        } catch (error) {
+            //console.log('error',error)
+        }
     }
     checkForFinalRoundOutcome = async (index, winner, items, name) => {
         try {
-          //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
-          var shortArr = []
-          //console.log('haaaaaaaaaaaapa', this.state.currentRound, index, winner)
-          items[index]['winner'] = winner
-          delete items[index]['chosenWinner']
-          delete items[index]['showChooseWinner']
-          this.setState({ [name]: items })
-          items.map((item, index) => {
-            //console.log('shortArr', shortArr)
-            shortArr['p1Points'] = item.p1Points
-            shortArr['p2Points'] = item.p2Points
-            shortArr['winner'] = item.winner
-            shortArr['status1'] = item.status1
-            shortArr['id'] = item.id
-            var theItem = {
-              p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
-              status1: item.status1, id: item.id
-            }
-            shortArr.push(theItem)
-          })
-                var theSelection=this.state.currentRound
-          if(this.state.currentRound==='finalRound'){theSelection=this.state.theMenu}
-          if (this.state.theEventKey === '', theSelection === '', scoreName === '', items.length < 1) return
-          var scoreName = ''
-          if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
-          //if(this.state.currentRound==='sweet16'){scoreName='round1Score'}
-          //if(this.state.currentRound==='round2'){scoreName='round2Score'}
-          scoreName = theSelection + 'Score'
-          let theItems = JSON.stringify(shortArr);
-          var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + theSelection + '::' + scoreName + '::' + theItems
-          if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
-          var theQuery = encodeURIComponent(theLink)
-          console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
-          //console.log('theLink', theLink, theItems)
-          //console.log('this.state.shortArr 006', shortArr)
-          //return
-          await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
-            //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
-            .then((res) => {
-              var theOutcome = res.data
-              this.notify(theOutcome)
-              if (theOutcome === 'Success Updating Results') {
-                this.checkAuth()
-              }
+            //var index = this.state.allRound1MatchesArr.map(function(x) {return x.id; }).indexOf(id);
+            var shortArr = []
+            //console.log('haaaaaaaaaaaapa', this.state.currentRound, index, winner)
+            items[index]['winner'] = winner
+            delete items[index]['chosenWinner']
+            delete items[index]['showChooseWinner']
+            this.setState({ [name]: items })
+            items.map((item, index) => {
+                //console.log('shortArr', shortArr)
+                shortArr['p1Points'] = item.p1Points
+                shortArr['p2Points'] = item.p2Points
+                shortArr['winner'] = item.winner
+                shortArr['status1'] = item.status1
+                shortArr['id'] = item.id
+                var theItem = {
+                    p1Points: item.p1Points, p2Points: item.p2Points, winner: item.winner,
+                    status1: item.status1, id: item.id
+                }
+                shortArr.push(theItem)
             })
+            var theSelection = this.state.currentRound
+            if (this.state.currentRound === 'finalRound') { theSelection = this.state.theMenu }
+            if (this.state.theEventKey === '', theSelection === '', scoreName === '', items.length < 1) return
+            var scoreName = ''
+            if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
+            //if(this.state.currentRound==='sweet16'){scoreName='round1Score'}
+            //if(this.state.currentRound==='round2'){scoreName='round2Score'}
+            scoreName = theSelection + 'Score'
+            let theItems = JSON.stringify(shortArr);
+            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::' + theSelection + '::' + scoreName + '::' + theItems
+            if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
+            var theQuery = encodeURIComponent(theLink)
+            console.log('001', this.state.theEventKey, this.state.currentRound, scoreName, theItems)
+            //console.log('theLink', theLink, theItems)
+            //console.log('this.state.shortArr 006', shortArr)
+            //return
+            await axios.get("https://theramtournament.com/getWorldCupResults2?term=" + theQuery)
+                //await axios.get("http://localhost:4000/getWorldCupResults2?term="+theQuery)
+                .then((res) => {
+                    var theOutcome = res.data
+                    this.notify(theOutcome)
+                    if (theOutcome === 'Success Updating Results') {
+                        this.checkAuth()
+                    }
+                })
         } catch (error) {
-          //console.log('error',error)
+            //console.log('error',error)
         }
-      }
+    }
     openEnterTeamsModal = () => {
         this.setState({ openEnterTeamsModal: group, team1Points: '', team2Points: '', team3Points: '', team4Points: '', team1Odds: '0.00', team2Odds: '0.00', team3Odds: '0.00', team4Odds: '0.00', team1Name: '', team2Name: '', teamName: '', team4Name: '', team1Flag: '', team2Flag: '', team3Flag: '', team4Flag: '' })
     }
@@ -1299,38 +1366,39 @@ class WorldCup extends Component {
                 if (dataSnapshot.exists()) { this.setState({ theGameEvent: dataSnapshot.val() }) }
             })
             editDbRef.child('menuSelection').once('value', dataSnapshot => {
-            if(dataSnapshot.exists()){this.setState({ menuSelection: dataSnapshot.val()})}
-               
-        })
-    }
-    }
-    chooseGameEvent = (item,menuSelection) => {
-        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/')
-        if(menuSelection==='picks'){
-        if (this.state.theGameEvent === item) {
-            editDbRef.child('currentPick').set(null)
-            this.setState({ theGameEvent: '' })
-        } else {
-            editDbRef.child('currentPick').set(item, (error) => {
-                if (!error) { this.setState({ theGameEvent: item }) }
+                if (dataSnapshot.exists()) { this.setState({ menuSelection: dataSnapshot.val() }) }
+
             })
-        }}else{
-        editDbRef.child('menuSelection').once('value', dataSnapshot => {
-            if(dataSnapshot.exists()){
-                if (dataSnapshot.val() === item) {
-                    editDbRef.child('menuSelection').set(null)
-                this.setState({ menuSelection:''})
-            }else{editDbRef.child('menuSelection').set(item);this.setState({ menuSelection:item})}
-            }else{
-             editDbRef.child('menuSelection').set(item)
-             this.setState({ menuSelection:item})
-            }
-        })
         }
     }
-        openWorldCupModal = async () => {
-       // this.notify('No details to enter at the moment '+this.state.menuSelection)
-        var menuSelection=this.state.menuSelection
+    chooseGameEvent = (item, menuSelection) => {
+        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/')
+        if (menuSelection === 'picks') {
+            if (this.state.theGameEvent === item) {
+                editDbRef.child('currentPick').set(null)
+                this.setState({ theGameEvent: '' })
+            } else {
+                editDbRef.child('currentPick').set(item, (error) => {
+                    if (!error) { this.setState({ theGameEvent: item }) }
+                })
+            }
+        } else {
+            editDbRef.child('menuSelection').once('value', dataSnapshot => {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.val() === item) {
+                        editDbRef.child('menuSelection').set(null)
+                        this.setState({ menuSelection: '' })
+                    } else { editDbRef.child('menuSelection').set(item); this.setState({ menuSelection: item }) }
+                } else {
+                    editDbRef.child('menuSelection').set(item)
+                    this.setState({ menuSelection: item })
+                }
+            })
+        }
+    }
+    openWorldCupModal = async () => {
+        // this.notify('No details to enter at the moment '+this.state.menuSelection)
+        var menuSelection = this.state.menuSelection
         var gamesInfo = firebase.database().ref('/theEvents/WorldCup/eventsIds/' + this.state.theEventKey)
         gamesInfo.once('value', dataSnapshot => {
             var stopRound2Edit = dataSnapshot.val().stopRound2Edit
@@ -1343,25 +1411,27 @@ class WorldCup extends Component {
             var modalTitle = ''
             var eventYear = year
             var time = new Date().getTime()
-            console.log('this.state.roundOf32Arr',this.state.roundOf32Arr)
-           
+            console.log('this.state.roundOf32Arr', this.state.roundOf32Arr)
+
             if (menuSelection === 'Round of 32') {
                 if (stopRound2Edit !== 'N/A' && time > stopRound2Edit) { this.notify('Event already started'); return }
                 else {
-                    modalTitle = 'World Cup ' + year + ' > Round of 32' 
+                    modalTitle = 'World Cup ' + year + ' > Round of 32'
                     this.setState({ itemToModals: this.state.roundOf32Arr, worldCupModal: true, modalTitle, selectionToModal: 'roundOf32' })
                 }
             }
-            if (menuSelection === 'Round of 16') { 
-                if (stopRoundOf16Edit !== 'N/A' && time > stopRoundOf16Edit) { this.notify('Event already started'); return }
-                else {
-                    modalTitle = 'World Cup ' + year + ' > Round of 16'
-                    this.setState({ itemToModals: this.state.roundOf16Arr, worldCupModal: true, modalTitle, selectionToModal: 'roundOf16' })
-                }
+            if (menuSelection === 'Round of 16') {
+                // if (stopRoundOf16Edit !== 'N/A' && time > stopRoundOf16Edit) { this.notify('Event already started'); return }
+                // else {
+                modalTitle = 'World Cup ' + year + ' > Round of 16'
+                this.setState({ itemToModals: this.state.roundOf16Arr, worldCupModal: true, modalTitle, selectionToModal: 'roundOf16' })
+                //  }
             }
             if (menuSelection === 'Quarter Finals') {
+                console.log('tuko menuSelection',menuSelection)
                 if (stopQuarterFinalsEdit !== 'N/A' && time > stopQuarterFinalsEdit) { this.notify('Event already started'); return }
                 else {
+                    console.log('tuko hereeeeeeeee')
                     modalTitle = 'World Cup ' + year + ' > Quarter Finals'
                     this.setState({ itemToModals: this.state.quarterFinalsArr, worldCupModal: true, modalTitle, selectionToModal: 'quarterFinals' })
                 }
@@ -1379,7 +1449,7 @@ class WorldCup extends Component {
                     else { this.notify('Event already started'); return }
                 }
                 else {
-                    modalTitle = 'World Cup ' + year + ' > Finals'  
+                    modalTitle = 'World Cup ' + year + ' > Finals'
                     this.setState({ itemToModals: this.state.finalArr, worldCupModal: true, modalTitle, selectionToModal: 'finalRound' })
                 }
             }
@@ -1403,67 +1473,69 @@ class WorldCup extends Component {
         })
 
     }
-      openWorldCupDetailsModal = async () => {
-         /*  var pickEvent = false
-        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
-        editDbRef.child('currentPick').once('value', dataSnapshot => {
-            if (dataSnapshot.exists()) {
-                this.setState({ theGameEvent: dataSnapshot.val() })
-                var theGameEvent = dataSnapshot.val()
-                if (this.state.currentRound === 'round2' && theGameEvent === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
-                if (this.state.theMenu === 'roundOf16' && theGameEvent === 'Round of 16') { pickEvent = true }
-                if (this.state.theMenu === 'quarterFinals' && theGameEvent === 'Quarter Finals') { pickEvent = true }
-                if (this.state.theMenu === 'semiFinals' && theGameEvent === 'Semi Finals') { pickEvent = true }
-                if (this.state.theMenu === 'final' && theGameEvent === 'Finals') { pickEvent = true }
-                if (this.state.currentRound === 'round1' && pickEvent === true) { this.setState({ enterTeamNameInfoModal: true }) }
-            } else {
-                this.notify('Selection not available at the moment')
-            }
-        })*/
+    openWorldCupDetailsModal = async () => {
+       // this.reArrangeRoundOf16()
+       // return
+        /*  var pickEvent = false
+       var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
+       editDbRef.child('currentPick').once('value', dataSnapshot => {
+           if (dataSnapshot.exists()) {
+               this.setState({ theGameEvent: dataSnapshot.val() })
+               var theGameEvent = dataSnapshot.val()
+               if (this.state.currentRound === 'round2' && theGameEvent === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
+               if (this.state.theMenu === 'roundOf16' && theGameEvent === 'Round of 16') { pickEvent = true }
+               if (this.state.theMenu === 'quarterFinals' && theGameEvent === 'Quarter Finals') { pickEvent = true }
+               if (this.state.theMenu === 'semiFinals' && theGameEvent === 'Semi Finals') { pickEvent = true }
+               if (this.state.theMenu === 'final' && theGameEvent === 'Finals') { pickEvent = true }
+               if (this.state.currentRound === 'round1' && pickEvent === true) { this.setState({ enterTeamNameInfoModal: true }) }
+           } else {
+               this.notify('Selection not available at the moment')
+           }
+       })*/
 
-    var menuSelection=this.state.menuSelection
-    console.log('menuSelection',menuSelection)
-    if (this.state.userLoggedIn === false) {
-      this.notify("Please Log In to continue")
-      this.setState({ openLoginModal: true })
-      return
-    }
-    var itemToModals = '', modalTitle = '', stopEdit = ''
-    var year = new Date().getFullYear()
-      if (menuSelection === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit' }
-      if (menuSelection === 'Round of 16') {
-        itemToModals = this.state.roundOf16Arr, modalTitle = 'World Cup ' + year + ' > Round of 16', stopEdit = 'stopRoundOf16Edit'
-      }
-      if (menuSelection === 'Quarter Finals') {
-        itemToModals = this.state.quarterFinalsArr, modalTitle = 'World Cup ' + year + ' > Quarter Finals', stopEdit = 'stopQuarterFinalsEdit'
-      }
-      if (menuSelection === 'Semi Finals') {
-        itemToModals = this.state.semiFinalsArr, modalTitle = 'World Cup ' + year + ' > Semi Finals', stopEdit = 'stopSemiFinalsEdit'
-      }
-      if (menuSelection === 'Finals') {
-        itemToModals = this.state.finalArr, modalTitle = 'World Cup ' + year + ' > Finals', stopEdit = 'stopFinalEdit'
-      }
-    
-    var i = 0, pointMissing = false
-    console.log('this.state.theItems', itemToModals)
-    //itemToModals=itemToModals.slice(0,1)
-    await itemToModals.map((item, index) => {
-      i++
-      //console.log('item.p1Points',item.p1Points)
-      if (item.p1Points === 'N/A' || item.p2Points === 'N/A') {
-        pointMissing = true
-      }
-      if (itemToModals.length === index + 1) {
-        if (pointMissing === true) {
-          this.notify('Event points not yet populated')
-        } else {
-          this.openTheModal2(itemToModals,stopEdit)
-          console.log('itemToModals', itemToModals)
-          this.setState({ itemToModals, modalTitle })
+        var menuSelection = this.state.menuSelection
+        console.log('menuSelection', menuSelection)
+        if (this.state.userLoggedIn === false) {
+            this.notify("Please Log In to continue")
+            this.setState({ openLoginModal: true })
+            return
         }
-      }
-    })
-  }
+        var itemToModals = '', modalTitle = '', stopEdit = ''
+        var year = new Date().getFullYear()
+        if (menuSelection === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit' }
+        if (menuSelection === 'Round of 16') {
+            itemToModals = this.state.roundOf16Arr, modalTitle = 'World Cup ' + year + ' > Round of 16', stopEdit = 'stopRoundOf16Edit'
+        }
+        if (menuSelection === 'Quarter Finals') {
+            itemToModals = this.state.quarterFinalsArr, modalTitle = 'World Cup ' + year + ' > Quarter Finals', stopEdit = 'stopQuarterFinalsEdit'
+        }
+        if (menuSelection === 'Semi Finals') {
+            itemToModals = this.state.semiFinalsArr, modalTitle = 'World Cup ' + year + ' > Semi Finals', stopEdit = 'stopSemiFinalsEdit'
+        }
+        if (menuSelection === 'Finals') {
+            itemToModals = this.state.finalArr, modalTitle = 'World Cup ' + year + ' > Finals', stopEdit = 'stopFinalEdit'
+        }
+
+        var i = 0, pointMissing = false
+        console.log('this.state.theItems', itemToModals)
+        //itemToModals=itemToModals.slice(0,1)
+        await itemToModals.map((item, index) => {
+            i++
+            //console.log('item.p1Points',item.p1Points)
+            if (item.p1Points === 'N/A' || item.p2Points === 'N/A') {
+                pointMissing = true
+            }
+            if (itemToModals.length === index + 1) {
+                if (pointMissing === true) {
+                    this.notify('Event points not yet populated')
+                } else {
+                    this.openTheModal2(itemToModals, stopEdit)
+                    console.log('itemToModals', itemToModals)
+                    this.setState({ itemToModals, modalTitle })
+                }
+            }
+        })
+    }
     proceed = () => {
         console.log('this.state.selectedId', this.state.selectedId)
         var groupArr = this.state.selectedGroupArr
@@ -1484,10 +1556,10 @@ class WorldCup extends Component {
             if (this.state.theEventKey === '', this.state.currentRound === '', scoreName === '') return
             if (!this.state.theEventKey || this.state.theEventKey.length < 3) return
             theItems = JSON.stringify(theItems);
-            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::groupStage::' + scoreName  + '::' + outcome + '::round1'
+            var theLink = 'theEvents::WorldCup::' + this.state.theEventKey + '::groupStage::' + scoreName + '::' + outcome + '::round1'
             if (!this.state.theEventKey || this.state.theEventKey.length === 0) return
-           // axios.post('http://localhost:4000/getWorldCupResults', {
-            axios.post('https://theramtournament.com/getWorldCupResults', {    
+            // axios.post('http://localhost:4000/getWorldCupResults', {
+            axios.post('https://theramtournament.com/getWorldCupResults', {
                 eventPath: theLink,
                 teams: theItems,
                 status: "Proceed",
@@ -1497,7 +1569,7 @@ class WorldCup extends Component {
                     var theOutcome = res.data
                     this.notify(theOutcome)
                     if (theOutcome === 'Success Updating Results') {
-                       this.getWorldCupMatches(this.state.userId)
+                        this.getWorldCupMatches(this.state.userId)
                     }
                 })
         } catch (error) {
@@ -1523,10 +1595,10 @@ class WorldCup extends Component {
             }
         })
     }
-      handleChildClick = (title, items) => {
-    this.setState({ count: this.state.count + 1, worldCupModal: false, [title]: items });
-    //console.log('azeeza', items)
-  };
+    handleChildClick = (title, items) => {
+        this.setState({ count: this.state.count + 1, worldCupModal: false, [title]: items });
+        //console.log('azeeza', items)
+    };
     dummyItems = (group, theItems) => {
         return (
             <div className={style.itemComp}>
@@ -1827,10 +1899,10 @@ class WorldCup extends Component {
         )
     }
     itemComp = (theItems, isPicked) => {
-        console.log('isPicked',isPicked)
-        isPicked=this.state.currentEventUserInfo[isPicked]
-        if(!isPicked){isPicked=false}
-        
+        console.log('isPicked', isPicked)
+        isPicked = this.state.currentEventUserInfo[isPicked]
+        if (!isPicked) { isPicked = false }
+
         return (
             <div className={style.divCont}>
                 <div className={style.listCont}>
@@ -2012,7 +2084,7 @@ class WorldCup extends Component {
                             <div id={style.selectorDiv}>
                                 {theGameEvents.map((item, index) => {
                                     return (
-                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item,'picks')}>
+                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item, 'picks')}>
                                             <div className={this.state.theGameEvent === item ? style.boxDiv3 : style.boxDiv3b}>
                                                 <MdCheck size={15} /></div>
                                             <p style={{ color: this.state.theGameEvent === item ? '#CB1E31' : null }}>{item}</p>
@@ -2022,13 +2094,13 @@ class WorldCup extends Component {
 
 
                             </div></div> : null}
-                             {this.state.isAdmin && this.state.groupStagePopulated ?
+                    {this.state.isAdmin && this.state.groupStagePopulated ?
                         <div>
                             <p id={style.picksP}>Current Selection</p>
                             <div id={style.selectorDiv}>
                                 {theGameEvents.map((item, index) => {
                                     return (
-                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item,'selection')}>
+                                        <div id={style.selectorDiv2} key={index} onClick={() => this.chooseGameEvent(item, 'selection')}>
                                             <div className={this.state.menuSelection === item ? style.boxDiv3 : style.boxDiv3b}>
                                                 <MdCheck size={15} /></div>
                                             <p style={{ color: this.state.menuSelection === item ? '#CB1E31' : null }}>{item}</p>
@@ -2108,12 +2180,12 @@ class WorldCup extends Component {
                         <div className={style.itemCont}>{this.state.groupStagePopulated && this.state.groupKArr.length ? this.groupItemComp('Group K', this.state.groupKArr) : this.dummyItems('Group K', groupATeams)}</div>
                         <div className={style.itemCont}>{this.state.groupStagePopulated && this.state.groupLArr.length ? this.groupItemComp('Group L', this.state.groupLArr) : this.dummyItems('Group L', groupATeams)}</div>
                     </div> : null}
-                    {this.state.currentRound === 'round2' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf32Arr,'round2Pick')}</div> : null}
+                    {this.state.currentRound === 'round2' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf32Arr, 'round2Pick')}</div> : null}
                     {this.state.currentRound === 'finalRound' ?
-                        <>{this.state.theMenu === 'roundOf16' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf16Arr,'roundOf16Pick')}</div> : null}
-                            {this.state.theMenu === 'quarterFinals' ? <div className={style.divCont}>{this.itemComp(this.state.quarterFinalsArr,'quarterFinalsPick')}</div> : null}
-                            {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr,'semiFinalsPick')}</div> : null}
-                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr,'finalsPick')}</div> : null}</>
+                        <>{this.state.theMenu === 'roundOf16' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf16Arr, 'roundOf16Pick')}</div> : null}
+                            {this.state.theMenu === 'quarterFinals' ? <div className={style.divCont}>{this.itemComp(this.state.quarterFinalsArr, 'quarterFinalsPick')}</div> : null}
+                            {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr, 'semiFinalsPick')}</div> : null}
+                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr, 'finalsPick')}</div> : null}</>
                         : null}
                     {this.state.enterTeamNameInfoModal ? <div className={style.modal} onClick={() => this.setState({ enterTeamNameInfoModal: false })}>
                         <div className={style.groupStagePicksDiv} onClick={(e) => this.doNothing(e)}>
@@ -2173,8 +2245,8 @@ class WorldCup extends Component {
                                 <button style={{ backgroundColor: '#CB1E31', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.eliminate()}>Eliminated</button>
                                 <button style={{ backgroundColor: '#1ecb7a', border: 'none', color: 'white', padding: '7px 15px', marginLeft: 10, cursor: 'pointer' }} onClick={() => this.proceed()}>Proceeding</button>
                             </div></div></div> : null}
-                            {this.state.worldCupModal ? <div className={style.detailsModal} onClick={() => this.setState({worldCupModal: false })}><WorldCupModal eventToWorldCupModal={this.state.selectionToModal} itemsToWorldCupModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
-                       {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='WorldCup' theItems={this.state.itemToModals} flockTeamName={this.state.ramFlockName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu} /></div> : null}
+                    {this.state.worldCupModal ? <div className={style.detailsModal} onClick={() => this.setState({ worldCupModal: false })}><WorldCupModal eventToWorldCupModal={this.state.selectionToModal} itemsToWorldCupModal={this.state.itemToModals} theEventKey={this.state.theEventKey} onClick={this.handleChildClick} /></div> : null}
+                    {this.state.opendetailsModal ? <div className={style.detailsModal} onClick={() => this.setState({ opendetailsModal: false })}><DetailsModal currentEvent='WorldCup' theItems={this.state.itemToModals} flockTeamName={this.state.ramFlockName} eventTitle={this.state.theEventTitle} theEventKey={this.state.theEventKey} currentSelection={this.state.currentRound} modalTitle={this.state.modalTitle} theMenu={this.state.theMenu} /></div> : null}
                 </div>
                 <ToastContainer />
             </>
