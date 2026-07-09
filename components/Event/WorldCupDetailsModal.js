@@ -379,8 +379,7 @@ class DetailsModal extends Component {
       var theInfo=dataSnapshot.val()
       var theName=dataSnapshot.key
       //console.log('theName',theName,'theInfo',theInfo)
-      //console.log('flockTeamName[0]',flockTeamName[0])
-     // return
+
       if(!theInfo){
         if(flockTeamName[0]){
           var name1=flockTeamName[0].replace(/ /g,"_")
