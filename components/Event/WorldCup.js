@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import style from "./WorldCup.module.scss";
 import { ToastContainer, toast } from 'react-toastify';
-import { MdCheck, MdInfoOutline, MdOutlinePersonOutline, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdCheck, MdOutlinePersonOutline, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { FaFontAwesomeFlag } from "react-icons/fa";
 import firebase from '../FirebaseClient'
 import dayjs from 'dayjs';
@@ -9,7 +9,6 @@ import Countdown from 'react-countdown';
 import { IoPersonSharp } from "react-icons/io5";
 import { TypeAnimation } from 'react-type-animation';
 import { RiTeamFill } from "react-icons/ri";
-import { SlOptionsVertical } from "react-icons/sl";
 import copy from 'copy-to-clipboard';
 import { BsFillLightningFill } from "react-icons/bs";
 import { FaRegCopy } from "react-icons/fa";
