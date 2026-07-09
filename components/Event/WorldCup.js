@@ -135,7 +135,7 @@ class WorldCup extends Component {
                 if (user.uid === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3' || user.uid === 'zZTNto5p3XVSLYeovAwWXHjvkN43' || user.uid === 'vKBbDsyLvqZQR1UR39XIJQPwwgq1') {
                     this.setState({ isAdmin: true })
                 }
-                this.setState({ userId, userLoggedIn: true })
+                this.setState({ userId, userLoggedIn: true }) 
                 if (userId) { this.getWorldCupMatches(userId) }
                 //this.getMatchesInfo(userId)
             } else {
@@ -2078,7 +2078,7 @@ class WorldCup extends Component {
                                 repeat={Infinity}
                             />}
                     </div>
-                    {this.state.isAdmin && this.state.groupStagePopulated ?
+                    {this.state.isAdmin &&this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'&& this.state.groupStagePopulated ?
                         <div>
                             <p id={style.picksP}>Allow World Cup Picks</p>
                             <div id={style.selectorDiv}>
@@ -2094,7 +2094,7 @@ class WorldCup extends Component {
 
 
                             </div></div> : null}
-                    {this.state.isAdmin && this.state.groupStagePopulated ?
+                    {this.state.isAdmin &&this.state.userId==='iHA7kUpK4EdZ7iIUUV0N7yvDM5G3'&& this.state.groupStagePopulated ?
                         <div>
                             <p id={style.picksP}>Current Selection</p>
                             <div id={style.selectorDiv}>
