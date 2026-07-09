@@ -8,7 +8,7 @@ import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 
 class profile extends Component {
-    state = { userId: '', userLoggedIn: '', isAdmin: '', name: '', email: '', phoneNo: '', showProgressBar: false, editName: '', editNameErr: '', editPhoneNumber: '', editPhoneNumberErr: '', editDetailsModal: true }
+    state = { userId: '', userLoggedIn: '', isAdmin: '', name: '', email: '', phoneNo: '', showProgressBar: false, editName: '', editNameErr: '', editPhoneNumber: '', editPhoneNumberErr: '', editDetailsModal: false }
     componentDidMount = () => {
         this.checkAuth()
     }

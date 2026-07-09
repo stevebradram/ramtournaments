@@ -324,7 +324,7 @@ class NavBar extends Component {
                     {this.state.showMessageNot ? <p>1</p> : null}
                     <AiFillMessage className={styles.mesoIc} />
                   </div></div>
-                <div className={styles.logDmesoDiv2} style={{ marginRight: 10, cursor: 'pointer' }} onClick={() => Router.push('/profile')}>
+                <div className={styles.logDmesoDiv3} style={{ marginRight: 10, cursor: 'pointer' }} onClick={() => Router.push('/profile')}>
                   <IoPersonCircle size={40} className={styles.mesoIc} style={{ color: '#9f9fb6ff' }} />
                 </div>
                 {/*<Link href="/" className={styles.talkDiv}>LOG IN</Link>
@@ -349,7 +349,7 @@ class NavBar extends Component {
             <Link href="/community" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>COMMUNITY</Link>
             {/*<Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv2}>LOG IN</Link>
                 <Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv3}>SIGN UP</Link>*/}
-
+            <Link href="/profile" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>EVENT PROFILE</Link>
             {this.state.isLogged ? <Link href="/" onClick={() => this.signOut()} className={styles.logOutL}>LOG OUT</Link> :
               <Link href="/" onClick={() => this.setState({ openLogInModal: !this.state.openLogInModal })} className={styles.talkDiv3}>LOG IN</Link>}
 

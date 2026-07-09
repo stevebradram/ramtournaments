@@ -126,10 +126,29 @@ $blackish:#292f51;
   //border: 1px solid $blackish;
   
 }
+.logDmesoDiv3{
+    position: relative;
+}
 .logDmesoDiv2{
 position: relative;
 }
 .logDmesoDiv2 p{
+    position: absolute;
+    color: white;
+    top:0;right:0;
+    z-index: 2;
+    background-color: $redColor;
+    height: 15px;
+    width: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 600;
+    //display: none;
+}
+.logDmesoDiv3 p{
     position: absolute;
     color: white;
     top:0;right:0;
@@ -553,6 +572,9 @@ text-decoration: none;
    .optionsDivLi{
    font-size: 20px;
    margin-top: 10px;
+}
+.logDmesoDiv3{
+    display: none;
 }
 }
 @media all and (max-width: 330px) {

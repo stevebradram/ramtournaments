@@ -23,6 +23,64 @@ var flagImg = 'https://a.espncdn.com/i/teamlogos/soccer/500/164.png'
 var groupATeams = [{ id: 'groupATeam1', teamName: 'Mexico', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/203.png', outCome: 'Proceed', rank: 24, points: 4.8 }, { id: 'groupATeam2', teamName: 'South Africa', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/467.png', outCome: 'Proceed', rank: 96, points: 2.3 }, { id: 'groupATeam3', teamName: 'South Korea', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/451.png', outCome: 'Eliminated', rank: 24, points: 1.52 }, { id: 'groupATeam4', teamName: 'Czechia', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/450.png', outCome: 'N/A', rank: 103, points: 3.52 }]
 var chosenTeams = [], ramOddsMap = '', teamsChosenOdds = []
 var theGameEvents = ['Group Stage', 'Round of 32', 'Round of 16', 'Quarter Finals', 'Semi Finals', 'Finals']
+var theR16FromDb = {
+  "r16Match1": {
+    "id": "r16Match1",
+    "player1": "Canada",
+    "player2": "Morocco",
+    "p1Points": 8.59,
+    "p2Points": 1.86
+  },
+  "r16Match2": {
+    "id": "r16Match2",
+    "player1": "Paraguay",
+    "player2": "France",
+    "p1Points": 82.4,
+    "p2Points": 1.39
+  },
+  "r16Match3": {
+    "id": "r16Match3",
+    "player1": "Brazil",
+    "player2": "Norway",
+    "p1Points": 1.89,
+    "p2Points": 7.41
+  },
+  "r16Match4": {
+    "id": "r16Match4",
+    "player1": "Mexico",
+    "player2": "England",
+    "p1Points": 5.13,
+    "p2Points": 3.09
+  },
+  "r16Match5": {
+    "id": "r16Match5",
+    "player1": "Portugal",
+    "player2": "Spain",
+    "p1Points": 7.04,
+    "p2Points": 1.97
+  },
+  "r16Match6": {
+    "id": "r16Match6",
+    "player1": "USA",
+    "player2": "Belgium",
+    "p1Points": 3.77,
+    "p2Points": 3.94
+  },
+  "r16Match7": {
+    "id": "r16Match7",
+    "player1": "Switzerland",
+    "player2": "Colombia",
+    "p1Points": 5.88,
+    "p2Points": 2.67
+  },
+  "r16Match8": {
+    "id": "r16Match8",
+    "player1": "Argentina",
+    "player2": "Egypt",
+    "p1Points": 1.57,
+    "p2Points": 15.26
+  }
+};
 var theQFromDb={
   "qfMatch1": {
     "id": "qfMatch1",
@@ -184,10 +242,11 @@ class WorldCup extends Component {
                 var value = data.val()
                 var round2 = data.val().round2
                 var final = data.val().final
-                console.log('value', theId, value)
-                console.log('round2', round2)
-                console.log('final', final)
-                if (round2) {
+                var theRoundOf16 = data.val().roundOf16
+               // console.log('value', theId, value)
+              //  console.log('round2', round2)
+              //  console.log('final', final)
+                if (!theRoundOf16&&round2) {
                     const r16MatchesArray = Object.entries(round2)
                         .filter(([matchId]) => matchId.startsWith("r16"))
                         .map(([matchId, winner]) => ({
@@ -197,14 +256,41 @@ class WorldCup extends Component {
                     const unifiedObject = Object.assign({}, ...r16MatchesArray);
                     if (r16MatchesArray.length > 0) {
                         console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
+                        //var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        //var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
+
                         var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/details/')
                         var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
+                        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/WorldCup2026/')
+
+                        //betsRef.set(unifiedObject)
+                        //ramsBets.set(unifiedObject)
+                                      console.log('unifiedObject',unifiedObject)
+                        const matchesData = theR16FromDb; // Your first JSON
+                        const myPicks = unifiedObject;             // Your second JSON
+
+                        const bestPossiblePoints = this.calculateBestPossiblePoints(matchesData, myPicks);
+                        console.log('hapo sawa', theId,bestPossiblePoints)
+                       // return
+                       var detObject={roundOf16Pick:true,roundOf16BPS:bestPossiblePoints}
                         betsRef.set(unifiedObject)
                         ramsBets.set(unifiedObject)
+                        detailsRef.update(detObject)
 
+                        detailsRef.child('flockName').once('value', dataSnapshot => {
+                        var theFlockName=dataSnapshot.val()
+                        if(theFlockName==='Flockless'){console.log('No FlockName 1',theFlockName)}
+                        else{
+                             var detObject={roundOf16Pick:true,roundOf16BPS:bestPossiblePoints}
+                            theFlockName=theFlockName.replace(/ /g,"|")
+                            console.log('Has FlockName 1',theFlockName.replace(/ /g,"|"))
+                            membersFlockNamesRef.child('/membersScores/'+theFlockName).child(theId).update(detObject)
+                        }
+                        })
                     }
                 }
-                if (final) {
+                if (!theRoundOf16&&final) {
                     const r16MatchesArray = Object.entries(final)
                         .filter(([matchId]) => matchId.startsWith("r16"))
                         .map(([matchId, winner]) => ({
@@ -213,11 +299,38 @@ class WorldCup extends Component {
                     console.log('r16MatchesArray', theId, r16MatchesArray)
                     const unifiedObject = Object.assign({}, ...r16MatchesArray);
                     if (r16MatchesArray.length > 0) {
-                        console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
-                        var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                                          var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
                         var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
-                        detailsbetsRefRef.set(unifiedObject)
+
+                        var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/details/')
+                        var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
+                        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/WorldCup2026/')
+
+                        //betsRef.set(unifiedObject)
+                        //ramsBets.set(unifiedObject)
+                                      console.log('unifiedObject',unifiedObject)
+                        const matchesData = theR16FromDb; // Your first JSON
+                        const myPicks = unifiedObject;             // Your second JSON
+
+                        const bestPossiblePoints = this.calculateBestPossiblePoints(matchesData, myPicks);
+                        console.log('hapo sawa', theId,bestPossiblePoints)
+                        //return
+                        var detObject={roundOf16Pick:true,roundOf16BPS:bestPossiblePoints}
+                        betsRef.set(unifiedObject)
                         ramsBets.set(unifiedObject)
+                        detailsRef.update(detObject)
+
+                        detailsRef.child('flockName').once('value', dataSnapshot => {
+                        var theFlockName=dataSnapshot.val()
+                        if(theFlockName==='Flockless'){console.log('No FlockName 1',theFlockName)}
+                        else{
+                             var detObject={roundOf16Pick:true,roundOf16BPS:bestPossiblePoints}
+                            theFlockName=theFlockName.replace(/ /g,"|")
+                            console.log('Has FlockName 1',theFlockName.replace(/ /g,"|"))
+                            membersFlockNamesRef.child('/membersScores/'+theFlockName).child(theId).update(detObject)
+                        }
+                     })
 
                     }
                 }
@@ -234,6 +347,7 @@ class WorldCup extends Component {
                 var theId = data.key
                 var value = data.val()
                 var roundOf16 = data.val().roundOf16
+                var theQuarterFinals = data.val().quarterFinals
                // var final = data.val().final
               //  console.log('value', theId, value)
               //  console.log('roundOf16', roundOf16)
@@ -1585,9 +1699,9 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
 
     }
     openWorldCupDetailsModal = async () => {
-       // this.reArrangeRoundOf16()
-      // this.reArrangeQuarterFinals()
-      //  return
+      //  this.reArrangeRoundOf16()
+       this.reArrangeQuarterFinals()
+        return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
        editDbRef.child('currentPick').once('value', dataSnapshot => {
@@ -1605,7 +1719,7 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
            }
        })*/
 
-        var menuSelection = this.state.menuSelection
+        var menuSelection = this.state.theGameEvent
         console.log('menuSelection', menuSelection)
         if (this.state.userLoggedIn === false) {
             this.notify("Please Log In to continue")
