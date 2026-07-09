@@ -24,6 +24,36 @@ var flagImg = 'https://a.espncdn.com/i/teamlogos/soccer/500/164.png'
 var groupATeams = [{ id: 'groupATeam1', teamName: 'Mexico', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/203.png', outCome: 'Proceed', rank: 24, points: 4.8 }, { id: 'groupATeam2', teamName: 'South Africa', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/467.png', outCome: 'Proceed', rank: 96, points: 2.3 }, { id: 'groupATeam3', teamName: 'South Korea', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/451.png', outCome: 'Eliminated', rank: 24, points: 1.52 }, { id: 'groupATeam4', teamName: 'Czechia', teamFlag: 'https://a.espncdn.com/i/teamlogos/soccer/500/450.png', outCome: 'N/A', rank: 103, points: 3.52 }]
 var chosenTeams = [], ramOddsMap = '', teamsChosenOdds = []
 var theGameEvents = ['Group Stage', 'Round of 32', 'Round of 16', 'Quarter Finals', 'Semi Finals', 'Finals']
+var theQFromDb={
+  "qfMatch1": {
+    "id": "qfMatch1",
+    "player1": "France",
+    "player2": "Morocco",
+    "p1Points": 1.63,
+    "p2Points": 10.82
+  },
+  "qfMatch2": {
+    "id": "qfMatch2",
+    "player1": "Spain",
+    "player2": "Belgium",
+    "p1Points": 1.66,
+    "p2Points": 9.33
+  },
+  "qfMatch3": {
+    "id": "qfMatch3",
+    "player1": "Norway",
+    "player2": "England",
+    "p1Points": 7.26,
+    "p2Points": 1.94
+  },
+  "qfMatch4": {
+    "id": "qfMatch4",
+    "player1": "Argentina",
+    "player2": "Switzerland",
+    "p1Points": 1.8,
+    "p2Points": 9.33
+  }
+}
 const groupStage = [
     { id: 'groupAMatch1', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
     { id: 'groupAMatch2', group: 'Group A', time: '', timeInMillis: '', player1: 'N/A', p1Points: 'N/A', p1Rec: 'N/A', p2Rec: 'N/A', player2: 'N/A', p2Points: 'N/A', stat: 'N/A', game: 'WorldCup', p1Photo: 'N/A', p2Photo: 'N/A', status1: 'notPlayed', status2: '', commenceTime: '', bet: '', winner: 'N/A', matchType: 'Round 1' },
@@ -144,7 +174,7 @@ class WorldCup extends Component {
             }
         })
     }
-    reArrangeRoundOf16 = () => {
+        reArrangeRoundOf16 = () => {
         var userRef = firebase.database().ref('/userBets/WorldCup/WorldCup2026/')
         // var userRef = firebase.database().ref('/users/')
         userRef.once('value', dataSnapshot => {
@@ -168,9 +198,9 @@ class WorldCup extends Component {
                     const unifiedObject = Object.assign({}, ...r16MatchesArray);
                     if (r16MatchesArray.length > 0) {
                         console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
-                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
                         var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
-                        detailsRef.set(unifiedObject)
+                        betsRef.set(unifiedObject)
                         ramsBets.set(unifiedObject)
 
                     }
@@ -185,28 +215,97 @@ class WorldCup extends Component {
                     const unifiedObject = Object.assign({}, ...r16MatchesArray);
                     if (r16MatchesArray.length > 0) {
                         console.log('hapo sawa', theId, this.state.theEventKey, r16MatchesArray)
-                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
+                        var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/roundOf16/')
                         var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/roundOf16/')
-                        detailsRef.set(unifiedObject)
+                        detailsbetsRefRef.set(unifiedObject)
                         ramsBets.set(unifiedObject)
 
                     }
                 }
-                /*var theUid=data.key,flockNameWithSpaces=''
-                var theFlockData=data.val().flockData//.WorldCup2026.name
-                if(theFlockData){
-                    theFlockData=theFlockData['ramData/events/WorldCup/WorldCup2026/bets/round2']
-                    if(theFlockData){
-                        //theFlockData=theFlockData['name']
-                        flockNameWithSpaces=theFlockData.split('|').join(' ')
-                       // userRef.child(theUid).child('/ramData/events/WorldCup/WorldCup2026/details/flockName/').set(flockNameWithSpaces)
-                    }else{theFlockData=''}
-                }else{theFlockData=''}
-                console.log('theFlockName 001',theCount,theUid,flockNameWithSpaces,theFlockData)
-                if(theCount===theNo){console.log('Count finished')}*/
             })
         })
     }
+    reArrangeQuarterFinals = () => {
+        var userRef = firebase.database().ref('/userBets/WorldCup/WorldCup2026/')
+        // var userRef = firebase.database().ref('/users/')
+        userRef.once('value', dataSnapshot => {
+            var theCount = 0, theNo = dataSnapshot.numChildren()
+            dataSnapshot.forEach((data) => {
+                theCount++
+                var theId = data.key
+                var value = data.val()
+                var roundOf16 = data.val().roundOf16
+               // var final = data.val().final
+              //  console.log('value', theId, value)
+              //  console.log('roundOf16', roundOf16)
+               // console.log('final', final)
+                if (roundOf16) {
+                    const r16MatchesArray = Object.entries(roundOf16)
+                        .filter(([matchId]) => matchId.startsWith("qfM"))
+                        .map(([matchId, winner]) => ({
+                            [matchId]: winner // Dynamically sets the match ID as the key
+                        }));
+                  //  console.log('r16MatchesArray', theId, r16MatchesArray)
+                    const unifiedObject = Object.assign({}, ...r16MatchesArray);
+                    if (r16MatchesArray.length > 0) {
+                       
+                        var betsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/bets/quarterFinals/')
+                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/details/')
+                        var ramsBets = firebase.database().ref('/userBets/WorldCup/WorldCup2026/' + theId + '/quarterFinals/')
+                        var membersFlockNamesRef = firebase.database().ref('/flocksSystem/flockNames/WorldCup2026/')
+                        
+                        //var theItem={}
+                        console.log('unifiedObject',unifiedObject)
+                        const matchesData = theQFromDb; // Your first JSON
+                        const myPicks = unifiedObject;             // Your second JSON
+
+                        const bestPossiblePoints = this.calculateBestPossiblePoints(matchesData, myPicks);
+                        console.log('hapo sawa', theId,bestPossiblePoints)
+                      
+                       var detObject={quarterFinalsRemake:true,quarterFinalsPick:true,currentPick:'quarterFinals',theMenu:'quarterFinals',quarterFinalsBPS:bestPossiblePoints}
+                        betsRef.set(unifiedObject)
+                        ramsBets.set(unifiedObject)
+                        detailsRef.update(detObject)
+
+                        detailsRef.child('flockName').once('value', dataSnapshot => {
+                        var theFlockName=dataSnapshot.val()
+                        if(theFlockName==='Flockless'){console.log('No FlockName 1',theFlockName)}
+                        else{
+                             var detObject={currentPick:'quarterFinals',theMenu:'quarterFinals',quarterFinalsPick:true,quarterFinalsBPS:bestPossiblePoints}
+                            theFlockName=theFlockName.replace(/ /g,"|")
+                            console.log('Has FlockName 1',theFlockName.replace(/ /g,"|"))
+                            membersFlockNamesRef.child('/membersScores/'+theFlockName).child(theId).update(detObject)
+                        }
+                        })
+                       
+                    }
+                }
+        })
+    })
+}
+calculateBestPossiblePoints = (matchesData, myPicks) => {
+  let totalPoints = 0;
+
+  
+  Object.keys(myPicks).forEach((matchId) => {
+    const pickedPlayerKey = myPicks[matchId]; 
+    const matchDetails = matchesData[matchId]; 
+
+    if (matchDetails) {
+  
+      const pointsKey = pickedPlayerKey === 'player1' ? 'p1Points' : 'p2Points';
+      
+      const pointsValue = matchDetails[pointsKey];
+      
+      if (pointsValue && typeof pointsValue === 'number') {
+        totalPoints += pointsValue;
+      }
+    }
+  });
+
+  // Rounding to 2 decimal places to handle floating-point precision math
+  return parseFloat(totalPoints.toFixed(2));
+}
     remakeFlocks = async () => {
         var userRef = firebase.database().ref('/users/')
         userRef.once('value', dataSnapshot => {
@@ -1037,6 +1136,15 @@ class WorldCup extends Component {
 
     }
     pickWinner = (id, winner, time) => {
+       /* var theGameEvent=this.state.theGameEvent,currentRound='',theMenu=''
+        if (theGameEvent === 'Round of 32') {this.setState({currentRound:'round2',theMenu:''});currentRound='round2',theMenu=''}
+        if (theGameEvent === 'Round of 16') {this.setState({currentRound:'finalRound',theMenu:'roundOf16'});currentRound='finalRound',theMenu='roundOf16'}
+        if (theGameEvent === 'Quarter Finals') {this.setState({currentRound:'finalRound',theMenu:'quarterFinals'});currentRound='finalRound',theMenu='quarterFinals'}
+        if (theGameEvent === 'Semi Finals') {this.setState({currentRound:'finalRound',theMenu:'semiFinals'});currentRound='finalRound',theMenu='semiFinals'}
+        if (theGameEvent === 'Finals') {this.setState({currentRound:'finalRound',theMenu:'final'});currentRound='finalRound',theMenu='final'}
+                console.log('this.state.theMenu 004',theGameEvent,this.state.currentRound,this.state.theMenu)*/
+       // return
+     
         var nowTime = new Date().getTime()
         console.log('this.currentRound', this.state.currentRound)
         if (this.state.currentRound === 'round2') {
@@ -1049,7 +1157,7 @@ class WorldCup extends Component {
                 this.notify('Match not yet started')
                 return
             }
-            /* if (winner !== 'N/A') {
+             /*if (winner !== 'N/A') {
                this.notify('Winner already filled')
                return
              }*/
@@ -1068,7 +1176,7 @@ class WorldCup extends Component {
                     this.notify('Match not yet started')
                     return
                 }
-                /*if (winner !== 'N/A') {
+               /* if (winner !== 'N/A') {
                   this.notify('Winner already filled')
                   return
                 }*/
@@ -1088,7 +1196,7 @@ class WorldCup extends Component {
                     this.notify('Match not yet started')
                     return
                 }
-                /* if (winner !== 'N/A') {
+                 /*if (winner !== 'N/A') {
                    this.notify('Winner already filled')
                    return
                  }*/
@@ -1108,7 +1216,7 @@ class WorldCup extends Component {
                     this.notify('Match not yet started')
                     return
                 }
-                /* if (winner !== 'N/A') {
+               /* if (winner !== 'N/A') {
                    this.notify('Winner already filled')
                    return
                  }*/
@@ -1128,7 +1236,7 @@ class WorldCup extends Component {
                     this.notify('Match not yet started')
                     return
                 }
-                /* if (winner !== 'N/A') {
+                 /*if (winner !== 'N/A') {
                    this.notify('Winner already filled')
                    return
                  }*/
@@ -1363,10 +1471,14 @@ class WorldCup extends Component {
         if (this.state.theEventKey) {
             var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
             editDbRef.child('currentPick').once('value', dataSnapshot => {
-                if (dataSnapshot.exists()) { this.setState({ theGameEvent: dataSnapshot.val() }) }
+                if (dataSnapshot.exists()) { 
+                    this.setState({ theGameEvent: dataSnapshot.val() })
+                 }
             })
             editDbRef.child('menuSelection').once('value', dataSnapshot => {
-                if (dataSnapshot.exists()) { this.setState({ menuSelection: dataSnapshot.val() }) }
+                if (dataSnapshot.exists()) { 
+                    this.setState({ menuSelection: dataSnapshot.val() }) 
+                }
 
             })
         }
@@ -1475,7 +1587,8 @@ class WorldCup extends Component {
     }
     openWorldCupDetailsModal = async () => {
        // this.reArrangeRoundOf16()
-       // return
+      // this.reArrangeQuarterFinals()
+      //  return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
        editDbRef.child('currentPick').once('value', dataSnapshot => {
@@ -1502,18 +1615,18 @@ class WorldCup extends Component {
         }
         var itemToModals = '', modalTitle = '', stopEdit = ''
         var year = new Date().getFullYear()
-        if (menuSelection === 'Round of 32') { itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit' }
+        if (menuSelection === 'Round of 32') {this.setState({currentRound:'round2',theMenu:''});itemToModals = this.state.roundOf32Arr, modalTitle = 'World Cup ' + year + ' > Round of 32', stopEdit = 'stopRound2Edit'}
         if (menuSelection === 'Round of 16') {
-            itemToModals = this.state.roundOf16Arr, modalTitle = 'World Cup ' + year + ' > Round of 16', stopEdit = 'stopRoundOf16Edit'
+            this.setState({currentRound:'finalRound',theMenu:'roundOf16'});itemToModals = this.state.roundOf16Arr, modalTitle = 'World Cup ' + year + ' > Round of 16', stopEdit = 'stopRoundOf16Edit'
         }
         if (menuSelection === 'Quarter Finals') {
-            itemToModals = this.state.quarterFinalsArr, modalTitle = 'World Cup ' + year + ' > Quarter Finals', stopEdit = 'stopQuarterFinalsEdit'
+            this.setState({currentRound:'finalRound',theMenu:'quarterFinals'});itemToModals = this.state.quarterFinalsArr, modalTitle = 'World Cup ' + year + ' > Quarter Finals', stopEdit = 'stopQuarterFinalsEdit'
         }
         if (menuSelection === 'Semi Finals') {
-            itemToModals = this.state.semiFinalsArr, modalTitle = 'World Cup ' + year + ' > Semi Finals', stopEdit = 'stopSemiFinalsEdit'
+            this.setState({currentRound:'finalRound',theMenu:'semiFinals'});itemToModals = this.state.semiFinalsArr, modalTitle = 'World Cup ' + year + ' > Semi Finals', stopEdit = 'stopSemiFinalsEdit'
         }
         if (menuSelection === 'Finals') {
-            itemToModals = this.state.finalArr, modalTitle = 'World Cup ' + year + ' > Finals', stopEdit = 'stopFinalEdit'
+            this.setState({currentRound:'finalRound',theMenu:'final'});itemToModals = this.state.finalArr, modalTitle = 'World Cup ' + year + ' > Finals', stopEdit = 'stopFinalEdit'
         }
 
         var i = 0, pointMissing = false

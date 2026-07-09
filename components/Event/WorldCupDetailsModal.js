@@ -16,6 +16,7 @@ class DetailsModal extends Component {
     bestPossibleScore:0,buttonClick:true,showProgressBar:false,ramFlockNames:[],flockNameModal:false,openNewFlockModal:true,
     ramFlockName:'',flockNameNoSpace:'',myEmail:'',myPhoneNo:''}
   componentDidMount=()=>{
+    console.log('his.props.theMenu',this.props.theMenu,this.props.currentSelection)
    
     //console.log('iteeems',this.props.currentEvent,this.props.eventTitle,this.props.theEventKey)
     this.props.hideModal
@@ -306,7 +307,7 @@ class DetailsModal extends Component {
     if(this.props.currentSelection==='round1'||this.props.currentSelection==='round2'){
       theSelection=this.props.currentSelection
     }
-     if(this.props.currentSelection==='finalRound'){
+     if(this.props.currentSelection==='finalRound'){   
       theSelection=this.props.theMenu
      }
     const theTime = new Date().getTime()
