@@ -1699,9 +1699,9 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
 
     }
     openWorldCupDetailsModal = async () => {
-      //  this.reArrangeRoundOf16()
-     //  this.reArrangeQuarterFinals()
-      //  return
+       //this.reArrangeRoundOf16()
+       //this.reArrangeQuarterFinals()
+       //return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
        editDbRef.child('currentPick').once('value', dataSnapshot => {

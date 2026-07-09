@@ -4,9 +4,9 @@ const Meta=({title,keywords,description,image,url})=> {
     return (
         <Head>
        {/*primary tags*/}
-        <meta name="theme-color" content="#2B3074"></meta>
-        <meta name="msapplication-navbutton-color" content="#2B3074"></meta>
-        <meta name="apple-mobile-web-app-status-bar-style" content="#2B3074"></meta>
+        <meta name="theme-color" content="#292f51"></meta>
+        <meta name="msapplication-navbutton-color" content="#292f51"></meta>
+        <meta name="apple-mobile-web-app-status-bar-style" content="#292f51"></meta>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name='keywords' content={keywords}/>
         <meta name='description' content={description}/>
