@@ -346,7 +346,7 @@ class WorldCup extends Component {
                 theCount++
                 var theId = data.key
                 var value = data.val()
-                var roundOf16 = data.val().roundOf16
+                var roundOf16 = data.val().roundOf16//round2//roundOf16
                 var theQuarterFinals = data.val().quarterFinals
                // var final = data.val().final
               //  console.log('value', theId, value)
@@ -665,6 +665,8 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
                 var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
                 var finalRoundCount = dataSnapshot.child('finalRound').numChildren()
                 var round2Exists = dataSnapshot.child('round2').exists()
+
+                console.log('semiFinalsCount',semiFinalsCount)
                 // 
                 if (round2Exists) {
                     var i = 0
@@ -731,7 +733,7 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
                 var semiFinalsExists = dataSnapshot.child('semiFinals').exists()
                 if (semiFinalsExists) {
                     var i = 0
-                    semiFinalsArr = theData.final4
+                    semiFinalsArr = theData.semiFinals
                     //console.log('round 14 item',round2Count,round2Arr)
                     for (var key in semiFinalsArr) {
                         i++
@@ -744,7 +746,7 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
                         })
                         if (semiFinalsCount === i) {
                             this.setState({ semiFinalsArr: this.state.semiFinalsArr })
-                            //console.log('semiFinalsArr ', this.state.semiFinalsArr)
+                            console.log('semiFinalsArr 5555555555555555 ', this.state.semiFinalsArr)
                         }
                     }
                 }
@@ -1700,8 +1702,8 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
     }
     openWorldCupDetailsModal = async () => {
        //this.reArrangeRoundOf16()
-       //this.reArrangeQuarterFinals()
-       //return
+      // this.reArrangeQuarterFinals()
+      // return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
        editDbRef.child('currentPick').once('value', dataSnapshot => {
