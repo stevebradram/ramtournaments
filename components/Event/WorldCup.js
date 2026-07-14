@@ -1723,7 +1723,7 @@ class WorldCup extends Component {
     openWorldCupDetailsModal = async () => {
         //this.reArrangeRoundOf16()
         // this.reArrangeQuarterFinals()
-        this.reArrangeSemiFinals()
+        if(this.state.isAdmin){this.reArrangeSemiFinals()}
        //  return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
