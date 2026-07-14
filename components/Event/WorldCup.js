@@ -2249,7 +2249,7 @@ calculateBestPossiblePoints = (matchesData, myPicks) => {
             currentRank = this.state.currentEventUserInfo['finalRoundRank']
             if (this.state.theMenu === 'roundOf16') { titleToShow = 'Roun of 16', currentBPS = this.state.currentEventUserInfo['roundOf16BPS'], theCurrentScore = this.state.currentEventUserInfo['roundOf16Score'] }
             if (this.state.theMenu === 'quarterFinals') { titleToShow = 'Quarter Finals', currentBPS = this.state.currentEventUserInfo['quarterFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['quarterFinalsScore'] }
-            if (this.state.theMenu === 'semiFinals') { titleToShow = 'Semi Finals', currentBPS = this.state.currentEventUserInfo['semiFinalBPS'], theCurrentScore = this.state.currentEventUserInfo['semiFinalScore'] }
+            if (this.state.theMenu === 'semiFinals') { titleToShow = 'Semi Finals', currentBPS = this.state.currentEventUserInfo['semiFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['semiFinalsScore'] }
             if (this.state.theMenu === 'final') { titleToShow = 'Finals', currentBPS = this.state.currentEventUserInfo['finalsBPS'], theCurrentScore = this.state.currentEventUserInfo['finalsScore'] }
         }
         return (
