@@ -683,7 +683,7 @@ class WorldCup extends Component {
                 var roundOf16Count = dataSnapshot.child('roundOf16').numChildren()
                 var quarterFinalsCount = dataSnapshot.child('quarterFinals').numChildren()
                 var semiFinalsCount = dataSnapshot.child('semiFinals').numChildren()
-                var finalRoundCount = dataSnapshot.child('finalRound').numChildren()
+                var finalRoundCount = dataSnapshot.child('final').numChildren()
                 var round2Exists = dataSnapshot.child('round2').exists()
 
                 console.log('semiFinalsCount', semiFinalsCount)
@@ -771,11 +771,12 @@ class WorldCup extends Component {
                     }
                 }
 
-                var finalRoundExists = dataSnapshot.child('finalRound').exists()
+                var finalRoundExists = dataSnapshot.child('final').exists()
+                 console.log('finalRoundExists', finalRoundExists)
                 if (finalRoundExists) {
                     var i = 0
-                    finalArr = theData.finalRound
-                    //console.log('round 14 item',round2Count,round2Arr)
+                    finalArr = theData.final
+                    console.log('round 14 finalArr',finalArr)
                     for (var key in finalArr) {
                         i++
                         var theId = key
@@ -785,10 +786,10 @@ class WorldCup extends Component {
                                 item2['bet'] = betPlayer
                             }
                         })
-                        if (semiFinalsCount === i) {
+                       
                             this.setState({ finalArr: this.state.finalArr })
-                            //console.log('finalRoundArr ', this.state.finalArr)
-                        }
+                            console.log('finalRoundArr ', this.state.finalArr)
+                        
                     }
                 }
             })
@@ -1723,7 +1724,7 @@ class WorldCup extends Component {
     openWorldCupDetailsModal = async () => {
         //this.reArrangeRoundOf16()
         // this.reArrangeQuarterFinals()
-        if(this.state.isAdmin){this.reArrangeSemiFinals()}
+       // if(this.state.isAdmin){this.reArrangeSemiFinals()}
        //  return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
@@ -2151,7 +2152,7 @@ class WorldCup extends Component {
         console.log('isPicked', isPicked)
         isPicked = this.state.currentEventUserInfo[isPicked]
         if (!isPicked) { isPicked = false }
-
+        console.log('isPicked',isPicked)
         return (
             <div className={style.divCont}>
                 <div className={style.listCont}>
@@ -2271,7 +2272,7 @@ class WorldCup extends Component {
             if (this.state.theMenu === 'roundOf16') { titleToShow = 'Roun of 16', currentBPS = this.state.currentEventUserInfo['roundOf16BPS'], theCurrentScore = this.state.currentEventUserInfo['roundOf16Score'] }
             if (this.state.theMenu === 'quarterFinals') { titleToShow = 'Quarter Finals', currentBPS = this.state.currentEventUserInfo['quarterFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['quarterFinalsScore'] }
             if (this.state.theMenu === 'semiFinals') { titleToShow = 'Semi Finals', currentBPS = this.state.currentEventUserInfo['semiFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['semiFinalsScore'] }
-            if (this.state.theMenu === 'final') { titleToShow = 'Finals', currentBPS = this.state.currentEventUserInfo['finalsBPS'], theCurrentScore = this.state.currentEventUserInfo['finalsScore'] }
+            if (this.state.theMenu === 'final') { titleToShow = 'Finals', currentBPS = this.state.currentEventUserInfo['finalBPS'], theCurrentScore = this.state.currentEventUserInfo['finalScore'] }
         }
         return (
             <>
@@ -2434,7 +2435,7 @@ class WorldCup extends Component {
                         <>{this.state.theMenu === 'roundOf16' ? <div className={style.divCont}>{this.itemComp(this.state.roundOf16Arr, 'roundOf16Pick')}</div> : null}
                             {this.state.theMenu === 'quarterFinals' ? <div className={style.divCont}>{this.itemComp(this.state.quarterFinalsArr, 'quarterFinalsPick')}</div> : null}
                             {this.state.theMenu === 'semiFinals' ? <div className={style.divCont}>{this.itemComp(this.state.semiFinalsArr, 'semiFinalsPick')}</div> : null}
-                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr, 'finalsPick')}</div> : null}</>
+                            {this.state.theMenu === 'final' ? <div className={style.divCont}>{this.itemComp(this.state.finalArr, 'finalPick')}</div> : null}</>
                         : null}
                     {this.state.enterTeamNameInfoModal ? <div className={style.modal} onClick={() => this.setState({ enterTeamNameInfoModal: false })}>
                         <div className={style.groupStagePicksDiv} onClick={(e) => this.doNothing(e)}>
