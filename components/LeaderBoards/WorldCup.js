@@ -162,7 +162,7 @@ class WorldCup extends Component {
               var roundOf16BPS=userBetData.roundOf16BPS,quarterFinalsBPS=userBetData.quarterFinalsBPS
               var semiFinalsBPS=userBetData.semiFinalsBPS,finalRoundBPS=userBetData.finalRoundBPS
               var roundOf16Score=userBetData.roundOf16Score,quarterFinalsScore=userBetData.quarterFinalsScore
-              var semiFinalsScore=userBetData.semiFinalsScore,finalRoundScore=userBetData.finalRoundScore
+              var semiFinalsScore=userBetData.semiFinalsScore,finalScore=userBetData.finalScore
               var theMenu=userBetData.theMenu
 
             
@@ -174,18 +174,18 @@ class WorldCup extends Component {
               if(!roundOf16Score||roundOf16Score===undefined||roundOf16Score===null){roundOf16Score=0}
               if(!quarterFinalsScore||quarterFinalsScore===undefined||quarterFinalsScore===null){quarterFinalsScore=0}
               if(!semiFinalsScore||semiFinalsScore===undefined||semiFinalsScore===null){semiFinalsScore=0}
-              if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
+              if(!finalScore||finalScore===undefined||finalScore===null){finalScore=0}
               
              
               if(currentRound==='roundOf16'){BPS=roundOf16BPS}if(currentRound==='quarterFinals'){BPS=quarterFinalsBPS}
               if(currentRound==='semiFinals'){BPS=semiFinalsBPS}if(currentRound==='finalRound'){BPS=finalRoundBPS}
 
-              var score=Number(roundOf16Score)+Number(quarterFinalsScore)+Number(semiFinalsScore)+Number(finalRoundScore)
+              var score=Number(roundOf16Score)+Number(quarterFinalsScore)+Number(semiFinalsScore)+Number(finalScore)
               score=Number(score).toFixed(2)
               var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
                 email:theEmail,phone:thePhone,roundOf16BPS:roundOf16BPS,quarterFinalsBPS:quarterFinalsBPS,finalRoundBPS:finalRoundBPS,
                 roundOf16Score:roundOf16Score,quarterFinalsScore:quarterFinalsScore,semiFinalsScore:semiFinalsScore,semiFinalsBPS:semiFinalsBPS,
-                finalRoundScore:finalRoundScore,score:score}
+                finalScore:finalScore,score:score}
                 theDet2.push(theDet)
                 //console.log('final round 36366',theDet2)
               this.setState({finalRoundArr:theDet2})
@@ -234,22 +234,22 @@ class WorldCup extends Component {
               var userBetData=dataSnapshot.val()
               var round1Score=userBetData.round1Score,round2Score=userBetData.round2Score
               var roundOf16Score=userBetData.roundOf16Score,quarterFinalsScore=userBetData.quarterFinalsScore
-              var semiFinalsScore=userBetData.semiFinalsScore,finalRoundScore=userBetData.finalRoundScore
+              var semiFinalsScore=userBetData.semiFinalsScore,finalScore=userBetData.finalScore
               
               if(!round1Score||round1Score===undefined||round1Score===null){round1Score=0}
               if(!round2Score||round2Score===undefined||round2Score===null){round2Score=0}
               if(!roundOf16Score||roundOf16Score===undefined||roundOf16Score===null){roundOf16Score=0}
               if(!quarterFinalsScore||quarterFinalsScore===undefined||quarterFinalsScore===null){quarterFinalsScore=0}
               if(!semiFinalsScore||semiFinalsScore===undefined||semiFinalsScore===null){semiFinalsScore=0}
-              if(!finalRoundScore||finalRoundScore===undefined||finalRoundScore===null){finalRoundScore=0}
-              //console.log('scorees',theId,round1Score,round2Score,roundOf16Score,quarterFinalsScore,semiFinalsScore,finalRoundScore)
+              if(!finalScore||finalScore===undefined||finalScore===null){finalScore=0}
+              //console.log('scorees',theId,round1Score,round2Score,roundOf16Score,quarterFinalsScore,semiFinalsScore,finalScore)
              
-              var score=Number(round1Score)+Number(round2Score)+Number(roundOf16Score)+Number(quarterFinalsScore)+Number(semiFinalsScore)+Number(finalRoundScore)
+              var score=Number(round1Score)+Number(round2Score)+Number(roundOf16Score)+Number(quarterFinalsScore)+Number(semiFinalsScore)+Number(finalScore)
               score=Number(score).toFixed(2)
               var theDet={id:theId,flockName:userBetData.flockName,teamName:userBetData.teamName,
                 round1Score:round1Score,round2Score:round2Score,email:theEmail,phone:thePhone,
                 roundOf16Score:roundOf16Score,quarterFinalsScore:quarterFinalsScore,semiFinalsScore:semiFinalsScore,
-                finalRoundScore:finalRoundScore,score:score}
+                finalScore:finalScore,score:score}
                 theDet2.push(theDet)
                //console.log('ikoooooooooooooooo 1111',theDet2)
               this.setState({overallArr:theDet2})
@@ -414,7 +414,7 @@ class WorldCup extends Component {
               <td>{this.state.finalRoundExists?item.roundOf16Score:'0.00'}</td>
               <td>{this.state.finalRoundExists?item.quarterFinalsScore:'0.00'}</td>
               <td>{this.state.finalRoundExists?item.semiFinalsScore:'0.00'}</td>
-              <td>{this.state.finalRoundExists?item.finalRoundScore:'0.00'}</td>
+              <td>{this.state.finalRoundExists?item.finalScore:'0.00'}</td>
               </>:null
            }
            {this.state.currentSelection==='overall'?
@@ -425,7 +425,7 @@ class WorldCup extends Component {
               <td>{item.roundOf16Score?item.roundOf16Score:'0.00'}</td>
               <td>{item.quarterFinalsScore?item.quarterFinalsScore:'0.00'}</td>
               <td>{item.semiFinalsScore?item.semiFinalsScore:'0.00'}</td>
-              <td>{item.finalRoundScore?item.finalRoundScore:'0.00'}</td>
+              <td>{item.finalScore?item.finalScore:'0.00'}</td>
               </>:null
            }
            {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td></>:null}
