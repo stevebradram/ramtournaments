@@ -96,7 +96,7 @@ this.getRamMembersData()
             var theItem2 = { name: theData.ramName, score: r2S, BPS: r2BPS, pick: round2Pick, uid: theUserId }
             //
             var roundOf16Score = theData.roundOf16Score, quarterFinalsScore = theData.quarterFinalsScore,
-              semiFinalsScore = theData.semiFinalsScore, finalRoundScore = theData.finalRoundScore,
+              semiFinalsScore = theData.semiFinalsScore, finalRoundScore = theData.finalScore,
               finalRoundPick = theData.finalRoundPick, roundOf16Pick = theData.roundOf16Pick, quarterFinalsPick = theData.quarterFinalsPick,
               semiFinalsPick = theData.semiFinalsPick
             if (roundOf16Score === undefined) { roundOf16Score = '0' };
@@ -159,7 +159,7 @@ this.getRamMembersData()
           var roundOf16Score = theData.roundOf16Score
           var quarterFinalsScore = theData.quarterFinalsScore
           var semiFinalsScore = theData.semiFinalsScore
-          var finalRoundScore = theData.finalRoundScore
+          var finalRoundScore = theData.finalScore
           if (roundOf16Score === undefined) { roundOf16Score = 0 }
           if (quarterFinalsScore === undefined) { quarterFinalsScore = 0 }
           if (semiFinalsScore === undefined) { semiFinalsScore = 0 }

@@ -406,15 +406,18 @@ class WorldCup extends Component {
                 var value = data.val()
                 var semiFinals = data.val().semiFinals
                 if (semiFinals) {
-                        var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/details/')
-                        detailsRef.once('value', dataSnapshot => {
-                            var semiFinalsBPS =dataSnapshot.val().semiFinalsBPS
-                            var semiFinalsScore =dataSnapshot.val().semiFinalsScore
-                           if(semiFinalsBPS){detailsRef.child('semiFinalBPS').set(semiFinalsBPS)}
-                           if(semiFinalsScore){detailsRef.child('semiFinalScore').set(semiFinalsScore)}
-                                
-                        })}})})               
-                     
+                    var detailsRef = firebase.database().ref('/users/' + theId + '/ramData/events/WorldCup/WorldCup2026/details/')
+                    detailsRef.once('value', dataSnapshot => {
+                        var semiFinalsBPS = dataSnapshot.val().semiFinalsBPS
+                        var semiFinalsScore = dataSnapshot.val().semiFinalsScore
+                        if (semiFinalsBPS) { detailsRef.child('semiFinalBPS').set(semiFinalsBPS) }
+                        if (semiFinalsScore) { detailsRef.child('semiFinalScore').set(semiFinalsScore) }
+
+                    })
+                }
+            })
+        })
+
     }
     calculateBestPossiblePoints = (matchesData, myPicks) => {
         let totalPoints = 0;
@@ -772,11 +775,11 @@ class WorldCup extends Component {
                 }
 
                 var finalRoundExists = dataSnapshot.child('final').exists()
-                 console.log('finalRoundExists', finalRoundExists)
+                console.log('finalRoundExists', finalRoundExists)
                 if (finalRoundExists) {
                     var i = 0
                     finalArr = theData.final
-                    console.log('round 14 finalArr',finalArr)
+                    console.log('round 14 finalArr', finalArr)
                     for (var key in finalArr) {
                         i++
                         var theId = key
@@ -786,10 +789,10 @@ class WorldCup extends Component {
                                 item2['bet'] = betPlayer
                             }
                         })
-                       
-                            this.setState({ finalArr: this.state.finalArr })
-                            console.log('finalRoundArr ', this.state.finalArr)
-                        
+
+                        this.setState({ finalArr: this.state.finalArr })
+                        console.log('finalRoundArr ', this.state.finalArr)
+
                     }
                 }
             })
@@ -1428,6 +1431,46 @@ class WorldCup extends Component {
         }
 
     }
+    closePickWinner = (id) => {
+        if (this.state.currentRound === 'round2') {
+            var index2 = this.state.roundOf32Arr.map(function (x) { return x.id; }).indexOf(id);
+            var theItems = this.state.roundOf32Arr
+            delete theItems[index2]['chosenWinner']
+            delete theItems[index2]['showChooseWinner']
+            this.setState({ roundOf32Arr: theItems })
+            //console.log('this.state.currentItems 001', theItems)
+        }
+        if (this.state.currentRound === 'finalRound') {
+            if (this.state.theMenu === 'roundOf16') {
+                var index2 = this.state.roundOf16Arr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.roundOf16Arr
+                delete theItems[index2]['chosenWinner']
+                delete theItems[index2]['showChooseWinner']
+                this.setState({ roundOf16Arr: theItems })
+            }
+            if (this.state.theMenu === 'quarterFinals') {
+                var index2 = this.state.quarterFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.quarterFinalsArr
+                delete theItems[index2]['chosenWinner']
+                delete theItems[index2]['showChooseWinner']
+                this.setState({ quarterFinalsArr: theItems })
+            }
+            if (this.state.theMenu === 'semiFinals') {
+                var index2 = this.state.semiFinalsArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.semiFinalsArr
+                delete theItems[index2]['chosenWinner']
+                delete theItems[index2]['showChooseWinner']
+                this.setState({ semiFinalsArr: theItems })
+            }
+            if (this.state.theMenu === 'final') {
+                var index2 = this.state.finalArr.map(function (x) { return x.id; }).indexOf(id);
+                var theItems = this.state.finalArr
+                delete theItems[index2]['chosenWinner']
+                delete theItems[index2]['showChooseWinner']
+                this.setState({ finalArr: theItems })
+            }
+        }
+    }
     submitWinner = (id, winner) => {
         //console.log('haaaaaaaaaaaapa 000000')
         if (this.state.currentRound === 'round2') {
@@ -1724,8 +1767,8 @@ class WorldCup extends Component {
     openWorldCupDetailsModal = async () => {
         //this.reArrangeRoundOf16()
         // this.reArrangeQuarterFinals()
-       // if(this.state.isAdmin){this.reArrangeSemiFinals()}
-       //  return
+        // if(this.state.isAdmin){this.reArrangeSemiFinals()}
+        //  return
         /*  var pickEvent = false
        var editDbRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey)
        editDbRef.child('currentPick').once('value', dataSnapshot => {
@@ -2152,7 +2195,7 @@ class WorldCup extends Component {
         console.log('isPicked', isPicked)
         isPicked = this.state.currentEventUserInfo[isPicked]
         if (!isPicked) { isPicked = false }
-        console.log('isPicked',isPicked)
+        console.log('isPicked', isPicked)
         return (
             <div className={style.divCont}>
                 <div className={style.listCont}>
@@ -2268,7 +2311,7 @@ class WorldCup extends Component {
         if (this.state.currentRound === 'round1') { titleToShow = 'Group Stage', currentBPS = this.state.currentEventUserInfo['round1BPS'], theCurrentScore = this.state.currentEventUserInfo['round1Score'], currentRank = this.state.currentEventUserInfo['round1Rank'] }
         if (this.state.currentRound === 'round2') { titleToShow = 'Round of 32', currentBPS = this.state.currentEventUserInfo['round2BPS'], theCurrentScore = this.state.currentEventUserInfo['round2Score'], currentRank = this.state.currentEventUserInfo['round2Rank'] }
         if (this.state.currentRound === 'finalRound') {
-            currentRank = this.state.currentEventUserInfo['finalRoundRank']
+            currentRank = this.state.currentEventUserInfo['finalRank']
             if (this.state.theMenu === 'roundOf16') { titleToShow = 'Roun of 16', currentBPS = this.state.currentEventUserInfo['roundOf16BPS'], theCurrentScore = this.state.currentEventUserInfo['roundOf16Score'] }
             if (this.state.theMenu === 'quarterFinals') { titleToShow = 'Quarter Finals', currentBPS = this.state.currentEventUserInfo['quarterFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['quarterFinalsScore'] }
             if (this.state.theMenu === 'semiFinals') { titleToShow = 'Semi Finals', currentBPS = this.state.currentEventUserInfo['semiFinalsBPS'], theCurrentScore = this.state.currentEventUserInfo['semiFinalsScore'] }
