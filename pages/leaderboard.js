@@ -617,7 +617,7 @@ class leaderboard extends Component {
            <th>Super Bowl</th>
            </>
           :null}
-           {this.state.isAdmin?<><th>Phone</th><th>Email</th><th>Delete</th></>:null}
+           {this.state.isAdmin?<><th>Phone</th><th>Email</th><th>Delete</th><th>Nots</th></>:null}
         </tr>
         {theItems.map((item, index) => {
           var theScore='',theBPS=''
@@ -662,7 +662,7 @@ class leaderboard extends Component {
               <td>{item.finalRoundScore}</td>*/}
               </>
               :null}
-              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.teamName,deleteModal:true,userIdToBeDeleted:item.id,flockToBeDeleted:item.flockName})}/></td></>:null}
+              {this.state.isAdmin?<><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={()=>this.setState({deleteName:item.teamName,deleteModal:true,userIdToBeDeleted:item.id,flockToBeDeleted:item.flockName})}/></td><td>{item.nots}</td></>:null}
             </tr>
             )
         })}

@@ -53,15 +53,19 @@ class leaderboard extends Component {
     this.setState({[e.target.id]:value})
   }
   uploadToDb= async () => {
+  
 
-  if(this.state.videoThumbnail!==''&&this.state.videoLink!==''&&this.state.videoTitle!==''){
+  if(this.state.videoLink!==''&&this.state.videoTitle!==''&&this.state.videoNumber!==''){
     this.showProgressBar()
+    const urlString = this.state.videoLink
+    const parsedUrl = new URL(urlString);
+    const videoId = parsedUrl.pathname.slice(1);
     this.notify('Uploading.....')
-    var theThumbNail='https://img.youtube.com/vi/'+this.state.videoThumbnail+'/0.jpg' 
-    var theVideoLink="https://youtu.be/"+this.state.videoLink
+    var theThumbNail='https://img.youtube.com/vi/'+videoId+'/0.jpg' 
+    var theVideoLink='https://youtu.be/'+videoId
     var theDb = firebase.database().ref('/videos/')
     var theKey=theDb.push().key
-    var theItem={id:theKey,thumbnail:theThumbNail,title:this.state.videoTitle,video:theVideoLink,time:new Date().getTime()}
+    var theItem={id:theKey,thumbnail:theThumbNail,title:this.state.videoTitle,video:theVideoLink,time:new Date().getTime(),videoNumber:this.state.videoNumber}
     theDb.child(theKey).set(theItem, error => {
       if (!error) {
         this.setState({ videoModal: false })
@@ -105,7 +109,7 @@ class leaderboard extends Component {
             })}
             {this.state.isAdmin?<div className={styles.headerDiv2} onClick={()=>this.setState({videoModal:true})}>Add Video</div>:null}
             </div>
-          {this.state.communitySelection==='News & Videos'?<News/>:null}
+          {this.state.communitySelection==='News & Videos'?<News isAdmin={this.state.isAdmin}/>:null}
           {this.state.communitySelection==='Hall of Fame'?<HallOfFame/>:null}
 
           {this.state.videoModal?<div className={styles.modalCont} onClick={()=>this.setState({videoModal:false})}>
@@ -116,8 +120,10 @@ class leaderboard extends Component {
              <input className={styles.eventInput} id='videoTitle' placeholder='Enter video title' value={this.state.videoTitle} onChange={(event) => this.inputChange(event)}></input>
             <p className={styles.vidP}>Video Link</p>
              <input className={styles.eventInput} id='videoLink' placeholder='Enter video Link' value={this.state.videoLink} onChange={(event) => this.inputChange(event)}></input>
-            <p className={styles.vidP}>Video Thumnail</p>
-             <input className={styles.eventInput} id='videoThumbnail' placeholder='Enter video thumbnail' value={this.state.videoThumbnail} onChange={(event) => this.inputChange(event)}></input>
+            {/*<p className={styles.vidP}>Video Thumnail</p>
+             <input className={styles.eventInput} id='videoThumbnail' placeholder='Enter video thumbnail' value={this.state.videoThumbnail} onChange={(event) => this.inputChange(event)}></input>*/}
+              <p className={styles.vidP}>Video Number</p>
+             <input className={styles.eventInput} id='videoNumber' placeholder='Enter video number' value={this.state.videoNumber} onChange={(event) => this.inputChange(event)}></input>
             <p className={styles.submitP} onClick={()=>this.uploadToDb()}>Upload</p></div>
           </div>:null}
           </div>

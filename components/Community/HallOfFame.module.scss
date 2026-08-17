@@ -26,8 +26,14 @@ $blackish:#292f51;
 }
 .listDiv{
     margin-bottom: 5px;
+    display:flex;
+    align-items:center;
 }
-
+.deleteDiv{
+    margin-top:3px;
+    margin-right:5px;
+    cursor:pointer;
+}
 .container h2{
     margin-top: 30px;
     margin-bottom: 10px;

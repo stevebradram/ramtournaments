@@ -17,6 +17,7 @@ $blackish:#292f51;
     right:0;top: 0;
     margin: 100px 80px 100px 80px;
     overflow: hidden;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     
 }
 .container2{
@@ -296,6 +297,9 @@ $blackish:#292f51;
     margin: 10px;
     border-radius: 20px;
     box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+
+
 }
 .verifiedDiv{
     display: flex;
@@ -405,11 +409,14 @@ $blackish:#292f51;
     padding-top: 60px;
 }
 .editDiv{
+    position: fixed;
     height: 60px;
     padding: 0px 5px 0px 12px;
     margin: 10px;
     border-radius: 30px;
     margin-bottom: 20px;
+
+    
 }
 .verifiedDiv{
     display: flex;

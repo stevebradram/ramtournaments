@@ -174,9 +174,9 @@ this.getRamMembersData()
             avScore = Number(avScore.toFixed(2))
           }
 
-          var overallAvScoreNew = theData.round1AvScore||0 + theData.round2AvScore||0 + avScore||0
+          var overallAvScoreNew = Number(theData.round1AvScore||0) + Number(theData.round2AvScore||0) + Number(avScore||0)
           overallAvScoreNew = overallAvScoreNew.toFixed(2);
-          ////console.log('yyyyyyyy',theScore,roundOf16MembersNo)
+          console.log('data.key',data.key,theData.round1AvScore,theData.round2AvScore,avScore,'overallAvScoreNew',overallAvScoreNew)
           var theItem3 = { flockName: data.key, membersNo: roundOf16MembersNo, score: theScore, avScore: avScore }
 
           var avMmebersNo = overallMembersNoNew //(Number(roundOf16MembersNo) + Number(theData.round1MembersNo) + Number(theData.round2MembersNo)) / 3

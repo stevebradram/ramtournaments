@@ -47,11 +47,13 @@ class leaderboard extends Component {
       var theD=data.val().userData
      
       if(!theD.name)return
-      var theItem={name:theD.name,phone:theD.phoneNo,email:theD.email,created:theD.created}
+      let notificationStatus = true;
+      if(theD.notificationsEnabled===false){notificationStatus=false}
+      var theItem={name:theD.name,phone:theD.phoneNo,email:theD.email,created:theD.created,notificationStatus:notificationStatus}
       theUsers.push(theItem)
       if(theCount===i){
-        //console.log('the users',theUsers)
-        var sortedArr=theUsers.sort(function(a, b){return b.created - a.created});
+        console.log('the users',theUsers)
+        var sortedArr=theUsers.sort((a, b) => a.name.localeCompare(b.name));
         this.setState({theUsers:sortedArr})
       }
     })
@@ -94,6 +96,7 @@ class leaderboard extends Component {
           <th></th>
           <th>Name</th>
           <th>Email</th>
+          <th>Notifications?</th>
           <th>Phone No</th>
           <th>Joined</th>
         </tr>
@@ -104,6 +107,7 @@ class leaderboard extends Component {
               <td>{index+1}</td>
               <td>{item.name}</td>
               <td>{item.email}</td>
+              <td>{item.notificationStatus+''}</td>
               <td>{item.phone}</td>
               <td>{created}</td>
             </tr>
@@ -116,5 +120,4 @@ class leaderboard extends Component {
         )
     }
 }
-
 export default leaderboard

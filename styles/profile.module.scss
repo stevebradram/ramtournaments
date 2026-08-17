@@ -15,7 +15,7 @@ $blackish:#292f51;
 #container2{
     background-color: white;
     width: 400px;
-    height: 430px;
+    height: auto;
     overflow: hidden;
     box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
     border-radius:20px;
@@ -110,19 +110,87 @@ $blackish:#292f51;
 .imageDiv{
     height: 100px;
     width: 100px;
+    min-height: 100px;
+    min-width: 100px;
     border: 1px solid #eee;
-    border-radius: 50px;
+    border-radius: 50%;
     margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+     overflow: hidden;
+     position:relative;
+     //background-color:red
+}
+.imageDiv img{
+    height: 100px;
+    width:100px;
+    object-fit: cover;
+    image-rendering: -webkit-optimize-contrast; 
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+.cameraDiv{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    background-color:#eeeeee55;
+    position:absolute;
+    bottom:0;left:0;right:0;
+    z-index:10;
+    align-items:center;
+    padding:2px 0px;
+}
+.cameraIcon{
+    border-radius:50px;
+    font-size:20px;
+    background-color:#eeeeee00;
+    align-self:center;
+    color:#eee;
+    cursor:pointer
+}
+.changePhotoDiv{
+ background-color: $blackish;
+ border-radius:5px;
+ font-size: 12px;
+ display: flex;
+ align-items:center ;
+ justify-content: center;
+ padding-bottom: 3px;
+ color: #fff;
+ height: 20px;
+ width: 90px;
+ //border: 1px solid $blackish;
+ font-weight: 500;
+ margin-top: 5px;
+ cursor: pointer;
+}
+.imageDiv2{
+    height: 50px;
+    width: 50px;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    margin-top: -20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;  
+}
+
+.imageDiv2 img{
+    height: 100%;
+    object-fit: cover;
+}
+.imageDiv img{
+    height: 100%;
+    object-fit: cover;
 }
 .icProfile{
     font-size: 98px;
     color: #eee;
 }
 .nameP{
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 5px;
     font-weight: 700;
     color:$blackish
@@ -132,6 +200,6 @@ $blackish:#292f51;
      color:$blackish
 }
 .phoneP{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
      color:$blackish
 }

@@ -8,6 +8,11 @@ const Meta=({title,keywords,description,image,url})=> {
         <meta name="msapplication-navbutton-color" content="#292f51"></meta>
         <meta name="apple-mobile-web-app-status-bar-style" content="#292f51"></meta>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual"></meta>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-visual"
+        />
         <meta name='keywords' content={keywords}/>
         <meta name='description' content={description}/>
         <meta charSet='utf-8'/>

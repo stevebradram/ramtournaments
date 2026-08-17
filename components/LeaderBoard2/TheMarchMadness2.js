@@ -3,7 +3,7 @@ import firebase from '../FirebaseClient'
 import styles from './TheMarchMadness.module.scss'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { ToastContainer, toast } from 'react-toastify';
-class TheMarchMadness2 extends Component {
+class TheMarchMadness extends Component {
   constructor() {
     super();
     this.tableRef = React.createRef(null);
@@ -448,4 +448,4 @@ getFinalRound=()=>{
     )
   }
 }
-export default TheMarchMadness2
+export default TheMarchMadness

@@ -3,21 +3,35 @@ import style from './News.module.scss';
 import ReactPlayer from 'react-player'
 import firebase from '../FirebaseClient';
 import {FaPlay} from 'react-icons/fa';
+import { MdDeleteOutline } from "react-icons/md";
+import { ToastContainer, toast } from 'react-toastify';
 class News extends Component {
     
     state={
         videoArray:[],
-        currentId:''
+        currentId:'',
+        isAdmin:false
     }
 
     componentDidMount(){
       this.fetchMusicVideos()
+      this.checkAuth()
     }
-
+       checkAuth = () => {
+    var userId = ''
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        userId = user.uid
+        //console.log('userIddddddd',userId)
+        if (user.uid === 'iHA7kUpK4EdZ7iIUUV0N7yvDM5G3' || user.uid === 'zZTNto5p3XVSLYeovAwWXHjvkN43' || user.uid === 'vKBbDsyLvqZQR1UR39XIJQPwwgq1' || user.uid === 'qXeqfrI5VNV7bPMkrzl0QsySmoi2') {
+          this.setState({ isAdmin: true })
+        }}
+    })
+  }
     fetchMusicVideos=async()=>{
         var theRef=''
         try {
-         theRef = firebase.database().ref('/videos/')//.orderByKey('id');
+         theRef = firebase.database().ref('/videos/')//.orderByKey('videoNumber ');
           var array1=[]
           var array2=[],i=0
          await theRef.once('value', (dataSnapshot) => {
@@ -29,13 +43,14 @@ class News extends Component {
                 const video= data.val().video
                 const thumbnail= data.val().thumbnail
                 const id =  data.val().id
+                const videoNumber =  data.val().videoNumber
                 //console.log("thumbnail", thumbnail)
                 array1={
-                    name: name, video: video, id:id, title:title, thumbnail:thumbnail
+                    name: name, video: video, id:id, title:title, thumbnail:thumbnail,videoNumber:videoNumber
                 }
                 array2.push(array1)
                 if(theCount===i){
-                  array2=array2.sort(function(a, b){return b.id - a.id})
+                  array2=array2.sort(function(a, b){return b.videoNumber - a.videoNumber})
                   //console.log('rrrrra',array2)
                   this.setState({
                     videoArray:array2
@@ -56,6 +71,17 @@ class News extends Component {
         })
         
       }
+      deleteVideo=(id)=>{
+        var theDb = firebase.database().ref('/videos/')
+        theDb.child(id).set(null)
+        this.setState((prevState) => ({
+        videoArray: prevState.videoArray.filter(item => item.id !== id)
+        }));
+        this.notify('Deleted successfully');
+      }
+          notify = (message) => {
+        toast.warn(message, { position: "top-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, progress: undefined });
+    };
     render() {
         const videoList=this.state.videoArray.map((item,index)=>{
             let playerToShow=''
@@ -78,16 +104,21 @@ class News extends Component {
                 <div  className={style.reactPlayerDiv} key={index}>
                     <div  className={style.reactPlayerDiv3} >
                     {playerToShow}
+                    {this.state.isAdmin?<div  className={style.editDiv}>
+                    <p>{item.videoNumber}</p>
+                    <div  className={style.deleteDiv} onClick={()=>this.deleteVideo(item.id)}><MdDeleteOutline /></div>
+                </div>:null}
                     </div>
                 <p className={style.artTitle}>{item.title}</p>
+              
                 </div>
                
             )})
         return (
-            <div className={style.container}>
+            <><div className={style.container}>
                  {videoList}
                  
-            </div>
+            </div><ToastContainer/></>
         )
     }
 }
