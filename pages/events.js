@@ -54,7 +54,7 @@ class events extends Component {
     var found = this.state.theEvents.find(function (e) { return e.id === sportType })
     if (!found) { return }
     var reordered = this.state.theEvents.filter(function (e) { return e.id !== sportType })
-    reordered.push(found)
+    reordered.unshift(found)
     this.setState({ theEvents: reordered })
     this.chooseEvent(found.name)
   }
