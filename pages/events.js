@@ -44,8 +44,19 @@ class events extends Component {
     var homeRef = firebase.database().ref('/theEvents/eventToShowHomePage/')
     await homeRef.once('value', snap => {
       var val = snap.val()
-      if (val && val.id) { this.setState({ pinnedEventId: val.id }) }
+      if (val && val.id) {
+        this.setState({ pinnedEventId: val.id })
+        if (val.sportType) { this.moveSportTabLast(val.sportType) }
+      }
     })
+  }
+  moveSportTabLast = (sportType) => {
+    var found = this.state.theEvents.find(function (e) { return e.id === sportType })
+    if (!found) { return }
+    var reordered = this.state.theEvents.filter(function (e) { return e.id !== sportType })
+    reordered.push(found)
+    this.setState({ theEvents: reordered })
+    this.chooseEvent(found.name)
   }
 
   checkAuth = () => {
