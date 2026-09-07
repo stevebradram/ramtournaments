@@ -11,6 +11,42 @@ import theRamOdds from './ramOdds.json'
 import theNFLOdds from '../TheJSONS/nflOdds.json'
 import localStorage from 'local-storage'
 
+const NFL_TEAM_ROWS = [
+  ['Arizona Cardinals', 'Cardinals', 'ari'],
+  ['Atlanta Falcons', 'Falcons', 'atl'],
+  ['Baltimore Ravens', 'Ravens', 'bal'],
+  ['Buffalo Bills', 'Bills', 'buf'],
+  ['Carolina Panthers', 'Panthers', 'car'],
+  ['Chicago Bears', 'Bears', 'chi'],
+  ['Cincinnati Bengals', 'Bengals', 'cin'],
+  ['Cleveland Browns', 'Browns', 'cle'],
+  ['Dallas Cowboys', 'Cowboys', 'dal'],
+  ['Denver Broncos', 'Broncos', 'den'],
+  ['Detroit Lions', 'Lions', 'det'],
+  ['Green Bay Packers', 'Packers', 'gb'],
+  ['Houston Texans', 'Texans', 'hou'],
+  ['Indianapolis Colts', 'Colts', 'ind'],
+  ['Jacksonville Jaguars', 'Jaguars', 'jax'],
+  ['Kansas City Chiefs', 'Chiefs', 'kc'],
+  ['Las Vegas Raiders', 'Raiders', 'lv'],
+  ['Los Angeles Chargers', 'Chargers', 'lac'],
+  ['Los Angeles Rams', 'Rams', 'lar'],
+  ['Miami Dolphins', 'Dolphins', 'mia'],
+  ['Minnesota Vikings', 'Vikings', 'min'],
+  ['New England Patriots', 'Patriots', 'ne'],
+  ['New Orleans Saints', 'Saints', 'no'],
+  ['New York Giants', 'Giants', 'nyg'],
+  ['New York Jets', 'Jets', 'nyj'],
+  ['Philadelphia Eagles', 'Eagles', 'phi'],
+  ['Pittsburgh Steelers', 'Steelers', 'pit'],
+  ['San Francisco 49ers', '49ers', 'sf'],
+  ['Seattle Seahawks', 'Seahawks', 'sea'],
+  ['Tampa Bay Buccaneers', 'Buccaneers', 'tb'],
+  ['Tennessee Titans', 'Titans', 'ten'],
+  ['Washington Commanders', 'Commanders', 'wsh'],
+]
+const NFL_TEAMS_DATA = [{ leagues: [{ teams: NFL_TEAM_ROWS.map(r => ({ team: { displayName: r[0], nickname: r[1], logos: [{ href: 'https://a.espncdn.com/i/teamlogos/nfl/500/' + r[2] + '.png' }] } })) }] }]
+
 var wildCardEdit=[],divisionalRoundEdit=[],conferenceChampionshipEdit=[],superBowlEdit=[]
 
 var wildCardEdit2=[],divisionalRoundEdit2=[],conferenceChampionshipEdit2=[],superBowlEdit2=[]
@@ -231,20 +267,20 @@ class NCAAModal extends Component {
   submitDetails = (theItems,theState) => {
     var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
-    theItems.map((item, index) => {
-        if (item.apiId === '') {
-          theItems[index]['error'] = 'API ID field must be filled'
-          this.setState({theState:theItems})
-          return
-        } else {
-          i++
-          theItems[index]['error'] = ''
-        }
-        if (i === theItems.length) {
-          this.setState({[theState]:theItems })
-          this.getOddsApiData(theItems,theState)
-        }
-      })
+    var filledItems = theItems.filter(function (it) { return it.apiId !== '' && it.apiId !== undefined })
+    if (filledItems.length === 0) {
+      theItems[0]['error'] = 'API ID field must be filled'
+      this.setState({theState:theItems})
+      return
+    }
+    filledItems.map((item, index) => {
+      i++
+      filledItems[index]['error'] = ''
+      if (i === filledItems.length) {
+        this.setState({[theState]:filledItems })
+        this.getOddsApiData(filledItems,theState)
+      }
+    })
   }
   divisionalRoundSubmit = () => {
     var i = 0
@@ -607,7 +643,7 @@ class NCAAModal extends Component {
     //const response = await axios.get(logosUrl);
     //console.log(response.data);
     var smallResultsArr = []
-    axios.get(logosUrl)
+    Promise.resolve({ data: { sports: NFL_TEAMS_DATA } })
       .then((res) => {
         var resultsArr = res.data['sports']
         //console.log('the logos 1111', resultsArr.length)
@@ -666,7 +702,7 @@ class NCAAModal extends Component {
     //const response = await axios.get(logosUrl);
     //console.log(response.data);
     var smallResultsArr = []
-    axios.get(logosUrl)
+    Promise.resolve({ data: { sports: NFL_TEAMS_DATA } })
       .then((res) => {
         var resultsArr = res.data['sports']
         //console.log('the logos 1111', resultsArr.length)
