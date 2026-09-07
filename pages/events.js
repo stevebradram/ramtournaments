@@ -32,12 +32,26 @@ class events extends Component {
     currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'WorldCup', pastEventsAvailable: false,
     eventRamUfc: '', eventMarchMadness: '', eventNfl: '', ramUfcMaincardArray: [],
     ramUfcPrelimsArray: [], nflArray: [], marchMadnessArray: [], ufcSubHeadings: '', selectedSport: 'World Cup', selectedId: '',theApiKey:'',
-    allGames: [], theEventTitle: '', theEventKey: '', sportType: '', theTime: '', endTime: '', showChooseEventModal: false, firstSport: '',isAdmin:false,openApiModal:false,apiKeyErr:'',
+    allGames: [], pinnedEventId: '', theEventTitle: '', theEventKey: '', sportType: '', theTime: '', endTime: '', showChooseEventModal: false, firstSport: '',isAdmin:false,openApiModal:false,apiKeyErr:'',
     theEvents: [{ id: "NCAAB", name: 'March Madness' }, { id: "ramUfc", name: 'RAM UFC' }, { id: "NCAAF", name: 'NCAAF' }, { id: "NFL", name: 'NFL Playoffs' }, { id: "NFLRegular", name: 'NFL Season' },{ id: "WorldCup", name: 'World Cup' }],
     apiEvents: [{ id: "oddsApi", name: 'https://api.the-odds-api.com/' }, { id: "sportsDataApi", name: 'https://api.sportsdata.io/' }],apiEventSelectedName:'',apiEventSelectedId:''
   }
   componentDidMount = () => {
+    this.getPinnedEvent()
     this.checkAuth()
+  }
+  getPinnedEvent = async () => {
+    var pinRef = firebase.database().ref('/settings/pinnedEventId')
+    await pinRef.once('value', snap => {
+      var val = snap.val()
+      if (val) { this.setState({ pinnedEventId: val }) }
+    })
+  }
+  pinEvent = (eventId) => {
+    if (!this.state.isAdmin) { return }
+    firebase.database().ref('/settings').update({ pinnedEventId: eventId })
+    this.setState({ pinnedEventId: eventId })
+    toast.success('Pinned as landing event')
   }
   checkAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -156,7 +170,14 @@ class events extends Component {
                 allGames.splice(i, 1);
                 allGames.unshift(item);
               }
-              if (l === theCount) {
+        if (this.state.pinnedEventId) {
+          var pIdx = allGames.findIndex(function (g) { return g.id === this.state.pinnedEventId }.bind(this))
+          if (pIdx > 0) {
+            var pinned = allGames.splice(pIdx, 1)[0]
+            allGames.unshift(pinned)
+          }
+        }
+        if (l === theCount) {
                 theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
                 this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, endTime }, () => {
                   if (this.state.selectedId === "NCAAB") { this.setState({ selectedEvent: 'March Madness',theCurrentEvent: 'marchMadness'}) }
