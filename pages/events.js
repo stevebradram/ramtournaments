@@ -148,6 +148,9 @@ class events extends Component {
     }
   }
   checkForAllEvents = async () => {
+    var pinnedId = ''
+    var homeEvtRef = firebase.database().ref('/theEvents/eventToShowHomePage/')
+    await homeEvtRef.once('value', hs => { var hv = hs.val(); if (hv && hv.id) { pinnedId = hv.id } })
     var userInfoDb = firebase.database().ref('/theEvents/eventsIds')
     var allGames = []
     await userInfoDb.once('value', dataSnapshot => {
@@ -176,8 +179,8 @@ class events extends Component {
                 allGames.splice(i, 1);
                 allGames.unshift(item);
               }
-        if (this.state.pinnedEventId) {
-          var pIdx = allGames.findIndex(function (g) { return g.id === this.state.pinnedEventId }.bind(this))
+        if (pinnedId) {
+          var pIdx = allGames.findIndex(function (g) { return g.id === pinnedId })
           if (pIdx > 0) {
             var pinned = allGames.splice(pIdx, 1)[0]
             allGames.unshift(pinned)
