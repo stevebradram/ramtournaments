@@ -208,18 +208,18 @@ class NCAAModal extends Component {
   submitDetails = (theItems, theState) => {
     var yearNow = new Date().getFullYear()
     var i = 0, j = 0, k = 0, l = 0
-    theItems.map((item, index) => {
-      if (item.apiId === '') {
-        theItems[index]['error'] = 'API ID field must be filled'
-        this.setState({ theState: theItems })
-        return
-      } else {
-        i++
-        theItems[index]['error'] = ''
-      }
-      if (i === theItems.length) {
-        this.setState({ [theState]: theItems })
-        this.getOddsApiData(theItems, theState)
+    var filledItems = theItems.filter(function (it) { return it.apiId !== '' && it.apiId !== undefined })
+    if (filledItems.length === 0) {
+      theItems[0]['error'] = 'API ID field must be filled'
+      this.setState({ theState: theItems })
+      return
+    }
+    filledItems.map((item, index) => {
+      i++
+      filledItems[index]['error'] = ''
+      if (i === filledItems.length) {
+        this.setState({ [theState]: filledItems })
+        this.getOddsApiData(filledItems, theState)
       }
     })
   }
