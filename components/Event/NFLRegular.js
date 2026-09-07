@@ -662,6 +662,23 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     event.preventDefault()
     this.setState({ selectHomeEvent: true })
   }
+  deleteEvent = async (event, data, id) => {
+    event.stopPropagation()
+    event.preventDefault()
+    var title = (data && data.title) ? data.title : 'this event'
+    var ok = await confirm('Delete ' + title + '? This cannot be undone.')
+    if (!ok) { return }
+    var delDb = firebase.database().ref('/theEvents/eventsIds/' + id)
+    delDb.remove(error => {
+      if (!error) {
+        this.setState({ selectHomeEvent: false })
+        this.notify('Event deleted')
+        this.checkEvent2()
+      } else {
+        this.notify('Could not delete event')
+      }
+    })
+  }
   sendEvent = (event, data, id) => {
     event.stopPropagation()
     event.preventDefault()
@@ -1760,7 +1777,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
                     <p style={{ marginLeft: 2, marginRight: 2 }}>-</p>
                     <p className={style.headListP3}>{timing}</p></div></div>
                 {this.state.isAdmin ? <><SlOptionsVertical onClick={(event) => this.chooseHomeEvent(event)} />
-                  {this.state.selectHomeEvent ? <div className={style.selectHomeEventDiv} onClick={() => this.setState({ selectHomeEvent: false })}><button onClick={(event) => this.sendEvent(event, item.theData, item.id)}>Make home event</button></div> : null}</> : null}
+                  {this.state.selectHomeEvent ? <div className={style.selectHomeEventDiv} onClick={() => this.setState({ selectHomeEvent: false })}><button onClick={(event) => this.sendEvent(event, item.theData, item.id)}>Make home event</button><button onClick={(event) => this.deleteEvent(event, item.theData, item.id)}>Delete event</button></div> : null}</> : null}
               </div>
             )
           })}
