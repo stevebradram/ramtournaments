@@ -41,18 +41,13 @@ class events extends Component {
     this.checkAuth()
   }
   getPinnedEvent = async () => {
-    var pinRef = firebase.database().ref('/settings/pinnedEventId')
-    await pinRef.once('value', snap => {
+    var homeRef = firebase.database().ref('/theEvents/eventToShowHomePage/')
+    await homeRef.once('value', snap => {
       var val = snap.val()
-      if (val) { this.setState({ pinnedEventId: val }) }
+      if (val && val.id) { this.setState({ pinnedEventId: val.id }) }
     })
   }
-  pinEvent = (eventId) => {
-    if (!this.state.isAdmin) { return }
-    firebase.database().ref('/settings').update({ pinnedEventId: eventId })
-    this.setState({ pinnedEventId: eventId })
-    toast.success('Pinned as landing event')
-  }
+
   checkAuth = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
