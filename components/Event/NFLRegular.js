@@ -668,7 +668,9 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     var title = (data && data.title) ? data.title : 'this event'
     var ok = window.confirm('Delete ' + title + '? This cannot be undone.')
     if (!ok) { return }
-    var delDb = firebase.database().ref('/theEvents/eventsIds/' + id)
+    var delDb = firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + id)
+    firebase.database().ref('/theEvents/NFLRegular/' + id).remove()
+    firebase.database().ref('/theEvents/eventsIds/' + id).remove()
     delDb.remove(error => {
       if (!error) {
         this.setState({ selectHomeEvent: false })
