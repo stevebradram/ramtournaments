@@ -109,7 +109,7 @@ class NCAA extends Component {
     userId: '', userLoggedIn: false, isAdmin: false, teamName: '', flockName: '', openLoginModal: false, theEventTime: 0,
     currentScore: '', bestPossibleScore: '', currentRank: '', editDetailsModal: false, profilePhoto: '', theCurrentEvent: 'NFLRegular', pastEventsAvailable: false,
     pastGames: [], theEventTitle: '', theEventKey: '', ramUfcEarlyPrelimsArray: [], count: 0, currentEventUserInfo: {}, allMatches: [], expired: false, nflModal: false,
-    week1RoundArray: [], week2RoundArray: [], week3RoundArray: [], week4RoundArray: [], finalArray: [], allEvents: [], currentSelection: 'week1Round', isWeek1DataAvailable: false, allGames: [],
+    pinnedHomeId: '', week1RoundArray: [], week2RoundArray: [], week3RoundArray: [], week4RoundArray: [], finalArray: [], allEvents: [], currentSelection: 'week1Round', isWeek1DataAvailable: false, allGames: [],
     isWeek2DataAvailable: false, isWeek3DataAvailable: false, isWeek4DataAvailable: false, isFinalsDataAvailable: false, endTime: '', editType: 'stopweek1RoundEdit', eventToNFLModal: '', showCreateEventModal: true, showCreateEventModal2: false,
     isWeek1RoundPicked: false, isWeek2RoundPicked: false, isWeek3RoundPicked: false, isWeek4RoundPicked: false, isFinalsPicked: false, selectHomeEvent: false, itemsToNFLModal: [], week1Time: '', week1Err: '', week2Time: '', showChooseWeekModal: false,
     week2Time: '', week2Err: '', week3Time: '', week3Err: '', superBowlTime: '', superBowlErr: '', hasUserPicked: false, oddsUpdate: '', resultsUpdate: '', showConfirmModal: false, confirmMessage: '', confirmModalType: '',
@@ -264,6 +264,8 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     })
   }
   checkUpcomingPastGames = async (userId) => {
+    var homeRef2 = firebase.database().ref('/theEvents/eventToShowHomePage/')
+    await homeRef2.once('value', hs2 => { var hv2 = hs2.val(); if (hv2 && hv2.id) { this.state.pinnedHomeId = hv2.id } })
     //return
     //console.log('naingia2222222222222')
     var gamesInfo = firebase.database().ref('/theEvents/NFLRegular/eventsIds/')
@@ -312,7 +314,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         if (gamesCount === i) {
           //console.log('zoote', allGames)
           var theEventTitle = '', theEventKey = '', theEventTime = 0, oddsUpdate = '', resultsUpdate = '', stopweek1RoundEdit = '', theValues = ''
-          if (allGames.length > 0) { allGames = allGames.sort((a, b)=> b.time - a.time ); theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'], stopweek1RoundEdit = allGames[0]['stopweek1RoundEdit'], theValues = allGames[0]['theValues'] }
+          if (allGames.length > 0) { allGames = allGames.sort((a, b)=> b.time - a.time ) ; var pinHomeId = this.state.pinnedHomeId; if (pinHomeId) { var pI = allGames.findIndex(function (g) { return g.id === pinHomeId }); if (pI > 0) { var pEv = allGames.splice(pI, 1)[0]; allGames.unshift(pEv) } }; theEventTitle = allGames[0]['title']; theEventKey = allGames[0]['id'], theEventTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], endTime = allGames[0]['endTime'], oddsUpdate = allGames[0]['oddsUpdate'], resultsUpdate = allGames[0]['resultsUpdate'], stopweek1RoundEdit = allGames[0]['stopweek1RoundEdit'], theValues = allGames[0]['theValues'] }
         }
         var expired = false
         if ((theEventTime - new Date().getTime()) < 86400000) {
