@@ -173,19 +173,19 @@ class events extends Component {
             //console.log('rrrrrrr checkForAllEvents', this.state.selectedId, allGames)
             var l = 0
             allGames = allGames.sort(function (a, b) { return b.time - a.time });
+        if (pinnedId) {
+          var pIdx = allGames.findIndex(function (g) { return g.id === pinnedId })
+          if (pIdx > 0) {
+            var pinnedItem = allGames.splice(pIdx, 1)[0]
+            allGames.unshift(pinnedItem)
+          }
+        }
             allGames.forEach((item, i) => {
               l++
               if (item.sportType === this.state.selectedId) {
                 allGames.splice(i, 1);
                 allGames.unshift(item);
               }
-        if (pinnedId) {
-          var pIdx = allGames.findIndex(function (g) { return g.id === pinnedId })
-          if (pIdx > 0) {
-            var pinned = allGames.splice(pIdx, 1)[0]
-            allGames.unshift(pinned)
-          }
-        }
         if (l === theCount) {
                 theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime']
                 this.setState({ allGames, theEventTitle, theEventKey, sportType, theTime, endTime }, () => {
