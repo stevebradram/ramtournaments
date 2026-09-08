@@ -666,7 +666,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     event.stopPropagation()
     event.preventDefault()
     var title = (data && data.title) ? data.title : 'this event'
-    var ok = await confirm('Delete ' + title + '? This cannot be undone.')
+    var ok = window.confirm('Delete ' + title + '? This cannot be undone.')
     if (!ok) { return }
     var delDb = firebase.database().ref('/theEvents/eventsIds/' + id)
     delDb.remove(error => {
