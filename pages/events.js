@@ -82,9 +82,9 @@ class events extends Component {
       getApiKey = async () => {
         var apiRef = firebase.database().ref('/apiKeys')
          await apiRef.once('value', dataSnapshot => {
-           this.setState({oddsApiKey:dataSnapshot.val().oddsApi})
-            localStorage.set('oddsApiKey', dataSnapshot.val().oddsApi)
-            localStorage.set('sportsDataApiKey', dataSnapshot.val().sportsDataApi)
+           this.setState({oddsApiKey:(dataSnapshot.val() || '').trim().oddsApi})
+            localStorage.set('oddsApiKey', (dataSnapshot.val() || '').trim().oddsApi)
+            localStorage.set('sportsDataApiKey', (dataSnapshot.val() || '').trim().sportsDataApi)
          })
       }
   hideModal = () => {
@@ -139,7 +139,7 @@ class events extends Component {
   submitApiKey = async () => {
     var apiRef = firebase.database().ref('/apiKeys')
     if(this.state.apiEventSelectedName&&this.state.theApiKey.length>2){
-    apiRef.child(this.state.apiEventSelectedId).set(this.state.theApiKey)
+    apiRef.child(this.state.apiEventSelectedId).set(this.state.theApiKey.trim())
     this.setState({apiKeyErr:'',openApiModal:false})
     this.notify('Key updated successfully')
     this.getApiKey()
