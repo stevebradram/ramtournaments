@@ -139,35 +139,57 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
 };
   checkForOddsUpdate = async () => {
     try {
-     var oddsApiKey = await localStorage.get('oddsApiKey');
+      var oddsApiKey = await localStorage.get('oddsApiKey')
       if (!this.state.currentSelection || !this.state.theEventKey || this.state.theEventKey.length < 3) return
-      var theLink = 'theEvents::NFLRegular::' + this.state.theEventKey + '::' + this.state.currentSelection+'::'+oddsApiKey
-      var theQuery = encodeURIComponent(theLink)
-      //console.log('the theLink 11111', theLink)
-      //return
-      var editDbRef = firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + this.state.theEventKey + '/' + this.state.editType)
-      editDbRef.once('value', dataSnapshot => {
-
-        if ((new Date().getTime() > dataSnapshot.val())) {
-          this.notify('Update odds time expired')
-          this.setState({ showProgressBar: false })
-          //console.log('the Z000000', new Date().getTime(), dataSnapshot.val())
-        }
-        else {
-          //console.log('the theLink RRRRRAAAAAAA', theLink)
-         // axios.get("http://localhost:4000/updateNFLRegularOdds?term=" + theQuery)
-          axios.get("https://theramtournament.com/updateNFLRegularOdds?term=" + theQuery)
-            .then((res) => {
-              this.setState({ showConfirmModal: false, showProgressBar: false })
-              var theItems = res.data
-              this.notify('Success Updating the NFL odds')
-
-            })
-        }
+      if (!oddsApiKey) { this.notify('No odds API key saved'); this.setState({ showConfirmModal: false, showProgressBar: false }); return }
+      var roundKey = this.state.currentSelection
+      var eventKey = this.state.theEventKey
+      var gamesRef = firebase.database().ref('/theEvents/NFLRegular/' + eventKey + '/' + roundKey)
+      var snap = await gamesRef.once('value')
+      var games = snap.val()
+      if (!games) { this.notify('No games found for this week'); this.setState({ showConfirmModal: false, showProgressBar: false }); return }
+      var gameKeys = Object.keys(games)
+      var times = gameKeys.map(function (k) { return games[k].timeInMillis || games[k].time }).filter(Boolean)
+      var minT = Math.min.apply(null, times) - 3600000
+      var maxT = Math.max.apply(null, times) + 10800000
+      var fmt = function (ms) { return new Date(ms).toISOString().split('.')[0] + 'Z' }
+      var url = 'https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?commenceTimeFrom=' + fmt(minT) + '&commenceTimeTo=' + fmt(maxT) + '&regions=us&markets=h2h&oddsFormat=decimal&apiKey=' + oddsApiKey
+      var resp = await axios.get(url)
+      var feed = resp.data || []
+      var byId = {}
+      feed.forEach(function (g) { byId[g.id] = g })
+      var updates = {}
+      var changed = 0
+      gameKeys.forEach(function (gk) {
+        var game = games[gk]
+        var match = byId[game.apiId]
+        if (!match) { return }
+        var totals = {}
+        var books = 0
+        ;(match.bookmakers || []).forEach(function (bk) {
+          var mk = (bk.markets || [])[0]
+          if (!mk) { return }
+          books++
+          ;(mk.outcomes || []).forEach(function (o) { totals[o.name] = (totals[o.name] || 0) + o.price })
+        })
+        if (!books) { return }
+        var h = totals[match.home_team], aw = totals[match.away_team]
+        if (!h || !aw) { return }
+        updates[gk + '/p1Points'] = Math.round((h / books) * 100) / 100
+        updates[gk + '/p2Points'] = Math.round((aw / books) * 100) / 100
+        changed++
       })
-
+      if (!changed) { this.notify('No matching odds returned'); this.setState({ showConfirmModal: false, showProgressBar: false }); return }
+      await gamesRef.update(updates)
+      await firebase.database().ref('/theEvents/NFLRegular/eventsIds/' + eventKey).update({ oddsTimeUpdate: new Date().getTime() })
+      await firebase.database().ref('/theEvents/eventsIds/' + eventKey).update({ oddsTimeUpdate: new Date().getTime() })
+      this.setState({ showConfirmModal: false, showProgressBar: false })
+      this.notify('Updated odds for ' + changed + ' games')
+      this.checkEvent2()
     } catch (error) {
-      //console.log('error', error)
+      console.log('odds update error', error)
+      this.setState({ showConfirmModal: false, showProgressBar: false })
+      this.notify('Odds update failed. Please try again.')
     }
   }
   checkForOddsUpdateTime = () => {
