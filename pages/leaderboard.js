@@ -163,8 +163,8 @@ class leaderboard extends Component {
           //console.log('theEventTitle 00',theEventTitle)
           //console.log('theEventKey 00',theEventKey)
           this.setState({allGames,theEventTitle,theEventKey,sportType,theTime,currentSelection},()=>{
-            this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
-         // this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
+    // this.getScoreBoardData(sportType,theEventKey,theTime,currentSelection)
+    this.checkForSelectedEvent(sportType,theEventKey,theTime,currentSelection)
           //console.log('sportType555555555',sportType)
             //this.getNullScoreBoardData(sportType,theEventKey)
           })
