@@ -753,7 +753,7 @@ class leaderboard extends Component {
    </div>}
       </div>:this.state.sportType!=='NFLRegular'&&this.state.sportType!=='WorldCup'?<>{this.state.loadMadness1===true?<TheMarchMadness  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>:
         <TheMarchMadness2  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}</>
-        :this.state.sportType!=='WorldCup'?<div><NFLRegular  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count} ref={this.nflRegularRef}/></div>:<WorldCup  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}
+        :this.state.sportType!=='WorldCup'?<div><NFLRegular key={this.state.theEventKey}  theEventKey={this.state.theEventKey} sportType={this.state.sportType} currentRound='week1Round' theCount={this.state.count} ref={this.nflRegularRef}/></div>:<WorldCup  theEventKey={this.state.theEventKey} currentRound={this.state.currentSelection} theCount={this.state.count}/>}
          {this.state.deleteModal?<div className={styles.modal}>
                 <div className={styles.delModal}>
                   <p className={styles.delModalP1}>Confirm Delete?</p>
