@@ -66,6 +66,8 @@ class MyFlocks extends Component {
     return [];
   };
   checkUpcomingPastGames = async (userId) => {
+    var homeRef3 = firebase.database().ref('/theEvents/eventToShowHomePage/')
+    await homeRef3.once('value', hs3 => { var hv3 = hs3.val(); if (hv3 && hv3.id) { this.pinnedHomeIdVal = hv3.id } })
     var userInfoDb = firebase.database().ref('/theEvents/eventsIds')
     var i = 0, upcomingGames = [], pastGames = [], allGames = []
     var nowDate = await new Date().getTime()
@@ -96,6 +98,10 @@ class MyFlocks extends Component {
           var theEventTitle = '', theEventKey = '', sportType = '', theTime = '', endTime = '', theValues = ''
           if (allGames.length > 0) {
             allGames = allGames.sort(function (a, b) { return b.endTime - a.endTime });
+      if (this.pinnedHomeIdVal) {
+        var pI = allGames.findIndex(function (g) { return g.id === this.pinnedHomeIdVal }.bind(this))
+        if (pI > 0) { var pEv = allGames.splice(pI, 1)[0]; allGames.unshift(pEv) }
+      }
 
             theEventTitle = allGames[0]['title']; sportType = allGames[0]['sportType'], theEventKey = allGames[0]['id'], theTime = allGames[0]['time'], endTime = allGames[0]['endTime'], currentSelection = allGames[0]['currentSelection'], theValues = allGames[0]['theValues']
             var isEventStarted = true
