@@ -301,9 +301,23 @@ class MyFlocks extends Component {
     //membersFlockNamesRef.child(flockNameWithNoSpaces).child(this.state.userId).set('$$$'+this.state.creatorName)
 
   } //this.theFlocksData(theEventKey)
-  theFlocksData = (theEventKey, sportType) => {
+  theFlocksData = async (theEventKey, sportType) => {
     //console.log('theFlocksArr 888800000 hereeeeeeeeeeeeeeeeeeee')
     var theFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/theFlocks/')
+    var msSnap = await firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores').once('value')
+    var msData = msSnap.val() || {}
+    var liveCounts = {}, liveScores = {}
+    Object.keys(msData).forEach(function (fl) {
+      var recs = msData[fl] || {}
+      var ids = Object.keys(recs)
+      liveCounts[fl] = ids.length
+      var sum = 0
+      ids.forEach(function (u) {
+        var s = recs[u] || {}
+        sum += Number(s.week1RoundScore || 0) + Number(s.week2RoundScore || 0) + Number(s.week3RoundScore || 0)
+      })
+      liveScores[fl] = Math.round(sum * 100) / 100
+    })
     theFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
         var count = dataSnapshot.numChildren()
@@ -320,6 +334,11 @@ class MyFlocks extends Component {
           }
           if (sportType === 'NFLRegular') {
             theArr2 = { flockName: data.key, score: theData.score, avScore: theData.avScore, membersNo: theData.week1RoundMembersNo, theData: theData, totalScore: totalScore.toFixed(2), week1Score: week1Score.toFixed(2), week2Score: week2Score.toFixed(2), week3Score: week3Score.toFixed(2), scoreSum: scoreSum.toFixed(2) }
+        if (liveCounts[data.key]) {
+          theArr2.membersNo = liveCounts[data.key]
+          theArr2.score = liveScores[data.key]
+          theArr2.avScore = Math.round((liveScores[data.key] / liveCounts[data.key]) * 100) / 100
+        }
           } else if (sportType === 'NFL') {
             var wildCardScore = theData.wildCardScore || 0
             var divisionalRoundScore = theData.divisionalRoundScore || 0
