@@ -1835,7 +1835,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal2: true })}>Create New NFL Event</p>
         </div> : null}
         <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
-        {this.state.theLink.length > 1 && this.hasUpcomingGame() ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
+        {this.state.theLink.length > 1 && new Date().getTime() < this.state.stopweek1RoundEdit ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
           <p>Flock Invite Link</p>
           <MdOutlineShare />
         </div> : null}
