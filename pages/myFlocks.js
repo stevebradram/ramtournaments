@@ -846,23 +846,11 @@ class MyFlocks extends Component {
                         }
                       } else if (this.state.sportType === 'NFLRegular') {
                         //console.log('haaapa round 1',item.theData)
-                        if (this.state.currentSelection === 'round1') {
-                          theMembersNo = item.theData.week1RoundMembersNo
-                          theScore = item.theData.week1RoundScore
-                          theAvScore = item.theData.week1RoundAvScore
-                        }
-                        if (this.state.currentSelection === 'round2') {
-                          //console.log('haaapa round 2')
-                          theMembersNo = item.theData.week2RoundMembersNo
-                          theScore = item.theData.week2RoundScore
-                          theAvScore = item.theData.week2RoundAvScore
-                        }
-                        if (this.state.currentSelection === 'round3') {
-                          //console.log('haaapa round 2')
-                          theMembersNo = item.theData.week3RoundMembersNo
-                          theScore = item.theData.week3RoundScore
-                          theAvScore = item.theData.week3RoundAvScore
-                        }
+      if (this.state.currentSelection === 'round1' || this.state.currentSelection === 'round2' || this.state.currentSelection === 'round3') {
+        theMembersNo = item.membersNo
+        theScore = item.score
+        theAvScore = item.avScore
+      }
                       } else {
                         theMembersNo = item.membersNo
                         theScore = item.score
