@@ -1483,6 +1483,17 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
     //console.log('kang',this.state.currentSelection)
     this.setState({ confirmMessage: message, showConfirmModal: true, confirmModalType: type })
   }
+  hasUpcomingGame = () => {
+    var sel = this.state.theMenu || this.state.currentSelection
+    var arr = []
+    if (sel === 'week1Round') { arr = this.state.week1RoundArray || [] }
+    else if (sel === 'week2Round') { arr = this.state.week2RoundArray || [] }
+    else if (sel === 'week3Round') { arr = this.state.week3RoundArray || [] }
+    else if (sel === 'week4Round') { arr = this.state.week4RoundArray || [] }
+    if (!arr.length) { return false }
+    var now = new Date().getTime()
+    return arr.some(function (g) { return Number(g.timeInMillis || 0) > now })
+  }
   proceed = () => {
     if (this.state.confirmModalType === 'oddsUpdate') { this.checkForOddsUpdateTime() }
     if (this.state.confirmModalType === 'resultsUpdate') { this.checkForOutcome() }
@@ -1824,7 +1835,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
           <p className={style.eventP2} onClick={() => this.setState({ showCreateEventModal2: true })}>Create New NFL Event</p>
         </div> : null}
         <p className={style.eveP}>Event: <span>{titleToShow}</span></p>
-        {this.state.theLink.length > 1 && new Date().getTime() < this.state.stopweek1RoundEdit ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
+        {this.state.theLink.length > 1 && this.hasUpcomingGame() ? <div className={style.shareDiv} onClick={() => this.copyLink()}>
           <p>Flock Invite Link</p>
           <MdOutlineShare />
         </div> : null}
