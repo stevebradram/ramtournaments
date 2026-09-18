@@ -299,7 +299,7 @@ class DetailsModal extends Component {
     var toAdmin=String(this.state.teamName||'').split('$$$').join('')+'!!'+this.state.ramFlockName+'!!'+this.state.myEmail+'!!'+this.state.myPhoneNo
 
     if(this.state.ramFlockName!=='Flockless'){
-      membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(this.state.teamName)
+    membersFlockNamesRef.child('/members/'+this.state.flockNameNoSpace).child(this.state.userId).set(String(this.state.teamName||'').split('$$$').join(''))
       adminRef.child(this.state.userId).set(toAdmin)
       membersFlockNamesRef.child('/membersScores/'+this.state.flockNameNoSpace).child(this.state.userId).update(scoreData)
     }
