@@ -606,18 +606,28 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
         if (pointMissing === true) {
           this.notify('Event points not yet populated')
         } else {
-          var userPlayedRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/stopweek1RoundEdit')
-          userPlayedRef.once('value', dataSnapshot => {
-            if ((new Date().getTime() > dataSnapshot.val())) {
-              if (this.state.hasUserPlayed === false) {
-                this.notify("Event pick expired")
+            var nowT = new Date().getTime()
+            if (this.state.currentSelection !== 'week1Round') {
+              var anyUpcoming = itemToModals.some(function (g) { return Number(g.timeInMillis || 0) > nowT })
+              if (!anyUpcoming && this.state.hasUserPlayed === false) {
+                this.notify('Event pick expired')
               } else {
                 this.openTheModal2(stopEditTime)
               }
             } else {
-              this.openTheModal2(stopEditTime)
+              var userPlayedRef = firebase.database().ref('/theEvents/eventsIds/' + this.state.theEventKey + '/' + stopEditTime)
+              userPlayedRef.once('value', dataSnapshot => {
+                if (nowT > dataSnapshot.val()) {
+                  if (this.state.hasUserPlayed === false) {
+                    this.notify('Event pick expired')
+                  } else {
+                    this.openTheModal2(stopEditTime)
+                  }
+                } else {
+                  this.openTheModal2(stopEditTime)
+                }
+              })
             }
-          })
 
         }
       }
