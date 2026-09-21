@@ -245,7 +245,7 @@ class DetailsModal extends Component {
     this.state.theItems.map((item,index)=>{
       //console.log('iteeem',item.id,item.bet)
       i++
-      itemsData[item.id]=item.bet
+      if (Number(item.timeInMillis || 0) > new Date().getTime()) { itemsData[item.id] = item.bet }
           if(this.state.theItems.length===i){
            
         
