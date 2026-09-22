@@ -306,17 +306,30 @@ class MyFlocks extends Component {
     var theFlocksRef = firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/theFlocks/')
     var msSnap = await firebase.database().ref('/flocksSystem/flockNames/' + theEventKey + '/membersScores').once('value')
     var msData = msSnap.val() || {}
-    var liveCounts = {}, liveScores = {}
+    var liveWeek = {}
+    var wkKeys = ['week1Round', 'week2Round', 'week3Round', 'week4Round']
     Object.keys(msData).forEach(function (fl) {
       var recs = msData[fl] || {}
       var ids = Object.keys(recs)
-      liveCounts[fl] = ids.length
-      var sum = 0
-      ids.forEach(function (u) {
-        var s = recs[u] || {}
-        sum += Number(s.week1RoundScore || 0) + Number(s.week2RoundScore || 0) + Number(s.week3RoundScore || 0)
+      var o = {}, anyPlayed = {}, ovScore = 0, ovAvg = 0
+      wkKeys.forEach(function (wk) {
+        var m = 0, s = 0
+        ids.forEach(function (u) {
+          var r = recs[u] || {}
+          if (r[wk + 'BPS'] !== undefined) {
+            m++
+            s += Number(r[wk + 'Score'] || 0)
+            anyPlayed[u] = true
+          }
+        })
+        s = Math.round(s * 100) / 100
+        var a = m ? Math.round((s / m) * 100) / 100 : 0
+        o[wk] = { m: m, s: s, a: a }
+        ovScore += s
+        ovAvg += a
       })
-      liveScores[fl] = Math.round(sum * 100) / 100
+      o.overall = { m: Object.keys(anyPlayed).length, s: Math.round(ovScore * 100) / 100, a: Math.round(ovAvg * 100) / 100 }
+      liveWeek[fl] = o
     })
     theFlocksRef.once('value', dataSnapshot => {
       if (dataSnapshot.exists()) {
@@ -334,10 +347,11 @@ class MyFlocks extends Component {
           }
           if (sportType === 'NFLRegular') {
             theArr2 = { flockName: data.key, score: theData.score, avScore: theData.avScore, membersNo: theData.week1RoundMembersNo, theData: theData, totalScore: totalScore.toFixed(2), week1Score: week1Score.toFixed(2), week2Score: week2Score.toFixed(2), week3Score: week3Score.toFixed(2), scoreSum: scoreSum.toFixed(2) }
-        if (liveCounts[data.key]) {
-          theArr2.membersNo = liveCounts[data.key]
-          theArr2.score = liveScores[data.key]
-          theArr2.avScore = Math.round((liveScores[data.key] / liveCounts[data.key]) * 100) / 100
+        if (liveWeek[data.key]) {
+          theArr2.liveWeek = liveWeek[data.key]
+          theArr2.membersNo = liveWeek[data.key].overall.m
+          theArr2.score = liveWeek[data.key].overall.s
+          theArr2.avScore = liveWeek[data.key].overall.a
         }
           } else if (sportType === 'NFL') {
             var wildCardScore = theData.wildCardScore || 0
@@ -845,8 +859,14 @@ class MyFlocks extends Component {
                           theAvScore = item.theData.round2AvScore
                         }
                       } else if (this.state.sportType === 'NFLRegular') {
-                        //console.log('haaapa round 1',item.theData)
-      if (this.state.currentSelection === 'round1' || this.state.currentSelection === 'round2' || this.state.currentSelection === 'round3') {
+      var lw = item.liveWeek
+      var cs = this.state.currentSelection
+      var pk = lw ? (lw[cs] || lw.overall) : null
+      if (pk) {
+        theMembersNo = pk.m
+        theScore = pk.s
+        theAvScore = pk.a
+      } else {
         theMembersNo = item.membersNo
         theScore = item.score
         theAvScore = item.avScore
