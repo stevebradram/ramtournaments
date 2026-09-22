@@ -861,7 +861,8 @@ class MyFlocks extends Component {
                       } else if (this.state.sportType === 'NFLRegular') {
       var lw = item.liveWeek
       var cs = this.state.currentSelection
-      var pk = lw ? (lw[cs] || lw.overall) : null
+      var wkMap = { round1: 'week1Round', round2: 'week2Round', round3: 'week3Round', round4: 'week4Round' }
+      var pk = lw ? (lw[wkMap[cs] || cs] || lw.overall) : null
       if (pk) {
         theMembersNo = pk.m
         theScore = pk.s
