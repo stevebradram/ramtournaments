@@ -115,8 +115,10 @@ class DetailsModal extends Component {
     //console.log('this.state.theItems',this.state.theItems)
     if (this.state.teamName.length<3){this.setState({teamNameErr:'Team Name must be 3 characters and above'});return}
     var i=0,theAmount=[]
+    var nowT = new Date().getTime()
+    var requiredCount = this.state.theItems.filter(function (it) { return (it.bet && it.bet !== '') || Number(it.timeInMillis || 0) > nowT }).length
     this.state.theItems.map((item,index)=>{
-      
+      if ((!item.bet || item.bet === '') && Number(item.timeInMillis || 0) <= nowT) { return }
      
       var amount=0
       if(item.bet==='player1'){
@@ -140,7 +142,7 @@ class DetailsModal extends Component {
       mySelection.push(theArr)
       //console.log('mySelection',mySelection)
       i++
-      if(i===this.state.theItems.length){
+      if(i===requiredCount){
         const sum = theAmount.reduce((partialSum, a) => partialSum + a, 0);
         //console.log('the suummmm',sum)
         this.setState({allPicked:true,mySelection:mySelection,bestPossibleScore:sum.toFixed(2)},()=>{
