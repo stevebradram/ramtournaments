@@ -611,14 +611,14 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
             if (!anyUpcoming && this.state.hasUserPlayed === false) {
               this.notify('Event pick expired')
             } else {
-              this.openTheModal2(stopEditTime)
+              this.openTheModal2(stopEditTime, anyUpcoming)
             }
 
         }
       }
     })
   }
-  openTheModal2 = (stopEditTime) => {
+  openTheModal2 = (stopEditTime, anyUpcoming) => {
     //console.log('this.state.theEventKey', this.state.currentSelection, this.state.theEventKey, this.state.editType)
     //hasUserPlayed
     //return
@@ -634,7 +634,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       } else {
 
         //console.log('now 005', new Date().getTime(), dataSnapshot.val())
-        if ((new Date().getTime() > dataSnapshot.val())) {
+        if ((new Date().getTime() > dataSnapshot.val()) && !anyUpcoming) {
           //console.log('now 005', new Date().getTime(), dataSnapshot.val())
           if (this.state.currentSelection === 'week3Round') {
             this.notify("Event pick expired")
