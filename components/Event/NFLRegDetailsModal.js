@@ -436,6 +436,7 @@ class DetailsModal extends Component {
           return(
            <div className={styles.listDiv} key={index}>
            <p className={styles.matchP}>Match #{index+1}</p>
+           {gameLocked ? <p className={styles.nbP1} style={{ color: '#CB1E31' }}>This game has locked - it already started</p> : null}
            <div id={styles.table1Div}>
                         <table className={styles.table1}>
                             <tr id={styles.table1Tr1}>
