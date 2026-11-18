@@ -368,7 +368,7 @@ if (await confirm({ confirmation: 'Do you really want to delete this item?' })) 
       var week2RoundCount = dataSnapshot.child('week2Round').numChildren()
       var week3RoundCount = dataSnapshot.child('week3Round').numChildren()
       var week4RoundCount = dataSnapshot.child('week4Round').numChildren()
-      var theInfo = dataSnapshot.val()
+      var theInfo = dataSnapshot.val() || {}
 
       if (theInfo.week1Round) {
         var array1 = []
