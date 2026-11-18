@@ -82,9 +82,9 @@ class events extends Component {
       getApiKey = async () => {
         var apiRef = firebase.database().ref('/apiKeys')
          await apiRef.once('value', dataSnapshot => {
-           this.setState({oddsApiKey:(dataSnapshot.val() || '').trim().oddsApi})
-            localStorage.set('oddsApiKey', (dataSnapshot.val() || '').trim().oddsApi)
-            localStorage.set('sportsDataApiKey', (dataSnapshot.val() || '').trim().sportsDataApi)
+           this.setState({oddsApiKey:String((dataSnapshot.val() || {}).oddsApi || '').trim()})
+            localStorage.set('oddsApiKey', String((dataSnapshot.val() || {}).oddsApi || '').trim())
+            localStorage.set('sportsDataApiKey', String((dataSnapshot.val() || {}).sportsDataApi || '').trim())
          })
       }
   hideModal = () => {
