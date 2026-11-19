@@ -208,7 +208,6 @@ class LogIn extends Component {
           email:email,
           phoneNo:phoneNo,
           created: theTime,
-          pass:password,
        
         }
         var userInfoDb = firebase.database().ref('users/')
