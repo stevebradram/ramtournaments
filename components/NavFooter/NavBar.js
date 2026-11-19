@@ -349,7 +349,7 @@ class NavBar extends Component {
             <Link href="/community" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>COMMUNITY</Link>
             {/*<Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv2}>LOG IN</Link>
                 <Link href="/"onClick={()=>this.closeTheAcDiv()} className={styles.talkDiv3}>SIGN UP</Link>*/}
-            <Link href="/profile" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>EVENT PROFILE</Link>
+            <Link href="/profile" onClick={() => this.closeTheAcDiv()} className={styles.optionsDivLi}>USER PROFILE</Link>
             {this.state.isLogged ? <Link href="/" onClick={() => this.signOut()} className={styles.logOutL}>LOG OUT</Link> :
               <Link href="/" onClick={() => this.setState({ openLogInModal: !this.state.openLogInModal })} className={styles.talkDiv3}>LOG IN</Link>}
 
