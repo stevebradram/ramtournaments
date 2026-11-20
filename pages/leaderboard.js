@@ -76,7 +76,7 @@ class leaderboard extends Component {
     return (<span style={{whiteSpace:'nowrap'}}>
       {keys.map((k)=>{
         var it=b[k]||{}
-        return <span key={k} style={{marginRight:5}} title={it.label||''}>{it.icon||'\u{1F3C6}'}<span style={{cursor:'pointer',color:'#CB1E31',marginLeft:1,fontWeight:'bold'}} onClick={()=>this.removeBadge(item.id,k)}>\u00D7</span></span>
+        return <span key={k} style={{marginRight:5}} title={it.label||''}>{it.icon||'\u{1F3C6}'}<span style={{cursor:'pointer',color:'#CB1E31',marginLeft:1,fontWeight:'bold'}} onClick={()=>this.removeBadge(item.id,k)}>{'\u00D7'}</span></span>
       })}
       <span style={{cursor:'pointer',fontWeight:'bold',color:'#292f51'}} onClick={()=>this.setState({badgeModal:true,badgeUid:item.id,badgeName:item.teamName,badgeIcon:'\u{1F3C6}',badgeLabel:'',badgeYear:''})}>+</span>
     </span>)
