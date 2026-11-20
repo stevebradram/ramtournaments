@@ -11,15 +11,63 @@ class TheMarchMadness extends Component {
     this.getAlert = this.getAlert.bind(this);
   }
   state = {
-    week1RoundArr: [], week2RoundArr: [], week3RoundArr: [],week4RoundArr:[],currentSelection: 'week1', theItems: [], finalRoundExists: false, isAdmin: false, userId: '', overallArr: [], overallRoundExists: '', finalRoundArr: [], finalRoundMenu: '', theCount: '', deleteModal: false,
+    week1RoundArr: [], week2RoundArr: [], week3RoundArr: [],week4RoundArr:[],userBadges:{},badgeModal:false,badgeUid:'',badgeName:'',badgeIcon:'\u{1F3C6}',badgeLabel:'',badgeYear:'',currentSelection: 'week1', theItems: [], finalRoundExists: false, isAdmin: false, userId: '', overallArr: [], overallRoundExists: '', finalRoundArr: [], finalRoundMenu: '', theCount: '', deleteModal: false,
     deleteName: '', userIdToBeDeleted: '', flockToBeDeleted: '', thePicked: '', eventStartTime: '',theValues: '',theEventKey:'',sportType:'',isWeek1Available:false,isWeek2Available:false,isWeek3Available:false,isWeek4Available:false,howManyWeeks:0
   }
 
+  loadBadges = () => {
+    firebase.database().ref('/userBadges').on('value',(snap)=>{
+      this.setState({userBadges:snap.val()||{}})
+    })
+  }
+  renderBadges = (uid) => {
+    var all=this.state.userBadges||{}
+    var b=all[uid]
+    if(!b){return null}
+    var keys=Object.keys(b)
+    if(!keys.length){return null}
+    return (<span style={{marginLeft:5,whiteSpace:'nowrap'}}>
+      {keys.map((k)=>{
+        var it=b[k]||{}
+        var tip=(it.label||'Winner')+(it.year?(' ('+it.year+')'):'')
+        return <span key={k} title={tip} style={{marginRight:1}}>{it.icon||'\u{1F3C6}'}</span>
+      })}
+    </span>)
+  }
+  renderBadgeAdmin = (item) => {
+    var all=this.state.userBadges||{}
+    var b=all[item.id]||{}
+    var keys=Object.keys(b)
+    return (<span style={{whiteSpace:'nowrap'}}>
+      {keys.map((k)=>{
+        var it=b[k]||{}
+        return <span key={k} style={{marginRight:5}} title={it.label||''}>{it.icon||'\u{1F3C6}'}<span style={{cursor:'pointer',color:'#CB1E31',marginLeft:1,fontWeight:'bold'}} onClick={()=>this.removeBadge(item.id,k)}>\u00D7</span></span>
+      })}
+      <span style={{cursor:'pointer',fontWeight:'bold'}} onClick={()=>this.setState({badgeModal:true,badgeUid:item.id,badgeName:item.teamName,badgeIcon:'\u{1F3C6}',badgeLabel:'',badgeYear:''})}>+</span>
+    </span>)
+  }
+  saveBadge = () => {
+    var uid=this.state.badgeUid
+    var label=(this.state.badgeLabel||'').trim()
+    if(!uid||!label){return}
+    var key='b'+new Date().getTime()
+    firebase.database().ref('/userBadges/'+uid+'/'+key).set({
+      icon:this.state.badgeIcon||'\u{1F3C6}',
+      label:label,
+      year:String(this.state.badgeYear||'').trim()
+    },(err)=>{
+      if(!err){this.setState({badgeModal:false,badgeLabel:'',badgeYear:''})}
+    })
+  }
+  removeBadge = (uid,key) => {
+    firebase.database().ref('/userBadges/'+uid+'/'+key).remove()
+  }
   componentDidMount = () => {
     //this.setState()
     //console.log('here march madness again agaiiiiiiin 111',this.props.theEventKey)
    // return
     this.setState({theCount:this.props.theCount,theEventKey:this.props.theEventKey})
+    this.loadBadges()
     // this.props.onClick()
     //return
     this.loadData(this.props.theEventKey)
@@ -510,14 +558,14 @@ class TheMarchMadness extends Component {
                       {this.state.isWeek3Available?<th>WEEK 3</th>:null}
                       {this.state.isWeek4Available?<th>WEEK 4</th>:null}
                     </> : null}
-                  {this.state.isAdmin ? <><th>Phone</th><th>Email</th><th>Delete</th></> : null}
+                  {this.state.isAdmin ? <><th>Phone</th><th>Email</th><th>Delete</th><th>Badges</th></> : null}
                 </tr>
                 {sortData.map((item, index) => {
                   //console.log('tttttttt', item)
                   return (
                     <tr key={index} id={styles.table1Tr2} style={{ backgroundColor: item.id === this.state.userId ? '#292f51' : index === 0 ? '#CB1E31' : null, color: item.id === this.state.userId ? 'white' : index === 0 ? '#ffffff' : '#292f51' }}>
                       <td>{index + 1}</td>
-                      <td>{item.teamName}</td>
+                      <td>{item.teamName}{this.renderBadges(item.id)}</td>
                       <td>{item.flockName}</td>
                       {this.state.currentSelection === 'week1' || this.state.currentSelection === 'week2' || this.state.currentSelection === 'week3' || this.state.currentSelection === 'week4'?
                         <><td>{item.bestPossibleScore ? item.bestPossibleScore : 'N/A'}</td>
@@ -532,11 +580,35 @@ class TheMarchMadness extends Component {
                           {this.state.isWeek4Available?<td>{item.week4RoundScore ? item.week4RoundScore : '0.00'}</td>:null}
                         </> : null
                       }
-                      {this.state.isAdmin ? <><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={() => this.setState({ deleteName: item.teamName, deleteModal: true, userIdToBeDeleted: item.id, flockToBeDeleted:item.flockName?.split(' ').join('|')})} /></td></> : null}
+                      {this.state.isAdmin ? <><td>{item.phone}</td><td>{item.email}</td><td><MdDeleteOutline className={styles.delIC} onClick={() => this.setState({ deleteName: item.teamName, deleteModal: true, userIdToBeDeleted: item.id, flockToBeDeleted:item.flockName?.split(' ').join('|')})} /></td><td>{this.renderBadgeAdmin(item)}</td></> : null}
                     </tr>)
                 }
                 )}
               </table> </div></div>
+          {this.state.badgeModal ? <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,backgroundColor:'rgba(0,0,0,0.55)',zIndex:99999,display:'flex',alignItems:'center',justifyContent:'center'}} onClick={()=>this.setState({badgeModal:false})}>
+            <div style={{backgroundColor:'#fff',padding:20,borderRadius:8,width:320,maxWidth:'90%'}} onClick={(e)=>e.stopPropagation()}>
+              <h3 style={{marginTop:0,marginBottom:4,color:'#292f51'}}>Add badge</h3>
+              <p style={{marginTop:0,marginBottom:14,color:'#292f51',fontSize:13}}>{this.state.badgeName}</p>
+              <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Icon</label>
+              <select value={this.state.badgeIcon} onChange={(e)=>this.setState({badgeIcon:e.target.value})} style={{width:'100%',padding:6,marginBottom:10}}>
+                <option value={'\u{1F3C6}'}>{'\u{1F3C6}'} Trophy</option>
+                <option value={'\u{1F947}'}>{'\u{1F947}'} Gold medal</option>
+                <option value={'\u{1F948}'}>{'\u{1F948}'} Silver medal</option>
+                <option value={'\u{1F949}'}>{'\u{1F949}'} Bronze medal</option>
+                <option value={'\u{1F37A}'}>{'\u{1F37A}'} Pint glass</option>
+                <option value={'\u{1F451}'}>{'\u{1F451}'} Crown</option>
+                <option value={'\u2B50'}>{'\u2B50'} Star</option>
+              </select>
+              <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Label</label>
+              <input value={this.state.badgeLabel} onChange={(e)=>this.setState({badgeLabel:e.target.value})} placeholder='2026 NFL Champion' style={{width:'100%',padding:6,marginBottom:10,boxSizing:'border-box'}}/>
+              <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Year</label>
+              <input value={this.state.badgeYear} onChange={(e)=>this.setState({badgeYear:e.target.value})} placeholder='2026' style={{width:'100%',padding:6,marginBottom:16,boxSizing:'border-box'}}/>
+              <div style={{display:'flex',justifyContent:'flex-end'}}>
+                <button onClick={()=>this.setState({badgeModal:false})} style={{marginRight:8,padding:'6px 12px',cursor:'pointer'}}>Cancel</button>
+                <button onClick={()=>this.saveBadge()} style={{padding:'6px 12px',backgroundColor:'#CB1E31',color:'#fff',border:'none',borderRadius:4,cursor:'pointer'}}>Add badge</button>
+              </div>
+            </div>
+          </div> : null}
           {this.state.deleteModal ? <div className={styles.modal}>
             <div className={styles.delModal}>
               <p className={styles.delModalP1}>Confirm Delete?</p>
