@@ -44,7 +44,7 @@ class leaderboard extends Component {
     var i=0
     dataSnapshot.forEach((data) => {
       i++
-      var theD=data.val().userData
+      var theD=data.val().userData||{}
      
       if(!theD.name)return
       let notificationStatus = true;
