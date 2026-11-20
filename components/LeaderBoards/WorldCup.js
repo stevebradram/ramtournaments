@@ -597,6 +597,7 @@ class WorldCup extends Component {
              <p style={{marginTop:0,marginBottom:14,color:'#292f51',fontSize:13}}>{this.state.badgeName}</p>
              <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Icon</label>
              <select value={this.state.badgeIcon||'\u{1F3C6}'} onChange={(e)=>this.setState({badgeIcon:e.target.value})} style={{width:'100%',padding:6,marginBottom:10}}>
+               <option value={'\u{1F40F}'}>{'\u{1F40F}'} Ram</option>
                <option value={'\u{1F3C6}'}>{'\u{1F3C6}'} Trophy</option>
                <option value={'\u{1F947}'}>{'\u{1F947}'} Gold medal</option>
                <option value={'\u{1F948}'}>{'\u{1F948}'} Silver medal</option>
