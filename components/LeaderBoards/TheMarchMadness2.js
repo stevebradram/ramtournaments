@@ -26,7 +26,7 @@ class TheMarchMadness2 extends Component {
       {keys.map((k)=>{
         var it=b[k]||{}
         var tip=(it.label||'Winner')+(it.year?(' ('+it.year+')'):'')
-        return <span key={k} title={tip} style={{marginRight:1}}>{it.icon||'\u{1F3C6}'}</span>
+        return <span key={k} title={tip} style={{marginRight:1}}>{it.icon||'\u{1F40F}'}</span>
       })}
     </span>)
   }
@@ -37,9 +37,9 @@ class TheMarchMadness2 extends Component {
     return (<span style={{whiteSpace:'nowrap'}}>
       {keys.map((k)=>{
         var it=b[k]||{}
-        return <span key={k} style={{marginRight:5}} title={it.label||''}>{it.icon||'\u{1F3C6}'}<span style={{cursor:'pointer',color:'#CB1E31',marginLeft:1,fontWeight:'bold'}} onClick={()=>this.removeBadge(item.id,k)}>{'\u00D7'}</span></span>
+        return <span key={k} style={{marginRight:5}} title={it.label||''}>{it.icon||'\u{1F40F}'}<span style={{cursor:'pointer',color:'#CB1E31',marginLeft:1,fontWeight:'bold'}} onClick={()=>this.removeBadge(item.id,k)}>{'\u00D7'}</span></span>
       })}
-      <span style={{cursor:'pointer',fontWeight:'bold'}} onClick={()=>this.setState({badgeModal:true,badgeUid:item.id,badgeName:item.teamName,badgeIcon:'\u{1F3C6}',badgeLabel:'',badgeYear:''})}>+</span>
+      <span style={{cursor:'pointer',fontWeight:'bold'}} onClick={()=>this.setState({badgeModal:true,badgeUid:item.id,badgeName:item.teamName,badgeIcon:'\u{1F40F}',badgeLabel:'',badgeYear:''})}>+</span>
     </span>)
   }
   saveBadge=()=>{
@@ -48,7 +48,7 @@ class TheMarchMadness2 extends Component {
     if(!uid||!label){return}
     var key='b'+new Date().getTime()
     firebase.database().ref('/userBadges/'+uid+'/'+key).set({
-      icon:this.state.badgeIcon||'\u{1F3C6}',
+      icon:this.state.badgeIcon||'\u{1F40F}',
       label:label,
       year:String(this.state.badgeYear||'').trim()
     },(err)=>{
@@ -496,15 +496,10 @@ getFinalRound=()=>{
            <h3 style={{marginTop:0,marginBottom:4,color:'#292f51'}}>Add badge</h3>
            <p style={{marginTop:0,marginBottom:14,color:'#292f51',fontSize:13}}>{this.state.badgeName}</p>
            <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Icon</label>
-           <select value={this.state.badgeIcon||'\u{1F3C6}'} onChange={(e)=>this.setState({badgeIcon:e.target.value})} style={{width:'100%',padding:6,marginBottom:10}}>
+           <select value={this.state.badgeIcon||'\u{1F40F}'} onChange={(e)=>this.setState({badgeIcon:e.target.value})} style={{width:'100%',padding:6,marginBottom:10}}>
              <option value={'\u{1F40F}'}>{'\u{1F40F}'} Ram</option>
-             <option value={'\u{1F3C6}'}>{'\u{1F3C6}'} Trophy</option>
-             <option value={'\u{1F947}'}>{'\u{1F947}'} Gold medal</option>
-             <option value={'\u{1F948}'}>{'\u{1F948}'} Silver medal</option>
-             <option value={'\u{1F949}'}>{'\u{1F949}'} Bronze medal</option>
              <option value={'\u{1F37A}'}>{'\u{1F37A}'} Pint glass</option>
              <option value={'\u{1F451}'}>{'\u{1F451}'} Crown</option>
-             <option value={'\u2B50'}>{'\u2B50'} Star</option>
              <option value={'\u{1FA9C}'}>{'\u{1FA9C}'} Ladder</option>
              <option value={'\u{1F3F7}\uFE0F'}>{'\u{1F3F7}\uFE0F'} Name tag</option>
            </select>
