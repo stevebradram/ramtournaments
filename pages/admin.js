@@ -167,6 +167,7 @@ class leaderboard extends Component {
             <option value={'\u{1F451}'}>{'\u{1F451}'} Crown</option>
             <option value={'\u2B50'}>{'\u2B50'} Star</option>
             <option value={'\u{1FA9C}'}>{'\u{1FA9C}'} Ladder</option>
+            <option value={'\u{1F3F7}\uFE0F'}>{'\u{1F3F7}\uFE0F'} Name tag</option>
           </select>
           <label style={{display:'block',fontSize:12,color:'#292f51',marginBottom:3}}>Label</label>
           <input value={this.state.badgeLabel||''} onChange={(e)=>this.setState({badgeLabel:e.target.value})} placeholder='2026 NFL Champion' style={{width:'100%',padding:6,marginBottom:10,boxSizing:'border-box'}}/>
